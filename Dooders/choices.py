@@ -16,8 +16,8 @@ class GenericChoice:
     effect = 'positive' # positive, negative, neutral
     target = 'self' # self, other, environment
     attributes = ['Strength']
-    criteria = threshold('Strength', '>', 70)
-    on_fail = update_attribute('Strength', -10)
-    on_success = update_attribute('Strength', 10)
+    criteria = (threshold,('Strength', '>', 70))
+    on_fail = (update_attribute,('Strength', -10))
+    on_success = (update_attribute,('Strength', 10))
 
 
