@@ -1,4 +1,4 @@
-
+from choices import Choice
 
 def get_weights(weight_type='normal'):
     if weight_type == 'normal':
@@ -15,3 +15,4 @@ class Reality:
     weights = get_weights()
     attribute_range = get_attribute_range(1,100)
     counter = 0
+    all_possible_choices = Choice.possible_choices

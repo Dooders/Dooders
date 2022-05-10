@@ -1,7 +1,7 @@
 
 import random
 import names
-import reality
+from reality import Reality
 
 from config import ATTRIBUTE_LIST
 
@@ -20,8 +20,8 @@ def spawn_attributes(attribute_list, attribute_range, weights):
 
 class Dooder:
     def __init__(self):
-        self.birth_date = reality.counter
+        self.birth_date = Reality.counter
         self.name = names.get_full_name()
         self.motivation = ''
-        self.base_attributes = spawn_attributes(ATTRIBUTE_LIST, reality.attribute_range, reality.weights)
+        self.base_attributes = spawn_attributes(ATTRIBUTE_LIST, Reality.attribute_range, Reality.weights)
         self.attributes = self.base_attributes
