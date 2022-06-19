@@ -14,7 +14,7 @@ class Simulation(Model):
     height = 20
     width = 20
 
-    initial_agents = 100
+    initial_agents = 10
     verbose = False  # Print-monitoring
 
     description = (
@@ -25,7 +25,7 @@ class Simulation(Model):
         self,
         width=20,
         height=20,
-        initial_agents=100
+        initial_agents=initial_agents
     ):
         """
         """

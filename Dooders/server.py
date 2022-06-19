@@ -12,11 +12,10 @@ def Avatar(agent):
 
     portrayal = {}
 
-    if type(agent) is Dooder:
-        portrayal["Shape"] = "wolf_sheep/resources/sheep.png"
-        # https://icons8.com/web-app/433/sheep
-        portrayal["scale"] = 0.9
-        portrayal["Layer"] = 1
+    portrayal["Shape"] = "dooders/resources/red_dot.png"
+    # https://icons8.com/web-app/433/sheep
+    portrayal["scale"] = 0.9
+    portrayal["Layer"] = 1
 
     return portrayal
 
