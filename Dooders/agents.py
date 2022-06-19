@@ -1,11 +1,11 @@
-from mesa import Agent
+from dooders.random_walk import RandomWalker
 
-class Dooder(Agent):
+class Dooder(RandomWalker):
     """
     """
-    def __init__(self, unique_id, pos, model, moore, happiness=None):
-        super().__init__(unique_id, pos, model, moore=moore)
-        self.happiness = happiness
+    def __init__(self, unique_id, pos, model):
+        super().__init__(unique_id, pos, model)
+
     
     def kill(self, agent):
         self.model.grid.remove_agent(agent)

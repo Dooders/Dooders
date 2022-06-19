@@ -1,7 +1,9 @@
-from mesa import Model, DataCollector
+from mesa import Model
+from mesa.datacollection import DataCollector
 from mesa.space import MultiGrid
-from agents import Dooder
 from mesa.time import RandomActivation
+
+from dooders.agents import Dooder
 
 
 class Simulation(Model):
@@ -35,14 +37,14 @@ class Simulation(Model):
 
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(self.width, self.height, torus=True)
-        self.datacollector = DataCollector({"Dooders": lambda m: m.schedule.get_type_count(Dooder)})
+        self.datacollector = DataCollector({"Dooders": lambda m: m.schedule.get_agent_count()})
 
         # Create agents:
         for i in range(self.initial_agents):
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
             happiness = self.random.randrange(10,90)
-            dooder = Dooder(self.next_id(), (x, y), self, True, happiness)
+            dooder = Dooder(self.next_id(), (x, y), self)
             self.grid.place_agent(dooder, (x, y))
             self.schedule.add(dooder)
 
