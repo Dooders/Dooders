@@ -1,9 +1,6 @@
 
 import random
 import names
-from reality import Reality
-
-from config import ATTRIBUTE_LIST
 
 
 
