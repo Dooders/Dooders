@@ -13,7 +13,7 @@ Breed:
 Breeding
 Enviroment check, breed roll if there is a neighbor, then procreate chance roll, then create new agent. Breeding is taking averge of two genetics
 
-Process:
+Behavior:
 1. Move check
     * roll to see if move, else pass
     * then choose direction
