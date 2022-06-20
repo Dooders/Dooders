@@ -30,7 +30,20 @@ class RandomWalker(mesa.Agent):
         Step one cell in any allowable direction.
         """
         # Pick the next cell from the adjacent cells.
-        next_moves = self.model.grid.get_neighborhood(self.pos, self.moore, True)
-        next_move = self.random.choice(next_moves)
-        # Now move:
-        self.model.grid.move_agent(self, next_move)
+        next_moves = self.model.grid.get_neighborhood(
+            self.pos, self.moore, True)
+
+        # move check
+        if len(next_moves) > 0:
+
+            if self.behavior.fate(self.behavior.MakeMoveProbability):
+                next_move = self.random.choice(
+                    next_moves, weights=self.behavior.MoveDirectionDistribution)
+                self.model.grid.move_agent(self, next_move)
+
+            else:
+                pass
+
+        else:
+            self.model.grid.remove_agent(self)
+            self.model.schedule.remove(self)
