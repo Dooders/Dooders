@@ -7,7 +7,7 @@ def generate_weights():
     pass
 
 def generate_score():
-    pass
+    return randrange(100)
 
 def generate_distribution():
     pass
