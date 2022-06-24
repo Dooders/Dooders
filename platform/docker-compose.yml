@@ -1,9 +1,9 @@
 version: '3.8'
 services:
   cube:
-		container_name: DooderCube
+    container_name: DooderCube
     image: cubejs/cube:latest
-		restart: unless-stopped
+    restart: unless-stopped
     ports:
       - 4000:4000  # Cube.js API and Developer Playground
       - 3000:3000  # Dashboard app, if created
@@ -11,19 +11,19 @@ services:
       - CUBEJS_DEV_MODE=true
     volumes:
       - .:/cube/conf
-	db:
+  db:
     container_name: DooderDB
     image: postgres
     restart: unless-stopped
     environment:
-			POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       PGDATA: /data/postgres
-		volumes: 
-			- postgres:/data/postgres
+    volumes: 
+    - postgres:/data/postgres
     ports:
       - 5432:5432
-		networks:
+    networks:
       - postgres
   pgadmin:
     container_name: DooderAdmin
@@ -39,8 +39,8 @@ services:
     networks:
       - postgres
     restart: unless-stopped
-		logging:
-		  driver: "none"
+    logging:
+      driver: "none"
 networks:
   postgres:
     driver: bridge
