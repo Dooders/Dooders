@@ -6,6 +6,7 @@ app = Flask(__name__)
 @app.route('/plus_one')
 def plus_one():
     x = int(request.args.get('x', 1))
+    print('hello dude')
     return json.dumps({'x': x + 1, 't': 'hey yo'})
 
 
