@@ -5,12 +5,14 @@ services:
     image: cubejs/cube:latest
     restart: unless-stopped
     ports:
-      - 4000:4000  # Cube.js API and Developer Playground
-      - 3000:3000  # Dashboard app, if created
+      - 4000:4000 # Cube.js API and Developer Playground
+      - 3000:3000 # Dashboard app, if created
     environment:
       - CUBEJS_DEV_MODE=true
     volumes:
       - .:/cube/conf
+    networks:
+      - host
   db:
     container_name: DooderDB
     image: postgres
@@ -19,8 +21,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       PGDATA: /data/postgres
-    volumes: 
-    - postgres:/data/postgres
+    volumes:
+      - postgres:/data/postgres
     ports:
       - 5432:5432
     networks:
@@ -33,7 +35,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
-       - pgadmin:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
@@ -45,5 +47,5 @@ networks:
   postgres:
     driver: bridge
 volumes:
-    postgres:
-    pgadmin: 
+  postgres:
+  pgadmin:
