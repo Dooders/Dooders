@@ -1,0 +1,12 @@
+version: '2.3'
+services:
+  flask-reload:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash deploy.sh
+    environment:
+      PYTHONPATH: .
+    ports:
+      - '9060:9060'
+      - '9061:9061'
