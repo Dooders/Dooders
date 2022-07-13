@@ -1,8 +1,8 @@
-from dooders.agent import RandomWalker
+from dooders.movement import RandomMovement
 from dooders.behavior import Behavior
 
 
-class Dooder(RandomWalker):
+class Dooder(RandomMovement):
     """
     """
 
