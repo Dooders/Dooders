@@ -1,4 +1,4 @@
-from dooders.agents import Dooder
+from dooders.agent import Dooder
 from dooders.model import Simulation
 
 from mesa.visualization.ModularVisualization import ModularServer

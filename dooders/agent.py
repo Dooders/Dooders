@@ -1,7 +1,7 @@
-import mesa
+from mesa import Agent
 
 
-class RandomWalker(mesa.Agent):
+class RandomWalker(Agent):
     """
     Class implementing random walker methods in a generalized manner.
     Not intended to be used on its own, but to inherit its methods to multiple
@@ -37,8 +37,8 @@ class RandomWalker(mesa.Agent):
         if len(next_moves) > 0:
 
             if self.behavior.fate(self.behavior.MakeMoveProbability):
-                next_move = self.random.choice(
-                    next_moves, weights=self.behavior.MoveDirectionDistribution)
+                next_move = self.random.choices(
+                    next_moves, weights=self.behavior.MoveDirectionDistribution, k=1)[0]
                 self.model.grid.move_agent(self, next_move)
 
             else:
