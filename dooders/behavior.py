@@ -1,4 +1,12 @@
-from random import randrange, choices, sample
+from random import randrange, sample, randint
+from typing import List
+from pydantic import BaseModel
+
+
+class Fate:
+
+    def __init__():
+        pass
 
 
 def generate_probability():
@@ -6,36 +14,42 @@ def generate_probability():
 
 
 def generate_weights():
-    pass
+    return []
 
 
 def generate_score():
     return randrange(100)
 
 
-def generate_distribution(n, total):
-    dividers = sorted(sample(range(1, total), n - 1))
-    return [a - b for a, b in zip(dividers + [total], [0] + dividers)]
+def generate_distribution(number_of_choices):
+    """
+    Generates a distribution of probabilities for a given number of choices.
+    """
+    #! TODO: apply different distributions
+    dividers = sorted(sample(range(1, 100), number_of_choices - 1)) # random distribution
+    return [a - b for a, b in zip(dividers + [100], [0] + dividers)]
 
 
-def fate(weight):
-    fate_list = [True, False]
-    weights = (weight, 100-weight)
+def ask_fate(probability):
+    if randint(1,100) < probability:
+        return True
+    else:
+        return False
 
-    return choices(fate_list, weights=weights, k=len(fate_list))[0]
 
+class Behavior(BaseModel):
+    ActionSuccessProbability: int = generate_probability()
+    TakeActionProbability: int = generate_probability()
+    ActionSelectionWeights: List = generate_weights()
+    MakeMoveProbability: int = generate_probability()
+    MoveSuccessProbability: int = generate_probability()
+    BreedSuccessProbability: int = generate_probability()
+    BreedActionProbability: int = generate_probability()
+    MoveDirectionDistribution: List = generate_distribution(9)
+    AwarenessScore: int = generate_score()
+    ActionOrderDistribution: List = generate_distribution(3)
+    ActionPrivilegeScore: int = generate_score()
+    HappinessScore: int = generate_score()
+    EnvironmentScore: int = generate_score()
 
-class Behavior:
-    ActionSuccessProbability = generate_probability()
-    TakeActionProbability = generate_probability()
-    ActionSelectionWeights = generate_weights()
-    MakeMoveProbability = generate_probability()
-    BreedSuccessProbability = generate_probability()
-    BreedActionProbability = generate_probability()
-    MoveDirectionDistribution = generate_distribution(9, 100)
-    AwarenessScore = generate_score()
-    ActionOrderDistribution = generate_distribution(3, 100)
-    ActionPrivilegeScore = generate_score()
-    HappinessScore = generate_score()
-    EnvironmentScore = generate_score()
 

@@ -1,5 +1,6 @@
 from mesa import Agent
 
+
 class RandomMovement(Agent):
     """
     Class implementing random walker methods in a generalized manner.
@@ -29,21 +30,23 @@ class RandomMovement(Agent):
         Step one cell in any allowable direction.
         """
         # Pick the next cell from the adjacent cells.
-        next_moves = self.model.grid.get_neighborhood(
+        possible_moves = self.model.grid.get_neighborhood(
             self.pos, self.moore, True)
 
+        origin = self.pos
+        destination = self.random.choice(possible_moves)
+
+        self.model.grid.move_agent(self, destination)
+
+        return origin, destination
+
         # move check
-        if len(next_moves) > 0:
+        # if len(next_moves) > 0:
 
-            if self.behavior.fate(self.behavior.MakeMoveProbability):
-                next_move = self.random.choices(
-                    next_moves, weights=self.behavior.MoveDirectionDistribution, k=1)[0]
-                self.model.grid.move_agent(self, next_move)
+        #     if self.behavior.fate(self.behavior.MakeMoveProbability):
+        #         next_move = self.random.choices(
+        #             next_moves, weights=self.behavior.MoveDirectionDistribution, k=1)[0]
+        #         self.model.grid.move_agent(self, next_move)
 
-            else:
-                pass
-
-        else:
-            self.model.grid.remove_agent(self)
-            self.model.schedule.remove(self)
-
+        #     else:
+        #         pass
