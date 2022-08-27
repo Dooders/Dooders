@@ -15,6 +15,12 @@ class Experiment:
         self.experiment_id = shortuuid.uuid()
         self.simulation = Simulation(self.experiment_id, self.parameters)
 
+    def setup_experiment(self):
+        self.simulation.setup()
+
+    def execute_cycle(self):
+        self.simulation.cycle()
+
     def get_log(self, n: int = 20):
         with open(f"logs/log.log", "r") as f:
             lines = f.readlines()[-n:]
@@ -34,9 +40,17 @@ class Experiment:
 
     def get_object(self, object_id: str):  # ! make this better
         return self.simulation.time.get_object(object_id)
-    
-    def get_results(self):
-        return self.simulation.information.cycle_results()
+
+    def get_cycle_results(self):
+        return self.simulation.get_results()
+
+    @property
+    def is_running(self):
+        return self.simulation.running
+
+    @property
+    def cycle_number(self):
+        return self.simulation.time.time
 
 
 class SessionManager:

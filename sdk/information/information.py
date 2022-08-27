@@ -68,7 +68,7 @@ class Information(BaseInformation):
         # iterate through the data collectors and add the data to the result dict
         for _, values in simulation.information.data.items():
             for column, value in values.items():
-                result_dict[column] = value[:-1] # get the last value
+                result_dict[column] = value[-1] # get the last value
                 
         return result_dict
 

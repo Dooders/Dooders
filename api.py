@@ -68,11 +68,11 @@ async def websocket_endpoint(websocket: WebSocket):
             parameters = await websocket.receive_json()
             # experiment.set_parameters(parameters)
 
-            experiment.simulation.setup()
+            experiment.setup_experiment()
 
-            while experiment.simulation.running and experiment.simulation.time.time < 100:
-                experiment.simulation.cycle()
-                results = experiment.simulation.get_results() #! make sure result is cycle specific and not aggregate
+            while experiment.is_running and experiment.cycle_number < 100:
+                experiment.execute_cycle()
+                results = experiment.get_cycle_results()
                 await websocket.send_json(results)
                 # snooze for 1 second
                 await asyncio.sleep(.1)
