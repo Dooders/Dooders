@@ -3,53 +3,75 @@ from typing import Dict, List
 import shortuuid
 from fastapi import WebSocket
 
-from sdk.dooder import Dooder
-from sdk.environment.energy import Energy
+from sdk.base_object import BaseObject
 from sdk.parameters import ExperimentParameters
 from sdk.simulation import Simulation
 
 
 class Experiment:
     def __init__(self, parameters: ExperimentParameters):
+        """
+        Initializes an experiment.
+
+        Args:
+            parameters: Experiment parameters.
+        """
         self.parameters = parameters
         self.experiment_id = shortuuid.uuid()
         self.simulation = Simulation(self.experiment_id, self.parameters)
 
-    def setup_experiment(self):
+    def setup_experiment(self) -> None:
+        """ 
+        Setup the experiment.    
+        """
         self.simulation.setup()
 
-    def execute_cycle(self):
+    def execute_cycle(self) -> None:
+        """  
+        Execute a cycle. 
+        """
         self.simulation.cycle()
 
     def get_log(self, n: int = 20):
+        """ 
+        Fetch the past n log entries.
+        """
         with open(f"logs/log.log", "r") as f:
             lines = f.readlines()[-n:]
             for line in lines:
                 if self.experiment_id in line:
                     print(line)
 
-    def get_dooder(self, dooder_id: int):
-        dooder = [object for object in self.simulation.time._objects if isinstance(
-            object, Dooder) and object.unique_id == dooder_id]
-        return dooder[0].__dict__ if dooder else 'Not Found'
+    def get_object(self, object_id: str) -> BaseObject:  # ! make this better
+        """ 
+        Fetch an object by its id.
 
-    def get_energy(self, energy_id: int):
-        energy = [object for object in self.simulation.time._objects if isinstance(
-            object, Energy) and object.unique_id == energy_id]
-        return energy[0].__dict__ if energy else 'Not Found'
-
-    def get_object(self, object_id: str):  # ! make this better
+        Args:
+            object_id: The id of the object.
+        """
         return self.simulation.time.get_object(object_id)
 
-    def get_cycle_results(self):
+    def get_cycle_results(self) -> Dict:
+        """         
+        Returns:
+            A dictionary of the results of the current cycle.
+        """
         return self.simulation.get_results()
 
     @property
-    def is_running(self):
+    def is_running(self) -> bool:
+        """
+        Returns:
+            True if the experiment is running.
+        """
         return self.simulation.running
 
     @property
-    def cycle_number(self):
+    def cycle_number(self) -> int:
+        """ 
+        Returns:
+            The current cycle number. 
+        """
         return self.simulation.time.time
 
 
