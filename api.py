@@ -1,25 +1,15 @@
 # uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 
 import asyncio
+from collections import namedtuple
+from typing import Tuple
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Tuple
 
-from dooders.experiment import Experiment, SessionManager
-from dooders.parameters import ExperimentParameters
-
-DEFAULT_PARAMETERS = ExperimentParameters(
-    width=20,
-    height=20,
-    agents=10,
-    verbose=True,
-    verbosity=1,
-    steps=100,
-    initial_energy_value = 1,
-    initial_energy_count = 10
-)
+from experiment import Experiment, SessionManager
+from sdk.parameters import ExperimentParameters
 
 app = FastAPI()
 manager = SessionManager()
@@ -37,7 +27,7 @@ app.add_middleware(
 
 class ServerResponse(BaseModel):
     status: int
-    message: Tuple[str, str]
+    message: str
 
 
 @app.get("/")
@@ -48,7 +38,6 @@ async def main() -> ServerResponse:
 @app.get("/start")
 async def main() -> ServerResponse:
     response, _ = experiment.start()
-    print(response)
     return ServerResponse(status=200, message=response)
 
 
@@ -72,22 +61,24 @@ async def websocket_endpoint(websocket: WebSocket):
     """
     await manager.connect(websocket)
     try:
-        experiment = Experiment(DEFAULT_PARAMETERS)
+        experiment = Experiment(ExperimentParameters)
         manager.add_experiment(experiment)
 
         while True:
             parameters = await websocket.receive_json()
-            experiment.set_parameters(ExperimentParameters(**parameters))
+            # experiment.set_parameters(parameters)
 
-            while experiment.simulation.running and experiment.simulation.schedule.time < parameters['steps']:
-                # experiment.agent_count = experiment.simulation.schedule.get_agent_count()
-                experiment.simulation.step()
-                results = experiment.simulation.get_results()
+            experiment.simulation.setup()
+
+            while experiment.simulation.running and experiment.simulation.time.time < 100:
+                experiment.simulation.cycle()
+                results = experiment.simulation.get_results() #! make sure result is cycle specific and not aggregate
                 await websocket.send_json(results)
                 # snooze for 1 second
                 await asyncio.sleep(.1)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+        print("Websocket disconnected")
 
 if __name__ == "__main__":
     import uvicorn

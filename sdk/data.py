@@ -17,12 +17,13 @@ class ExperimentResults(BaseModel):
     Results of the simulation.
     The main output of the simulation sent via websocket.
     """
-    StepNumber: int
-    AgentCount: int
+    CycleCount: int
+    DooderCount: int
+    EnergyCount: int
     DirectionCount: DirectionCountDict
 
 
-def direction_counts(model) -> DirectionCountDict:
+def direction_counts(simulation) -> DirectionCountDict:
     """
     Count the number of times each direction is chosen.
     The count is accumulated across all agents.
@@ -32,13 +33,13 @@ def direction_counts(model) -> DirectionCountDict:
         Keep track of the distribution of directions.
 
     Args:
-        model: Simulation model.
+        simulation: Simulation object.
 
     Returns:
         A dictionary mapping direction to count.
     """
     from collections import Counter
-    direction_list = model.datacollector.get_agent_vars_dataframe()[
+    direction_list = simulation.information.get_agent_vars_dataframe()[
         'Direction'].tolist()
     direction_counts = Counter(direction_list)
     final_direction_counts = DirectionCountDict(**direction_counts)
@@ -46,19 +47,19 @@ def direction_counts(model) -> DirectionCountDict:
     return final_direction_counts
 
 
-def results(model) -> ExperimentResults:
+def results(simulation) -> ExperimentResults:
     """
     Rollup the results of the simulation.
     Function executes at the end of each step.
 
     Args:
-        model: Simulation model.
+        simulation: Simulation simulation.
 
     Returns:
         A dictionary of results.
     """
     results = {
-        'StepNumber': model.schedule.steps,
-        'AgentCount': model.schedule.get_agent_count(),
-        'DirectionCount': direction_counts(model)}
+        'StepNumber': simulation.time.steps,
+        'AgentCount': simulation.time.get_agent_count(),
+        'DirectionCount': direction_counts(simulation)}
     return results

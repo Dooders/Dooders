@@ -38,7 +38,7 @@ def get_logger():
     handler = logging.FileHandler(logPath, 'a+')
     """ Set the formatter of 'CustomFormatter' type as we need to log base function name and base file name """
     handler.setFormatter(CustomFormatter(
-        '%(asctime)s - %(message)s'))
+        "{'timestamp': '%(asctime)s', %(message)s},"))
     logger.addHandler(handler)
 
     # Return logger object
@@ -53,7 +53,7 @@ def log(self, granularity, scope):
             message = function(*args, **kwargs)
 
             if granularity <= self.params.granularity:
-                cycle_number = self.model.schedule.time
+                cycle_number = self.simulation.time.time
                 unique_id = self.unique_id
                 experiment_id = self.experiment_id
                 logger_obj = get_logger()

@@ -1,46 +1,28 @@
-from mesa.datacollection import DataCollector
-from pydantic import BaseModel
-
-from dooders.data import ExperimentResults
-from dooders.logger import get_logger
-
-
-class AgentInformation(BaseModel):
-    agent_id: int
-    energy: int
-    direction: str
-    x: int
-    y: int
+from sdk.data import ExperimentResults
+from sdk.information.base import BaseInformation
+from sdk.information.collectors import DEFAULT_COLLECTORS
+from sdk.logger import get_logger
 
 
-class SimulationInformation(BaseModel):
-    agent_count: int
-    energy_count: int
-    direction_counts: dict
+class Information(BaseInformation):
 
-
-class Information(DataCollector):
-
-    def __init__(self, experiment_id, model_reporters: SimulationInformation = None, agent_reporters: AgentInformation = None, rollup_reporters: dict = None):
+    def __init__(self, experiment_id):
         """
         Create a new DataCollector object.
 
         Args:
             experiment_id: The unique ID of the experiment.
-            model_reporters: A dictionary of model level reporters.
-            agent_reporters: A dictionary of agent level reporters.
-            rollup_reporters: A dictionary of rollup reporters.
         """
-        super().__init__(model_reporters, agent_reporters)
+        super().__init__(DEFAULT_COLLECTORS)
         self.rollup_reporters = {}
         self.rollup_vars = {}
         self.logger = get_logger()
         self.granularity = 2
         self.experiment_id = experiment_id
 
-        if rollup_reporters is not None:
-            for name, reporter in rollup_reporters.items():
-                self._new_rollup_reporter(name, reporter)
+        # if rollup_reporters is not None:
+        #     for name, reporter in rollup_reporters.items():
+        #         self._new_rollup_reporter(name, reporter)
 
     def _new_rollup_reporter(self, name: str, reporter: callable) -> None:
         """
@@ -56,22 +38,24 @@ class Information(DataCollector):
 
     def collect(self, simulation) -> None:
         """
-        Collect data from the model.
+        Collect data from the simulation.
 
         Args:
-            simulation: The model to collect data from.
+            simulation: The simulation to collect data from.
         """
         super().collect(simulation)
 
-        # data rollup to model level
+        # data rollup to simulation level
         # replicate how mesa does a function based data collection
         # ? can I make this from a decorator
         if self.rollup_reporters:
             for var, reporter in self.rollup_reporters.items():
                 self.rollup_vars[var].append(
                     self._reporter_decorator(reporter))
+                
+        # print(self.get_result_dict(simulation))
 
-    def get_result_dict(self) -> ExperimentResults:
+    def get_result_dict(self, simulation) -> ExperimentResults:
         """
         Get a dictionary of the results of the experiment.
 
@@ -79,8 +63,13 @@ class Information(DataCollector):
             A dictionary of the results of the experiment.
         """
         result_dict = dict()
-        for var, reporter in self.rollup_reporters.items():
-            result_dict[var] = self.rollup_vars[var]
+        result_dict['CycleCount'] = simulation.time.time
+
+        # iterate through the data collectors and add the data to the result dict
+        for _, values in simulation.information.data.items():
+            for column, value in values.items():
+                result_dict[column] = value[:-1] # get the last value
+                
         return result_dict
 
     def log(self, message: str, granularity: int) -> None:
@@ -92,5 +81,5 @@ class Information(DataCollector):
             granularity: The granularity of the message.
         """
         if granularity <= self.granularity:  # enviroment variable???
-            message_string = f"{self.experiment_id}  - {message}"
+            message_string = f"'experiment_id':'{self.experiment_id}', {message}"
             self.logger.info(message_string)

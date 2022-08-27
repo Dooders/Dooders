@@ -1,5 +1,6 @@
-from random import randrange, sample, randint
+from random import randint, randrange, sample
 from typing import List
+
 from pydantic import BaseModel
 
 

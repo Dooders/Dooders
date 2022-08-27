@@ -1,17 +1,42 @@
-from typing import List, Dict
-from fastapi import WebSocket
-import shortuuid
+from typing import Dict, List
 
-from dooders.simulation import Simulation
-from dooders.parameters import ExperimentParameters
+import shortuuid
+from fastapi import WebSocket
+
+from sdk.dooder import Dooder
+from sdk.environment.energy import Energy
+from sdk.parameters import ExperimentParameters
+from sdk.simulation import Simulation
 
 
 class Experiment:
     def __init__(self, parameters: ExperimentParameters):
         self.parameters = parameters
-        self.verbosity = parameters.verbosity
         self.experiment_id = shortuuid.uuid()
         self.simulation = Simulation(self.experiment_id, self.parameters)
+
+    def get_log(self, n: int = 20):
+        with open(f"logs/log.log", "r") as f:
+            lines = f.readlines()[-n:]
+            for line in lines:
+                if self.experiment_id in line:
+                    print(line)
+
+    def get_dooder(self, dooder_id: int):
+        dooder = [object for object in self.simulation.time._objects if isinstance(
+            object, Dooder) and object.unique_id == dooder_id]
+        return dooder[0].__dict__ if dooder else 'Not Found'
+
+    def get_energy(self, energy_id: int):
+        energy = [object for object in self.simulation.time._objects if isinstance(
+            object, Energy) and object.unique_id == energy_id]
+        return energy[0].__dict__ if energy else 'Not Found'
+
+    def get_object(self, object_id: str):  # ! make this better
+        return self.simulation.time.get_object(object_id)
+    
+    def get_results(self):
+        return self.simulation.information.cycle_results()
 
 
 class SessionManager:
@@ -38,5 +63,3 @@ class SessionManager:
     def cleanup(self, session_id: str):
         self.disconnect(self.active_connections[session_id])
         self.delete_experiment(session_id)
-    
-
