@@ -47,7 +47,7 @@ class Experiment:
         Fetch an object by its id.
 
         Args:
-            object_id: The id of the object.
+            object_id: The id of the object. Based on a random short uuid assigned to every object at its creation.
         """
         return self.simulation.time.get_object(object_id)
 
