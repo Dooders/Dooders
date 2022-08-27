@@ -16,8 +16,6 @@ This project took a lot of inspiration and direction from:
 
 # Primary Concepts
 
----
-
 **Dooder** - An agent object with an amount of causal “control” in the simulation.
 
 **Experiment** - A component of one or multiple simulations.
