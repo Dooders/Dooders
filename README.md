@@ -13,23 +13,20 @@ This project took a lot of inspiration and direction from:
 - [The Romance of Reality](https://www.amazon.com/Romance-Reality-Organizes-Consciousness-Complexity-ebook/dp/B09GW3G45J/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627602&sr=8-2)
 - [At Home in the Universe](https://www.amazon.com/At-Home-Universe-Self-Organization-Complexity-ebook/dp/B004VEEO12/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627686&sr=8-1)
 
+## Primary Concepts
 
+- [**Dooder**](docs/Dooder.md) - An agent object with an amount of causal “control” in the simulation.
 
+- **Experiment** - A component of one or multiple simulations.
 
-# Primary Concepts
+- **Simulation** - A full execution of the agent model and additional components (I.e., Environment).
 
-**Dooder** - An agent object with an amount of causal “control” in the simulation.
+- **Environment** - Proxy for spatial interactions and effects. A lot like a game board.
 
-**Experiment** - A component of one or multiple simulations.
+- **Component** - Analogous to a system. In reality, just about everything is a system. A component serves as a non-object system (non spatial representation).
 
-**Simulation** - A full execution of the agent model and additional components (I.e., Environment).
+- **Object** - A component that has a spatial element, like a Dooder or Energy.
 
-**Environment** - Proxy for spatial interactions and effects. A lot like a game board.
+- **Energy** - An object that allows a Dooder to perform “work” (execute movements and actions).
 
-**Component** - Analogous to a system. In reality, just about everything is a system. A component serves as a non-object system (non spatial representation).
-
-**Object** - A component that has a spatial element, like a Dooder or Energy.
-
-**Energy** - An object that allows a Dooder to perform “work” (execute movements and actions).
-
-**Cycle** - An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps.
+- **Cycle** - An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps.
