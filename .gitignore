@@ -133,3 +133,7 @@ dmypy.json
 
 # logs
 logs/
+Sandbox.ipynb
+Validation.ipynb
+sdk/param play.ipynb
+Validation.ipynb

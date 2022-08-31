@@ -1,8 +1,6 @@
 # uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 
 import asyncio
-from collections import namedtuple
-from typing import Tuple
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware

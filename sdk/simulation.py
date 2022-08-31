@@ -3,7 +3,7 @@ from random import choices
 from sdk.base import BaseSimulation
 from sdk.dooder import Dooder
 from sdk.environment import Energy
-from sdk.parameters import ExperimentParameters
+from sdk.config import ExperimentParameters
 
 
 class Simulation(BaseSimulation):
@@ -30,15 +30,15 @@ class Simulation(BaseSimulation):
         """
         Setup the simulation.
         """
-        self.spawn_objects(Dooder, self.params['Dooder'].StartingAgentCount)
-        self.spawn_objects(Energy, self.params['Energy'].StartingEnergyCount)
+        self.spawn_objects(Dooder, self.params.Dooder.StartingAgentCount)
+        self.spawn_objects(Energy, self.params.Energy.StartingEnergyCount)
 
         self.running = True
         self.information.collect(self)
 
     def spawn_object(self, x: int, y: int, Object) -> None:
         object_name = Object.__name__
-        object = Object(self.generate_id(), (x, y), self, self.params[object_name])
+        object = Object(self.generate_id(), (x, y), self, self.params.get(object_name))
         self.environment.place_object(object, (x, y))
         self.time.add(object)
 
@@ -59,7 +59,7 @@ class Simulation(BaseSimulation):
         Advance the simulation by one cycle.        
         """
         # place new energy
-        self.spawn_objects(Energy, self.params['Simulation'].CycleEnergyAdd)
+        self.spawn_objects(Energy, self.params.Simulation.CycleEnergyAdd)
 
         # advance every agent by a step
         self.time.step()
@@ -74,7 +74,7 @@ class Simulation(BaseSimulation):
         self.setup()
 
         # todo: Dynamic checks for when to stop simulation
-        while self.running and self.time.time < self.params['Simulation'].MaxCycles:
+        while self.running and self.time.time < self.params.Simulation.MaxCycles:
             self.cycle()
 
     def reset(self) -> None:
@@ -106,6 +106,12 @@ class Simulation(BaseSimulation):
     def generate_id(self) -> int:
         """Generate a new id for an object."""
         return self.seed.uuid()
+    
+    def stop_condition(self) -> bool:
+        """
+        Check if the simulation should stop.
+        """
+        pass
 
     @property
     def results(self):

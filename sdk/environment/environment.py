@@ -54,27 +54,44 @@ class Environment(BaseEnvironment):
         self.remove_object(object)
         self.place_object(object, position)
         object.position = position
+        
+        
+    def get_object_types(self) -> List[BaseObject]: #! test needed
+        """
+        Get all object types in the environment.
+        """
+        object_types = []
+        for x in range(self.width):
+            for y in range(self.height):
+                for obj in self.grid[x][y]:
+                    if obj.name not in object_types:
+                        object_types.append(obj.__class__)
+        return object_types
 
 
-    def get_objects(self, object_type=BaseObject) -> List[BaseObject]:
+    def get_objects(self, object_type=BaseObject) -> List[BaseObject]: #! make so you can pass in string
         """
         Get all objects of a given type.
 
         Args:
             type: The type of object to get.
         """
-
+        #! test needed
+        #! Need a way to get all the objects in the environment
         # object_type_dict = {'BaseObject': BaseObject,
         #                     'Energy': Energy,
         #                     'Dooder': Dooder}
 
         # object_type_class = object_type_dict[object_type]
+        
+        if object_type == BaseObject:
+            object_type = self.get_object_types()
   
         objects = []
         for x in range(self.width):
             for y in range(self.height):
                 for obj in self.grid[x][y]:
-                    if isinstance(obj, object_type):
+                    if obj.name in object_type:
                         objects.append(obj)
         return objects
 

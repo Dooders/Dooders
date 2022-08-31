@@ -1,10 +1,10 @@
 from typing import Dict, List
 
-import shortuuid
+from sdk.util import ShortUUID
 from fastapi import WebSocket
 
 from sdk.base_object import BaseObject
-from sdk.parameters import ExperimentParameters
+from sdk.config import ExperimentParameters
 from sdk.simulation import Simulation
 
 
@@ -16,8 +16,9 @@ class Experiment:
         Args:
             parameters: Experiment parameters.
         """
+        self.seed = ShortUUID()
         self.parameters = parameters
-        self.experiment_id = shortuuid.uuid()
+        self.experiment_id = self.seed.uuid()
         self.simulation = Simulation(self.experiment_id, self.parameters)
 
     def setup_experiment(self) -> None:

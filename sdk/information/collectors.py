@@ -1,4 +1,5 @@
-
+from typing import Callable
+from pydantic import BaseModel, Field
 
 def get_dooder_count(simulation):
     return simulation.time.get_object_count('Dooder')
@@ -14,6 +15,9 @@ def get_direction_counts(simulation):
     direction_counts = Counter(direction_list)
 
     return dict(direction_counts)
+
+
+
 
 
 DEFAULT_COLLECTORS = [

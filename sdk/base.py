@@ -4,7 +4,7 @@ from typing import Dict
 
 from sdk.environment import Environment
 from sdk.information import Information
-from sdk.parameters import ExperimentParameters
+from sdk.config import ExperimentParameters
 from sdk.time import Time
 from sdk.util import ShortUUID
 
@@ -18,10 +18,11 @@ class BaseSimulation(ABC):
     def __init__(self, experiment_id: int, params: ExperimentParameters):
         self.experiment_id = experiment_id
         self.random = random
-        self.params = ExperimentParameters
-
+        self.params = ExperimentParameters.parse_obj(params)
+        print(self.params)
+        self.components = [] #! this will house all the components. Makes it easier to abstract
         # Initialize the simulation components
-        self.environment = Environment(params['Environment'])
+        self.environment = Environment(self.params.Environment)
         self.information = Information(experiment_id)
         self.time = Time()
         self.seed = ShortUUID()

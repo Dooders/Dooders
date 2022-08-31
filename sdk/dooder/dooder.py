@@ -21,7 +21,7 @@ class Dooder(BaseObject):
         self.behavior = Behavior()
         self.cognition = Cognition()
         self.params = params
-        self.energy = self.params.StartingEnergyCount
+        self.energy = self.params.StartingEnergySupply
         self.direction = 'Origin'
         self.moore = self.params.Moore
         self.log(granularity=1,
