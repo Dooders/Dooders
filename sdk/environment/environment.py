@@ -65,11 +65,11 @@ class Environment(BaseEnvironment):
             for y in range(self.height):
                 for obj in self.grid[x][y]:
                     if obj.name not in object_types:
-                        object_types.append(obj.__class__)
+                        object_types.append(obj.__class__.__name__)
         return object_types
 
 
-    def get_objects(self, object_type=BaseObject) -> List[BaseObject]: #! make so you can pass in string
+    def get_objects(self, object_type: str ='BaseObject') -> List[BaseObject]:
         """
         Get all objects of a given type.
 
@@ -77,14 +77,7 @@ class Environment(BaseEnvironment):
             type: The type of object to get.
         """
         #! test needed
-        #! Need a way to get all the objects in the environment
-        # object_type_dict = {'BaseObject': BaseObject,
-        #                     'Energy': Energy,
-        #                     'Dooder': Dooder}
-
-        # object_type_class = object_type_dict[object_type]
-        
-        if object_type == BaseObject:
+        if object_type == 'BaseObject':
             object_type = self.get_object_types()
   
         objects = []
@@ -94,6 +87,21 @@ class Environment(BaseEnvironment):
                     if obj.name in object_type:
                         objects.append(obj)
         return objects
+    
+    def get_object(self, object_id: str) -> BaseObject:
+        """
+        Get an object by its id.
+
+        Args:
+            object_id: The id of the object. Based on a random short uuid assigned to every object at its creation.
+        """
+        for x in range(self.width):
+            for y in range(self.height):
+                for obj in self.grid[x][y]:
+                    if obj.unique_id == object_id:
+                        return obj
+                    
+        return 'No object found'
 
     @property
     def object_types(self):

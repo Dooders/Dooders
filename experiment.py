@@ -50,7 +50,16 @@ class Experiment:
         Args:
             object_id: The id of the object. Based on a random short uuid assigned to every object at its creation.
         """
-        return self.simulation.time.get_object(object_id)
+        return self.simulation.environment.get_object(object_id)
+    
+    def get_objects(self, object_type: str ='BaseObject') -> List[BaseObject]:
+        """ 
+        Get all objects of a given type.
+
+        Args:
+            type: The type of object to get.
+        """
+        return self.simulation.environment.get_objects(object_type)
 
     def get_cycle_results(self) -> Dict:
         """         
