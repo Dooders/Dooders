@@ -1,4 +1,5 @@
 from typing import Dict, List
+from random import choices
 
 from sdk.util import ShortUUID
 from fastapi import WebSocket
@@ -60,6 +61,22 @@ class Experiment:
             type: The type of object to get.
         """
         return self.simulation.environment.get_objects(object_type)
+    
+    
+    def get_random_objects(self, object_type: str ='BaseObject', n: int = 1) -> List[BaseObject]:
+        """ 
+        Get n random objects of a given type.
+
+        Args:
+            type: The type of object to get.
+            n: The number of objects to get.
+        """
+        object_list = self.get_objects(object_type)
+        k = min(len(object_list), n)
+        random_objects = choices(object_list, k=k)
+        
+        return random_objects
+    
 
     def get_cycle_results(self) -> Dict:
         """         
