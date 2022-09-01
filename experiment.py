@@ -1,12 +1,12 @@
-from typing import Dict, List
 from random import choices
+from typing import Dict, List
 
-from sdk.util import ShortUUID
 from fastapi import WebSocket
 
 from sdk.base_object import BaseObject
 from sdk.config import ExperimentParameters
 from sdk.simulation import Simulation
+from sdk.util import ShortUUID
 
 
 class Experiment:
