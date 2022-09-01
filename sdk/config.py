@@ -1,3 +1,4 @@
+import json
 from typing import Callable, List
 from pydantic import BaseModel, Field
 
@@ -6,6 +7,10 @@ class BaseCollector(BaseModel):
     name: str = Field(..., description="Name of the collector")
     function: Callable = Field(..., description="Function to be called")
     component: str = Field(..., description="Component type to collect")
+    
+    
+with open("sdk/config.json", "r") as f:
+     default_config = json.load(f)
 
 
     

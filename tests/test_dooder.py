@@ -1,18 +1,18 @@
 import sys
 sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
 sys.path.append('D:\\Dropbox\\Dooders\\')
+sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\tests')
+sys.path.append('D:\\Dropbox\\Dooders\\tests')
 import pytest
-from collections import namedtuple
 
 from sdk.dooder import Dooder
-from sdk.tests.util import mock_simulation
-from sdk.parameters import ExperimentParameters
+from util import mock_simulation
 
 
 @pytest.fixture
 def dooder():
     simulation = mock_simulation()
-    object = Dooder('1', (1,1), simulation, ExperimentParameters['Dooder'])
+    object = Dooder('1', (1,1), simulation, simulation.params.Dooder)
     simulation.environment.place_object(object, (1,1))
     simulation.time.add(object)
     
@@ -21,7 +21,7 @@ def dooder():
 
 def test_dooder_init():
     simulation = mock_simulation()
-    dooder = Dooder('1', (1,1), simulation, ExperimentParameters['Dooder'])
+    dooder = Dooder('1', (1,1), simulation, simulation.params.Dooder)
     assert dooder.position == (1,1)
     assert dooder.energy == 5
     assert dooder.unique_id == '1'

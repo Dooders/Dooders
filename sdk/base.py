@@ -19,7 +19,6 @@ class BaseSimulation(ABC):
         self.experiment_id = experiment_id
         self.random = random
         self.params = ExperimentParameters.parse_obj(params)
-        print(self.params)
         self.components = [] #! this will house all the components. Makes it easier to abstract
         # Initialize the simulation components
         self.environment = Environment(self.params.Environment)

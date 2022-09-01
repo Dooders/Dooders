@@ -1,0 +1,25 @@
+{
+    "Simulation": {
+        "MaxCycles": 100,
+        "CycleEnergyAdd": 10,
+        "Granularity": 2
+    },
+    "Environment": {
+        "Width": 10,
+        "Height": 10,
+        "Torus": "True"
+    },
+    "Dooder": {
+        "StartingEnergySupply": 5,
+        "StartingAgentCount": 10,
+        "Moore": "True"
+    },
+    "Energy": {
+        "MaxLifespan": 10,
+        "MinLifeSpan": 2,
+        "StartingEnergyCount": 10
+    },
+    "Information": {
+        "Collectors": ["DooderCount", "EnergyCount", "DirectionCount"]
+    }
+}

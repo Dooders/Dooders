@@ -3,16 +3,16 @@ sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
 sys.path.append('D:\\Dropbox\\Dooders\\')
 import pytest
 
-from sdk.dooder.dooder import Dooder
-from sdk.environment.energy import Energy
+# from sdk.dooder.dooder import Dooder
+# from sdk.environment.energy import Energy
 from sdk.simulation import Simulation
-from sdk.parameters import ExperimentParameters
+from util import test_config
 
 
 
 @pytest.fixture
 def simulation():
-    return Simulation('test', ExperimentParameters)
+    return Simulation('test', test_config)
 
 
 @pytest.fixture
@@ -32,8 +32,8 @@ def test_simulation_setup(simulation):
     assert simulation.running == True
     # assert len(simulation.time._objects) == 30
     assert len(simulation.environment.get_objects()) == 20
-    assert len(simulation.environment.get_objects(Dooder)) == 10
-    assert len(simulation.environment.get_objects(Energy)) == 10
+    assert len(simulation.environment.get_objects('Dooder')) == 10
+    assert len(simulation.environment.get_objects('Energy')) == 10
 
 
 def test_run_simulation():
@@ -46,7 +46,7 @@ def test_run_simulation():
             if self.steps == 9:
                 self.running = False
 
-    simulation = TestSimulation('test', ExperimentParameters)
+    simulation = TestSimulation('test', test_config)
     simulation.run_simulation()
 
 

@@ -1,16 +1,17 @@
-from sdk.parameters import ExperimentParameters
-from sdk.tests.util import mock_simulation
-from sdk.environment import Energy
+
 import pytest
 import sys
 sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
 sys.path.append('D:\\Dropbox\\Dooders\\')
 
+from util import mock_simulation
+from sdk.environment import Energy
+
 
 @pytest.fixture
 def energy():
     simulation = mock_simulation()
-    object = Energy('3', (3, 3), simulation, ExperimentParameters['Energy'])
+    object = Energy('3', (3, 3), simulation, simulation.params.Energy)
     simulation.environment.place_object(object, (3, 3))
     simulation.time.add(object)
 

@@ -5,7 +5,7 @@ sys.path.append('D:\\Dropbox\\Dooders\\')
 
 
 from sdk.information import Information
-from sdk.tests.util import simulation
+from util import simulation
 
 
 @pytest.fixture
