@@ -1,3 +1,4 @@
+from typing import List
 from sdk.data import ExperimentResults
 from sdk.information.base import BaseInformation
 from sdk.logger import get_logger
@@ -76,3 +77,31 @@ class Information(BaseInformation):
         if granularity <= self.granularity:  # enviroment variable???
             message_string = f"'experiment_id':'{self.experiment_id}', {message}"
             self.logger.info(message_string)
+            
+            
+    # function to read log json from the last record to the first record
+    def read_log(self) :
+        with open('logs/log.log', 'r') as f:
+            for line in f:
+                yield line
+                
+                
+    def get_experiment_log(self, experiment_id: str = 'Current') -> List[str]:
+        """
+        Get the log for a given experiment.
+
+        Args:
+            experiment_id: The id of the experiment.
+        """
+        
+        if experiment_id == 'Current':
+            experiment_id = self.experiment_id
+
+        for line in self.read_log():
+            if experiment_id in line:
+                yield line
+                
+    def get_object_history(self, object_id: str):
+        for line in self.get_experiment_log():
+            if object_id in line:
+                return line

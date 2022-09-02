@@ -84,6 +84,16 @@ class Experiment:
             A dictionary of the results of the current cycle.
         """
         return self.simulation.get_results()
+    
+    def get_dooder_history(self, object_id: str = 'Random'):
+        if object_id == 'Random':
+            random_object = self.get_random_objects('Dooder')
+            if random_object:
+                object_id = random_object[0].unique_id
+                
+            else:
+                return 'No active Dooders'
+        return self.simulation.information.get_object_history(object_id)
 
     @property
     def is_running(self) -> bool:
