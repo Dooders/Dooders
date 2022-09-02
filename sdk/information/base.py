@@ -4,6 +4,8 @@ from typing import Callable, List
 import pandas as pd
 from pydantic import BaseModel
 
+from sdk.information.collectors import CollectorRegistry
+
 
 class BaseCollector(BaseModel):
     name: str
@@ -17,7 +19,7 @@ class BaseInformation:
 
     simulation = None
 
-    def __init__(self, collectors: List[BaseCollector]) -> None:
+    def __init__(self) -> None:
         """ 
         Initialize the collector.
 
@@ -27,7 +29,7 @@ class BaseInformation:
         self.collectors: dict = {}
         self.data: dict = {}
 
-        for collector in collectors:
+        for collector in CollectorRegistry.registry:
             self._add_collector(collector)
 
     def _add_collector(self, collector: BaseCollector) -> None:
