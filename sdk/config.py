@@ -13,39 +13,6 @@ with open("sdk/config.json", "r") as f:
      default_config = json.load(f)
 
 
-    
-##### Stop Conditions ##### 
-#! need to write tests for these
-class StopCondition(BaseModel):
-    Name: str = Field(..., description="Name of the stop condition")
-    Condition: str = Field(..., description="Condition to be met")
-    
-def check_max_cycle(simulation):
-    if simulation.cycle >= simulation.params.Simulation.MaxCycles:
-        return True
-    
-def check_simulation_running(simulation):
-    if not simulation.running:
-        return True
-    
-def check_dooder_count(simulation):
-    if simulation.environment.get_objects("Dooder").count() == 0:
-        return True
-    
-class MaxCyclesCheck:
-    Name = "Stop on Max Cycles"
-    Condition = check_max_cycle
-    
-class StopRunningCheck:
-    Name = "Stop on Max Cycles"
-    Condition = check_simulation_running
-    
-class StopDooderZeroCheck:
-    Name = "Stop on zero Dooder objects"
-    Condition = check_dooder_count
-
-
-
 #### Parameters #####
 
 class DooderParameters(BaseModel):
@@ -63,7 +30,7 @@ class EnergyParameters(BaseModel):
 
 class SimulationParameters(BaseModel):
     MaxCycles: int = Field(100, description="Maximum number of cycles to run")
-    StopConditions: List[StopCondition] = Field(None, description="List of stop conditions")
+    # StopConditions: List[StopCondition] = Field(None, description="List of stop conditions")
     CycleEnergyAdd: int = Field(10, description="Energy added per cycle")
     Granularity: int = Field(2, description="Granularity of the log")
 

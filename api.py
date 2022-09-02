@@ -68,7 +68,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             experiment.setup_experiment()
 
-            while experiment.is_running and experiment.cycle_number < 100:
+            while experiment.simulation.stop_conditions():
                 experiment.execute_cycle()
                 results = experiment.get_cycle_results()
                 await websocket.send_json(results)

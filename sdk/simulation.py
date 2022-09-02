@@ -4,6 +4,7 @@ from sdk.base import BaseSimulation
 from sdk.dooder import Dooder
 from sdk.environment import Energy
 from sdk.config import ExperimentParameters
+from sdk.stop_conditions import ConditionRegistry
 
 
 class Simulation(BaseSimulation):
@@ -73,8 +74,7 @@ class Simulation(BaseSimulation):
         """Run the simulation for a specified number of steps."""
         self.setup()
 
-        # todo: Dynamic checks for when to stop simulation
-        while self.running and self.time.time < self.params.Simulation.MaxCycles:
+        while self.stop_conditions():
             self.cycle()
 
     def reset(self) -> None:
@@ -107,11 +107,20 @@ class Simulation(BaseSimulation):
         """Generate a new id for an object."""
         return self.seed.uuid()
     
-    def stop_condition(self) -> bool:
+    def stop_conditions(self) -> bool:
         """
         Check if the simulation should stop.
         """
-        pass
+        result, reason = ConditionRegistry.check_conditions(self)
+        
+        if result:
+            self.stop()
+            self.information.log(f"Simulation stopped by {reason}", 1)
+            
+            return False
+            
+        else:
+            return True
 
     @property
     def results(self):
