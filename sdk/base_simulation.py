@@ -22,7 +22,7 @@ class BaseSimulation(ABC):
         self.components = [] #! this will house all the components. Makes it easier to abstract
         # Initialize the simulation components
         self.environment = Environment(self.params.Environment)
-        self.information = Information(experiment_id)
+        self.information = Information(experiment_id, self.params.Information)
         self.time = Time()
         self.seed = ShortUUID()
 

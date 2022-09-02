@@ -1,8 +1,7 @@
 {
     "Simulation": {
         "MaxCycles": 100,
-        "CycleEnergyAdd": 10,
-        "Granularity": 2
+        "CycleEnergyAdd": 10
     },
     "Environment": {
         "Width": 28,
@@ -20,6 +19,7 @@
         "StartingEnergyCount": 10
     },
     "Information": {
-        "Collectors": ["DooderCount", "EnergyCount", "DirectionCount"]
+        "Collectors": ["DooderCount", "EnergyCount", "DirectionCount"],
+        "Granularity": 2
     }
 }

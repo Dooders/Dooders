@@ -32,11 +32,12 @@ class SimulationParameters(BaseModel):
     MaxCycles: int = Field(100, description="Maximum number of cycles to run")
     # StopConditions: List[StopCondition] = Field(None, description="List of stop conditions")
     CycleEnergyAdd: int = Field(10, description="Energy added per cycle")
-    Granularity: int = Field(2, description="Granularity of the log")
+
 
 
 class InformationParameters(BaseModel):
     Collectors: List[str] = []
+    Granularity: int = Field(2, description="Granularity of the log")
 
 
 class EnvironmentParameters(BaseModel):

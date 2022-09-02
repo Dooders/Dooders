@@ -6,7 +6,7 @@ from sdk.logger import get_logger
 
 class Information(BaseInformation):
 
-    def __init__(self, experiment_id):
+    def __init__(self, experiment_id, params):
         """
         Create a new DataCollector object.
 
@@ -15,7 +15,7 @@ class Information(BaseInformation):
         """
         super().__init__()
         self.logger = get_logger()
-        self.granularity = 2
+        self.granularity = params.Granularity
         self.experiment_id = experiment_id
 
     # def _new_rollup_reporter(self, name: str, reporter: callable) -> None:
@@ -60,7 +60,7 @@ class Information(BaseInformation):
         result_dict['CycleCount'] = simulation.time.time
 
         # iterate through the data collectors and add the data to the result dict
-        for _, values in simulation.information.data.items():
+        for _, values in self.data.items():
             for column, value in values.items():
                 result_dict[column] = value[-1] # get the last value
                 
@@ -74,17 +74,20 @@ class Information(BaseInformation):
             message: The message to log.
             granularity: The granularity of the message.
         """
-        if granularity <= self.granularity:  # enviroment variable???
+        if granularity <= self.granularity:  # environment variable???
             message_string = f"'experiment_id':'{self.experiment_id}', {message}"
             self.logger.info(message_string)
             
-            
-    # function to read log json from the last record to the first record
-    def read_log(self) :
+    def read_log(self) -> List[str]:
+        """
+        Read the log file.
+        
+        Returns:
+            A list of the lines in the log file. 
+        """
         with open('logs/log.log', 'r') as f:
             for line in f:
                 yield line
-                
                 
     def get_experiment_log(self, experiment_id: str = 'Current') -> List[str]:
         """
@@ -102,6 +105,12 @@ class Information(BaseInformation):
                 yield line
                 
     def get_object_history(self, object_id: str):
+        """
+        Get the history of an object.
+        
+        Args:
+            object_id: The id of the object. 
+        """
         for line in self.get_experiment_log():
             if object_id in line:
-                return line
+                print(line)

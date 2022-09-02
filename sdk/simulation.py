@@ -1,6 +1,6 @@
 from random import choices
 
-from sdk.base import BaseSimulation
+from sdk.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.dooder import Dooder
 from sdk.environment import Energy
@@ -115,14 +115,32 @@ class Simulation(BaseSimulation):
 
         if result:
             self.stop()
-            # ! Need to add sim details to log
-            self.information.log(f"Simulation stopped by {reason}", 1)
+            self.log(1, f"Simulation stopped because of {reason}", 'Simulation')
 
             return False
 
         else:
             return True
+        
+    def log(self, granularity: int, message: str, scope: str) -> None:
+        # get specific dooder instance details and send to information object
+        cycle_number = self.time.time
+
+        log_dict = {
+            'scope': scope,
+            'cycle_number': cycle_number,
+            'granularity': granularity,
+            'message': message
+        }
+
+        final_message = str(log_dict).strip('{}')
+        
+        self.information.log(final_message, granularity)
 
     @property
     def results(self):
         return "__test__"
+    
+    @property
+    def cycle_number(self) -> int:
+        return self.cycles
