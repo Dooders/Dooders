@@ -85,14 +85,25 @@ class Experiment:
         """
         return self.simulation.get_results()
     
-    def get_dooder_history(self, object_id: str = 'Random'):
+    
+    def get_dooder_history(self, object_id: str = 'Random') -> Dict:
+        """
+        Get the history of a dooder.
+        
+        Args:
+            object_id: The id of the dooder. If 'Random', a random dooder will be selected. 
+        
+        Returns:
+            A dictionary of the history of the dooder.
+        """
         if object_id == 'Random':
             random_object = self.get_random_objects('Dooder')
+            
             if random_object:
                 object_id = random_object[0].unique_id
-                
             else:
                 return 'No active Dooders'
+            
         return self.simulation.information.get_object_history(object_id)
 
     @property
