@@ -1,9 +1,9 @@
 from random import choices
 
 from sdk.base import BaseSimulation
+from sdk.config import ExperimentParameters
 from sdk.dooder import Dooder
 from sdk.environment import Energy
-from sdk.config import ExperimentParameters
 from sdk.stop_conditions import ConditionRegistry
 
 
@@ -23,9 +23,8 @@ class Simulation(BaseSimulation):
             params: Experiment parameters.
         """
         super().__init__(experiment_id, params)
-        
-        self.cycles: int = 0
 
+        self.cycles: int = 0
 
     def setup(self) -> None:
         """
@@ -39,7 +38,8 @@ class Simulation(BaseSimulation):
 
     def spawn_object(self, x: int, y: int, Object) -> None:
         object_name = Object.__name__
-        object = Object(self.generate_id(), (x, y), self, self.params.get(object_name))
+        object = Object(self.generate_id(), (x, y), self,
+                        self.params.get(object_name))
         self.environment.place_object(object, (x, y))
         self.time.add(object)
 
@@ -67,7 +67,7 @@ class Simulation(BaseSimulation):
 
         # collect data at the end of the cycle
         self.information.collect(self)
-        
+
         self.cycles += 1
 
     def run_simulation(self) -> None:
@@ -106,19 +106,20 @@ class Simulation(BaseSimulation):
     def generate_id(self) -> int:
         """Generate a new id for an object."""
         return self.seed.uuid()
-    
+
     def stop_conditions(self) -> bool:
         """
         Check if the simulation should stop.
         """
         result, reason = ConditionRegistry.check_conditions(self)
-        
+
         if result:
             self.stop()
+            # ! Need to add sim details to log
             self.information.log(f"Simulation stopped by {reason}", 1)
-            
+
             return False
-            
+
         else:
             return True
 
