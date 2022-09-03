@@ -41,11 +41,13 @@ def test_dooder_die(dooder):
     assert object not in simulation.environment.get_objects(Dooder)
     assert object not in simulation.time.get_objects(Dooder)
 
+
 def test_dooder_choose_random_move(dooder):
     object, _ = dooder
     origin, destination = object.choose_random_move()
     assert origin == (1,1)
     assert destination in [(1,2), (2,1), (2,2), (1,1), (1,0), (0,1), (0,0), (2,0), (0,2), (2,2)]
+
 
 def test_dooder_step(dooder):
     object, _ = dooder
