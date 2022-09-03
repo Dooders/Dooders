@@ -1,10 +1,7 @@
 import pytest
-import sys
-sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
-sys.path.append('D:\\Dropbox\\Dooders\\')
 
 from sdk.environment import Environment
-from util import DooderTestObject, EnergyTestObject, mock_simulation
+from tests.util import DooderTestObject, EnergyTestObject, mock_simulation
 
 @pytest.fixture
 def simulation():

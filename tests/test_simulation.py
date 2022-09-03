@@ -1,12 +1,7 @@
-import sys
-sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
-sys.path.append('D:\\Dropbox\\Dooders\\')
 import pytest
 
-# from sdk.dooder.dooder import Dooder
-# from sdk.environment.energy import Energy
 from sdk.simulation import Simulation
-from util import test_config
+from tests.util import test_config
 
 
 

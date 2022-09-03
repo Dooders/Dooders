@@ -1,12 +1,7 @@
-import sys
-sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
-sys.path.append('D:\\Dropbox\\Dooders\\')
-sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\tests')
-sys.path.append('D:\\Dropbox\\Dooders\\tests')
 import pytest
 
 from sdk.dooder import Dooder
-from util import mock_simulation
+from tests.util import mock_simulation
 
 
 @pytest.fixture

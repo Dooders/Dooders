@@ -1,10 +1,7 @@
 import pytest
-import sys
-sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
-sys.path.append('D:\\Dropbox\\Dooders\\')
 
 from sdk.time import Time
-from util import DooderTestObject, EnergyTestObject
+from tests.util import DooderTestObject, EnergyTestObject
 
 
 @pytest.fixture

@@ -3,9 +3,6 @@ from sdk.dooder.dooder import Dooder
 from sdk.environment.energy import Energy
 from sdk.simulation import Simulation
 
-# @pytest.fixture
-# def simulation():
-#     return Simulation('test', DEFAULT_PARAMETERS)
 
 with open("sdk/config.json", "r") as f:
      test_config = json.load(f)

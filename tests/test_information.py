@@ -1,11 +1,8 @@
 import pytest
-import sys
-sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
-sys.path.append('D:\\Dropbox\\Dooders\\')
 
 
 from sdk.information import Information
-from util import simulation
+from tests.util import simulation
 
 
 @pytest.fixture
@@ -47,9 +44,6 @@ def test_collect(information):
 def test_read_log(information):
     assert information.read_log()
     
+    
 def test_get_experiment_log(information):
     assert information.get_experiment_log()
-    
-    
-def test_get_object_history(information):
-    assert information.get_object_history()
