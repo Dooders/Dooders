@@ -9,6 +9,7 @@ from sdk.stop_conditions import ConditionRegistry
 
 class Simulation(BaseSimulation):
     """
+    
     """
 
     def __init__(
@@ -20,7 +21,11 @@ class Simulation(BaseSimulation):
         many different components
 
         Args:
+            experiment_id: The id of the experiment this simulation is a part of.
             params: Experiment parameters.
+        
+        Attributes:
+            cycles: The number of cycles that have passed.
         """
         super().__init__(experiment_id, params)
 
@@ -29,6 +34,10 @@ class Simulation(BaseSimulation):
     def setup(self) -> None:
         """
         Setup the simulation.
+        1. Spawn the dooders
+        2. Spawn the energy
+        3. Set simulation running to true
+        4. Collect initial state
         """
         self.spawn_objects(Dooder, self.params.Dooder.StartingAgentCount)
         self.spawn_objects(Energy, self.params.Energy.StartingEnergyCount)
@@ -37,6 +46,14 @@ class Simulation(BaseSimulation):
         self.information.collect(self)
 
     def spawn_object(self, x: int, y: int, Object) -> None:
+        """ 
+        Spawn a new object at a given location.
+        
+        Args:
+            x: The x coordinate of the location.
+            y: The y coordinate of the location.
+            Object: The object to spawn.
+        """
         object_name = Object.__name__
         object = Object(self.generate_id(), (x, y), self,
                         self.params.get(object_name))
@@ -47,6 +64,7 @@ class Simulation(BaseSimulation):
         """
         Spawn a number of new objects at random locations.
         Args:
+            Object: The object to spawn.
             object_count: The number of objects to spawn.
         """
         locations = [(loc[1], loc[2]) for loc in self.environment.coord_iter()]
@@ -79,7 +97,7 @@ class Simulation(BaseSimulation):
 
     def reset(self) -> None:
         """
-        Reinstantiate the simulation object, using the current parameters.
+        Reset the simulation object, using the current parameters.
 
         This is useful for resetting the simulation after a parameter change.
         """
@@ -100,16 +118,29 @@ class Simulation(BaseSimulation):
         self.reset()
 
     def get_results(self) -> dict:
-        """Get the step results of the simulation."""
+        """
+        Get the step results of the simulation.
+        
+        Returns:
+            A dictionary of the results.
+        """
         return self.information.get_result_dict(self)
 
     def generate_id(self) -> int:
-        """Generate a new id for an object."""
+        """
+        Generate a new id for an object.
+        
+        Returns:
+            A uuid4 short id.
+        """
         return self.seed.uuid()
 
     def stop_conditions(self) -> bool:
         """
         Check if the simulation should stop.
+        
+        Returns:
+            True if the simulation should stop, False otherwise.
         """
         result, reason = ConditionRegistry.check_conditions(self)
 
@@ -123,7 +154,14 @@ class Simulation(BaseSimulation):
             return True
         
     def log(self, granularity: int, message: str, scope: str) -> None:
-        # get specific dooder instance details and send to information object
+        """ 
+        Log a message to the logger.
+        
+        Args:
+            granularity: The granularity of the message. 1 is the least granular.
+            message: The message to log.
+            scope: The scope of the message. Like 'Simulation' or 'Dooder'
+        """
         cycle_number = self.time.time
 
         log_dict = {
@@ -136,11 +174,13 @@ class Simulation(BaseSimulation):
         final_message = str(log_dict).strip('{}')
         
         self.information.log(final_message, granularity)
-
-    @property
-    def results(self):
-        return "__test__"
     
     @property
     def cycle_number(self) -> int:
+        """ 
+        Get the current cycle number.
+        
+        Returns:
+            The current cycle number.
+        """
         return self.cycles
