@@ -1,5 +1,4 @@
 from typing import List
-from sdk.data import ExperimentResults
 from sdk.information.base import BaseInformation
 from sdk.logger import get_logger
 
@@ -49,7 +48,7 @@ class Information(BaseInformation):
                 
         # print(self.get_result_dict(simulation))
 
-    def get_result_dict(self, simulation) -> ExperimentResults:
+    def get_result_dict(self, simulation):
         """
         Get a dictionary of the results of the experiment.
 
