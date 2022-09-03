@@ -3,7 +3,6 @@ from typing import Callable, List
 
 import pandas as pd
 from pydantic import BaseModel
-
 from sdk.information.collectors import CollectorRegistry
 
 
@@ -25,6 +24,10 @@ class BaseInformation:
 
         Args:
             collectors: List of collectors to be used.
+
+        Attributes:
+            collectors: Dictionary of collectors.
+            data: Dictionary of data collected.
         """
         self.collectors: dict = {}
         self.data: dict = {}
@@ -59,6 +62,11 @@ class BaseInformation:
 
     def _collect(self, component: str, simulation) -> None:
         """
+        Run all the collectors for the given component.
+
+        Args:
+            component: Component to collect data from.
+            simulation: Simulation object to collect data from.
         """
         for name, func in self.collectors[component].items():
 
@@ -73,18 +81,30 @@ class BaseInformation:
                     self.data[component][name].append(
                         func[0](simulation, **func[1]))
 
-    def collect(self, simulation):
-        """Collect all the data for the given simulation object."""
+    def collect(self, simulation) -> None:
+        """
+        Collect all the data for the given simulation object.
+
+        Args:
+            simulation: Simulation object to collect data from.
+        """
         for component, collector in self.collectors.items():
             self._collect(component, simulation)
 
     @staticmethod
-    def _getattr(name, _object):
+    def _getattr(name, _object) -> object:
         """Turn around arguments of getattr to make it partially callable."""
         return getattr(_object, name, None)
 
     def get_dataframe(self, component: str) -> pd.DataFrame:
         """
+        Get the collected data as a pandas DataFrame.
+
+        Args:
+            component: Component to get data from.
+
+        Returns:
+            DataFrame of collected data.
         """
         df = pd.DataFrame.from_dict(self.data[component], orient="columns")
 

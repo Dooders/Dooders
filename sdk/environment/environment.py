@@ -8,16 +8,25 @@ MultiGridContent = List[Any]  # ! fix this here and in base
 
 
 class Environment(BaseEnvironment):
+    """ 
+
+    """
 
     grid: List[List[MultiGridContent]]
 
-    def __init__(self, params) -> None:
+    def __init__(self, params: dict) -> None:
         """
         Create a new MultiGrid object.
 
         Args:
-            width, height: The size of the grid to create.
-            torus: Boolean whether the grid wraps or not.
+            params: The parameters for the environment.
+
+        Attributes:
+            grid: The grid of the environment.
+            width: The width of the environment.
+            height: The height of the environment.
+            torus: Whether the environment is toroidal.
+            empties: The empty cells in the environment.
         """
         super().__init__(params)
 
@@ -62,7 +71,8 @@ class Environment(BaseEnvironment):
         self.place_object(object, position)
         object.position = position
 
-    def get_object_types(self) -> List[BaseObject]:  # ! test needed
+    # ! test needed
+    def get_object_types(self) -> List[BaseObject]:
         """
         Get all object types in the environment.
 

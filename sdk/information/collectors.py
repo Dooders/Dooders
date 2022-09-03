@@ -1,16 +1,26 @@
-from typing import Callable
 from statistics import mean
+from typing import Callable
 
 
 class CollectorRegistry:
-    """ The factory class for creating executors"""
-
+    """ 
+    The factory class for creating executors
+    """
+    
+    # The registry of collectors
     registry = []
-    """ Internal registry for available executors """
 
     @classmethod
     def register_collector(cls, name: str, component: str) -> Callable:
         """ 
+        Register a collector in the registry.
+        
+        Args:
+            name: Name of the collector.
+            component: Component of the collector.
+            
+        Returns:
+            The decorator function.
         """
 
         def inner_wrapper(wrapped_class: Callable) -> Callable:
@@ -20,19 +30,19 @@ class CollectorRegistry:
 
         return inner_wrapper
 
-
 @CollectorRegistry.register_collector('DooderCount', 'Simulation')
-def get_dooder_count(simulation):
+def get_dooder_count(simulation) -> int:
+    """Return the number of dooders in the simulation."""
     return simulation.time.get_object_count('Dooder')
 
-
 @CollectorRegistry.register_collector('EnergyCount', 'Simulation')
-def get_energy_count(simulation):
+def get_energy_count(simulation) -> int:
+    """Return the number of energy in the simulation."""
     return simulation.time.get_object_count('Energy')
 
-
 @CollectorRegistry.register_collector('DirectionCounts', 'Simulation')
-def get_direction_counts(simulation):
+def get_direction_counts(simulation) -> dict:
+    """Return the number of moves in each direction."""
     dooders = simulation.time.get_objects('Dooder')
 
     from collections import Counter
@@ -41,9 +51,9 @@ def get_direction_counts(simulation):
 
     return dict(direction_counts)
 
-
 @CollectorRegistry.register_collector('TotalDooderEnergySupply', 'Simulation')
-def get_total_energy_supply(simulation):
+def get_total_energy_supply(simulation) -> int:
+    """ Return the total energy supply of all dooders in the simulation. """
     energy_supply = [
         dooder.energy for dooder in simulation.time.get_objects('Dooder')]
 
@@ -52,9 +62,9 @@ def get_total_energy_supply(simulation):
 
     return sum(energy_supply)
 
-
 @CollectorRegistry.register_collector('AverageEnergyAge', 'Simulation')
-def get_average_energy_age(simulation):
+def get_average_energy_age(simulation) -> float:
+    """Return the average age of energy in the simulation."""
     energy_age = [
         energy.cycle_count for energy in simulation.time.get_objects('Energy')]
 
@@ -64,5 +74,5 @@ def get_average_energy_age(simulation):
     return round(mean(energy_age), 2)
 
 @CollectorRegistry.register_collector('AverageBehaviorProfile', 'PostCollect')
-def get_average_behavior_profile(simulation):
+def get_average_behavior_profile(simulation) -> dict:
     pass

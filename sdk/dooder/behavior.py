@@ -11,6 +11,7 @@ class Fate:
 
 
 def generate_probability():
+    """  """
     return randrange(100)
 
 
@@ -37,39 +38,6 @@ def ask_fate(probability):
     else:
         return False
     
-    
-# class BaseBehavior(BaseModel):
-#     ActionSuccessProbability: int = 0
-#     TakeActionProbability: int = 0
-#     ActionSelectionWeights: List = []
-#     MakeMoveProbability: int = 0
-#     MoveSuccessProbability: int = 0
-#     BreedSuccessProbability: int = 0
-#     BreedActionProbability: int = 0
-#     MoveDirectionDistribution: List = []
-#     AwarenessScore: int = 0
-#     ActionOrderDistribution: List = []
-#     ActionPrivilegeScore: int = 0
-#     HappinessScore: int = 0
-#     EnvironmentScore: int = 0
-
-
-# class Behavior(BaseModel):
-        
-#         ActionSuccessProbability = generate_probability()
-#         TakeActionProbability = generate_probability()
-#         ActionSelectionWeights = generate_weights()
-#         MakeMoveProbability = generate_probability()
-#         MoveSuccessProbability = generate_probability()
-#         BreedSuccessProbability = generate_probability()
-#         BreedActionProbability = generate_probability()
-#         MoveDirectionDistribution = generate_distribution(9)
-#         AwarenessScore = generate_score()
-#         ActionOrderDistribution = generate_distribution(3)
-#         ActionPrivilegeScore = generate_score()
-#         HappinessScore = generate_score()
-#         EnvironmentScore = generate_score()
-
 
 class Behavior(BaseModel):
     ActionSuccessProbability: int = Field(default_factory=generate_probability)

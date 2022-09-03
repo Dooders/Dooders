@@ -1,16 +1,25 @@
 from typing import List
+
 from sdk.information.base import BaseInformation
 from sdk.logger import get_logger
 
 
 class Information(BaseInformation):
+    """
+    """
 
-    def __init__(self, experiment_id, params):
+    def __init__(self, experiment_id: str, params: dict) -> None:
         """
         Create a new DataCollector object.
 
         Args:
             experiment_id: The unique ID of the experiment.
+            params: The parameters of the experiment.
+
+        Attributes:
+            experiment_id: The unique ID of the experiment.
+            logger: The logger for the experiment.
+            granularity: The granularity of the experiment.
         """
         super().__init__()
         self.logger = get_logger()
@@ -45,12 +54,15 @@ class Information(BaseInformation):
         #     for var, reporter in self.rollup_reporters.items():
         #         self.rollup_vars[var].append(
         #             self._reporter_decorator(reporter))
-                
+
         # print(self.get_result_dict(simulation))
 
-    def get_result_dict(self, simulation):
+    def get_result_dict(self, simulation) -> dict:
         """
         Get a dictionary of the results of the experiment.
+
+        Args:
+            simulation: The simulation to collect data from.
 
         Returns:
             A dictionary of the results of the experiment.
@@ -61,8 +73,8 @@ class Information(BaseInformation):
         # iterate through the data collectors and add the data to the result dict
         for _, values in self.data.items():
             for column, value in values.items():
-                result_dict[column] = value[-1] # get the last value
-                
+                result_dict[column] = value[-1]  # get the last value
+
         return result_dict
 
     def log(self, message: str, granularity: int) -> None:
@@ -76,39 +88,45 @@ class Information(BaseInformation):
         if granularity <= self.granularity:  # environment variable???
             message_string = f"'experiment_id':'{self.experiment_id}', {message}"
             self.logger.info(message_string)
-            
+
     def read_log(self) -> List[str]:
         """
         Read the log file.
-        
-        Returns:
-            A list of the lines in the log file. 
+
+        Yields:
+            A list of the lines in the log file.
         """
         with open('logs/log.log', 'r') as f:
             for line in f:
                 yield line
-                
+
     def get_experiment_log(self, experiment_id: str = 'Current') -> List[str]:
         """
         Get the log for a given experiment.
 
         Args:
             experiment_id: The id of the experiment.
+
+        Yields:
+            A list of the lines in the log file.
         """
-        
+
         if experiment_id == 'Current':
             experiment_id = self.experiment_id
 
         for line in self.read_log():
             if experiment_id in line:
                 yield line
-                
-    def get_object_history(self, object_id: str):
+
+    def get_object_history(self, object_id: str) -> List[str]:
         """
         Get the history of an object.
-        
+
         Args:
             object_id: The id of the object. 
+
+        Returns:
+            A list of the lines in the log file.
         """
         for line in self.get_experiment_log():
             if object_id in line:

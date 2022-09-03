@@ -6,8 +6,11 @@ from sdk.environment.energy import Energy
 
 
 class Dooder(BaseObject):
+    """ 
 
-    def __init__(self, unique_id: int, position: tuple, simulation, params):
+    """
+
+    def __init__(self, unique_id: int, position: tuple, simulation, params: dict) -> None:
         """
         Create a new Dooder object.
 
@@ -15,7 +18,18 @@ class Dooder(BaseObject):
             unique_id: Unique ID for the object.
             position: Starting position for the object.
             simulation: Reference to the simulation.
-            moore: Whether to use Moore or Von Neumann neighborhood.
+            params: Parameters for the simulation.
+
+        Attributes:
+            unique_id: Unique ID for the object.
+            position: Starting position for the object.
+            simulation: Reference to the simulation.
+            params: Parameters for the simulation.
+            energy: The energy level of the dooder.
+            direction: The direction the dooder is facing.
+            moore: The Moore neighborhood of the dooder.
+            cognition: The cognition of the dooder.
+            behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
         self.behavior = Behavior()
@@ -27,7 +41,7 @@ class Dooder(BaseObject):
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
-    def kill(self, dooder: BaseObject):
+    def kill(self, dooder: BaseObject) -> None:
         """ 
         Kill a dooder. 
 
@@ -40,7 +54,7 @@ class Dooder(BaseObject):
 
         self.log(granularity=1, message=message, scope='Dooder')
 
-    def die(self, reason='Unknown'):
+    def die(self, reason: str = 'Unknown') -> None:
         """
         A dooder dies.
 
@@ -53,9 +67,13 @@ class Dooder(BaseObject):
 
         self.log(granularity=1, message=message, scope='Dooder')
 
-    def choose_random_move(self):
+    def choose_random_move(self) -> tuple:
         """
         Step one cell in any allowable direction.
+
+        Returns:
+            origin: The origin of the move.
+            destination: The destination after the move.
         """
         # Pick the next cell from the adjacent cells.
         possible_moves = self.simulation.environment.get_neighborhood(
@@ -66,8 +84,9 @@ class Dooder(BaseObject):
 
         return origin, destination
 
-    def step(self):
+    def step(self) -> None:
         """
+        Step the dooder.
         """
         #! Come up with a better design step flow.
         # get cell contents
