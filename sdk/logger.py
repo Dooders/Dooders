@@ -1,6 +1,6 @@
-import functools
 import logging
 import os
+
 
 def get_logger():
     """ Creates a Log File and returns Logger object """
@@ -21,14 +21,14 @@ def get_logger():
     logger = logging.Logger(log_file_name)
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler(logPath, 'a+')
-    handler.setFormatter(logging.formatter(
-        "{'timestamp': '%(asctime)s', %(message)s},"))
+    handler.setFormatter(logging.formatter("{'timestamp': '%(asctime)s', %(message)s},"))
     logger.addHandler(handler)
 
     # Return logger object
     return logger
 
-
+######################################
+#! May use this decorator in the future
 #def log(self, granularity, scope):
 #    def decorator(function):
  #       @functools.wraps(function)

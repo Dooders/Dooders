@@ -1,11 +1,27 @@
-from abc import ABC, abstractmethod
 import random
+from abc import ABC, abstractmethod
 
 
 class BaseObject(ABC):
+    """ 
+
+    """
+
     def __init__(self, unique_id: int, position, simulation) -> None:
         """
         Object Meta-Class
+
+        Args:
+            unique_id: Unique ID for the object
+            position: Position of the object
+            simulation: Simulation object for the object
+
+        Attributes:
+            unique_id: Unique ID for the object
+            position: Position of the object
+            simulation: Simulation object for the object
+            information: Information object for the object
+            environment: Environment object for the object
         """
         self.unique_id = unique_id
         self.simulation = simulation
@@ -14,7 +30,14 @@ class BaseObject(ABC):
         self.information = simulation.information
 
     def log(self, granularity: int, message: str, scope: str) -> None:
-        # get specific dooder instance details and send to information object
+        """ 
+        Log a message to the information object
+
+        Args:
+            granularity: Granularity of the log
+            message: Message to log
+            scope: Scope of the log
+        """
         cycle_number = self.simulation.time.time
 
         log_dict = {
@@ -25,10 +48,8 @@ class BaseObject(ABC):
             'message': message
         }
 
-        # final_message = f"'{scope}' - '{self.unique_id}' - '{cycle_number}' - '{granularity}' - '{message}'"
-
         final_message = str(log_dict).strip('{}')
-        
+
         self.information.log(final_message, granularity)
 
     @abstractmethod
@@ -37,8 +58,16 @@ class BaseObject(ABC):
 
     @property
     def random(self) -> random.Random:
+        """  
+        Returns:
+            Random object for the simulation
+        """
         return self.simulation.random
-    
+
     @property
     def name(self) -> str:
+        """ 
+        Returns:
+            Name of the object
+        """
         return self.__class__.__name__
