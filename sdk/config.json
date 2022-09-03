@@ -1,6 +1,6 @@
 {
     "Simulation": {
-        "MaxCycles": 100,
+        "MaxCycles": 1000,
         "CycleEnergyAdd": 10
     },
     "Environment": {
