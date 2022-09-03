@@ -10,12 +10,12 @@ from util import simulation
 
 @pytest.fixture
 def information():
-    information = Information('1')
+    information = Information('1', simulation.params.Information)
     return information
 
 
 def test_information_init(information):
-    information = Information('1')
+    information = Information('1', simulation.params.Information)
     assert information.experiment_id == '1'
 
 

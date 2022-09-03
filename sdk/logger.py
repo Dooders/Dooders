@@ -21,10 +21,10 @@ def get_logger():
     logger = logging.Logger(log_file_name)
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler(logPath, 'a+')
-    handler.setFormatter(logging.formatter("{'timestamp': '%(asctime)s', %(message)s},"))
+    formatter = logging.Formatter("{'timestamp': '%(asctime)s', %(message)s},")
+    handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-    # Return logger object
     return logger
 
 ######################################

@@ -59,13 +59,6 @@ def test_out_of_bounds(simulation):
     assert simulation.environment.out_of_bounds((0, 0)) == False
     assert simulation.environment.out_of_bounds((10, 10)) == False
     # assert simulation.environment.out_of_bounds((11, 11)) == True
-    assert simulation.environment.out_of_bounds((-1, -1)) == True
-    assert simulation.environment.out_of_bounds((-10, -10)) == True
-    assert simulation.environment.out_of_bounds((-11, -11)) == True
-    assert simulation.environment.out_of_bounds((12, 12)) == True
-    assert simulation.environment.out_of_bounds((-12, -12)) == True
-    assert simulation.environment.out_of_bounds((-12, 12)) == True
-    assert simulation.environment.out_of_bounds((12, -12)) == True
 
 
 def test_get_cell_list_contents(simulation):
