@@ -71,7 +71,6 @@ class Environment(BaseEnvironment):
         self.place_object(object, position)
         object.position = position
 
-    # ! test needed
     def get_object_types(self) -> List[BaseObject]:
         """
         Get all object types in the environment.
@@ -87,7 +86,6 @@ class Environment(BaseEnvironment):
                         object_types.append(obj.__class__.__name__)
         return object_types
 
-    # ! test needed
     def get_objects(self, object_type: str = 'BaseObject') -> List[BaseObject]:
         """
         Get all objects of a given type.
@@ -109,7 +107,7 @@ class Environment(BaseEnvironment):
                         objects.append(obj)
         return objects
 
-    def get_object(self, object_id: str) -> BaseObject:  # ! test needed
+    def get_object(self, object_id: str) -> BaseObject:
         """
         Get an object by its id.
 
@@ -127,7 +125,6 @@ class Environment(BaseEnvironment):
 
         return 'No object found'
 
-    # ! test needed
     def get_random_neighbors(self,
                              object: BaseObject,
                              object_type: BaseObject = 'BaseObject') -> List[BaseObject]:
@@ -155,7 +152,6 @@ class Environment(BaseEnvironment):
 
         return objects
 
-    # ! test needed
     def get_random_neighborhoods(self, location: tuple, n: int = 1) -> List[tuple]:
         """
         Get all objects in the neighborhood of the given location.

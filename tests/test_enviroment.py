@@ -3,7 +3,6 @@ import sys
 sys.path.append('C:\\Users\\peril\\Dropbox\\Dooders\\')
 sys.path.append('D:\\Dropbox\\Dooders\\')
 
-
 from sdk.environment import Environment
 from util import DooderTestObject, EnergyTestObject, mock_simulation
 
@@ -13,6 +12,11 @@ def simulation():
     simulation.environment.place_object(DooderTestObject, (1, 1))
     simulation.environment.place_object(EnergyTestObject, (1, 1))
     return simulation
+
+
+def test_environment_init():
+    simulation = mock_simulation()
+    environment = Environment(simulation.params.Environment)
 
 
 def test_place_object(simulation):
@@ -27,6 +31,12 @@ def test_remove_object(simulation):
 def test_move_object(simulation):
     simulation.environment.move_object(DooderTestObject, (1,2))
     assert simulation.environment.grid[1][2] == [DooderTestObject]
+    
+    
+def test_get_object(simulation):
+    assert simulation.environment.get_object(DooderTestObject.unique_id) == DooderTestObject
+    assert simulation.environment.get_object(EnergyTestObject.unique_id) == EnergyTestObject
+    assert simulation.environment.get_object('aaaa') == 'No object found'
 
 
 def test_get_objects(simulation):
@@ -39,7 +49,6 @@ def test_iter_neighborhood(simulation):
 
 
 def test_get_neighborhood(simulation):
-
     assert simulation.environment.get_neighborhood((1, 1)) == [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
     # assert simulation.environment.get_neighborhood((0, 0)) == [(0, 1), (0, 9), (1, 0), (1, 1), (1, 9), (9, 0), (9, 1), (9, 9)]
 
@@ -71,3 +80,17 @@ def test_is_cell_empty(simulation):
     assert simulation.environment.is_cell_empty((1, 1)) == False
     assert simulation.environment.is_cell_empty((0, 0)) == True
     assert simulation.environment.is_cell_empty((1, 2)) == True
+
+
+def test_get_object_types(simulation):
+    assert simulation.environment.get_object_types() == ['Dooder', 'Energy']
+    
+    
+# def test_get_random_neighbors(simulation):
+#     assert simulation.environment.get_random_neighbors((1, 1)) == DooderTestObject
+#     assert simulation.environment.get_random_neighbors((1, 2)) == None
+    
+    
+# def test_get_random_neighborhoods(simulation):
+#     assert simulation.environment.get_random_neighborhood((1, 1)) == (0, 0)
+#     assert simulation.environment.get_random_neighborhood((1, 2)) == None
