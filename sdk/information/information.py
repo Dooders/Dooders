@@ -1,3 +1,20 @@
+"""
+Information component used to collect information from the simulation.
+This class provides the prim ary capability to collect information from the
+simulation at the end of each cycle. The information is stored in a dictionary
+named 'data'.
+
+Collectors are the registered functions that are used to collect specific data.
+All collectors are stored in the collectors attribute. The collectors attribute
+is a dictionary of dictionaries. The first key is the collector component.
+
+This component is also the main method to log activity from the simulation.
+All activity is logged to a file based on specified granularity. Granularity
+is defined as the level of detail to log. 1 is the lowest and most important
+level of detail. 3 is the highest and most detailed level of detail, including
+when energy dissipation occurs, failed movements, and failed actions, etc..
+"""
+
 from typing import List
 
 from sdk.information.base import BaseInformation
@@ -6,11 +23,12 @@ from sdk.logger import get_logger
 
 class Information(BaseInformation):
     """
+    Class for collecting data from the simulation.
     """
 
     def __init__(self, experiment_id: str, params: dict) -> None:
         """
-        Create a new DataCollector object.
+        Create a new Information component.
 
         Args:
             experiment_id: The unique ID of the experiment.
@@ -26,18 +44,6 @@ class Information(BaseInformation):
         self.granularity = params.Granularity
         self.experiment_id = experiment_id
 
-    # def _new_rollup_reporter(self, name: str, reporter: callable) -> None:
-    #     """
-    #     Create a new rollup reporter.
-
-    #     Args:
-    #         name: The name of the reporter.
-    #         reporter: The reporter function.
-    #     """
-    #     # ? do I need to add a check to see if the reporter is a function
-    #     self.rollup_reporters[name] = reporter
-    #     self.rollup_vars[name] = []
-
     def collect(self, simulation) -> None:
         """
         Collect data from the simulation.
@@ -46,16 +52,8 @@ class Information(BaseInformation):
             simulation: The simulation to collect data from.
         """
         super().collect(simulation)
-
-        # data rollup to simulation level
-        # replicate how mesa does a function based data collection
-        # ? can I make this from a decorator
-        # if self.rollup_reporters:
-        #     for var, reporter in self.rollup_reporters.items():
-        #         self.rollup_vars[var].append(
-        #             self._reporter_decorator(reporter))
-
-        # print(self.get_result_dict(simulation))
+        
+        # TODO: Will add post collect rollups here
 
     def get_result_dict(self, simulation) -> dict:
         """
@@ -70,7 +68,6 @@ class Information(BaseInformation):
         result_dict = dict()
         result_dict['CycleCount'] = simulation.time.time
 
-        # iterate through the data collectors and add the data to the result dict
         for _, values in self.data.items():
             for column, value in values.items():
                 result_dict[column] = value[-1]  # get the last value
