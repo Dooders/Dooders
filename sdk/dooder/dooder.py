@@ -1,5 +1,5 @@
 from sdk.base_object import BaseObject
-from sdk.dooder.behavior import Behavior, ask_fate
+from sdk.dooder.behavior import ask_fate, generate_behavior
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
@@ -32,7 +32,7 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        self.behavior = Behavior()
+        self.behavior = generate_behavior()
         self.cognition = Cognition()
         self.params = params
         self.energy = self.params.StartingEnergySupply
@@ -89,6 +89,7 @@ class Dooder(BaseObject):
         Step the dooder.
         """
         #! Come up with a better design step flow.
+        #! Have a simple way to easily change step flow
         # get cell contents
         direction = 'None'
         cell_contents = self.simulation.environment.get_cell_list_contents(
@@ -124,7 +125,7 @@ class Dooder(BaseObject):
             else:
                 new_direction = get_direction(self.position, destination)
 
-            if ask_fate(self.behavior.MoveSuccessProbability):  # if true, successfuly move
+            if ask_fate(self.behavior.MoveSuccessProbability):  # if true, successfully move
                 self.simulation.environment.move_object(self, destination)
                 self.energy -= 1
                 direction = new_direction

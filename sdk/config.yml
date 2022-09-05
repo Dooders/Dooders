@@ -1,0 +1,19 @@
+---
+Simulation:
+  MaxCycles: 100
+  CycleEnergyAdd: 10
+Environment:
+  Width: 28
+  Height: 28
+  Torus: True
+Dooder:
+  StartingEnergySupply: 5
+  StartingAgentCount: 10
+  Moore: True
+Energy:
+  MaxLifespan: 10
+  MinLifeSpan: 2
+  StartingEnergyCount: 10
+Information:
+  Collectors: [DooderCount, EnergyCount, DirectionCount]
+  Granularity: 2
