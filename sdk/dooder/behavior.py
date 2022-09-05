@@ -38,6 +38,18 @@ def ask_fate(probability):
     else:
         return False
     
+    
+class Generators(enum):
+    'GenerateProbability' = generate_probability
+    'GenerateDistribution' = generate_distribution
+    'GenerateWeights' = generate_weights
+    
+# maybe have yaml instead of classes 
+class ActionSelectionWeights(BaseModel):
+    Description = '?'
+    Type = List[int]
+    Generator = 'GenerateWeights'
+    
 
 class Behavior(BaseModel):
     ActionSuccessProbability: int = Field(default_factory=generate_probability)
