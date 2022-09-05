@@ -1,0 +1,8 @@
+---
+ActionSuccessProbability:
+  Description: Just a test yaml behavior attribute
+  Generator: Probability
+
+ActionSelectionWeights:
+  Description: Just a test yaml behavior attribute
+  Generator: [Distribution, 5]
