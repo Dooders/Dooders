@@ -1,4 +1,4 @@
-import json
+import yaml
 from typing import Callable, List
 
 from pydantic import BaseModel, Field
@@ -10,8 +10,9 @@ class BaseCollector(BaseModel):
     function: Callable = Field(..., description="Function to be called")
     component: str = Field(..., description="Component type to collect")
     
-with open("sdk/config.json", "r") as f:
-     default_config = json.load(f)
+with open("sdk/config.yml", "r") as f:
+      default_config = yaml.load(f, Loader=yaml.FullLoader)
+
 
 
 #### Parameters #####
