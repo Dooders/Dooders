@@ -1,7 +1,7 @@
 import pytest
 
 from sdk.simulation import Simulation
-from tests.util import test_config
+from tests.test_util import test_config
 
 
 

@@ -1,7 +1,7 @@
 import pytest
 
 from sdk.environment import Environment
-from tests.util import DooderTestObject, EnergyTestObject, mock_simulation
+from tests.test_util import DooderTestObject, EnergyTestObject, mock_simulation
 
 @pytest.fixture
 def simulation():

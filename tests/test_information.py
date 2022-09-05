@@ -2,7 +2,7 @@ import pytest
 
 
 from sdk.information import Information
-from tests.util import simulation
+from tests.test_util import simulation
 
 
 @pytest.fixture

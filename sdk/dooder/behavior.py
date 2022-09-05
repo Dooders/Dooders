@@ -1,5 +1,8 @@
+from enum import Enum
+from functools import partial
 from random import randint, randrange, sample
 from typing import Any, List
+import yaml
 
 from pydantic import BaseModel, Field
 
@@ -39,29 +42,52 @@ def ask_fate(probability):
         return False
     
     
-class Generators(enum):
-    'GenerateProbability' = generate_probability
-    'GenerateDistribution' = generate_distribution
-    'GenerateWeights' = generate_weights
-    
-# maybe have yaml instead of classes 
-class ActionSelectionWeights(BaseModel):
-    Description = '?'
-    Type = List[int]
-    Generator = 'GenerateWeights'
-    
+class Generators:
+    Probability = generate_probability
+    Distribution = generate_distribution
+    Weights = generate_weights
+    Score = generate_score
 
 class Behavior(BaseModel):
-    ActionSuccessProbability: int = Field(default_factory=generate_probability)
-    TakeActionProbability: int = Field(default_factory=generate_probability)
-    # ActionSelectionWeights: List[None] = Field(default_factory=generate_weights)
-    MakeMoveProbability: int = Field(default_factory=generate_probability)
-    MoveSuccessProbability: int = Field(default_factory=generate_probability)
-    BreedSuccessProbability: int = Field(default_factory=generate_probability)
-    BreedActionProbability: int = Field(default_factory=generate_probability)
-    # MoveDirectionDistribution: List[int] = Field(default_factory=generate_distribution(9))
-    AwarenessScore: int = Field(default_factory=generate_score)
-    # ActionOrderDistribution: List[int] = Field(default_factory=generate_distribution(3))
-    ActionPrivilegeScore: int = Field(default_factory=generate_score)
-    HappinessScore: int = Field(default_factory=generate_score)
-    EnvironmentScore: int = Field(default_factory=generate_score)
+    ActionSuccessProbability: int = 0
+    TakeActionProbability: int = 0
+    ActionSelectionWeights: List[int] = []
+    MakeMoveProbability: int = 0
+    MoveSuccessProbability: int = 0
+    BreedSuccessProbability: int = 0
+    BreedActionProbability: int = 0
+    MoveDirectionDistribution: List[int] = []
+    AwarenessScore: int = 0
+    ActionOrderDistribution: List[int] = []
+    ActionPrivilegeScore: int = 0
+    HappinessScore: int = 0
+    EnvironmentScore: int = 0
+
+
+def load_behavior_profiles():
+    with open('sdk/dooder/behavior.yml') as f:
+        profile = yaml.load(f, Loader=yaml.FullLoader)
+        return profile
+
+def generate_values(profile):
+    generated_values = {}
+    for key, value in profile.items():
+
+        if type(value['Generator']) == list:
+            generator = getattr(Generators, value['Generator'][0])
+            generator_func = partial(generator, value['Generator'][1])
+            
+        else:
+            generator_func = getattr(Generators, value['Generator'])
+            
+        generated_values[key] = generator_func()
+        
+    return generated_values
+    
+def generate_behavior():
+    profile = load_behavior_profiles()
+    values = generate_values(profile)
+    return Behavior(**values)
+
+
+print(generate_behavior())

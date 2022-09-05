@@ -1,7 +1,7 @@
 import pytest
 
 from sdk.time import Time
-from tests.util import DooderTestObject, EnergyTestObject
+from tests.test_util import DooderTestObject, EnergyTestObject
 
 
 @pytest.fixture

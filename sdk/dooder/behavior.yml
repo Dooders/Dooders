@@ -2,7 +2,39 @@
 ActionSuccessProbability:
   Description: Just a test yaml behavior attribute
   Generator: Probability
-
 ActionSelectionWeights:
   Description: Just a test yaml behavior attribute
   Generator: [Distribution, 5]
+TakeActionProbability:
+  Description: Just a test yaml behavior attribute
+  Generator: Probability
+MakeMoveProbability:
+  Description: Just a test yaml behavior attribute
+  Generator: Probability
+MoveSuccessProbability:
+  Description: Just a test yaml behavior attribute
+  Generator: Probability
+BreedSuccessProbability:
+  Description: Just a test yaml behavior attribute
+  Generator: Probability
+BreedActionProbability:
+  Description: Just a test yaml behavior attribute
+  Generator: Probability
+MoveDirectionDistribution:
+  Description: Just a test yaml behavior attribute
+  Generator: [Distribution, 9]
+AwarenessScore:
+  Description: Just a test yaml behavior attribute
+  Generator: Score
+ActionOrderDistribution:
+  Description: Just a test yaml behavior attribute
+  Generator: [Distribution, 3]
+ActionPrivilegeScore:
+  Description: Just a test yaml behavior attribute
+  Generator: Score
+HappinessScore:
+  Description: Just a test yaml behavior attribute
+  Generator: Score
+EnvironmentScore:
+  Description: Just a test yaml behavior attribute
+  Generator: Score

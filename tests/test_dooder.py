@@ -1,7 +1,7 @@
 import pytest
 
 from sdk.dooder import Dooder
-from tests.util import mock_simulation
+from tests.test_util import mock_simulation
 
 
 @pytest.fixture
