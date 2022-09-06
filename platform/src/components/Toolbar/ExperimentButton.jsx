@@ -12,7 +12,7 @@ const ExperimentButton = ({ socket, parameters, setter }) => {
   return (
     <Button
       variant="contained"
-      color="primary"
+      color="secondary"
       onClick={handleClick}
       
     >

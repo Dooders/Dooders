@@ -28,6 +28,7 @@ export default function ResponsiveSideBar() {
       >
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
+          <br />
           <List>
             {['Experiment', 'Settings'].map((text, index) => (
               <ListItem key={text} disablePadding>

@@ -4,7 +4,7 @@ const ApiButton = ({ name }) => {
   return (
     <Button
       variant="contained"
-      color="primary"
+      color="secondary"
       onClick={() => {
         fetch(`http://localhost:8080/${name.toLowerCase()}`)
           .then((res) => res.json())

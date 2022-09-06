@@ -1,5 +1,6 @@
 import Toolbar from "./Toolbar/Toolbar";
 import Dashboard from "./Dashboard/Dashboard";
+import Box from '@mui/material/Box';
 import ExperimentChart from "./ExperimentChart/ExperimentChart";
 import {
   useState,
@@ -59,11 +60,11 @@ const App = () => {
 
   
   return (
-    <div>
+    <Box>
       <Toolbar socket={webSocket} setter={setSessionData}/>
       <Dashboard data={previousResults}/>
       <ExperimentChart data={sessionData} />
-    </div>
+    </Box>
   );
 };
 
