@@ -1,7 +1,7 @@
 ---
 Simulation:
   MaxCycles: 100
-  CycleEnergyAdd: 10
+  EnergyPerCycle: 10
 Environment:
   Width: 10
   Height: 10
@@ -11,9 +11,8 @@ Dooder:
   StartingAgentCount: 10
   Moore: True
 Energy:
-  MaxLifespan: 10
-  MinLifeSpan: 2
-  StartingEnergyCount: 10
+  MaxEnergyLife: 10
+  MinEnergyLife: 2
 Information:
   Collectors: [DooderCount, EnergyCount, DirectionCount]
   Granularity: 2
