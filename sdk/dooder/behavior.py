@@ -84,6 +84,3 @@ def generate_behavior():
     profile = load_behavior_profiles()
     values = generate_values(profile)
     return Behavior(**values)
-
-
-print(generate_behavior())

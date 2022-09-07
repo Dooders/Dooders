@@ -1,6 +1,7 @@
 ---
 ActionSuccessProbability:
   Description: Just a test yaml behavior attribute
+  Used: ~
   Generator: Probability
 ActionSelectionWeights:
   Description: Just a test yaml behavior attribute
@@ -10,9 +11,11 @@ TakeActionProbability:
   Generator: Probability
 MakeMoveProbability:
   Description: Just a test yaml behavior attribute
+  Used: Inside dooder step before moving
   Generator: Probability
 MoveSuccessProbability:
   Description: Just a test yaml behavior attribute
+  Used: Inside dooder step after choosing a direction to move
   Generator: Probability
 BreedSuccessProbability:
   Description: Just a test yaml behavior attribute
