@@ -3,8 +3,8 @@ Simulation:
   MaxCycles: 100
   CycleEnergyAdd: 10
 Environment:
-  Width: 28
-  Height: 28
+  Width: 10
+  Height: 10
   Torus: True
 Dooder:
   StartingEnergySupply: 5
