@@ -57,15 +57,11 @@ class Behavior(BaseModel):
     BreedSuccessProbability: int = 0
     BreedActionProbability: int = 0
     MoveDirectionDistribution: List[int] = []
-    AwarenessScore: int = 0
     ActionOrderDistribution: List[int] = []
-    ActionPrivilegeScore: int = 0
-    HappinessScore: int = 0
-    EnvironmentScore: int = 0
 
 
 def load_behavior_profiles():
-    with open('sdk/dooder/behavior.yml') as f:
+    with open('sdk/dooder/genetics.yml') as f:
         profile = yaml.load(f, Loader=yaml.FullLoader)
         return profile
 
