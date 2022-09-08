@@ -25,15 +25,15 @@ class DooderParameters(BaseModel):
 class EnergyParameters(BaseModel):
     """ Parameters for Energy object """
     # Random value between Min and Max lifecycle
-    MaxLifespan: int = Field(10, description="Maximum lifespan of an energy")
-    MinLifeSpan: int = Field(2, description="Minimum lifespan of an energy")
+    MaxEnergyLife: int = Field(10, description="Maximum lifespan of an energy")
+    MinEnergyLife: int = Field(2, description="Minimum lifespan of an energy")
     StartingEnergyCount: int = Field(10, description="Starting energy count")
 
 class SimulationParameters(BaseModel):
     """ Parameters for the Simulation """
     MaxCycles: int = Field(100, description="Maximum number of cycles to run")
     # StopConditions: List[StopCondition] = Field(None, description="List of stop conditions")
-    CycleEnergyAdd: int = Field(10, description="Energy added per cycle")
+    EnergyPerCycle: int = Field(10, description="Energy added per cycle")
 
 class InformationParameters(BaseModel):
     """ Parameters for the Information component """

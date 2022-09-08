@@ -78,7 +78,7 @@ class Simulation(BaseSimulation):
         Advance the simulation by one cycle.        
         """
         # place new energy
-        self.spawn_objects(Energy, self.params.Simulation.CycleEnergyAdd)
+        self.spawn_objects(Energy, self.params.Simulation.EnergyPerCycle)
 
         # advance every agent by a step
         self.time.step()

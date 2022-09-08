@@ -1,31 +1,31 @@
 ---
 ActionSuccessProbability:
-  Description: Just a test yaml behavior attribute
+  Description: The probability that the chosen action will be successful 
   Used: ~
   Generator: Probability
 ActionSelectionWeights:
-  Description: Just a test yaml behavior attribute
+  Description: Determines the probability to choose certain action types
   Generator: [Distribution, 5]
 TakeActionProbability:
-  Description: Just a test yaml behavior attribute
+  Description: The probability that the dooder will make an action during its turn
   Generator: Probability
 MakeMoveProbability:
-  Description: Just a test yaml behavior attribute
+  Description: The probability that the dooder will attempt to move during its turn
   Used: Inside dooder step before moving
   Generator: Probability
 MoveSuccessProbability:
-  Description: Just a test yaml behavior attribute
+  Description: The probability that a move will be successful
   Used: Inside dooder step after choosing a direction to move
   Generator: Probability
 BreedSuccessProbability:
-  Description: Just a test yaml behavior attribute
+  Description: The probability that reproduction will be successful
   Generator: Probability
 BreedActionProbability:
-  Description: Just a test yaml behavior attribute
+  Description: The probability the dooder will attempt to reproduce
   Generator: Probability
 MoveDirectionDistribution:
-  Description: Just a test yaml behavior attribute
+  Description: Weights to determine the direction of movement
   Generator: [Distribution, 9]
 ActionOrderDistribution:
-  Description: Just a test yaml behavior attribute
+  Description: Order in which actions are taken
   Generator: [Distribution, 3]
