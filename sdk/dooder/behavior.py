@@ -1,54 +1,62 @@
-from enum import Enum
 from functools import partial
 from random import randint, randrange, sample
-from typing import Any, List
-import yaml
+from typing import List
 
-from pydantic import BaseModel, Field
+import yaml
+from pydantic import BaseModel
 
 
 class Fate:
+    @classmethod
+    def generate_probability(cls) -> int:
+        """  
+        
+        """
+        return randrange(1, 100)
 
-    def __init__():
-        pass
+    @classmethod
+    def generate_weights(cls) -> List[int]:
+        """ 
+        
+        """
+        return [None]
+
+    @classmethod
+    def generate_score(cls) -> int:
+        """ 
+        
+        """
+        return randrange(1, 100)
+
+    @classmethod
+    def generate_distribution(cls, number_of_choices: int) -> List[int]:
+        """
+        Generates a distribution of probabilities for a given number of choices.
+        """
+        #! TODO: apply different distributions
+        # random distribution
+        dividers = sorted(sample(range(1, 100), number_of_choices - 1))
+        return [a - b for a, b in zip(dividers + [100], [0] + dividers)]
+
+    @classmethod
+    def ask_fate(cls, probability: int) -> bool:
+        """ 
+        
+        """
+        if randint(1, 100) < probability:
+            return True
+        else:
+            return False
 
 
-def generate_probability():
-    """  """
-    return randrange(100)
-
-
-def generate_weights():
-    return [None]
-
-
-def generate_score():
-    return randrange(100)
-
-
-def generate_distribution(number_of_choices):
-    """
-    Generates a distribution of probabilities for a given number of choices.
-    """
-    #! TODO: apply different distributions
-    dividers = sorted(sample(range(1, 100), number_of_choices - 1)) # random distribution
-    return [a - b for a, b in zip(dividers + [100], [0] + dividers)]
-
-
-def ask_fate(probability):
-    if randint(1,100) < probability:
-        return True
-    else:
-        return False
-    
-    
 class Generators:
-    Probability = generate_probability
-    Distribution = generate_distribution
-    Weights = generate_weights
-    Score = generate_score
+    Probability = Fate.generate_probability
+    Distribution = Fate.generate_distribution
+    Weights = Fate.generate_weights
+    Score = Fate.generate_score
+        
 
-class Behavior(BaseModel):
+class BehaviorProfile(BaseModel):
     ActionSuccessProbability: int = 0
     TakeActionProbability: int = 0
     ActionSelectionWeights: List[int] = []
@@ -60,27 +68,42 @@ class Behavior(BaseModel):
     ActionOrderDistribution: List[int] = []
 
 
-def load_behavior_profiles():
-    with open('sdk/dooder/genetics.yml') as f:
-        profile = yaml.load(f, Loader=yaml.FullLoader)
-        return profile
+class Behavior:
 
-def generate_values(profile):
-    generated_values = {}
-    for key, value in profile.items():
-
-        if type(value['Generator']) == list:
-            generator = getattr(Generators, value['Generator'][0])
-            generator_func = partial(generator, value['Generator'][1])
-            
-        else:
-            generator_func = getattr(Generators, value['Generator'])
-            
-        generated_values[key] = generator_func()
+    @classmethod
+    def load_genetics(self) -> dict:
+        """ 
         
-    return generated_values
-    
-def generate_behavior():
-    profile = load_behavior_profiles()
-    values = generate_values(profile)
-    return Behavior(**values)
+        """
+        with open('sdk/dooder/genetics.yml') as f:
+            genetics = yaml.load(f, Loader=yaml.FullLoader)
+            return genetics
+
+    @classmethod
+    def generate_values(self, genetics: dict) -> dict:
+        """ 
+        
+        """
+        generated_values = {}
+        for key, value in genetics.items():
+
+            if type(value['Generator']) == list:
+                generator = getattr(Generators, value['Generator'][0])
+                generator_func = partial(generator, value['Generator'][1])
+
+            else:
+                generator_func = getattr(Generators, value['Generator'])
+
+            generated_values[key] = generator_func()
+
+        return generated_values
+
+    @classmethod
+    def generate_behavior(cls) -> BehaviorProfile:
+        """ 
+        
+        """
+        genetics = cls.load_genetics()
+        profile = cls.generate_values(genetics)
+        
+        return BehaviorProfile(**profile)

@@ -1,5 +1,5 @@
 from sdk.base_object import BaseObject
-from sdk.dooder.behavior import ask_fate, generate_behavior
+from sdk.dooder.behavior import Fate, Behavior
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
@@ -32,7 +32,7 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        self.behavior = generate_behavior()
+        self.behavior = Behavior.generate_behavior()
         self.cognition = Cognition()
         self.params = params
         self.energy = self.params.StartingEnergySupply
@@ -117,7 +117,7 @@ class Dooder(BaseObject):
             self.die('lack of energy')
             return
 
-        if ask_fate(self.behavior.MakeMoveProbability):  # if true, move
+        if Fate.ask_fate(self.behavior.MakeMoveProbability):  # if true, move
             origin, destination = self.choose_random_move()
 
             if origin != None:
@@ -125,7 +125,7 @@ class Dooder(BaseObject):
             else:
                 new_direction = get_direction(self.position, destination)
 
-            if ask_fate(self.behavior.MoveSuccessProbability):  # if true, successfully move
+            if Fate.ask_fate(self.behavior.MoveSuccessProbability):  # if true, successfully move
                 self.simulation.environment.move_object(self, destination)
                 self.energy -= 1
                 direction = new_direction
