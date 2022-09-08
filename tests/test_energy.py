@@ -19,7 +19,7 @@ def test_energy_init(energy):
     object, _ = energy
     assert object.unique_id == '3'
     assert object.position == (3, 3)
-    assert object.life_span >= 2 and object.life_span <= object.params.MaxLifespan
+    assert object.life_span >= object.params.MinEnergyLife and object.life_span <= object.params.MaxEnergyLife
     assert object.cycle_count == 0
 
 
