@@ -1,6 +1,7 @@
 from sdk.base_object import BaseObject
-from sdk.dooder.behavior import Fate, Behavior
+from sdk.dooder.behavior import Behavior
 from sdk.dooder.cognition import Cognition
+from sdk.dooder.fate import Fate
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
 
@@ -125,7 +126,8 @@ class Dooder(BaseObject):
             else:
                 new_direction = get_direction(self.position, destination)
 
-            if Fate.ask_fate(self.behavior.MoveSuccessProbability):  # if true, successfully move
+            # if true, successfully move
+            if Fate.ask_fate(self.behavior.MoveSuccessProbability):
                 self.simulation.environment.move_object(self, destination)
                 self.energy -= 1
                 direction = new_direction

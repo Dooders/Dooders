@@ -1,52 +1,9 @@
 from functools import partial
-from random import randint, randrange, sample
 from typing import List
 
 import yaml
 from pydantic import BaseModel
-
-
-class Fate:
-    @classmethod
-    def generate_probability(cls) -> int:
-        """  
-        
-        """
-        return randrange(1, 100)
-
-    @classmethod
-    def generate_weights(cls) -> List[int]:
-        """ 
-        
-        """
-        return [None]
-
-    @classmethod
-    def generate_score(cls) -> int:
-        """ 
-        
-        """
-        return randrange(1, 100)
-
-    @classmethod
-    def generate_distribution(cls, number_of_choices: int) -> List[int]:
-        """
-        Generates a distribution of probabilities for a given number of choices.
-        """
-        #! TODO: apply different distributions
-        # random distribution
-        dividers = sorted(sample(range(1, 100), number_of_choices - 1))
-        return [a - b for a, b in zip(dividers + [100], [0] + dividers)]
-
-    @classmethod
-    def ask_fate(cls, probability: int) -> bool:
-        """ 
-        
-        """
-        if randint(1, 100) < probability:
-            return True
-        else:
-            return False
+from sdk.dooder.fate import Fate
 
 
 class Generators:
@@ -54,7 +11,7 @@ class Generators:
     Distribution = Fate.generate_distribution
     Weights = Fate.generate_weights
     Score = Fate.generate_score
-        
+
 
 class BehaviorProfile(BaseModel):
     ActionSuccessProbability: int = 0
@@ -69,21 +26,38 @@ class BehaviorProfile(BaseModel):
 
 
 class Behavior:
+    """ 
+    Behavior class used to generate the genetic expression of a Dooder
+    A genetic expression is a set of probabilities and weights that determine 
+    the behavior of a Dooder.
+    """
 
     @classmethod
     def load_genetics(self) -> dict:
         """ 
-        
+        Load the genetics from the yaml file
+
+        Returns:
+            dict: The genetics profiles
         """
+
         with open('sdk/dooder/genetics.yml') as f:
             genetics = yaml.load(f, Loader=yaml.FullLoader)
+
             return genetics
 
     @classmethod
     def generate_values(self, genetics: dict) -> dict:
         """ 
-        
+        Generate the values for the behavior profile
+
+        Args:
+            genetics: The genetics profiles
+
+        Returns:
+            dict: The values for the behavior profile
         """
+
         generated_values = {}
         for key, value in genetics.items():
 
@@ -101,9 +75,13 @@ class Behavior:
     @classmethod
     def generate_behavior(cls) -> BehaviorProfile:
         """ 
-        
+        Generate a behavior profile for a Dooder
+
+        Returns:
+            BehaviorProfile: The behavior profile for a Dooder based on genetics
         """
+
         genetics = cls.load_genetics()
         profile = cls.generate_values(genetics)
-        
+
         return BehaviorProfile(**profile)
