@@ -2,7 +2,7 @@ import random
 from collections import defaultdict
 from typing import List, Type, Union
 
-from sdk.time.base import BaseTime, ClassObject
+from sdk.base.base_time import BaseTime, ClassObject
 
 TimeT = Union[float, int]
 

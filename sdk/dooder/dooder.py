@@ -1,4 +1,4 @@
-from sdk.base_object import BaseObject
+from sdk.base.base_object import BaseObject
 from sdk.dooder.behavior import Behavior
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate

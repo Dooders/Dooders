@@ -1,8 +1,8 @@
 from random import choices
 from typing import Any, List
 
-from sdk.base_object import BaseObject
-from sdk.environment.base import BaseEnvironment
+from sdk.base.base_object import BaseObject
+from sdk.base.base_environment import BaseEnvironment
 
 MultiGridContent = List[Any]  # ! fix this here and in base
 

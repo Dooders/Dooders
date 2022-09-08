@@ -17,7 +17,7 @@ when energy dissipation occurs, failed movements, and failed actions, etc..
 
 from typing import List
 
-from sdk.information.base import BaseInformation
+from sdk.base.base_information import BaseInformation
 from sdk.logger import get_logger
 
 

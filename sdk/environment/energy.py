@@ -1,6 +1,6 @@
 import random
 
-from sdk.base_object import BaseObject
+from sdk.base.base_object import BaseObject
 
 
 class Energy(BaseObject):

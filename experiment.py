@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from fastapi import WebSocket
 
-from sdk.base_object import BaseObject
+from sdk.base.base_object import BaseObject
 from sdk.config import ExperimentParameters
 from sdk.simulation import Simulation
 from sdk.util import ShortUUID

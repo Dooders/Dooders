@@ -1,6 +1,6 @@
 from random import choices
 
-from sdk.base_simulation import BaseSimulation
+from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.dooder import Dooder
 from sdk.environment import Energy

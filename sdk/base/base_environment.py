@@ -12,7 +12,7 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
                     Set, Tuple, TypeVar, Union, cast, overload)
 
 import numpy as np
-from sdk.base_object import BaseObject
+from sdk.base.base_object import BaseObject
 
 Coordinate = Tuple[int, int]
 Position = Coordinate
