@@ -31,6 +31,8 @@ class Behavior:
     A genetic expression is a set of probabilities and weights that determine 
     the behavior of a Dooder.
     """
+    
+    behavior_profiles = []
 
     @classmethod
     def load_genetics(self) -> dict:
@@ -83,5 +85,7 @@ class Behavior:
 
         genetics = cls.load_genetics()
         profile = cls.generate_values(genetics)
+        behavior = BehaviorProfile(**profile)
+        cls.behavior_profiles.append(behavior)
 
-        return BehaviorProfile(**profile)
+        return behavior
