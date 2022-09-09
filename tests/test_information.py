@@ -47,3 +47,7 @@ def test_read_log(information):
     
 def test_get_experiment_log(information):
     assert information.get_experiment_log()
+    
+    
+def test_collectors(information):
+    assert information.collectors is not None
