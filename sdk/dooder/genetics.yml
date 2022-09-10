@@ -5,9 +5,11 @@ ActionSuccessProbability:
   Generator: Probability
 ActionSelectionWeights:
   Description: Determines the probability to choose certain action types
+  Used: ~
   Generator: [Distribution, 5]
 TakeActionProbability:
   Description: The probability that the dooder will make an action during its turn
+  Used: ~
   Generator: Probability
 MakeMoveProbability:
   Description: The probability that the dooder will attempt to move during its turn
@@ -19,13 +21,17 @@ MoveSuccessProbability:
   Generator: Probability
 BreedSuccessProbability:
   Description: The probability that reproduction will be successful
+  Used: ~
   Generator: Probability
 BreedActionProbability:
   Description: The probability the dooder will attempt to reproduce
+  Used: ~
   Generator: Probability
 MoveDirectionDistribution:
   Description: Weights to determine the direction of movement
+  Used: ~
   Generator: [Distribution, 9]
 ActionOrderDistribution:
   Description: Order in which actions are taken
+  Used: ~
   Generator: [Distribution, 3]
