@@ -15,7 +15,7 @@ class Fate:
         Returns:
             int: A random probability between 0 and 100
         """
-
+        # add different distros and options
         return randrange(1, 100)
 
     @classmethod
