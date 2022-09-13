@@ -16,3 +16,8 @@ Energy:
 Information:
   Collectors: [DooderCount, EnergyCount, DirectionCount]
   Granularity: 2
+Strategies:
+  Lifespan: [Uniform, { "min": 1, "max": 10 }]
+  EnergyPerCycle: [Fixed, { "value": 10 }]
+  MaxTotalEnergy: [Normal, { "mean": 50, "deviation": 10 }]
+  Placement: RandomLocation
