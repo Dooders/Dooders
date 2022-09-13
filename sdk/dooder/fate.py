@@ -1,7 +1,6 @@
 from random import randint, randrange, sample
 from typing import List
 
-
 class Fate:
     """ 
     Fate class used to decide the "fate" of an action.
@@ -15,8 +14,8 @@ class Fate:
         Returns:
             int: A random probability between 0 and 100
         """
-        # add different distros and options
-        return randrange(1, 100)
+        return randint(1, 100)
+        
 
     @classmethod
     def generate_weights(cls) -> List[int]:
