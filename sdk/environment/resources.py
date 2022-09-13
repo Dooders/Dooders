@@ -17,6 +17,13 @@ def get_normal_rvs(mean, std, size=1):
     return norm.rvs(loc=mean, scale=std, size=size)
 
 
+class Uniform(BaseModel):
+    Low: int = 1
+    High: int = 10
+    Size: int = 1
+
+
+
 # MaxTotalEnergy (None, static, dist, dynamic)
 # EnergyPerCycle (None, static, uniform, dynamic)
 # EnergyPlacement (Random, weghted, hotspot)
