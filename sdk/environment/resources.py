@@ -21,6 +21,10 @@ class Uniform(BaseModel):
     Low: int = 1
     High: int = 10
     Size: int = 1
+        
+    @classmethod
+    def generate(cls, **kwargs):
+        return get_uniform_rvs(kwargs['min', kwargs['max'], 1)
 
 
 
@@ -33,6 +37,13 @@ class MaxTotalEnergy(BaseModel):
     None: field()
     Static: field()
 
+        
+        
+        
+class EnergyStrategies():
+    MaxTotalEnergy: Union[None, Static, Uniform]
+    EnergyPerCycle: Union[None, Static, Uniform]
+        
 
 class Resources:
 
