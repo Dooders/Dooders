@@ -17,6 +17,16 @@ def get_normal_rvs(mean, std, size=1):
     return norm.rvs(loc=mean, scale=std, size=size)
 
 
+# MaxTotalEnergy (None, static, dist, dynamic)
+# EnergyPerCycle (None, static, uniform, dynamic)
+# EnergyPlacement (Random, weghted, hotspot)
+# EnergyDissapation (None, static, uniform)
+
+class MaxTotalEnergy(BaseModel):
+    None: field()
+    Static: field()
+
+
 class Resources:
 
     def get_energy_count(self, strategy: str) -> int:
