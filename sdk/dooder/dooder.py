@@ -144,3 +144,38 @@ class Dooder(BaseObject):
                 granularity=3, message=f"Skipped move", scope='Dooder')
 
         self.direction = direction
+
+
+"""
+# Todo: Create an Effects class (can be temporary or permanent)
+
+#! Every end of cycle there will be a check to check fate if the dooder will die
+#! The probability of death will go either up or down depending on multiple factors and effects
+#! So survivability is a function of the effects of genetics, environment, and behavior
+!# Then I can train an agent to maximize days alive and survivability
+!# Maybe even have the ability to change how fate is determined
+ 
+ 
+ 
+##### Formulas #####
+ 
+#! Survivability modifier
+Every dooder starts with 99.99% probability surviving the cycle
+The modifier will reduce the probability of survival to be checked at the end of each cycle
+survival_probability_modifier = (negative_effects + positive_effects) + permanent_effects
+ 
+#! Hunger (temporary negative effect)
+Calculates the hunger slevel of the dooder
+Added to negative_effects
+M = Metabolism (between 1 and 2)
+hunger = M^(number of cycle hungry) more cycle will add more negative probability
+
+#! Age (permanent negative effect)
+As a dooder goes through more cycles, it will have a higher chance of dying
+Needs to have a long time as low probability to die then at some point it will increase by a lot
+Age deterioration can be a genetic thing too
+
+!# Mood (temporary positive or negative effect)
+Based on a lot of different factors
+Between -100 and 100 or -1 and 1
+"""
