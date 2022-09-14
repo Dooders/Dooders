@@ -152,8 +152,8 @@ class Dooder(BaseObject):
 #! Every end of cycle there will be a check to check fate if the dooder will die
 #! The probability of death will go either up or down depending on multiple factors and effects
 #! So survivability is a function of the effects of genetics, environment, and behavior
-!# Then I can train an agent to maximize days alive and survivability
-!# Maybe even have the ability to change how fate is determined
+#! Then I can train an agent to maximize days alive and survivability
+#! Maybe even have the ability to change how fate is determined
  
  
  
