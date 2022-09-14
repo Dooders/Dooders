@@ -4,6 +4,8 @@ from scipy.stats import randint, norm
 from pydantic import BaseModel, Field
 
 
+
+
 def get_uniform_rvs(low, high, size=1):
     return randint.rvs(low=low, high=high, loc=0, size=size)
 
