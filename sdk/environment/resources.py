@@ -1,155 +1,65 @@
-from collections import namedtuple
 from random import choices
-from scipy.stats import randint, norm
-from pydantic import BaseModel, Field
+
+from pydantic import BaseModel
+from scipy.stats import norm, randint
+
+strategy = {
+    'EnergyPerCycle': {'function': 'Uniform', 'args': {'low': 1, 'high': 10}},
+    'MaxTotalEnergy': {'function': 'Normal', 'args': {'mean': 50, 'std': 10}},
+    'EnergyLifespan': {'function': 'Fixed', 'args': {'value': 7}},
+    'EnergyPlacement': {'function': 'Random'}
+}
 
 
-
-
-def get_uniform_rvs(low, high, size=1):
-    return randint.rvs(low=low, high=high, loc=0, size=size)
-
-
-def get_normal_rvs(mean, std, size=1):
-    return norm.rvs(loc=mean, scale=std, size=size)
-
-
-class FixedValue(BaseModel):
+class Strategies(BaseModel):
 
     @staticmethod
-    def generate(value: int):
-        return value
-
-
-class UniformDistribution(BaseModel):
+    def uniform_distribution(low: int, high: int, size: int = 1):
+        return randint.rvs(low=low, high=high, loc=0, size=size)
 
     @staticmethod
-    def generate(low: int, high: int, size: int = 1):
-        return get_uniform_rvs(low, high, size)[0]
-
-
-class NormalDistribution(BaseModel):
+    def normal_distribution(mean: int, std: int, size: int = 1):
+        return norm.rvs(loc=mean, scale=std, size=size)
 
     @staticmethod
-    def generate(mean: int, std: int, size: int = 1):
-        return round(get_normal_rvs(mean, std, size)[0])
+    def fixed_value(value):
+        return [value]
+
+    @staticmethod
+    def random_selection(simulation, number):
+        locations = [(loc[1], loc[2])
+                     for loc in simulation.environment.coord_iter()]
+        random_locations = choices(locations, k=number)
+
+        return random_locations
 
 
-class Strategies:
-    # make this another plugin for adding strategies easily
-    Fixed = FixedValue
-    Uniform = UniformDistribution
-    Normal = NormalDistribution
+class BaseStrategy(BaseModel):
+    " Make this a decorator with the get method "
 
     @classmethod
-    def get(cls, strategy: str):
+    def get(cls, strategy):
         return getattr(cls, strategy)
 
-    @classmethod
-    def get_strategy(cls, strategy: str):
-        return cls.get(strategy)
+
+class GenerationStrategies(BaseStrategy):
+    Uniform = Strategies.uniform_distribution
+    Normal = Strategies.normal_distribution
+    Fixed = Strategies.fixed_value
 
 
-# MaxTotalEnergy (None, fixed, dist, dynamic)
-# EnergyPerCycle (None, fixed, uniform, dynamic)
-# EnergyPlacement (Random, weighted, hotspot)
-# EnergyDissipation (None, fixed, uniform)
-
-# class MaxTotalEnergy:
-
-#     @staticmethod
-#     def get_strategy(strategy: str, **kwargs):
-#         return Strategies.get(strategy).generate(**kwargs)
-
-StrategyOptions = {
-    'Fixed': {
-        'value': 100
-    },
-    'Uniform': {
-        'low': 0,
-        'high': 100
-    },
-    'Normal': {
-        'mean': 50,
-        'std': 10
-    }
-}
-
-options = {
-    'value': 100
-}
-
-test = namedtuple('FixedValue', {'value': 100})
-
-print(test)
-
-strategies = {
-    'MaxTotalEnergy': {'Fixed': {'value': 100}},
-    'EnergyPerCycle': {'Uniform': {'low': 0, 'high': 100}},
-    'EnergyPlacement': {'Random': {}},
-}
-
-print(strategies['MaxTotalEnergy'])
-
-MaxTotalEnergy = Strategies.get_strategy('Fixed')
-print(MaxTotalEnergy.generate(**options))
-
-MaxTotalEnergy = Strategies.get_strategy('Uniform')
-print(MaxTotalEnergy)
-
-MaxTotalEnergy = Strategies.get_strategy('Normal')
-print(MaxTotalEnergy)
-
-# print(MaxTotalEnergy.get_strategy('Fixed', value=10))
-# print(MaxTotalEnergy.get_strategy('Uniform', low=1, high=10, size=1))
-# print(MaxTotalEnergy.get_strategy('Normal', mean=5, std=1, size=1))
-# print(MaxTotalEnergy)
-print('*****************')
+class PlacementStrategies(BaseStrategy):
+    Random = Strategies.random_selection
 
 
 class Resources:
 
-    @staticmethod
-    def get_strategy(self, strategy: str, **kwargs):
-        return Strategies.get(strategy).generate(**kwargs)
+    def generation_strategy(self, variable):
+        strat = strategy[variable]['function']
+        func = GenerationStrategies.get(strat)
+        args = strategy[variable]['args']
 
-    def calculate_resources(self, strategy: str) -> int:
-        """ Calculate the number of resources based on the strategy 
-        Should be a function that return the count of energy for this cycle, 
-        based on the strategy provided when the simulation is started
-        """
+        return round(func(**args)[0])
 
-        if strategy == "uniform":
-            return get_uniform_rvs(1, 10)
-
-        elif strategy == "normal":
-            return get_normal_rvs(50, 15)
-
-        elif strategy == "fixed":
-            return 10
-
-        else:
-            return ValueError("Unknown strategy")
-
-    def calculate_max_energy(self, strategy: str):
-        if strategy == "uniform":
-            return get_uniform_rvs(1, 10)
-        elif strategy == "normal":
-            return get_normal_rvs(50, 15)
-        elif strategy == "fixed":
-            return 10
-        else:
-            return ValueError("Unknown strategy")
-
-    def energy_placement(self, strategy: str):
-        energy_count = self.calculate_resources()
-
-        if strategy == "random":
-            locations = [(loc[1], loc[2])
-                         for loc in self.environment.coord_iter()]
-            random_locations = choices(locations, k=len(energy_count))
-            pass
-        elif strategy == "weighted":
-            pass
-        elif strategy == "hotspot":
-            pass
+    def placement_strategy(self, number):
+        pass
