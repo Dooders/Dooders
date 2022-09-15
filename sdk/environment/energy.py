@@ -1,46 +1,39 @@
-import random
-
-from sdk.base.base_object import BaseObject
-
-
-class Energy(BaseObject):
+class Energy:
     """ 
     
     """
     
-    def __init__(self, unique_id: str, position: float, simulation, params: dict) -> None:
+    def __init__(self, unique_id: str, lifespan, position, resources) -> None:
         """ 
         Args:
             unique_id: Unique ID of the object.
+            lifespan: Lifespan of the object.
             position: Position of the object.
-            simulation: The simulation object.
-            params: The parameters of the simulation.
             
         Attributes:
             unique_id: Unique ID of the object.
-            position: Position of the object.
-            simulation: The simulation object.
-            params: The parameters of the simulation.
+            position: Position of the object..
             life_span: The life span of the energy.
             cycle_count: The cycle count of the energy.
         """
-        super().__init__(unique_id, position, simulation)
-        self.params = params
-        self.life_span = random.randint(self.params.MinEnergyLife, self.params.MaxEnergyLife)
+        self.unique_id = unique_id
+        self.life_span = lifespan
+        self.position = position
         self.cycle_count = 0
+        self.resources = resources
         
     def step(self) -> None:
         """
         """
         self.cycle_count += 1
         if self.cycle_count >= self.life_span:
-            self.simulation.environment.remove_object(self)
-            self.simulation.time.remove(self)
-            self.log(
+            self.resources.consume(self)
+            self.resources.log(
                 granularity=3, message=f"Energy {self.unique_id} dissipated", scope='Energy')
 
     def consume(self):
         """
         """
-        self.simulation.environment.remove_object(self)
-        self.simulation.time.remove(self)
+        self.resources.consume(self)
+        self.resources.log(
+                granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
