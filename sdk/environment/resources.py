@@ -2,9 +2,9 @@ from sdk.strategies.strategies import Strategies
 from sdk.environment.energy import Energy
 
 strategy = {
-    'EnergyPerCycle': {'function': 'uniform_distribution', 'args': {'low': 1, 'high': 10}},
+    'EnergyPerCycle': {'function': 'uniform_distribution', 'args': {'low': 5, 'high': 10}},
     'MaxTotalEnergy': {'function': 'normal_distribution', 'args': {'mean': 50, 'std': 10}},
-    'EnergyLifespan': {'function': 'fixed_value', 'args': {'value': 7}},
+    'EnergyLifespan': {'function': 'fixed_value', 'args': {'value': 10}},
     'EnergyPlacement': {'function': 'random_location'}
 }
 
@@ -48,6 +48,8 @@ class Resources:
     def step(self):
         for resource in self.available_resources.values():
             resource.step()
+            
+        self.allocate_resources()
             
     def consume(self, resource):
         self.simulation.environment.remove_object(resource)

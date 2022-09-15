@@ -3,8 +3,8 @@ from random import choices
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.dooder import Dooder
-from sdk.environment import Energy
 from sdk.stop_conditions import ConditionRegistry
+from sdk.environment.resources import Resources
 
 
 class Simulation(BaseSimulation):
@@ -28,6 +28,8 @@ class Simulation(BaseSimulation):
             cycles: The number of cycles that have passed.
         """
         super().__init__(experiment_id, params)
+        
+        self.resources = Resources(self)
 
         self.cycles: int = 0
 
@@ -39,8 +41,8 @@ class Simulation(BaseSimulation):
         3. Set simulation running to true
         4. Collect initial state
         """
+        self.resources.allocate_resources()
         self.spawn_objects(Dooder, self.params.Dooder.StartingAgentCount)
-        self.spawn_objects(Energy, self.params.Energy.StartingEnergyCount)
 
         self.running = True
         self.information.collect(self)
@@ -78,7 +80,7 @@ class Simulation(BaseSimulation):
         Advance the simulation by one cycle.        
         """
         # place new energy
-        self.spawn_objects(Energy, self.params.Simulation.EnergyPerCycle)
+        self.resources.step()
 
         # advance every agent by a step
         self.time.step()
