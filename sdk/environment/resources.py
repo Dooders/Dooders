@@ -2,7 +2,7 @@ from sdk.strategies.strategies import Strategies
 from sdk.environment.energy import Energy
 
 strategy = {
-    'EnergyPerCycle': {'function': 'uniform_distribution', 'args': {'low': 5, 'high': 10}},
+    'EnergyPerCycle': {'function': 'uniform_distribution', 'args': {'low': 10, 'high': 15}},
     'MaxTotalEnergy': {'function': 'normal_distribution', 'args': {'mean': 50, 'std': 10}},
     'EnergyLifespan': {'function': 'fixed_value', 'args': {'value': 10}},
     'EnergyPlacement': {'function': 'random_location'}
@@ -23,7 +23,6 @@ class Resources:
         
         return round(func(**args))
 
-
     def placement_strategy(self, simulation, number):
         strat = strategy['EnergyPlacement']['function']
         func = Strategies.get(strat, 'Placement')
@@ -38,15 +37,15 @@ class Resources:
         energy_placement = self.placement_strategy(self.simulation, energy_per_cycle)
         
         for location in energy_placement:
-            if self.total_allocated_energy < max_total_energy:
+            if len(self.available_resources) < max_total_energy:
                 unique_id = self.simulation.generate_id()
-                energy = Energy(unique_id, energy_lifespan, location)
+                energy = Energy(unique_id, energy_lifespan, location, self)
                 self.simulation.environment.place_object(energy, location)
                 self.available_resources[unique_id] = energy
                 self.total_allocated_energy += 1
                 
     def step(self):
-        for resource in self.available_resources.values():
+        for resource in list(self.available_resources.values()):
             resource.step()
             
         self.allocate_resources()

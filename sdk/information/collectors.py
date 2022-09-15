@@ -64,7 +64,7 @@ def get_dooder_count(simulation) -> int:
 @CollectorRegistry.register_collector('EnergyCount', 'Simulation')
 def get_energy_count(simulation) -> int:
     """Return the number of energy in the simulation."""
-    return simulation.time.get_object_count('Energy')
+    return simulation.environment.get_object_count('Energy')
 
 
 @CollectorRegistry.register_collector('DirectionCounts', 'Simulation')
@@ -95,7 +95,7 @@ def get_total_energy_supply(simulation) -> int:
 def get_average_energy_age(simulation) -> float:
     """Return the average age of energy in the simulation."""
     energy_age = [
-        energy.cycle_count for energy in simulation.time.get_objects('Energy')]
+        energy.cycle_count for energy in simulation.environment.get_objects('Energy')]
 
     if len(energy_age) == 0:
         return 0

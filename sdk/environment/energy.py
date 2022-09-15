@@ -37,3 +37,11 @@ class Energy:
         self.resources.consume(self)
         self.resources.log(
                 granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
+
+    @property
+    def name(self) -> str:
+        """ 
+        Returns:
+            Name of the object
+        """
+        return self.__class__.__name__

@@ -174,3 +174,6 @@ class Environment(BaseEnvironment):
     @property
     def object_types(self):
         pass
+    
+    def get_object_count(self, object_type: str = 'BaseObject') -> int:
+        return len(self.get_objects(object_type))
