@@ -1,3 +1,11 @@
+""" 
+Simulation
+----------
+
+The simulation class is the main class of the simulation. It is responsible for
+initializing the simulation, running the simulation, and displaying the results.
+"""
+
 from random import choices
 
 from sdk.base.base_simulation import BaseSimulation
