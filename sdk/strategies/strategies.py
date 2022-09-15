@@ -6,7 +6,7 @@ This module contains the strategies used by the simulation.
 """
 
 from random import choices
-from typing import Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from scipy.stats import norm, randint
 
@@ -49,6 +49,9 @@ class Strategies:
         """
         return cls.strategies[type][strategy]
 
+#################################
+##### Generation Strategies #####
+#################################
 
 @Strategies.register("Generation")
 def uniform_distribution(low: int, high: int) -> int:
@@ -92,6 +95,10 @@ def fixed_value(value: int) -> int:
     """
     return value
 
+
+################################
+##### Placement Strategies #####
+################################
 
 @Strategies.register("Placement")
 def random_location(simulation: 'Simulation', number: int) -> list:
