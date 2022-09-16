@@ -105,6 +105,7 @@ class Society:
         #! maybe make this a more general function inside the Strategies class
         #! call it compile_strategy or something
         #! maybe compile all at once?????
+        #! or make it a class methos decorator?
         strat = seed_strategy[variable]['function']
         args = seed_strategy[variable]['args']
         func = Strategies.get(strat, 'Generation')
