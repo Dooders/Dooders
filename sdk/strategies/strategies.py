@@ -49,6 +49,14 @@ class Strategies:
         """
         return cls.strategies[type][strategy]
 
+def compile_strategy(strategy):
+    #! not sure this will work when passing simulation object
+    func = Strategies.get(strategy['func'], strategy_type)
+    args = strategy['args']
+
+    return func(**args)
+
+    
 #################################
 ##### Generation Strategies #####
 #################################
