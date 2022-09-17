@@ -17,15 +17,15 @@ This project took a lot of inspiration and direction from:
 
 - [**Dooder**](docs/Dooder.md) - An agent object with an amount of causal “control” in the simulation.
 
-- **Experiment** - A component of one or multiple simulations.
+- **Experiment** - One or multiple simulations.
 
 - **Simulation** - A full execution of the agent model and additional components (I.e., Environment).
 
 - **Environment** - Proxy for spatial interactions and effects. A lot like a game board.
 
-- **Component** - Analogous to a system. In reality, just about everything is a system. A component serves as a non-object system (non spatial representation).
+- **Model** - Analogous to a system. In reality, just about everything is a system. A model serves as a non-object system (non spatial representation).
 
-- **Object** - A component that has a spatial element, like a Dooder or Energy.
+- **Object** - A model that has a spatial element, like a Dooder or Energy.
 
 - **Energy** - An object that allows a Dooder to perform “work” (execute movements and actions).
 
