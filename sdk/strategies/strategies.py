@@ -19,6 +19,7 @@ class Strategies:
     strategies = {
         'Generation': {},
         'Placement': {},
+        'Genetics': {}
     }
 
     @classmethod
@@ -49,10 +50,15 @@ class Strategies:
         """
         return cls.strategies[type][strategy]
 
-def compile_strategy(strategy):
+def compile_strategy(simulation, raw_strategy):
     #! not sure this will work when passing simulation object
-    func = Strategies.get(strategy['func'], strategy_type)
-    args = strategy['args']
+    for strat in raw_strategy:
+        func = Strategies.get(raw_strategy[strat]['function'], strat)
+        args = raw_strategy[strat]['args']
+        raw_strategy[strat] = func(simulation, **args)
+        
+
+
 
     return func(**args)
 
@@ -125,3 +131,12 @@ def random_location(simulation: 'Simulation', number: int) -> list:
     random_locations = choices(locations, k=number)
 
     return random_locations
+
+
+################################
+###### Genetic Strategies ######
+################################
+
+@Strategies.register("Genetics")
+def random_genetics(value: int) -> int:
+    return 'working'

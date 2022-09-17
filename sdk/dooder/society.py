@@ -10,16 +10,20 @@ Graph:
 
 seed_strategy = {
     'SeedCount': {
-        'function': 'uniform',
+        'type': 'Generation',
+        'function': 'uniform_distribution',
         'args': {
             'low': 10,
             'high': 15
         }
     },
     'SeedPlacement': {
-        'function': 'random_location'
+        'type': 'Placement',
+        'function': 'random_location',
+        'args': {}
     },
     'SeedGenetics': {
+        'type': 'Genetics',
         'function': 'random_genetics'
     }
 }
@@ -27,21 +31,21 @@ seed_strategy = {
 
 dooder_strategy = {
     'StartingEnergySupply': {
-        'function': 'uniform',
+        'function': 'uniform_distribution',
         'args': {
             'low': 10,
             'high': 15
         }
     },
     'MaxEnergySupply': {
-        'function': 'normal',
+        'function': 'normal_distribution',
         'args': {
             'mean': 50,
             'std': 10
         }
     },
     'Metabolism': {
-        'function': 'uniform',
+        'function': 'uniform_distribution',
         'args': {
             'low': 1,
             'high': 5
@@ -105,23 +109,23 @@ class Society:
         #! maybe make this a more general function inside the Strategies class
         #! call it compile_strategy or something
         #! maybe compile all at once?????
-        #! or make it a class methos decorator?
+        #! or make it a class method decorator?
         strat = seed_strategy[variable]['function']
         args = seed_strategy[variable]['args']
         func = Strategies.get(strat, 'Generation')
 
         return round(func(**args))
 
-    def placement_strategy(self, simulation, number):
+    def placement_strategy(self, number):
         strat = seed_strategy['SeedPlacement']['function']
         func = Strategies.get(strat, 'Placement')
-        args = (simulation, number)
+        args = (self.simulation, number)
 
         return func(*args)
 
     def generate_seed_population(self):
         seed_count = self.generation_strategy('SeedCount')
-        seed_placement = self.placement_strategy(self.simulation, seed_count)
+        seed_placement = self.placement_strategy(seed_count)
 
         for position in seed_placement:
             self.generate_dooder(position, None)
