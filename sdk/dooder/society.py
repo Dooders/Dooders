@@ -1,6 +1,7 @@
 import networkx as nx
+
 from sdk.dooder import Dooder
-from sdk.strategies.strategies import Strategies
+from sdk.strategies.strategies import Strategies, compile_strategy
 
 """ 
 Graph:
@@ -29,73 +30,6 @@ seed_strategy = {
 }
 
 
-dooder_strategy = {
-    'StartingEnergySupply': {
-        'function': 'uniform_distribution',
-        'args': {
-            'low': 10,
-            'high': 15
-        }
-    },
-    'MaxEnergySupply': {
-        'function': 'normal_distribution',
-        'args': {
-            'mean': 50,
-            'std': 10
-        }
-    },
-    'Metabolism': {
-        'function': 'uniform_distribution',
-        'args': {
-            'low': 1,
-            'high': 5
-        }
-    },
-    'SurvivalProbability': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'ReproductionProbability': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'ReproductionEnergyCost': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 10
-        }
-    },
-    'ReproductionSuccessProbability': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'MoveProbability': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'MoveSuccessProbability': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'MoveEnergyCost': {
-        'function': 'fixed_value',
-        'args': {
-            'value': 1
-        }
-    }
-}
-
-
 class Society:
 
     active_dooders = {}
@@ -104,37 +38,18 @@ class Society:
 
     def __init__(self, simulation):
         self.simulation = simulation
-
-    def generation_strategy(self, variable):
-        #! maybe make this a more general function inside the Strategies class
-        #! call it compile_strategy or something
-        #! maybe compile all at once?????
-        #! or make it a class method decorator?
-        strat = seed_strategy[variable]['function']
-        args = seed_strategy[variable]['args']
-        func = Strategies.get(strat, 'Generation')
-
-        return round(func(**args))
-
-    def placement_strategy(self, number):
-        strat = seed_strategy['SeedPlacement']['function']
-        func = Strategies.get(strat, 'Placement')
-        args = (self.simulation, number)
-
-        return func(*args)
+        compile_strategy(self, seed_strategy)
 
     def generate_seed_population(self):
-        seed_count = self.generation_strategy('SeedCount')
-        seed_placement = self.placement_strategy(seed_count)
 
-        for position in seed_placement:
+        for position in self.SeedPlacement:
             self.generate_dooder(position, None)
 
     def generate_dooder(self, position, dooder_strategy):
         #! need to fix the dooder object creation and simplify it
         #! maybe make a dooder factory class or input dict
         dooder = Dooder(self.simulation.generate_id(), position,
-                        self.simulation, dooder_strategy)
+                        self.simulation)
         self.place_dooder(dooder, position)
 
     def place_dooder(self, dooder, position):
@@ -153,6 +68,9 @@ class Society:
 
     def get_dooder(self, dooder_id):
         return self.active_dooders[dooder_id]
+
+    def tester(self):
+        compile_strategy(self, seed_strategy)
 
     @property
     def active_dooder_count(self):

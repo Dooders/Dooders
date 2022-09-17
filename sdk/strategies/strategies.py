@@ -50,19 +50,28 @@ class Strategies:
         """
         return cls.strategies[type][strategy]
 
-def compile_strategy(simulation, raw_strategy):
-    #! not sure this will work when passing simulation object
-    for strat in raw_strategy:
-        func = Strategies.get(raw_strategy[strat]['function'], strat)
-        args = raw_strategy[strat]['args']
-        raw_strategy[strat] = func(simulation, **args)
-        
+
+def compile_strategy(model, raw_strategy):
+    compiled_strategy = raw_strategy.copy()
+
+    for strat_type, strat in raw_strategy.items():
+        func = Strategies.get(strat['function'], strat['type'])
+        args = strat.get('args', None)
+
+        if strat['type'] == 'Generation':
+            compiled_strategy[strat_type] = func(**args)
+
+        if strat['type'] == 'Placement':
+            compiled_strategy[strat_type] = func(
+                model.simulation, compiled_strategy['SeedCount'])
+
+        if strat['type'] == 'Genetics':
+            compiled_strategy[strat_type] = func(1)
+
+    for key, value in compiled_strategy.items():
+        setattr(model, key, value)
 
 
-
-    return func(**args)
-
-    
 #################################
 ##### Generation Strategies #####
 #################################
@@ -72,11 +81,11 @@ def uniform_distribution(low: int, high: int) -> int:
     """ 
     Generates a random value between the given low and high values. 
     Followings a uniform distribution.
-    
+
     Args:
         low (int): The lower bound of the distribution.
         high (int): The upper bound of the distribution.
-        
+
     Returns:
         The generated value.
     """
@@ -88,11 +97,11 @@ def normal_distribution(mean: int, std: int) -> int:
     """ 
     Generates a random value based on the given mean and standard deviation.
     Followings a normal distribution.
-    
+
     Args:
         mean (int): The mean of the distribution.
         std (int): The standard deviation of the distribution.
-        
+
     Returns:
         The generated value.
     """
@@ -103,7 +112,7 @@ def normal_distribution(mean: int, std: int) -> int:
 def fixed_value(value: int) -> int:
     """ 
     Returns a fixed value.
-    
+
     Args:
         value (int): The value to return.
     """
@@ -118,11 +127,11 @@ def fixed_value(value: int) -> int:
 def random_location(simulation: 'Simulation', number: int) -> list:
     """ 
     Generates a list of locations for the given number of resources and based on the provided strategy.
-    
+
     Args:
         simulation (Simulation): The simulation object.
         number (int): The number of locations to generate.
-    
+
     Returns:
         A list of locations.
     """
