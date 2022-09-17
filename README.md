@@ -1,6 +1,6 @@
 # Dooders
 
-Dooders is a python library for complex agent based simulation.
+Dooders is a python library for complex model-based simulation.
 
 This repo, and the overall project, is a space where I can experiment and learn more about complexity theory. The code, content, and concepts will change over time as I explore different ideas.
 
