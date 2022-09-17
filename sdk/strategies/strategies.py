@@ -14,6 +14,13 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
+class BaseStrategy(BaseModel):
+    Name: str
+    Type: str
+    Func: Callable
+    Args: dict
+    
+    
 class Strategies:
 
     strategies = {
