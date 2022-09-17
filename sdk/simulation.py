@@ -56,34 +56,7 @@ class Simulation(BaseSimulation):
 
         self.running = True
         self.information.collect(self)
-
-    # def spawn_object(self, x: int, y: int, Object) -> None:
-    #     """ 
-    #     Spawn a new object at a given location.
         
-    #     Args:
-    #         x: The x coordinate of the location.
-    #         y: The y coordinate of the location.
-    #         Object: The object to spawn.
-    #     """
-    #     object_name = Object.__name__
-    #     object = Object(self.generate_id(), (x, y), self,
-    #                     self.params.get(object_name))
-    #     self.environment.place_object(object, (x, y))
-    #     self.time.add(object)
-
-    # def spawn_objects(self, Object, object_count: int) -> None:
-    #     """
-    #     Spawn a number of new objects at random locations.
-    #     Args:
-    #         Object: The object to spawn.
-    #         object_count: The number of objects to spawn.
-    #     """
-    #     locations = [(loc[1], loc[2]) for loc in self.environment.coord_iter()]
-    #     random_locations = choices(locations, k=object_count)
-
-    #     for x, y in random_locations:
-    #         self.spawn_object(x, y, Object)
 
     def cycle(self) -> None:
         """
