@@ -63,13 +63,10 @@ class Strategies:
 
 
 def compile_strategy(model, raw_strategy):
-    #! actually may need to recompile every cycle instead of yielding a generator
-    #! can I return a dict generator?
     compiled_strategy = {}
     strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
 
     for strat_type, strat in strategies.items():
-        # make it so dependency is added to args, so I dont have to duplicate function execution
         func = Strategies.get(strat.StrategyFunc, strat.StrategyType)
         args = strat.Args
 
@@ -101,7 +98,7 @@ def uniform_distribution(low: int, high: int) -> int:
     Returns:
         The generated value.
     """
-    yield randint.rvs(low=low, high=high)
+    return randint.rvs(low=low, high=high)
 
 
 @Strategies.register("Generation")
@@ -128,7 +125,7 @@ def fixed_value(value: int) -> int:
     Args:
         value (int): The value to return.
     """
-    yield value
+    return value
 
 
 ################################
@@ -151,7 +148,7 @@ def random_location(simulation: 'Simulation', number: int) -> list:
                  for loc in simulation.environment.coord_iter()]
     random_locations = choices(locations, k=number)
 
-    yield random_locations
+    return random_locations
 
 
 ################################
@@ -160,4 +157,4 @@ def random_location(simulation: 'Simulation', number: int) -> list:
 
 @Strategies.register("Genetics")
 def random_genetics(value: int) -> int:
-    yield 'working'
+    return 'working'

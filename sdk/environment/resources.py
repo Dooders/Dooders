@@ -14,12 +14,18 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 class ResourceStrategy:
-    EnergyPerCycle = BaseStrategy(Type='Generation', Func='uniform_distribution',
+    EnergyPerCycle = BaseStrategy(StrategyType='Generation', 
+                                  StrategyFunc='uniform_distribution',
                                   Args={'low': 10, 'high': 15})
-    MaxTotalEnergy = BaseStrategy(Type='Generation', Func='normal_distribution',
+    
+    MaxTotalEnergy = BaseStrategy(StrategyType='Generation', 
+                                  StrategyFunc='normal_distribution',
                                   Args={'mean': 50, 'std': 10})
-    EnergyPlacement = BaseStrategy(Type='Placement', Func='random_location',
-                                   Args=None)
+    
+    EnergyPlacement = BaseStrategy(StrategyType='Placement', 
+                                   StrategyFunc='random_location',
+                                   Args=None, 
+                                   Dependency='EnergyPerCycle')
     
     
 class Resources:
@@ -64,9 +70,11 @@ class Resources:
         """ 
         Performs a step in the simulation.
         """
+        
         for resource in list(self.available_resources.values()):
             resource.step()
             
+        compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
             
     def consume(self, resource: Energy):

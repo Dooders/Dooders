@@ -26,6 +26,7 @@ class BehaviorProfile(BaseModel):
 
 
 class Behavior:
+    #! This can be a specialized strategy manager. Maybe it can extend Strategies
     """ 
     Behavior class used to generate the genetic expression of a Dooder
     A genetic expression is a set of probabilities and weights that determine 

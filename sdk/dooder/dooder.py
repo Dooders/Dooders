@@ -4,87 +4,54 @@ from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.strategies.strategies import compile_strategy
+from sdk.strategies.strategies import BaseStrategy, compile_strategy
 
-dooder_strategy = {
-    'StartingEnergySupply': {
-        'function': 'uniform_distribution',
-        'type': 'Generation',
-        'args': {
-            'low': 10,
-            'high': 15
-        }
-    },
-    'MaxEnergySupply': {
-        'function': 'normal_distribution',
-        'type': 'Generation',
-        'args': {
-            'mean': 50,
-            'std': 10
-        }
-    },
-    'Metabolism': {
-        'function': 'uniform_distribution',
-        'type': 'Generation',
-        'args': {
-            'low': 1,
-            'high': 5
-        }
-    },
-    'SurvivalProbability': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'ReproductionProbability': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'ReproductionEnergyCost': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 10
-        }
-    },
-    'ReproductionSuccessProbability': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'MoveProbability': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'MoveSuccessProbability': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 0.5
-        }
-    },
-    'MoveEnergyCost': {
-        'function': 'fixed_value',
-        'type': 'Generation',
-        'args': {
-            'value': 1
-        }
-    }
-}
+
+class DooderStrategy:
+    StartingEnergySupply = BaseStrategy(StrategyType='Generation',
+                                        StrategyFunc='uniform_distribution',
+                                        Args={'low': 10, 'high': 15})
+
+    MaxEnergySupply = BaseStrategy(StrategyType='Generation',
+                                   StrategyFunc='uniform_distribution',
+                                   Args={'low': 10, 'high': 15})
+
+    Metabolism = BaseStrategy(StrategyType='Generation',
+                              StrategyFunc='uniform_distribution',
+                              Args={'low': 1, 'high': 5})
+
+    SurvivalProbability = BaseStrategy(StrategyType='Generation',
+                                       StrategyFunc='fixed_value',
+                                       Args=1.0)
+
+    ReproductionProbability = BaseStrategy(StrategyType='Generation',
+                                           StrategyFunc='fixed_value',
+                                           Args=1.0)
+
+    ReproductionEnergyCost = BaseStrategy(StrategyType='Generation',
+                                          StrategyFunc='fixed_value',
+                                          Args=1)
+
+    ReproductionSuccessProbability = BaseStrategy(StrategyType='Generation',
+                                                  StrategyFunc='fixed_value',
+                                                  Args={'value': 1.0})
+
+    MoveProbability = BaseStrategy(StrategyType='Generation',
+                                   StrategyFunc='fixed_value',
+                                   Args=1.0)
+
+    MoveSuccessProbability = BaseStrategy(StrategyType='Generation',
+                                          StrategyFunc='fixed_value',
+                                          Args={'value': 1.0})
+
+    MovementEnergyCost = BaseStrategy(StrategyType='Generation',
+                                      StrategyFunc='fixed_value',
+                                      Args=1)
 
 
 class Dooder(BaseObject):
     """ 
+    #! Need to work out behavior and genetics now that I have the Strategies class
 
     """
 
@@ -110,7 +77,7 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        compile_strategy(self, dooder_strategy)
+        compile_strategy(self, DooderStrategy)
         self.behavior = Behavior.generate_behavior()
         self.cognition = Cognition()
         self.energy = self.StartingEnergySupply

@@ -10,10 +10,14 @@ Graph:
 
 
 class SeedStrategy:
-    SeedCount = BaseStrategy(Type='Generation', Func='uniform_distribution',
+    SeedCount = BaseStrategy(StrategyType='Generation', 
+                             StrategyFunc='uniform_distribution',
                              Args={'low': 10, 'high': 15})
-    SeedPlacement = BaseStrategy(Type='Placement', Func='random_location',
-                                 Args=None)
+    
+    SeedPlacement = BaseStrategy(StrategyType='Placement', 
+                                 StrategyFunc='random_location',
+                                 Args=None, 
+                                 Dependency='SeedCount')
 
 
 class Society:
