@@ -16,9 +16,18 @@ if TYPE_CHECKING:
 
 
 class BaseStrategy(BaseModel):
-    Type: str
-    Func: str
+    # What kind of value needs to be generated
+    StrategyType: str
+    # The function generator to be executed
+    StrategyFunc: str
+    # Arguments to pass to the StrategyFunc
     Args: Optional[dict] = None
+    # The strategy is dependent on the result of another strategy
+    # If true, the strategy will be compiled later
+    Dependency: Optional[str] = None
+    # The result should be refreshed each cycle
+    # If true, a generator is returned
+    CycleRefresh: Optional[bool] = True
     
     
 class Strategies:
