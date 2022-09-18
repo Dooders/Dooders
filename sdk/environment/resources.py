@@ -52,8 +52,8 @@ class Resources:
             The number of allocated resources.
         """
         
-        for location in self.EnergyPlacement:
-            if len(self.available_resources) < self.MaxTotalEnergy:
+        for location in next(self.EnergyPlacement):
+            if len(self.available_resources) < next(self.MaxTotalEnergy):
                 unique_id = self.simulation.generate_id()
                 energy = Energy(unique_id, location, self)
                 self.simulation.environment.place_object(energy, location)

@@ -18,16 +18,16 @@ if TYPE_CHECKING:
 class BaseStrategy(BaseModel):
     # What kind of value needs to be generated
     StrategyType: str
+    
     # The function generator to be executed
     StrategyFunc: str
+    
     # Arguments to pass to the StrategyFunc
     Args: Optional[dict] = None
+    
     # The strategy is dependent on the result of another strategy
     # If true, the strategy will be compiled later
     Dependency: Optional[str] = None
-    # The result should be refreshed each cycle
-    # If true, a generator is returned
-    CycleRefresh: Optional[bool] = True
     
     
 class Strategies:
@@ -63,23 +63,21 @@ class Strategies:
 
 
 def compile_strategy(model, raw_strategy):
+    #! actually may need to recompile every cycle instead of yielding a generator
     compiled_strategy = {}
     strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
 
     for strat_type, strat in strategies.items():
-        print(strat_type, strat)
-        func = Strategies.get(strat.Func, strat.Type)
+        # make it so dependency is added to args, so I dont have to duplicate function execution
+        func = Strategies.get(strat.StrategyFunc, strat.StrategyType)
         args = strat.Args
 
-        if strat.Type == 'Generation':
-            compiled_strategy[strat_type] = func(**args)
-
-        if strat.Type == 'Placement':
+        if strat.StrategyType == 'Placement':
             compiled_strategy[strat_type] = func(
-                model.simulation, compiled_strategy['SeedCount'])
-
-        if strat.Type == 'Genetics':
-            compiled_strategy[strat_type] = func(1)
+                model.simulation, compiled_strategy[strat.Dependency])
+            
+        else:
+            compiled_strategy[strat_type] = func(**args)
 
     for key, value in compiled_strategy.items():
         setattr(model, key, value)
@@ -102,7 +100,7 @@ def uniform_distribution(low: int, high: int) -> int:
     Returns:
         The generated value.
     """
-    return randint.rvs(low=low, high=high)
+    yield randint.rvs(low=low, high=high)
 
 
 @Strategies.register("Generation")
@@ -129,7 +127,7 @@ def fixed_value(value: int) -> int:
     Args:
         value (int): The value to return.
     """
-    return value
+    yield value
 
 
 ################################
@@ -152,7 +150,7 @@ def random_location(simulation: 'Simulation', number: int) -> list:
                  for loc in simulation.environment.coord_iter()]
     random_locations = choices(locations, k=number)
 
-    return random_locations
+    yield random_locations
 
 
 ################################
@@ -161,4 +159,4 @@ def random_location(simulation: 'Simulation', number: int) -> list:
 
 @Strategies.register("Genetics")
 def random_genetics(value: int) -> int:
-    return 'working'
+    yield 'working'
