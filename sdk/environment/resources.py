@@ -14,9 +14,9 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 class ResourceStrategy:
-    EnergyPerCycle = BaseStrategy(Type='Energy', Func='uniform_distribution',
+    EnergyPerCycle = BaseStrategy(Type='Generation', Func='uniform_distribution',
                                   Args={'low': 10, 'high': 15})
-    MaxTotalEnergy = BaseStrategy(Type='Energy', Func='normal_distribution',
+    MaxTotalEnergy = BaseStrategy(Type='Generation', Func='normal_distribution',
                                   Args={'mean': 50, 'std': 10})
     EnergyPlacement = BaseStrategy(Type='Placement', Func='random_location',
                                    Args=None)

@@ -48,12 +48,7 @@ class Strategies:
     @classmethod
     def get(cls, strategy: str, type: str) -> Callable:
         """ 
-        Get a collector from the registry.
-        Args:
-            name: Name of the collector.
-            component: Component of the collector.
-        Returns:
-            The collector.
+
         """
         return cls.strategies[type][strategy]
 
@@ -63,17 +58,18 @@ def compile_strategy(model, raw_strategy):
     strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
 
     for strat_type, strat in strategies.items():
-        func = Strategies.get(strat['function'], strat['type'])
-        args = strat.get('args', None)
+        print(strat_type, strat)
+        func = Strategies.get(strat.Func, strat.Type)
+        args = strat.Args
 
-        if strat['type'] == 'Generation':
+        if strat.Type == 'Generation':
             compiled_strategy[strat_type] = func(**args)
 
-        if strat['type'] == 'Placement':
+        if strat.Type == 'Placement':
             compiled_strategy[strat_type] = func(
                 model.simulation, compiled_strategy['SeedCount'])
 
-        if strat['type'] == 'Genetics':
+        if strat.Type == 'Genetics':
             compiled_strategy[strat_type] = func(1)
 
     for key, value in compiled_strategy.items():
