@@ -1,7 +1,6 @@
 import networkx as nx
-
 from sdk.dooder import Dooder
-from sdk.strategies.strategies import Strategies, compile_strategy
+from sdk.strategies.strategies import BaseStrategy, compile_strategy
 
 """ 
 Graph:
@@ -9,25 +8,12 @@ Graph:
     edges: interactions (cycle number, involved dooders, interaction type) & overall count per dooder
 """
 
-seed_strategy = {
-    'SeedCount': {
-        'type': 'Generation',
-        'function': 'uniform_distribution',
-        'args': {
-            'low': 10,
-            'high': 15
-        }
-    },
-    'SeedPlacement': {
-        'type': 'Placement',
-        'function': 'random_location',
-        'args': {}
-    },
-    'SeedGenetics': {
-        'type': 'Genetics',
-        'function': 'random_genetics'
-    }
-}
+
+class SeedStrategy:
+    SeedCount = BaseStrategy(Type='Generation', Func='uniform_distribution',
+                             Args={'low': 10, 'high': 15})
+    SeedPlacement = BaseStrategy(Type='Placement', Func='random_location',
+                                 Args=None)
 
 
 class Society:
@@ -38,7 +24,7 @@ class Society:
 
     def __init__(self, simulation):
         self.simulation = simulation
-        compile_strategy(self, seed_strategy)
+        compile_strategy(self, SeedStrategy)
 
     def generate_seed_population(self):
 
@@ -68,9 +54,6 @@ class Society:
 
     def get_dooder(self, dooder_id):
         return self.active_dooders[dooder_id]
-
-    def tester(self):
-        compile_strategy(self, seed_strategy)
 
     @property
     def active_dooder_count(self):

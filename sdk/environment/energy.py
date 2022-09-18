@@ -1,9 +1,15 @@
+from sdk.strategies.strategies import compile_strategy, BaseStrategy
+
+class EnergyStrategy:
+    Lifespan = BaseStrategy(Type='Generation', Func='uniform_distribution',
+                            Args={'low': 5, 'high': 15})
+
 class Energy:
     """ 
     
     """
     
-    def __init__(self, unique_id: str, lifespan, position, resources) -> None:
+    def __init__(self, unique_id: str, position, resources) -> None:
         """ 
         Args:
             unique_id: Unique ID of the object.
@@ -17,7 +23,7 @@ class Energy:
             cycle_count: The cycle count of the energy.
         """
         self.unique_id = unique_id
-        self.life_span = lifespan
+        compile_strategy(self, EnergyStrategy)
         self.position = position
         self.cycle_count = 0
         self.resources = resources

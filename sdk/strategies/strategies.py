@@ -6,19 +6,19 @@ This module contains the strategies used by the simulation.
 """
 
 from random import choices
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Optional
 
 from scipy.stats import norm, randint
+from pydantic import BaseModel
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
 class BaseStrategy(BaseModel):
-    Name: str
     Type: str
-    Func: Callable
-    Args: dict
+    Func: str
+    Args: Optional[dict] = None
     
     
 class Strategies:
@@ -59,9 +59,10 @@ class Strategies:
 
 
 def compile_strategy(model, raw_strategy):
-    compiled_strategy = raw_strategy.copy()
+    compiled_strategy = {}
+    strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
 
-    for strat_type, strat in raw_strategy.items():
+    for strat_type, strat in strategies.items():
         func = Strategies.get(strat['function'], strat['type'])
         args = strat.get('args', None)
 

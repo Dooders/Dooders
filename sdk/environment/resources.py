@@ -8,18 +8,20 @@ agents. It also contains the functions to access the resources.
 from typing import TYPE_CHECKING
 
 from sdk.environment.energy import Energy
-from sdk.strategies.strategies import Strategies
+from sdk.strategies.strategies import compile_strategy, BaseStrategy
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
-strategy = {
-    'EnergyPerCycle': {'function': 'uniform_distribution', 'args': {'low': 10, 'high': 15}},
-    'MaxTotalEnergy': {'function': 'normal_distribution', 'args': {'mean': 50, 'std': 10}},
-    'EnergyLifespan': {'function': 'fixed_value', 'args': {'value': 10}},
-    'EnergyPlacement': {'function': 'random_location'}
-}
-
+class ResourceStrategy:
+    EnergyPerCycle = BaseStrategy(Type='Energy', Func='uniform_distribution',
+                                  Args={'low': 10, 'high': 15})
+    MaxTotalEnergy = BaseStrategy(Type='Energy', Func='normal_distribution',
+                                  Args={'mean': 50, 'std': 10})
+    EnergyPlacement = BaseStrategy(Type='Placement', Func='random_location',
+                                   Args=None)
+    
+    
 class Resources:
     """ 
     Resources are the objects that are consumed by agents to perform actions.
@@ -40,39 +42,7 @@ class Resources:
     
     def __init__(self, simulation: 'Simulation'):
         self.simulation = simulation
-
-    def generation_strategy(self, variable: str):
-        """ 
-        Generates a value for the given variable based on the provided strategy.
-        
-        Args:
-            variable (str): The name of the variable to generate a value for.
-        
-        Returns:
-            The generated value.
-        """
-        strat = strategy[variable]['function']
-        args = strategy[variable]['args']
-        func = Strategies.get(strat, 'Generation')
-        
-        return round(func(**args))
-
-    def placement_strategy(self, simulation: 'Simulation', number: int):
-        """ 
-        Generates a list of locations for the given number of resources and based on the provided strategy.
-        
-        Args:
-            simulation (Simulation): The simulation object that contains the environment and the agents.
-            number (int): The number of resources to generate locations for.
-        
-        Returns:   
-            A list of locations.
-        """
-        strat = strategy['EnergyPlacement']['function']
-        func = Strategies.get(strat, 'Placement')
-        args = (simulation, number)
-
-        return func(*args)
+        compile_strategy(self, ResourceStrategy)
     
     def allocate_resources(self):
         """ 
@@ -81,15 +51,11 @@ class Resources:
         Returns:
             The number of allocated resources.
         """
-        energy_per_cycle = self.generation_strategy('EnergyPerCycle')
-        max_total_energy = self.generation_strategy('MaxTotalEnergy')
-        energy_lifespan = self.generation_strategy('EnergyLifespan')
-        energy_placement = self.placement_strategy(self.simulation, energy_per_cycle)
         
-        for location in energy_placement:
-            if len(self.available_resources) < max_total_energy:
+        for location in self.EnergyPlacement:
+            if len(self.available_resources) < self.MaxTotalEnergy:
                 unique_id = self.simulation.generate_id()
-                energy = Energy(unique_id, energy_lifespan, location, self)
+                energy = Energy(unique_id, location, self)
                 self.simulation.environment.place_object(energy, location)
                 self.available_resources[unique_id] = energy
                 self.total_allocated_energy += 1
