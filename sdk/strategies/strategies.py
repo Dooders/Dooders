@@ -64,6 +64,7 @@ class Strategies:
 
 def compile_strategy(model, raw_strategy):
     #! actually may need to recompile every cycle instead of yielding a generator
+    #! can I return a dict generator?
     compiled_strategy = {}
     strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
 
