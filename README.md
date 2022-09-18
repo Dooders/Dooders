@@ -34,8 +34,8 @@ This project took a lot of inspiration and direction from:
 
 
 
-This is an example of how I can do a footnote. [^fn]
+This is an example of how I can do a footnote. [^1]
 
 
-[^fn] And this his how I would cite it.
+[^1] And this his how I would cite it.
 
