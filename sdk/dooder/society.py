@@ -1,6 +1,6 @@
 import networkx as nx
 from sdk.dooder import Dooder
-from sdk.strategies.strategies import BaseStrategy, compile_strategy
+from sdk.strategies.strategies import BaseStrategy, compile_strategy, Strategies
 
 """ 
 Graph:
@@ -8,6 +8,8 @@ Graph:
     edges: interactions (cycle number, involved dooders, interaction type) & overall count per dooder
 """
 
+
+SeedStrategy = Strategies.load_strategy('sdk/dooder/seed.yml')
 
 class SeedStrategy:
     SeedCount = BaseStrategy(StrategyType='Generation', 
