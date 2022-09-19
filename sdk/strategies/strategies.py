@@ -7,6 +7,7 @@ This module contains the strategies used by the simulation.
 
 from random import choices
 from typing import TYPE_CHECKING, Any, Callable, Optional
+import yml
 
 from scipy.stats import norm, randint
 from pydantic import BaseModel
@@ -42,6 +43,13 @@ class Strategies:
         'Genetics': {}
     }
 
+    @classmethod
+    def load_strategy(path):
+        with yml:
+            strategy = f
+            
+        return strategy
+    
     @classmethod
     def register(cls, type: str) -> Callable:
         """ 
