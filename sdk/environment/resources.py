@@ -64,14 +64,13 @@ class Resources:
         self.strategies = compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
             
-    def consume(self, resource: Energy):
+    def remove(self, resource: Energy):
         """ 
         Consumes the given resource.
         
         Args:
             resource (Energy): The resource to consume.
         """
-        self.simulation.environment.remove_object(resource)
         self.available_resources.pop(resource.unique_id)
         
     def log(self, granularity: int, message: str, scope: str):

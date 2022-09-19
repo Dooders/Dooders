@@ -33,14 +33,16 @@ class Energy:
         """
         self.cycle_count += 1
         if self.cycle_count >= self.Lifespan:
-            self.resources.consume(self)
+            self.consume()
             self.resources.log(
                 granularity=3, message=f"Energy {self.unique_id} dissipated", scope='Energy')
 
     def consume(self):
         """
         """
-        self.resources.consume(self)
+    
+        self.resources.remove(self)
+        self.resources.simulation.environment.remove_object(self)
         self.resources.log(
                 granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
 
