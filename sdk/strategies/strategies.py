@@ -6,7 +6,7 @@ This module contains the strategies used by the simulation.
 """
 
 from random import choices
-from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING, Any, Callable, Optional
 
 from scipy.stats import norm, randint
 from pydantic import BaseModel
@@ -28,6 +28,10 @@ class BaseStrategy(BaseModel):
     # The strategy is dependent on the result of another strategy
     # If true, the strategy will be compiled later
     Dependency: Optional[str] = None
+    
+    Description: Optional[str] = None
+    
+    Used: Optional[str] = None
     
     
 class Strategies:
@@ -62,9 +66,14 @@ class Strategies:
         return cls.strategies[type][strategy]
 
 
-def compile_strategy(model, raw_strategy):
+def compile_strategy(model, raw_strategy: Any):
     compiled_strategy = {}
-    strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
+    
+    if type(raw_strategy) == object:
+        strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
+        
+    else:
+        strategies = raw_strategy
 
     for strat_type, strat in strategies.items():
         func = Strategies.get(strat.StrategyFunc, strat.StrategyType)
@@ -86,7 +95,7 @@ def compile_strategy(model, raw_strategy):
 #################################
 
 @Strategies.register("Generation")
-def uniform_distribution(low: int, high: int) -> int:
+def uniform_distribution(min: int, max: int) -> int:
     """ 
     Generates a random value between the given low and high values. 
     Followings a uniform distribution.
@@ -98,11 +107,11 @@ def uniform_distribution(low: int, high: int) -> int:
     Returns:
         The generated value.
     """
-    return randint.rvs(low=low, high=high)
+    return randint.rvs(low=min, high=max)
 
 
 @Strategies.register("Generation")
-def normal_distribution(mean: int, std: int) -> int:
+def normal_distribution(min: int, max: int, variation: float = None) -> float:
     """ 
     Generates a random value based on the given mean and standard deviation.
     Followings a normal distribution.
@@ -114,7 +123,13 @@ def normal_distribution(mean: int, std: int) -> int:
     Returns:
         The generated value.
     """
-    return norm.rvs(loc=mean, scale=std)
+    
+    mean = (max + min) / 2
+    
+    if variation is None:
+        variation = (max - min) / 4
+    
+    return norm.rvs(loc=mean, scale=variation)
 
 
 @Strategies.register("Generation")

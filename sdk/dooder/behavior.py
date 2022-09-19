@@ -1,39 +1,15 @@
-from functools import partial
-from typing import List
-
 import yaml
-from pydantic import BaseModel
-from sdk.dooder.fate import Fate
+from sdk.base.base_object import BaseObject
+from sdk.strategies.strategies import BaseStrategy, compile_strategy
 
-
-class Generators:
-    Probability = Fate.generate_probability
-    Distribution = Fate.generate_distribution
-    Weights = Fate.generate_weights
-    Score = Fate.generate_score
-
-
-class BehaviorProfile(BaseModel):
-    ActionSuccessProbability: int = 0
-    TakeActionProbability: int = 0
-    ActionSelectionWeights: List[int] = []
-    MakeMoveProbability: int = 0
-    MoveSuccessProbability: int = 0
-    BreedSuccessProbability: int = 0
-    BreedActionProbability: int = 0
-    MoveDirectionDistribution: List[int] = []
-    ActionOrderDistribution: List[int] = []
 
 
 class Behavior:
-    #! This can be a specialized strategy manager. Maybe it can extend Strategies
     """ 
     Behavior class used to generate the genetic expression of a Dooder
     A genetic expression is a set of probabilities and weights that determine 
     the behavior of a Dooder.
     """
-    
-    behavior_profiles = []
 
     @classmethod
     def load_genetics(self) -> dict:
@@ -48,35 +24,24 @@ class Behavior:
             genetics = yaml.load(f, Loader=yaml.FullLoader)
 
             return genetics
-
+        
     @classmethod
-    def generate_values(self, genetics: dict) -> dict:
+    def compile_genetics(cls, genetics: dict) -> dict:
         """ 
-        Generate the values for the behavior profile
+        Compile the genetics profiles
 
         Args:
-            genetics: The genetics profiles
-
-        Returns:
-            dict: The values for the behavior profile
+            genetics (dict): The genetics profiles
         """
-
-        generated_values = {}
-        for key, value in genetics.items():
-
-            if type(value['Generator']) == list:
-                generator = getattr(Generators, value['Generator'][0])
-                generator_func = partial(generator, value['Generator'][1])
-
-            else:
-                generator_func = getattr(Generators, value['Generator'])
-
-            generated_values[key] = generator_func()
-
-        return generated_values
-
+        full_results = {}
+        for gene in genetics:
+            full_results[gene] = BaseStrategy(**genetics[gene])
+            
+        return full_results
+    
+    
     @classmethod
-    def generate_behavior(cls) -> BehaviorProfile:
+    def generate_behavior(cls, dooder: BaseObject) -> dict:
         """ 
         Generate a behavior profile for a Dooder
 
@@ -85,8 +50,8 @@ class Behavior:
         """
 
         genetics = cls.load_genetics()
-        profile = cls.generate_values(genetics)
-        behavior = BehaviorProfile(**profile)
-        cls.behavior_profiles.append(behavior)
+        behavior_profiles = cls.compile_genetics(genetics)
+        compile_strategy(dooder, behavior_profiles)
+        
+        return behavior_profiles
 
-        return behavior

@@ -1,37 +1,61 @@
 ---
-ActionSuccessProbability:
-  Description: The probability that the chosen action will be successful 
-  Used: ~
-  Generator: Probability
-ActionSelectionWeights:
-  Description: Determines the probability to choose certain action types
-  Used: ~
-  Generator: [Distribution, 5]
-TakeActionProbability:
-  Description: The probability that the dooder will make an action during its turn
-  Used: ~
-  Generator: Probability
-MakeMoveProbability:
-  Description: The probability that the dooder will attempt to move during its turn
-  Used: Inside dooder step before moving
-  Generator: Probability
+StartingEnergySupply:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "min": 10, "max": 15 }
+  Description: The amount of energy the Dooder will start with
+MaxEnergySupply:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "min": 30, "max": 50 }
+  Description: The max amount of energy that a Dooder can hold at one time
+Metabolism:
+  Type: "Generation"
+  Func: "normal_distribution"
+  Args: { "min": 1, "max": 2 }
+  Description: A value between 1.0 and 2.0 that is used as an exponential value
+SurvivalProbability:
+  Type: "Generation"
+  Func: "normal_distribution"
+  Args: { "min": 1, "max": 100 }
+  Description:
+ReproductionProbability:
+  Type: "Generation"
+  Func: "normal_distribution"
+  Args: { "min": 1, "max": 100 }
+  Description:
+ReproductionEnergyCost:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "min": 1, "max": 5 }
+  Description:
+ReproductionSuccessProbability:
+  Type: "Generation"
+  Func: "normal_distribution"
+  Args: { "min": 1, "max": 100 }
+  Description:
+MoveProbability:
+  Type: "Generation"
+  Func: "normal_distribution"
+  Args: { "min": 1, "max": 100 }
+  Description:
 MoveSuccessProbability:
-  Description: The probability that a move will be successful
-  Used: Inside dooder step after choosing a direction to move
-  Generator: Probability
-BreedSuccessProbability:
-  Description: The probability that reproduction will be successful
-  Used: ~
-  Generator: Probability
-BreedActionProbability:
-  Description: The probability the dooder will attempt to reproduce
-  Used: ~
-  Generator: Probability
-MoveDirectionDistribution:
-  Description: Weights to determine the direction of movement
-  Used: ~
-  Generator: [Distribution, 9]
-ActionOrderDistribution:
-  Description: Order in which actions are taken
-  Used: ~
-  Generator: [Distribution, 3]
+  Type: "Generation"
+  Func: "normal_distribution"
+  Args: { "min": 1, "max": 100 }
+  Description:
+MovementEnergyCost:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "min": 1, "max": 3 }
+  Description:
+ActionSuccessProbability:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "low": 5, "high": 15 }
+  Description: The probability that the chosen action will be successful
+TakeActionProbability:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "low": 5, "high": 15 }
+  Description: The probability that the dooder will make an action during its turn

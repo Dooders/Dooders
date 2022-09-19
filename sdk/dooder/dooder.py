@@ -4,49 +4,7 @@ from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.strategies.strategies import BaseStrategy, compile_strategy
 
-
-class DooderStrategy:
-    StartingEnergySupply = BaseStrategy(StrategyType='Generation',
-                                        StrategyFunc='uniform_distribution',
-                                        Args={'low': 10, 'high': 15})
-
-    MaxEnergySupply = BaseStrategy(StrategyType='Generation',
-                                   StrategyFunc='uniform_distribution',
-                                   Args={'low': 10, 'high': 15})
-
-    Metabolism = BaseStrategy(StrategyType='Generation',
-                              StrategyFunc='uniform_distribution',
-                              Args={'low': 1, 'high': 5})
-
-    SurvivalProbability = BaseStrategy(StrategyType='Generation',
-                                       StrategyFunc='fixed_value',
-                                       Args=1.0)
-
-    ReproductionProbability = BaseStrategy(StrategyType='Generation',
-                                           StrategyFunc='fixed_value',
-                                           Args=1.0)
-
-    ReproductionEnergyCost = BaseStrategy(StrategyType='Generation',
-                                          StrategyFunc='fixed_value',
-                                          Args=1)
-
-    ReproductionSuccessProbability = BaseStrategy(StrategyType='Generation',
-                                                  StrategyFunc='fixed_value',
-                                                  Args={'value': 1.0})
-
-    MoveProbability = BaseStrategy(StrategyType='Generation',
-                                   StrategyFunc='fixed_value',
-                                   Args=1.0)
-
-    MoveSuccessProbability = BaseStrategy(StrategyType='Generation',
-                                          StrategyFunc='fixed_value',
-                                          Args={'value': 1.0})
-
-    MovementEnergyCost = BaseStrategy(StrategyType='Generation',
-                                      StrategyFunc='fixed_value',
-                                      Args=1)
 
 
 class Dooder(BaseObject):
@@ -77,8 +35,7 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        compile_strategy(self, DooderStrategy)
-        self.behavior = Behavior.generate_behavior()
+        self.behavior = Behavior.generate_behavior(self)
         self.cognition = Cognition()
         self.energy = self.StartingEnergySupply
         self.direction = 'Origin'
