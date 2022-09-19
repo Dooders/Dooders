@@ -14,8 +14,7 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
-
-ResourceStrategy = Strategies.load_strategy('sdk/strategies/resources.yaml')
+ResourceStrategy = Strategies.load_strategy('sdk/environment/resources.yml')
     
 class Resources:
     """ 
@@ -46,9 +45,8 @@ class Resources:
         Returns:
             The number of allocated resources.
         """
-        
-        for location in next(self.EnergyPlacement):
-            if len(self.available_resources) < next(self.MaxTotalEnergy):
+        for location in self.EnergyPlacement:
+            if len(self.available_resources) < self.MaxTotalEnergy:
                 unique_id = self.simulation.generate_id()
                 energy = Energy(unique_id, location, self)
                 self.simulation.environment.place_object(energy, location)

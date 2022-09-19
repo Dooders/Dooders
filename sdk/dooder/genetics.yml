@@ -37,7 +37,7 @@ ReproductionSuccessProbability:
 MoveProbability:
   Type: "Generation"
   Func: "normal_distribution"
-  Args: { "min": 1, "max": 100 }
+  Args: { "min": 1, "max": 100, 'variation': 10 }
   Description:
 MoveSuccessProbability:
   Type: "Generation"
@@ -52,10 +52,10 @@ MovementEnergyCost:
 ActionSuccessProbability:
   Type: "Generation"
   Func: "uniform_distribution"
-  Args: { "low": 5, "high": 15 }
+  Args: { "min": 5, "max": 15 }
   Description: The probability that the chosen action will be successful
 TakeActionProbability:
   Type: "Generation"
   Func: "uniform_distribution"
-  Args: { "low": 5, "high": 15 }
+  Args: { "min": 5, "max": 15 }
   Description: The probability that the dooder will make an action during its turn

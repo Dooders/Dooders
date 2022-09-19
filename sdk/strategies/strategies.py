@@ -44,7 +44,7 @@ class Strategies:
     }
 
     @classmethod
-    def load_strategy(path):
+    def load_strategy(cls, path):
         with open(path) as f:
             strategy = yaml.load(f, Loader=yaml.FullLoader)
 
@@ -78,12 +78,12 @@ def compile_strategy(model, raw_strategy: Any):
     compiled_strategy = {}
 
     for strat_name, strat in raw_strategy.items():
-        func = Strategies.get(strat.Func, strat.Type)
-        args = strat.Args
+        func = Strategies.get(strat['Func'], strat['Type'])
+        args = strat['Args']
 
-        if strat.Type == 'Placement':
+        if strat['Type'] == 'Placement':
             compiled_strategy[strat_name] = func(
-                model.simulation, compiled_strategy[strat.Dependency])
+                model.simulation, compiled_strategy[strat['Dependency']])
 
         else:
             compiled_strategy[strat_name] = func(**args)
@@ -131,7 +131,7 @@ def normal_distribution(min: int, max: int, variation: float = None) -> float:
     mean = (max + min) / 2
 
     if variation is None:
-        variation = (max - min) / 4
+        variation = (max - min) / 8
 
     return norm.rvs(loc=mean, scale=variation)
 

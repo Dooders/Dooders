@@ -1,7 +1,7 @@
 from sdk.strategies.strategies import compile_strategy, Strategies
 
 
-EnergyStrategy = Strategies.load_strategy('sdk/strategies/energy.yaml')
+EnergyStrategy = Strategies.load_strategy('sdk/environment/energy.yml')
 
 
 class Energy:
@@ -32,7 +32,7 @@ class Energy:
         """
         """
         self.cycle_count += 1
-        if self.cycle_count >= self.life_span:
+        if self.cycle_count >= self.Lifespan:
             self.resources.consume(self)
             self.resources.log(
                 granularity=3, message=f"Energy {self.unique_id} dissipated", scope='Energy')

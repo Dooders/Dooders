@@ -3,9 +3,7 @@ from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.strategies.strategies import Strategies, compile_strategy
-
-BehaviorStrategy = Strategies.load_strategy('sdk/dooder/seed.yml')
+from sdk.dooder.behavior import Behavior
 
 
 class Dooder(BaseObject):
@@ -35,7 +33,7 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        self.behavior = compile_strategy(self, BehaviorStrategy)
+        self.behavior = Behavior.compile_behavior(self)
         self.cognition = Cognition()
         self.energy = self.StartingEnergySupply
         self.direction = 'Origin'
@@ -119,7 +117,7 @@ class Dooder(BaseObject):
             self.die('lack of energy')
             return
 
-        if Fate.ask_fate(self.MakeMoveProbability):  # if true, move
+        if Fate.ask_fate(self.MoveProbability):  # if true, move
             origin, destination = self.choose_random_move()
 
             if origin != None:
