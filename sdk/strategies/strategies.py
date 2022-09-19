@@ -18,10 +18,10 @@ if TYPE_CHECKING:
 
 class BaseStrategy(BaseModel):
     # What kind of value needs to be generated
-    StrategyType: str
+    Type: str
 
     # The function generator to be executed
-    StrategyFunc: str
+    Func: str
 
     # Arguments to pass to the StrategyFunc
     Args: Optional[dict] = None
@@ -77,16 +77,16 @@ class Strategies:
 def compile_strategy(model, raw_strategy: Any):
     compiled_strategy = {}
 
-    for strat_type, strat in raw_strategy.items():
-        func = Strategies.get(strat.StrategyFunc, strat.StrategyType)
+    for strat_name, strat in raw_strategy.items():
+        func = Strategies.get(strat.Func, strat.Type)
         args = strat.Args
 
-        if strat.StrategyType == 'Placement':
-            compiled_strategy[strat_type] = func(
+        if strat.Type == 'Placement':
+            compiled_strategy[strat_name] = func(
                 model.simulation, compiled_strategy[strat.Dependency])
 
         else:
-            compiled_strategy[strat_type] = func(**args)
+            compiled_strategy[strat_name] = func(**args)
 
     for key, value in compiled_strategy.items():
         setattr(model, key, value)
