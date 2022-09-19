@@ -32,10 +32,3 @@ This project took a lot of inspiration and direction from:
 - **Cycle** - An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps.
 
 
-
-
-This is an example of how I can do a footnote[^1]. And some other text
-
-
-[^1]: And this his how I would cite it.
-
