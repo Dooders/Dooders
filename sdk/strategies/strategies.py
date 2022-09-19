@@ -7,7 +7,7 @@ This module contains the strategies used by the simulation.
 
 from random import choices
 from typing import TYPE_CHECKING, Any, Callable, Optional
-import yml
+import yaml
 
 from scipy.stats import norm, randint
 from pydantic import BaseModel
@@ -45,8 +45,8 @@ class Strategies:
 
     @classmethod
     def load_strategy(path):
-        with yml:
-            strategy = f
+        with open(path) as f:
+            strategy = yaml.load(f, Loader=yaml.FullLoader)
             
         return strategy
     
