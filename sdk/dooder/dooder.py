@@ -6,6 +6,8 @@ from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
 
 
+BehaviorStrategy = Strategies.load_strategy('sdk/dooder/seed.yml')
+
 
 class Dooder(BaseObject):
     """ 
