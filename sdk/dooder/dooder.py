@@ -3,7 +3,7 @@ from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.dooder.behavior import Behavior
+from sdk.dooder.genetics import Genetics
 
 
 class Dooder(BaseObject):
@@ -33,7 +33,8 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        self.behavior = Behavior.compile_behavior(self)
+        self.genetics = Genetics.compile_behavior(self)
+        self.behavior = self.genetics.copy()
         self.cognition = Cognition()
         self.energy = self.StartingEnergySupply
         self.direction = 'Origin'
