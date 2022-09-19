@@ -11,16 +11,6 @@ Graph:
 
 SeedStrategy = Strategies.load_strategy('sdk/dooder/seed.yml')
 
-class SeedStrategy:
-    SeedCount = BaseStrategy(StrategyType='Generation', 
-                             StrategyFunc='uniform_distribution',
-                             Args={'low': 10, 'high': 15})
-    
-    SeedPlacement = BaseStrategy(StrategyType='Placement', 
-                                 StrategyFunc='random_location',
-                                 Args=None, 
-                                 Dependency='SeedCount')
-
 
 class Society:
 
