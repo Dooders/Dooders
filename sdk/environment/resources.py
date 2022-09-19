@@ -63,7 +63,7 @@ class Resources:
         for resource in list(self.available_resources.values()):
             resource.step()
             
-        compile_strategy(self, ResourceStrategy)   
+        self.strategies = compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
             
     def consume(self, resource: Energy):
