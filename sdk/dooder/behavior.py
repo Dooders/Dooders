@@ -12,4 +12,8 @@ class Genetics:
         cls.genetic_profiles.append(genetics)
         
         return genetics
+    
+    @classmethod
+    def combine_genetics(cls, dooder1, dooder2):
+        pass
             
