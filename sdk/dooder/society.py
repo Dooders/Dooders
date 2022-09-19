@@ -25,9 +25,9 @@ class Society:
     def generate_seed_population(self):
 
         for position in self.SeedPlacement:
-            self.generate_dooder(position, None)
+            self.generate_dooder(position)
 
-    def generate_dooder(self, position, dooder_strategy):
+    def generate_dooder(self, position):
         #! need to fix the dooder object creation and simplify it
         #! maybe make a dooder factory class or input dict
         dooder = Dooder(self.simulation.generate_id(), position,
