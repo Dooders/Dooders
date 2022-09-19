@@ -1,0 +1,5 @@
+---
+Lifespan:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "low": 5, "high": 15 }

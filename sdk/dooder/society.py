@@ -1,6 +1,6 @@
 import networkx as nx
 from sdk.dooder import Dooder
-from sdk.strategies.strategies import BaseStrategy, compile_strategy, Strategies
+from sdk.strategies.strategies import Strategies, compile_strategy
 
 """ 
 Graph:
@@ -20,7 +20,7 @@ class Society:
 
     def __init__(self, simulation):
         self.simulation = simulation
-        compile_strategy(self, SeedStrategy)
+        self.seed = compile_strategy(self, SeedStrategy)
 
     def generate_seed_population(self):
 

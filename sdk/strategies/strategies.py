@@ -7,10 +7,10 @@ This module contains the strategies used by the simulation.
 
 from random import choices
 from typing import TYPE_CHECKING, Any, Callable, Optional
-import yaml
 
-from scipy.stats import norm, randint
+import yaml
 from pydantic import BaseModel
+from scipy.stats import norm, randint
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
@@ -19,22 +19,22 @@ if TYPE_CHECKING:
 class BaseStrategy(BaseModel):
     # What kind of value needs to be generated
     StrategyType: str
-    
+
     # The function generator to be executed
     StrategyFunc: str
-    
+
     # Arguments to pass to the StrategyFunc
     Args: Optional[dict] = None
-    
+
     # The strategy is dependent on the result of another strategy
     # If true, the strategy will be compiled later
     Dependency: Optional[str] = None
-    
+
     Description: Optional[str] = None
-    
+
     Used: Optional[str] = None
-    
-    
+
+
 class Strategies:
 
     strategies = {
@@ -47,9 +47,9 @@ class Strategies:
     def load_strategy(path):
         with open(path) as f:
             strategy = yaml.load(f, Loader=yaml.FullLoader)
-            
+
         return strategy
-    
+
     @classmethod
     def register(cls, type: str) -> Callable:
         """ 
@@ -76,26 +76,22 @@ class Strategies:
 
 def compile_strategy(model, raw_strategy: Any):
     compiled_strategy = {}
-    
-    if type(raw_strategy) == object:
-        strategies = {k:v for k,v in raw_strategy.__dict__.items() if k[:1] != '_'}
-        
-    else:
-        strategies = raw_strategy
 
-    for strat_type, strat in strategies.items():
+    for strat_type, strat in raw_strategy.items():
         func = Strategies.get(strat.StrategyFunc, strat.StrategyType)
         args = strat.Args
 
         if strat.StrategyType == 'Placement':
             compiled_strategy[strat_type] = func(
                 model.simulation, compiled_strategy[strat.Dependency])
-            
+
         else:
             compiled_strategy[strat_type] = func(**args)
 
     for key, value in compiled_strategy.items():
         setattr(model, key, value)
+
+    return compiled_strategy
 
 
 #################################
@@ -131,12 +127,12 @@ def normal_distribution(min: int, max: int, variation: float = None) -> float:
     Returns:
         The generated value.
     """
-    
+
     mean = (max + min) / 2
-    
+
     if variation is None:
         variation = (max - min) / 4
-    
+
     return norm.rvs(loc=mean, scale=variation)
 
 

@@ -1,8 +1,8 @@
-from sdk.strategies.strategies import compile_strategy, BaseStrategy
+from sdk.strategies.strategies import compile_strategy, Strategies
 
-class EnergyStrategy:
-    Lifespan = BaseStrategy(Type='Generation', Func='uniform_distribution',
-                            Args={'low': 5, 'high': 15})
+
+EnergyStrategy = Strategies.load_strategy('sdk/strategies/energy.yaml')
+
 
 class Energy:
     """ 
@@ -23,7 +23,7 @@ class Energy:
             cycle_count: The cycle count of the energy.
         """
         self.unique_id = unique_id
-        compile_strategy(self, EnergyStrategy)
+        self.strategies = compile_strategy(self, EnergyStrategy)
         self.position = position
         self.cycle_count = 0
         self.resources = resources

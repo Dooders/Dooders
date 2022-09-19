@@ -1,10 +1,10 @@
 ---
 SeedCount:
-  Type: Generation 
+  Type: Generation
   Func: uniform_distribution
-  Args: {'low': 10, 'high': 15})
+  Args: { "low": 10, "high": 15 }
 SeedPlacement:
   Type: Placement
   Func: random_location
-  Args: ~ 
+  Args: ~
   Dependency: SeedCount

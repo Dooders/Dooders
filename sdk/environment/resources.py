@@ -8,25 +8,14 @@ agents. It also contains the functions to access the resources.
 from typing import TYPE_CHECKING
 
 from sdk.environment.energy import Energy
-from sdk.strategies.strategies import compile_strategy, BaseStrategy
+from sdk.strategies.strategies import Strategies, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
-class ResourceStrategy:
-    EnergyPerCycle = BaseStrategy(StrategyType='Generation', 
-                                  StrategyFunc='uniform_distribution',
-                                  Args={'low': 10, 'high': 15})
-    
-    MaxTotalEnergy = BaseStrategy(StrategyType='Generation', 
-                                  StrategyFunc='normal_distribution',
-                                  Args={'mean': 50, 'std': 10})
-    
-    EnergyPlacement = BaseStrategy(StrategyType='Placement', 
-                                   StrategyFunc='random_location',
-                                   Args=None, 
-                                   Dependency='EnergyPerCycle')
-    
+
+
+ResourceStrategy = Strategies.load_strategy('sdk/strategies/resources.yaml')
     
 class Resources:
     """ 
@@ -48,7 +37,7 @@ class Resources:
     
     def __init__(self, simulation: 'Simulation'):
         self.simulation = simulation
-        compile_strategy(self, ResourceStrategy)
+        self.strategies = compile_strategy(self, ResourceStrategy)
     
     def allocate_resources(self):
         """ 

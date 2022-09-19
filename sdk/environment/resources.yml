@@ -1,0 +1,14 @@
+---
+EnergyPerCycle:
+  Type: "Generation"
+  Func: "uniform_distribution"
+  Args: { "low": 10, "high": 15 }
+MaxTotalEnergy:
+Type: "Generation"
+Func: "normal_distribution"
+Args: { "mean": 50, "std": 10 }
+EnergyPlacement:
+  Type: "Placement"
+  Func: "random_location"
+  Args: None
+  Dependency: "EnergyPerCycle"
