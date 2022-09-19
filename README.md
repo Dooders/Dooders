@@ -19,7 +19,7 @@ This project took a lot of inspiration and direction from:
 
 - **Experiment** - One or multiple simulations.
 
-- **Simulation** - A full execution of the agent model and additional components (I.e., Environment).
+- **Simulation** - A full execution of the agent model and additional models (I.e., Environment).
 
 - **Environment** - Proxy for spatial interactions and effects. A lot like a game board.
 

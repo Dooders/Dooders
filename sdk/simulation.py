@@ -27,7 +27,7 @@ class Simulation(BaseSimulation):
             params: ExperimentParameters) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
-        many different components
+        many different models
 
         Args:
             experiment_id: The id of the experiment this simulation is a part of.
