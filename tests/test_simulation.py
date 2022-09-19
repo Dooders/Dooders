@@ -25,10 +25,6 @@ def test_simulation_initialization(simulation):
 def test_simulation_setup(simulation):
     simulation.setup()
     assert simulation.running == True
-    # assert len(simulation.time._objects) == 30
-    assert len(simulation.environment.get_objects()) == 20
-    assert len(simulation.environment.get_objects('Dooder')) == 10
-    assert len(simulation.environment.get_objects('Energy')) == 10
 
 
 def test_run_simulation():

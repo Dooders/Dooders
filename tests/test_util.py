@@ -2,6 +2,7 @@ import yaml
 from sdk.dooder.dooder import Dooder
 from sdk.environment.energy import Energy
 from sdk.simulation import Simulation
+from sdk.environment.resources import Resources
 
 
 # with open("sdk/config.json", "r") as f:
@@ -16,5 +17,5 @@ simulation = Simulation('test', test_config)
 def mock_simulation():
     return Simulation('test', test_config)
 
-DooderTestObject = Dooder(1, (1, 1), simulation, simulation.params.Dooder)
-EnergyTestObject = Energy(2, (1, 1), simulation, simulation.params.Energy)
+DooderTestObject = Dooder(1, (1, 1), simulation)
+EnergyTestObject = Energy(2, (1, 1), Resources)

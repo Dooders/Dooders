@@ -7,7 +7,7 @@ from tests.test_util import mock_simulation
 @pytest.fixture
 def dooder():
     simulation = mock_simulation()
-    object = Dooder('1', (1,1), simulation, simulation.params.Dooder)
+    object = Dooder('1', (1,1), simulation)
     simulation.environment.place_object(object, (1,1))
     simulation.time.add(object)
     
@@ -16,9 +16,8 @@ def dooder():
 
 def test_dooder_init():
     simulation = mock_simulation()
-    dooder = Dooder('1', (1,1), simulation, simulation.params.Dooder)
+    dooder = Dooder('1', (1,1), simulation)
     assert dooder.position == (1,1)
-    assert dooder.energy == 5
     assert dooder.unique_id == '1'
 
 
