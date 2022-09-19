@@ -1,15 +1,15 @@
 from sdk.strategies.strategies import Strategies, compile_strategy
 
-BehaviorStrategy = Strategies.load_strategy('sdk/dooder/genetics.yml')
+GeneticStrategy = Strategies.load_strategy('sdk/dooder/genetics.yml')
 
-class Behavior:
+class Genetics:
     
-    behavior_profiles = []    
+    genetic_profiles = []    
 
     @classmethod
-    def compile_behavior(cls, dooder):
-        behavior = compile_strategy(dooder, BehaviorStrategy)
-        cls.behavior_profiles.append(behavior)
+    def compile_genetics(cls, dooder):
+        genetics = compile_strategy(dooder, GeneticStrategy)
+        cls.genetic_profiles.append(genetics)
         
-        return behavior
+        return genetics
             
