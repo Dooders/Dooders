@@ -10,10 +10,9 @@ from random import choices
 
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
-from sdk.dooder import Dooder
 from sdk.dooder.society import Society
-from sdk.stop_conditions import ConditionRegistry
 from sdk.environment.resources import Resources
+from sdk.stop_conditions import ConditionRegistry
 
 
 class Simulation(BaseSimulation):

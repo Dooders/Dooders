@@ -1,9 +1,14 @@
+from typing import TYPE_CHECKING
+
 from sdk.base.base_object import BaseObject
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
+from sdk.dooder.genetics import Genetics
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.dooder.genetics import Genetics
+
+if TYPE_CHECKING:
+    from sdk.base.base_simulation import BaseSimulation
 
 
 class Dooder(BaseObject):
@@ -11,7 +16,7 @@ class Dooder(BaseObject):
 
     """
 
-    def __init__(self, unique_id: int, position: tuple, simulation) -> None:
+    def __init__(self, unique_id: int, position: tuple, simulation: 'BaseSimulation') -> None:
         """
         Create a new Dooder object.
 

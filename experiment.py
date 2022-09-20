@@ -12,16 +12,16 @@ from sdk.util import ShortUUID
 class Experiment:
     """
     Class to manage the overall experiment and each simulation.
-    
+
     """
-    
+
     def __init__(self, parameters: ExperimentParameters):
         """
         Initializes an experiment.
 
         Args:
             parameters: Experiment parameters.
-            
+
         Attributes:
             experiment_id: The id of the experiment.
             simulation: The simulation object.
@@ -62,27 +62,26 @@ class Experiment:
         Args:
             object_id: The id of the object. 
                 Based on a random short uuid assigned to every object at its creation.
-        
+
         Returns:
             The object with the given id.
         """
         return self.simulation.environment.get_object(object_id)
-    
-    def get_objects(self, object_type: str ='BaseObject') -> List[BaseObject]:
+
+    def get_objects(self, object_type: str = 'BaseObject') -> List[BaseObject]:
         """ 
         Get all objects of a given type.
         Returns all objects if no type is given.
 
         Args:
             type: The type of object to get.
-            
+
         Returns:
             A list of objects of the given type.
         """
         return self.simulation.environment.get_objects(object_type)
-    
-    
-    def get_random_objects(self, object_type: str ='BaseObject', n: int = 1) -> List[BaseObject]:
+
+    def get_random_objects(self, object_type: str = 'BaseObject', n: int = 1) -> List[BaseObject]:
         """ 
         Get n random objects of a given type.
         Returns all objects if no type is given.
@@ -90,16 +89,15 @@ class Experiment:
         Args:
             type: The type of object to get.
             n: The number of objects to get.
-            
+
         Returns:
             A list of n random objects of the given type.
         """
         object_list = self.get_objects(object_type)
         k = min(len(object_list), n)
         random_objects = choices(object_list, k=k)
-        
+
         return random_objects
-    
 
     def get_cycle_results(self) -> Dict:
         """         
@@ -107,28 +105,27 @@ class Experiment:
             A dictionary of the results of the current cycle.
         """
         return self.simulation.get_results()
-    
-    
+
     def get_dooder_history(self, object_id: str = 'Random') -> Dict:
         """
         Get the history of a dooder.
         Returns a random dooder history if no id is given.
-        
+
         Args:
             object_id: The id of the dooder. If 'Random', 
                 a random dooder will be selected. 
-        
+
         Returns:
             A dictionary of the history of the dooder.
         """
         if object_id == 'Random':
             random_object = self.get_random_objects('Dooder')
-            
+
             if random_object:
                 object_id = random_object[0].unique_id
             else:
                 return 'No active Dooders'
-            
+
         return self.simulation.information.get_object_history(object_id)
 
     @property
@@ -152,10 +149,11 @@ class SessionManager:
     """ 
     Class to manage distinct sessions and interact with the experiments.
     """
+
     def __init__(self):
         """ 
         Initializes the session manager.
-        
+
         Attributes:
             active_experiments: A dictionary of active experiments.
             active_connections: A list of active websocket objects.
@@ -172,10 +170,10 @@ class SessionManager:
     def get_experiment(self, experiment_id: str) -> Experiment:
         """ 
         Get an experiment by its id.
-        
+
         Args:
             experiment_id: The id of the experiment.
-        
+
         Returns:
             The experiment with the given id.
         """
@@ -184,7 +182,7 @@ class SessionManager:
     def delete_experiment(self, experiment_id: str) -> None:
         """
         Delete an experiment from the active experiments.
-        
+
         Args:
             experiment_id: The id of the experiment.
         """
@@ -193,7 +191,7 @@ class SessionManager:
     async def connect(self, websocket: WebSocket) -> None:
         """ 
         Connect a websocket to the session manager.
-        
+
         Args:
             websocket: The websocket to connect.
         """
@@ -203,7 +201,7 @@ class SessionManager:
     def disconnect(self, websocket: WebSocket) -> None:
         """ 
         Disconnect a websocket from the session manager.
-        
+
         Args:
             websocket: The websocket to disconnect.
         """
@@ -212,7 +210,7 @@ class SessionManager:
     def cleanup(self, session_id: str) -> None:
         """  
         Cleanup the session manager.
-        
+
         Args:
             session_id: The id of the session to cleanup.
         """

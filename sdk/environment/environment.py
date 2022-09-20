@@ -1,8 +1,8 @@
 from random import choices
 from typing import Any, List
 
-from sdk.base.base_object import BaseObject
 from sdk.base.base_environment import BaseEnvironment
+from sdk.base.base_object import BaseObject
 
 MultiGridContent = List[Any]  # ! fix this here and in base
 
@@ -174,6 +174,6 @@ class Environment(BaseEnvironment):
     @property
     def object_types(self):
         pass
-    
+
     def get_object_count(self, object_type: str = 'BaseObject') -> int:
         return len(self.get_objects(object_type))

@@ -38,7 +38,7 @@ class Resources:
         self.simulation = simulation
         self.strategies = compile_strategy(self, ResourceStrategy)
     
-    def allocate_resources(self):
+    def allocate_resources(self) -> None:
         """ 
         Allocates resources based on the provided strategy.
         
@@ -53,7 +53,7 @@ class Resources:
                 self.available_resources[unique_id] = energy
                 self.total_allocated_energy += 1
                 
-    def step(self):
+    def step(self) -> None:
         """ 
         Performs a step in the simulation.
         """
@@ -64,7 +64,7 @@ class Resources:
         self.strategies = compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
             
-    def remove(self, resource: Energy):
+    def remove(self, resource: Energy) -> None:
         """ 
         Consumes the given resource.
         
@@ -73,7 +73,7 @@ class Resources:
         """
         self.available_resources.pop(resource.unique_id)
         
-    def log(self, granularity: int, message: str, scope: str):
+    def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
         Logs the given message.
         
