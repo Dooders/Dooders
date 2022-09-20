@@ -1,3 +1,4 @@
+![dooders logo](./docs/dooder_logo.png)
 # Dooders
 
 Dooders is a python library for complex model-based simulation.
