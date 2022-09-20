@@ -177,3 +177,11 @@ def random_location(simulation: 'Simulation', number: int) -> list:
 @Strategies.register("Genetics")
 def random_genetics(value: int) -> int:
     return 'working'
+
+
+#! add a linear increase based on past value and slope to determine delay in increasing probability or score
+#! add many different diff equations and distributions
+#! how about dooders carry their own nn weights that gets plugged into a gloabal model that the dooders doesnt habe access to???
+
+
+
