@@ -44,6 +44,8 @@ class Dooder(BaseObject):
         self.energy = self.StartingEnergySupply
         self.direction = 'Origin'
         self.moore = True
+        self.age = 0
+        self.hunger = 0 #! need to test out how this will work
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
@@ -67,8 +69,7 @@ class Dooder(BaseObject):
         Args:
             reason: The reason for the death.
         """
-        self.simulation.environment.remove_object(self)
-        self.simulation.time.remove(self)
+        self.simulation.society.terminate_dooder(self)
         message = f"Died from {reason}"
 
         self.log(granularity=1, message=message, scope='Dooder')
@@ -97,6 +98,7 @@ class Dooder(BaseObject):
         #! Come up with a better design step flow.
         #! Have a simple way to easily change step flow
         # get cell contents
+        self.age += 1
         direction = 'None'
         cell_contents = self.simulation.environment.get_cell_list_contents(
             self.position)

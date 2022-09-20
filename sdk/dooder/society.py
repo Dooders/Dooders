@@ -24,6 +24,7 @@ class Society:
     active_dooders = {}
     graph = nx.Graph()
     total_created_dooders = 0
+    graveyard = {}
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
         """ 
@@ -73,7 +74,7 @@ class Society:
         self.graph.add_node(dooder.unique_id)
         self.total_created_dooders += 1
 
-    def terminate_dooder(self, dooder_id: str) -> None:
+    def terminate_dooder(self, dooder: 'Dooder') -> None:
         """
         Terminate dooder based on the ID
         Removes from active_dooders, environment, and graph
@@ -81,9 +82,10 @@ class Society:
         Args:
             dooder_id (str): dooder id
         """
-        self.active_dooders.pop(dooder_id)
-        self.simulation.time.remove(dooder_id)
-        self.simulation.environment.remove_object(dooder_id)
+        self.graveyard[dooder.unique_id] = dooder
+        self.active_dooders.pop(dooder.unique_id)
+        self.simulation.time.remove(dooder)
+        self.simulation.environment.remove_object(dooder)
 
     def get_dooder(self, dooder_id: str) -> 'Dooder':
         """
