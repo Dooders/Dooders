@@ -186,5 +186,10 @@ def random_genetics(value: int) -> int:
 #! this would essentially serve as the agents model/mapping of reality
 #! there could be a societal model too
 #! more awareness gives more visibility to rules and facts
-
+#! weights can now be constant for all generations, access to data is variable, which makes value of predictions dependent on awareness
+#! awarness can slowly grow as more of society has knowledge of rules and values. This way "ideas" can spread (spatially)
+#! each dooder will have the internal model pipeline
+#! dooders can share rules and values that they know aboit. sometimes they are wrong and share bad info
+#! can i programatically and mechanically create inference from dooder experimemtation or learning from others???
+#! the more rule and values I add, the more complexity, and the more imformation a dooder has to adpat to the growing complexity
 
