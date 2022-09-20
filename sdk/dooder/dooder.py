@@ -38,7 +38,7 @@ class Dooder(BaseObject):
             behavior: The behavior of the dooder.
         """
         super().__init__(unique_id, position, simulation)
-        self.genetics = Genetics.compile_behavior(self)
+        self.genetics = Genetics.compile_genetics(self)
         self.behavior = self.genetics.copy()
         self.cognition = Cognition()
         self.energy = self.StartingEnergySupply
