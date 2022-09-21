@@ -83,7 +83,7 @@ def get_direction_counts(simulation) -> dict:
 def get_total_energy_supply(simulation) -> int:
     """ Return the total energy supply of all dooders in the simulation. """
     energy_supply = [
-        dooder.energy for dooder in simulation.time.get_objects('Dooder')]
+        dooder.energy_supply for dooder in simulation.time.get_objects('Dooder')]
 
     if len(energy_supply) == 0:
         return 0
