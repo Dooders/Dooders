@@ -1,6 +1,8 @@
 from typing import Callable
 
 #! base cindition class has a log of all comditions. and comdition specific class has its own access to self only
+#! might need to have ability for and/or comdition combinations
+#! check returns true/false and the probability to check, if needed (ask fate)
 
 class ConditionRegistry:
     """ 
