@@ -41,7 +41,7 @@ class Dooder(BaseObject):
         self.genetics = Genetics.compile_genetics(self)
         self.behavior = self.genetics.copy()
         self.cognition = Cognition()
-        self.energy = self.StartingEnergySupply
+        self.energy_supply = self.StartingEnergySupply
         self.direction = 'Origin'
         self.moore = True
         self.age = 0
@@ -105,11 +105,11 @@ class Dooder(BaseObject):
         energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
 
         if isinstance(energy, Energy):
-            self.energy += 1
+            self.energy_supply += 1
             energy[0].consume()
 
         elif len(energy) == 1:
-            self.energy += 1
+            self.energy_supply += 1
             e = energy[0]
             e.consume()
             self.log(
@@ -121,7 +121,7 @@ class Dooder(BaseObject):
         else:
             pass
 
-        if self.energy < 1:
+        if self.energy_supply < 1: #! make a way to compile nested if then checks
             self.die('lack of energy')
             return
 
@@ -136,13 +136,13 @@ class Dooder(BaseObject):
             # if true, successfully move
             if Fate.ask_fate(self.MoveSuccessProbability):
                 self.simulation.environment.move_object(self, destination)
-                self.energy -= 1
+                self.energy_supply -= 1
                 direction = new_direction
                 self.position = destination
                 self.log(
                     granularity=2, message=f"Moved {direction} from {origin} to {destination}", scope='Dooder')
             else:
-                self.energy -= 1
+                self.energy_supply -= 1
                 self.log(
                     granularity=3, message=f"Failed to move {direction} from {origin} to {destination}", scope='Dooder')
         else:
