@@ -9,7 +9,7 @@ def starvation(dooder) -> bool:
         dooder.days_hungry = 0
         
     # if the dooder is hungry, increment the days hungry attribute  
-    if dooder.energy_supply == 0:
+    if dooder.energy_supply <= 0:
         dooder.days_hungry += 1
     else:
         dooder.days_hungry = 0
