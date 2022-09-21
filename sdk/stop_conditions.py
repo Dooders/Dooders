@@ -1,5 +1,6 @@
 from typing import Callable
 
+#! base cindition class has a log of all comditions. and comdition specific class has its own access to self only
 
 class ConditionRegistry:
     """ 
