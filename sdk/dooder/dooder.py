@@ -175,10 +175,16 @@ class Dooder(BaseObject):
             self.direction = direction
             if self.death_check():
                 print('{} died during its cycle'.format(self.unique_id))
-      def __str__(self):
-          return "Dooder {0}, Position: {}".format()
+    
+    def __str__(self):
+        """
+        Return string of class attributes and genetics.
+        """
+        #! maybe come up with better formatting  
+        return f"ID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}" 
 
-"""
+
+
 # Todo: Create an Effects class (can be temporary or permanent)
 
 #! Every end of cycle there will be a check to check fate if the dooder will die
@@ -191,23 +197,23 @@ class Dooder(BaseObject):
  
 ##### Formulas #####
  
-#! Survivability modifier
-Every dooder starts with 99.99% probability surviving the cycle
-The modifier will reduce the probability of survival to be checked at the end of each cycle
-survival_probability_modifier = (negative_effects + positive_effects) + permanent_effects
+# #! Survivability modifier
+# Every dooder starts with 99.99% probability surviving the cycle
+# The modifier will reduce the probability of survival to be checked at the end of each cycle
+# survival_probability_modifier = (negative_effects + positive_effects) + permanent_effects
  
-#! Hunger (temporary negative effect)
-Calculates the hunger slevel of the dooder
-Added to negative_effects
-M = Metabolism (between 1 and 2)
-hunger = M^(number of cycle hungry) more cycle will add more negative probability
+# #! Hunger (temporary negative effect)
+# Calculates the hunger slevel of the dooder
+# Added to negative_effects
+# M = Metabolism (between 1 and 2)
+# hunger = M^(number of cycle hungry) more cycle will add more negative probability
 
-#! Age (permanent negative effect)
-As a dooder goes through more cycles, it will have a higher chance of dying
-Needs to have a long time as low probability to die then at some point it will increase by a lot
-Age deterioration can be a genetic thing too
+# #! Age (permanent negative effect)
+# As a dooder goes through more cycles, it will have a higher chance of dying
+# Needs to have a long time as low probability to die then at some point it will increase by a lot
+# Age deterioration can be a genetic thing too
 
-!# Mood (temporary positive or negative effect)
-Based on a lot of different factors
-Between -100 and 100 or -1 and 1
-"""
+# !# Mood (temporary positive or negative effect)
+# Based on a lot of different factors
+# Between -100 and 100 or -1 and 1
+# """
