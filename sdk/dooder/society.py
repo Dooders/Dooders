@@ -1,3 +1,10 @@
+"""
+
+
+#TODO Finishing graph nodes and edges
+#TODO Build in saving of dooder after each step
+"""
+
 from typing import TYPE_CHECKING
 import networkx as nx
 from sdk.dooder import Dooder
