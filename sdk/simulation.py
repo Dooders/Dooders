@@ -39,7 +39,7 @@ class Simulation(BaseSimulation):
         
         self.resources = Resources(self)
         self.society = Society(self)
-
+        self.running = False
         self.cycles: int = 0
 
     def setup(self) -> None:
