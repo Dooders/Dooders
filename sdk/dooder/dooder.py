@@ -45,7 +45,6 @@ class Dooder(BaseObject):
         self.direction = 'Origin'
         self.moore = True
         self.age = 0
-        self.hunger = 0 #! need to test out how this will work
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
@@ -82,6 +81,7 @@ class Dooder(BaseObject):
             origin: The origin of the move.
             destination: The destination after the move.
         """
+        #! have diff strategies for movement
         # Pick the next cell from the adjacent cells.
         possible_moves = self.simulation.environment.get_neighborhood(
             self.position, self.moore, True)
@@ -100,10 +100,11 @@ class Dooder(BaseObject):
         # get cell contents
         self.age += 1
         direction = 'None'
-        cell_contents = self.simulation.environment.get_cell_list_contents(
-            self.position)
+        
+        cell_contents = self.simulation.environment.get_cell_list_contents(self.position)
         energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
-
+        neighbors = [obj for obj in cell_contents if isinstance(obj, Dooder)]
+        
         if isinstance(energy, Energy):
             self.energy_supply += 1
             energy[0].consume()

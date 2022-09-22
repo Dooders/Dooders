@@ -47,7 +47,7 @@ class Conditions:
         return None
 
     @classmethod
-    def check_conditions(cls, *args, **kwargs) -> bool:
+    def check_conditions(cls, purpose, *args, **kwargs):
         """ 
         Check if any of the registered conditions are met.
 
@@ -59,8 +59,7 @@ class Conditions:
         """
         # check in registry in each purpose to see what purpose is the condition from
 
-        for condition in cls.registry:
-            purpose = cls.get_purpose(cls, condition)
+        for condition in cls.registry[purpose]:
             func = cls.registry[purpose][condition]
             if func(*args, **kwargs):
                 return True, condition
