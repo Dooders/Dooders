@@ -56,11 +56,8 @@ class Dooder(BaseObject):
         Args:
             dooder: The dooder to kill.
         """
-        self.simulation.environment.remove_object(dooder)
-        self.simulation.time.remove(dooder)
-        message = f"Killed {dooder.unique_id}"
-
-        self.log(granularity=1, message=message, scope='Dooder')
+        message = f"Killed by {self.unique_id}"
+        dooder.die(message)
 
     def die(self, reason: str = 'Unknown') -> None:
         """
