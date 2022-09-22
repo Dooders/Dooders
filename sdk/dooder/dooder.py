@@ -1,3 +1,7 @@
+"""
+
+"""
+
 from typing import TYPE_CHECKING
 
 from sdk.base.base_object import BaseObject
@@ -133,16 +137,9 @@ class Dooder(BaseObject):
                 e.consume()
                 self.log(
                     granularity=2, message=f"Consumed energy: {e.unique_id}", scope='Dooder')
-
-            elif len(energy) == 0:
-                pass
-
+                
             else:
                 pass
-
-            # if self.energy_supply < 1: #! make a way to compile nested if then checks
-            #     self.die('lack of energy')
-            #     return
 
             if Fate.ask_fate(self.MoveProbability):  # if true, move
                 origin, destination = self.choose_random_move()
@@ -170,6 +167,7 @@ class Dooder(BaseObject):
                     granularity=3, message=f"Skipped move", scope='Dooder')
 
             self.direction = direction
+            
             if self.death_check():
                 print('{} died during its cycle'.format(self.unique_id))
     
