@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Tuple
 
-POSITION = tuple[int,int]
-LOCATION = tuple[int,int]
+POSITION = Tuple[int,int]
+LOCATION = Tuple[int,int]
+CYCLE = int
