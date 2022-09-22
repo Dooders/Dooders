@@ -6,6 +6,7 @@ from sdk.dooder.fate import Fate
 from sdk.dooder.genetics import Genetics
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
+from sdk.stop_conditions import ConditionRegistry
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -72,6 +73,22 @@ class Dooder(BaseObject):
         message = f"Died from {reason}"
 
         self.log(granularity=1, message=message, scope='Dooder')
+        
+    def death_check(self) -> None:
+        #! make this proccess a decorator or factory for easy creation of any conditional action
+        """
+        A dooder dies against condition checks
+        """
+        result, reason = ConditionRegistry.check_condition('death', self)
+        
+        if result:
+            self.die(reason)
+            self.log(1, f"Died because of {reason}", 'Dooder')
+
+            return False
+
+        else:
+            return True
 
     def choose_random_move(self) -> tuple:
         """
@@ -100,6 +117,9 @@ class Dooder(BaseObject):
         # get cell contents
         self.age += 1
         direction = 'None'
+        
+        if self.death_check():
+            print('Technically dead')
         
         cell_contents = self.simulation.environment.get_cell_list_contents(self.position)
         energy = [obj for obj in cell_contents if isinstance(obj, Energy)]

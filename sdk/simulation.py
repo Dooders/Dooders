@@ -120,6 +120,7 @@ class Simulation(BaseSimulation):
         return self.seed.uuid()
 
     def stop_conditions(self) -> bool:
+        #! maybe make a decorator to implement this nicely
         """
         Check if the simulation should stop.
         
