@@ -1,6 +1,6 @@
-from typing import List, Tuple
+from typing import Tuple
 
-POSITION = Tuple[int,int]
-LOCATION = Tuple[int,int]
-CYCLE = int
-UniqueID = uuid
+Position = Tuple[int,int]
+Location = Tuple[int,int]
+Cycle = int
+UniqueID = str

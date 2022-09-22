@@ -1,46 +1,53 @@
 """
-
+A Dooder is a model object and the main focus of the library.
+Each object will have the ability to move around the environment and
+interact with other objects.
 """
 
 from typing import TYPE_CHECKING
 
 from sdk.base.base_object import BaseObject
+from sdk.conditions.conditions import Conditions
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.genetics import Genetics
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.conditions.conditions import Conditions
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
+    from sdk.data import Position, UniqueID
 
 
 class Dooder(BaseObject):
     """ 
-
+    Primary Dooder class
     """
 
-    def __init__(self, unique_id: int, position: tuple, simulation: 'BaseSimulation') -> None:
+    def __init__(self,
+                 unique_id: UniqueID,
+                 position: Position,
+                 simulation: 'BaseSimulation') -> None:
         """
         Create a new Dooder object.
 
         Args:
-            unique_id: Unique ID for the object.
-            position: Starting position for the object.
+            unique_id: Unique ID for the object. Created by the simulation object
+            position: Starting position for the object. 
+                The position ties to a location in the Environment object
             simulation: Reference to the simulation.
-            params: Parameters for the simulation.
 
         Attributes:
-            unique_id: Unique ID for the object.
-            position: Starting position for the object.
-            simulation: Reference to the simulation.
-            params: Parameters for the simulation.
-            energy: The energy level of the dooder.
+            unique_id: see Args
+            position: see Args
+            simulation: see Args
+            energy_supply: The energy level of the dooder.
             direction: The direction the dooder is facing.
             moore: The Moore neighborhood of the dooder.
             cognition: The cognition of the dooder.
-            behavior: The behavior of the dooder.
+            behavior: A mutable copy of a dooder's genetics. 
+                Behavior serves as an expression of the genetics and the dodder's environment
+            age: The number of cycles the dooder has been active.
         """
         super().__init__(unique_id, position, simulation)
         self.genetics = Genetics.compile_genetics(self)
@@ -65,41 +72,45 @@ class Dooder(BaseObject):
 
     def die(self, reason: str = 'Unknown') -> None:
         """
-        A dooder dies.
+        Removing a dooder from the simulation, 
+        with a given reason
 
         Args:
-            reason: The reason for the death.
+            reason: The reason for the death. 
+                For example: starvation, old age, etc.
         """
         self.simulation.society.terminate_dooder(self)
         message = f"Died from {reason}"
 
         self.log(granularity=1, message=message, scope='Dooder')
-        
+
     def death_check(self) -> None:
-        #! make this proccess a decorator or factory for easy creation of any conditional action
         """
-        A dooder dies against condition checks
+        Checking if the dooder should be dead based on conditions of current state
+
+        #TODO: make this process a decorator or factory for easy creation of any conditional action
         """
         result, reason = Conditions.check_conditions('death', self)
-        
+
         if result:
             self.die(reason)
-            del self
+            del self  # ! is this necessary?
 
             return True
 
         else:
             return False
 
-    def choose_random_move(self) -> tuple:
+    def choose_random_move(self) -> Position:
         """
         Step one cell in any allowable direction.
 
         Returns:
             origin: The origin of the move.
             destination: The destination after the move.
+
+        #TODO: Movement based on a selected strategy
         """
-        #! have diff strategies for movement
         # Pick the next cell from the adjacent cells.
         possible_moves = self.simulation.environment.get_neighborhood(
             self.position, self.moore, True)
@@ -111,22 +122,34 @@ class Dooder(BaseObject):
 
     def step(self) -> None:
         """
-        Step the dooder.
+        Step flow for a dooder.
+
+        Current flow:
+        * Check if the dooder should die
+        * Get cell contents
+        * If there is energy in the current location, consume it
+        * Check if the dooder should move and where
+        * Move the dooder if success check is true
+        * Check if the dooder should die based on step end state conditions
+
+        #TODO Better step flow design
+        #TODO Make it simple to change step flow
+
         """
-        #! Come up with a better design step flow.
-        #! Have a simple way to easily change step flow
-        
-        #! need to double check doing this twice is a good idea
+        #! need to double check doing this twice is a good idea or necessary
         if self.death_check():
             print("{} died in its sleep".format(self.unique_id))
-            
+
         else:
             self.age += 1
             direction = 'None'
-            cell_contents = self.simulation.environment.get_cell_list_contents(self.position)
+            cell_contents = self.simulation.environment.get_cell_list_contents(
+                self.position)
             energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
-            neighbors = [obj for obj in cell_contents if isinstance(obj, Dooder)]
-            
+            neighbors = [
+                obj for obj in cell_contents if isinstance(obj, Dooder)]
+
+            #! clean up this to log when first if statement is true
             if isinstance(energy, Energy):
                 self.energy_supply += 1
                 energy[0].consume()
@@ -137,11 +160,11 @@ class Dooder(BaseObject):
                 e.consume()
                 self.log(
                     granularity=2, message=f"Consumed energy: {e.unique_id}", scope='Dooder')
-                
-            else:
+
+            else:  # No energy to consume
                 pass
 
-            if Fate.ask_fate(self.MoveProbability):  # if true, move
+            if Fate.ask_fate(self.MoveProbability):  # if true, decide where to move
                 origin, destination = self.choose_random_move()
 
                 if origin != None:
@@ -167,17 +190,16 @@ class Dooder(BaseObject):
                     granularity=3, message=f"Skipped move", scope='Dooder')
 
             self.direction = direction
-            
+
             if self.death_check():
                 print('{} died during its cycle'.format(self.unique_id))
-    
-    def __str__(self):
+
+    def __str__(self) -> str:
         """
         Return string of class attributes and genetics.
         """
-        #! maybe come up with better formatting  
-        return f"ID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}" 
-
+        #! maybe come up with better formatting
+        return f"ID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}"
 
 
 # Todo: Create an Effects class (can be temporary or permanent)
@@ -187,16 +209,15 @@ class Dooder(BaseObject):
 #! So survivability is a function of the effects of genetics, environment, and behavior
 #! Then I can train an agent to maximize days alive and survivability
 #! Maybe even have the ability to change how fate is determined
- 
- 
- 
+
+
 ##### Formulas #####
- 
+
 # #! Survivability modifier
 # Every dooder starts with 99.99% probability surviving the cycle
 # The modifier will reduce the probability of survival to be checked at the end of each cycle
 # survival_probability_modifier = (negative_effects + positive_effects) + permanent_effects
- 
+
 # #! Hunger (temporary negative effect)
 # Calculates the hunger slevel of the dooder
 # Added to negative_effects
