@@ -13,10 +13,13 @@ from sdk.dooder.fate import Fate
 from sdk.dooder.genetics import Genetics
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
+from sdk.data import Position, UniqueID
+
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
-    from sdk.data import Position, UniqueID
+    
+    
 
 
 class Dooder(BaseObject):
@@ -25,8 +28,8 @@ class Dooder(BaseObject):
     """
 
     def __init__(self,
-                 unique_id: UniqueID,
-                 position: Position,
+                 unique_id: 'UniqueID',
+                 position: 'Position',
                  simulation: 'BaseSimulation') -> None:
         """
         Create a new Dooder object.
