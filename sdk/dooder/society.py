@@ -11,7 +11,7 @@ Graph:
     nodes: dooders (id, age, position, object_ref)
     edges: interactions (cycle number, involved dooders, interaction type) & overall count per dooder
 """
-
+#! society will manage the "soul" that is a temporally saved/stored dooder object
 
 SeedStrategy = Strategies.load_strategy('sdk/dooder/seed.yml')
 

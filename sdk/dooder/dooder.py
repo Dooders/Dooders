@@ -6,7 +6,7 @@ from sdk.dooder.fate import Fate
 from sdk.dooder.genetics import Genetics
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.stop_conditions import ConditionRegistry
+from sdk.conditions.conditions import Conditions
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -79,16 +79,16 @@ class Dooder(BaseObject):
         """
         A dooder dies against condition checks
         """
-        result, reason = ConditionRegistry.check_condition('death', self)
+        result, reason = Conditions.check_conditions('death', self)
         
         if result:
             self.die(reason)
-            self.log(1, f"Died because of {reason}", 'Dooder')
+            del self
 
-            return False
+            return True
 
         else:
-            return True
+            return False
 
     def choose_random_move(self) -> tuple:
         """
@@ -114,65 +114,67 @@ class Dooder(BaseObject):
         """
         #! Come up with a better design step flow.
         #! Have a simple way to easily change step flow
-        # get cell contents
-        self.age += 1
-        direction = 'None'
         
+        #! need to double check doing this twice is a good idea
         if self.death_check():
-            print('Technically dead')
-        
-        cell_contents = self.simulation.environment.get_cell_list_contents(self.position)
-        energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
-        neighbors = [obj for obj in cell_contents if isinstance(obj, Dooder)]
-        
-        if isinstance(energy, Energy):
-            self.energy_supply += 1
-            energy[0].consume()
-
-        elif len(energy) == 1:
-            self.energy_supply += 1
-            e = energy[0]
-            e.consume()
-            self.log(
-                granularity=2, message=f"Consumed energy: {e.unique_id}", scope='Dooder')
-
-        elif len(energy) == 0:
-            pass
-
+            print("{} died in its sleep".format(self.unique_id))
+            
         else:
-            pass
-
-        if self.energy_supply < 1: #! make a way to compile nested if then checks
-            self.die('lack of energy')
-            return
-
-        if Fate.ask_fate(self.MoveProbability):  # if true, move
-            origin, destination = self.choose_random_move()
-
-            if origin != None:
-                new_direction = get_direction(origin, destination)
-            else:
-                new_direction = get_direction(self.position, destination)
-
-            # if true, successfully move
-            if Fate.ask_fate(self.MoveSuccessProbability):
-                self.simulation.environment.move_object(self, destination)
-                self.energy_supply -= 1
-                direction = new_direction
-                self.position = destination
-                self.log(
-                    granularity=2, message=f"Moved {direction} from {origin} to {destination}", scope='Dooder')
-            else:
-                self.energy_supply -= 1
-                self.log(
-                    granularity=3, message=f"Failed to move {direction} from {origin} to {destination}", scope='Dooder')
-        else:
+            self.age += 1
             direction = 'None'
-            self.log(
-                granularity=3, message=f"Skipped move", scope='Dooder')
+            cell_contents = self.simulation.environment.get_cell_list_contents(self.position)
+            energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
+            neighbors = [obj for obj in cell_contents if isinstance(obj, Dooder)]
+            
+            if isinstance(energy, Energy):
+                self.energy_supply += 1
+                energy[0].consume()
 
-        self.direction = direction
+            elif len(energy) == 1:
+                self.energy_supply += 1
+                e = energy[0]
+                e.consume()
+                self.log(
+                    granularity=2, message=f"Consumed energy: {e.unique_id}", scope='Dooder')
 
+            elif len(energy) == 0:
+                pass
+
+            else:
+                pass
+
+            # if self.energy_supply < 1: #! make a way to compile nested if then checks
+            #     self.die('lack of energy')
+            #     return
+
+            if Fate.ask_fate(self.MoveProbability):  # if true, move
+                origin, destination = self.choose_random_move()
+
+                if origin != None:
+                    new_direction = get_direction(origin, destination)
+                else:
+                    new_direction = get_direction(self.position, destination)
+
+                # if true, successfully move
+                if Fate.ask_fate(self.MoveSuccessProbability):
+                    self.simulation.environment.move_object(self, destination)
+                    self.energy_supply -= 1
+                    direction = new_direction
+                    self.position = destination
+                    self.log(
+                        granularity=2, message=f"Moved {direction} from {origin} to {destination}", scope='Dooder')
+                else:
+                    self.energy_supply -= 1
+                    self.log(
+                        granularity=3, message=f"Failed to move {direction} from {origin} to {destination}", scope='Dooder')
+            else:
+                direction = 'None'
+                self.log(
+                    granularity=3, message=f"Skipped move", scope='Dooder')
+
+            self.direction = direction
+            if self.death_check():
+                print('{} died during its cycle'.format(self.unique_id))
 
 """
 # Todo: Create an Effects class (can be temporary or permanent)

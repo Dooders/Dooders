@@ -19,3 +19,7 @@ def starvation(dooder) -> bool:
         return True
     else:
         return False
+    
+# @Conditions.register('checkmate')
+# def check_mate(dooder) -> bool:
+#         return True
