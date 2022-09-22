@@ -175,6 +175,8 @@ class Dooder(BaseObject):
             self.direction = direction
             if self.death_check():
                 print('{} died during its cycle'.format(self.unique_id))
+      def __str__(self):
+          return "Dooder {0}, Position: {}".format()
 
 """
 # Todo: Create an Effects class (can be temporary or permanent)
