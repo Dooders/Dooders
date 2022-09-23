@@ -1,10 +1,10 @@
 import pytest
 
 from sdk.dooder.society import Society
-from tests.test_util import mock_simulation
+from sdk.mocks import mock_simulation
 
 
-@pytest.fixture
+@pytest.fixture #! how do i design a pytest-like "fixture"
 def society():
     simulation = mock_simulation()
     society = Society(simulation)
