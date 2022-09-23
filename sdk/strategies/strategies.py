@@ -44,7 +44,16 @@ class Strategies:
     }
 
     @classmethod
-    def load_strategy(cls, path):
+    def load_strategy(cls, path: str) -> dict:
+        """ 
+        Loads a strategy from a YAML file.
+        
+        Args:
+            path: The path to the YAML file.
+            
+        Returns:
+            A dictionary of strategies.
+        """
         with open(path) as f:
             strategy = yaml.load(f, Loader=yaml.FullLoader)
 
@@ -69,12 +78,29 @@ class Strategies:
     @classmethod
     def get(cls, strategy: str, type: str) -> Callable:
         """ 
+        Get a strategy from the registry.
+        
+        Args:
+            strategy: The name of the strategy.
+            type: The type of the strategy.
 
+        Returns:    
+            The strategy class.
         """
         return cls.strategies[type][strategy]
 
 
-def compile_strategy(model, raw_strategy: Any):
+def compile_strategy(model: Any, raw_strategy: Any) -> dict:
+    """ 
+    Compiles a strategy.
+    
+    Args:
+        model: The model to compile the strategy for.
+        raw_strategy: The raw strategy to compile.
+        
+    Returns:
+        A compiled strategy.
+    """
     compiled_strategy = {}
 
     for strat_name, strat in raw_strategy.items():

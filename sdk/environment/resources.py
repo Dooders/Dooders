@@ -34,7 +34,7 @@ class Resources:
     available_resources = {}
     total_allocated_energy = 0
     
-    def __init__(self, simulation: 'Simulation'):
+    def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
         self.strategies = compile_strategy(self, ResourceStrategy)
     
@@ -64,7 +64,7 @@ class Resources:
         self.strategies = compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
             
-    def remove(self, resource: Energy) -> None:
+    def remove(self, resource: 'Energy') -> None:
         """ 
         Consumes the given resource.
         
@@ -83,4 +83,3 @@ class Resources:
             scope (str): The scope of the message.
         """
         self.simulation.log(granularity, message, scope)
-        

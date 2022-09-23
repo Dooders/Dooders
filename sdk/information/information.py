@@ -15,10 +15,14 @@ level of detail. 3 is the highest and most detailed level of detail, including
 when energy dissipation occurs, failed movements, and failed actions, etc..
 """
 
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from sdk.base.base_information import BaseInformation
 from sdk.logger import get_logger
+
+if TYPE_CHECKING:
+    from sdk.data import UniqueID
+    from sdk.simulation import Simulation
 
 
 class Information(BaseInformation):
@@ -26,7 +30,7 @@ class Information(BaseInformation):
     Class for collecting data from the simulation.
     """
 
-    def __init__(self, experiment_id: str, params: dict) -> None:
+    def __init__(self, experiment_id: 'UniqueID', params: dict) -> None:
         """
         Create a new Information component.
 
@@ -44,18 +48,16 @@ class Information(BaseInformation):
         self.granularity = params.Granularity
         self.experiment_id = experiment_id
 
-    def collect(self, simulation) -> None:
+    def collect(self, simulation: 'Simulation') -> None:
         """
         Collect data from the simulation.
 
         Args:
             simulation: The simulation to collect data from.
         """
-        super().collect(simulation)
-        
-        # TODO: Will add post collect rollups here
+        super().collect(simulation)        
 
-    def get_result_dict(self, simulation) -> dict:
+    def get_result_dict(self, simulation: 'Simulation') -> dict:
         """
         Get a dictionary of the results of the experiment.
 
@@ -97,7 +99,7 @@ class Information(BaseInformation):
             for line in f:
                 yield line
 
-    def get_experiment_log(self, experiment_id: str = 'Current') -> List[str]:
+    def get_experiment_log(self, experiment_id: 'UniqueID' = 'Current') -> List[str]:
         """
         Get the log for a given experiment.
 

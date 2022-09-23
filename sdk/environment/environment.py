@@ -1,18 +1,25 @@
+""" 
+
+"""
+
 from random import choices
-from typing import Any, List
+from typing import TYPE_CHECKING, Any, List
 
 from sdk.base.base_environment import BaseEnvironment
 from sdk.base.base_object import BaseObject
 
-MultiGridContent = List[Any]  # ! fix this here and in base
+if TYPE_CHECKING:
+    from sdk.data import Location, UniqueID
 
+
+GridCell = List[Any]
 
 class Environment(BaseEnvironment):
     """ 
 
     """
 
-    grid: List[List[MultiGridContent]]
+    grid: List[List[GridCell]]
 
     def __init__(self, params: dict) -> None:
         """
@@ -30,7 +37,7 @@ class Environment(BaseEnvironment):
         """
         super().__init__(params)
 
-    def place_object(self, object: object, location: tuple) -> None:
+    def place_object(self, object: 'BaseObject', location: 'Location') -> None:
         """
         Place an object at the given location.
 
@@ -44,7 +51,7 @@ class Environment(BaseEnvironment):
         object.position = location
         self.empties.discard(location)
 
-    def remove_object(self, object: object) -> None:
+    def remove_object(self, object: 'BaseObject') -> None:
         """
         Remove an object from the grid.
 
@@ -58,7 +65,7 @@ class Environment(BaseEnvironment):
             self.empties.add(location)
         object.position = None
 
-    def move_object(self, object: object, location: tuple) -> None:
+    def move_object(self, object: 'BaseObject', location: 'Location') -> None:
         """ 
         Move an object to a new location.
 
@@ -107,7 +114,7 @@ class Environment(BaseEnvironment):
                         objects.append(obj)
         return objects
 
-    def get_object(self, object_id: str) -> BaseObject:
+    def get_object(self, object_id: 'UniqueID') -> BaseObject:
         """
         Get an object by its id.
 
@@ -126,7 +133,7 @@ class Environment(BaseEnvironment):
         return 'No object found'
 
     def get_random_neighbors(self,
-                             object: BaseObject,
+                             object: 'BaseObject',
                              object_type: BaseObject = 'BaseObject') -> List[BaseObject]:
         """
         Get all objects in the neighborhood of the given object.
@@ -152,7 +159,7 @@ class Environment(BaseEnvironment):
 
         return objects
 
-    def get_random_neighborhoods(self, location: tuple, n: int = 1) -> List[tuple]:
+    def get_random_neighborhoods(self, location: 'Location', n: int = 1) -> List['Location']:
         """
         Get all objects in the neighborhood of the given location.
 
@@ -170,10 +177,6 @@ class Environment(BaseEnvironment):
         random_neighborhoods = choices(neighborhoods, k=k)
 
         return random_neighborhoods
-
-    @property
-    def object_types(self):
-        pass
 
     def get_object_count(self, object_type: str = 'BaseObject') -> int:
         return len(self.get_objects(object_type))

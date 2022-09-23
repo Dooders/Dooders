@@ -1,7 +1,12 @@
+""" 
+
+"""
+
 import random
 from collections import defaultdict
 from typing import List, Type, Union
 
+from sdk.base.base_object import BaseObject
 from sdk.base.base_time import BaseTime, ClassObject
 
 TimeT = Union[float, int]
@@ -21,12 +26,12 @@ class Time(BaseTime):
             _objects: Dictionary of objects in the scheduler, 
                 with agent class names as keys
         """
-        self.steps = 0
+        # self.steps = 0
         self.random = random
         self.time: TimeT = 0  # ! What is the difference between time and steps?
         self._objects = defaultdict(dict)
 
-    def add(self, object) -> None:
+    def add(self, object: 'BaseObject') -> None:
         """
         Add an object to the schedule.
         
@@ -41,7 +46,7 @@ class Time(BaseTime):
 
         self._objects[object.name][object.unique_id] = object
 
-    def remove(self, object) -> None:
+    def remove(self, object: 'BaseObject') -> None:
         """
         Remove all instances of a given agent from the schedule.
         
@@ -77,10 +82,10 @@ class Time(BaseTime):
             self.random.shuffle(type_keys)
         for object_class in type_keys:
             self._step(object_class, shuffle_objects=shuffle_objects)
-        self.steps += 1
+        # self.steps += 1
         self.time += 1
 
-    def get_object_count(self, object_type) -> int:
+    def get_object_count(self, object_type: str) -> int:
         """
         Returns the current number of objects in the queue.
         
@@ -116,4 +121,3 @@ class Time(BaseTime):
             An object of a given class with a given unique_id.
         """
         return self._objects[object_class][unique_id]
-    
