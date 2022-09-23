@@ -1,7 +1,10 @@
-from typing import Callable
+""" 
 
 #! might need to have ability for and/or condition combinations
 #! check returns true/false and the probability to check, if needed (ask fate)
+"""
+
+from typing import Callable
 
 
 class Conditions:
