@@ -1,19 +1,18 @@
 # Dooder
 
-## Conceptual Explanation
+A Dooder is the primary agent object in the simulation. An agent is defined as an entity that has causal power, or has the ability to interact with its environment[^1]. Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
 
-A Dooder is the primary agent in the system. An agent is defined as an entity that has causal power, or has the ability to interact with the physical world. Another way of thinking about it is an agent can take in information and use that to increase its survivability.
-
-A Dooder contains the following sub models:
-
+A Dooder contains the following sub models:  
 - Behavior
 - Cognition
 - Genetics
 
-An individual Dooder is a sub model of Society, which represents the system of Dooders in the simulation.
+A Dooder is also a component of higher level models like:  
+- Environment
+- Society
+- Time
 
-You can think of that like a school of fish, you can examine the behavior of a single fish, or observe the behavior of the greater system, the school.
 
-## Structural Explanation
 
-A python class to contain a single instance of a Dooder object.
+
+[^1]: Put in reference
