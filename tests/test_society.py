@@ -37,8 +37,9 @@ def test_place_dooder(society):
     assert simulation.environment.grid[1][1] != None
     
     
-def test_properties(society):
-    society, _ = society
+def test_properties():
+    simulation = mock_simulation()
+    society = Society(simulation)
     assert society.active_dooders == {}
     assert society.total_created_dooders == 0
     assert society.graveyard == {}

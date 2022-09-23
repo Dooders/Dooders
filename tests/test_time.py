@@ -11,7 +11,7 @@ def time():
 
 def test_time_init():
     time = Time()
-    assert time.steps == 0
+    assert time.time == 0
 
 
 def test_time_add(time):
