@@ -43,9 +43,11 @@ This project took a lot of inspiration and direction from:
 - **Cycle** - An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps.
 
 
-how it works
+## How it works
 
-future plans
+## Future Plans
+
+## My Background
 
 
 [^1]: complexity systems science
