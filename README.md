@@ -9,6 +9,8 @@ To unpack the terminology a bit:
 * **Model-based**: as it includes intersction netween intertwined models. A model is like a map, it's an imperfect and simplified representation of reality.[^2]  
 * **Simulation**: because there is power in experimenting with different iterations of a simulation.  
 
+long-term goals: Complexification and Integration. Adding more and more complexity, and imtegration between the evolving models. See how chages affect the simulation and if any emergent properties surface.
+
 This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and the effects of properties like feedback loops, attractors, and chaos theorty. The code, content, and concepts will change over time as I explore different ideas.
 
 My primary goal is to gain an intuition of the mechanics and dynamics of complex systems. The project allows me to have a central location for experimentation and documentation.
