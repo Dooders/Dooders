@@ -17,16 +17,16 @@ A Dooder is also a component of higher level models like:
 - [Information](Information.md)
 
 
+
 ## Attributes
----
+
 
 
 ## Step Flow
----
+
 
 
 ## Genetics
----
 
 
 
