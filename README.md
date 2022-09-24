@@ -14,9 +14,11 @@ To unpack the terminology a bit:
 
 This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.. The code, content, and concepts will change over time as I explore different ideas.  
 
-Primary Goal: gain an intuition of the mechanics and dynamics of complex systems. The project allows me to have a central location for experimentation and documentation.  
+### Primary Goal:
+gain an intuition of the mechanics and dynamics of complex systems. The project allows me to have a central location for experimentation and documentation.  
 
-Primary Strategy: Complexification[^3] and Integration[^4]. Adding more and more complexity, and imtegration between the evolving models. See how chages affect the simulation and if any emergent[^5] properties surface.  
+### Primary Strategy:
+Complexification[^3] and Integration[^4]. Adding more and more complexity, and imtegration between the evolving models. See how chages affect the simulation and if any emergent[^5] properties surface.  
 
 
 This project took a lot of inspiration and direction from:
@@ -28,7 +30,8 @@ This project took a lot of inspiration and direction from:
 
 ## Primary Concepts
 
--- change to a table
+| [**Dooder**](docs/Dooder.md) | An agent object with an amount of 'causal' control in the simulation |  
+  
 
 - [**Dooder**](docs/Dooder.md) - An agent object with an amount of causal “control” in the simulation.
 
