@@ -1,14 +1,13 @@
 ![dooders logo](./docs/dooder_logo.png)
 # Dooders
-> Reality works, model it
+> Reality works; model it.
 
 Dooders is a python library for complex model-based simulations.
 
-To unpack the terminology a bit:
-**Complex** because the library simulates not only a single system, but systems of systems.[^1]  
-**Model-based** as it includes intersction netween intertwined models. A model is like a map, it's an imperfect and simplified representation of reality.[^2]  
-**Simulation** because there is power in experimenting with different iterations of a simulation.  
-Reality works. So we might as well try and replicate the patterns we onserved.  
+To unpack the terminology a bit:  
+**Complex**: because the library simulates not only a single system, but systems of systems.[^1]  
+**Model-based**: as it includes intersction netween intertwined models. A model is like a map, it's an imperfect and simplified representation of reality.[^2]  
+**Simulation**: because there is power in experimenting with different iterations of a simulation.  
 
 This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and the effects of properties like feedback loops, attractors, and chaos theorty. The code, content, and concepts will change over time as I explore different ideas.
 
