@@ -16,5 +16,20 @@ A Dooder is also a component of higher level models like:
 - [Society](Society.md)
 - [Information](Information.md)
 
+
+## Attributes
+---
+
+
+## Step Flow
+---
+
+
+## Genetics
+---
+
+
+
+
 [^1]: Put in reference
 [^2]: Put in reference
