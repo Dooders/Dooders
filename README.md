@@ -28,7 +28,7 @@ This project took a lot of inspiration and direction from:
 
 ## Primary Concepts
 
-# change to a table
+-- change to a table
 
 - [**Dooder**](docs/Dooder.md) - An agent object with an amount of causal “control” in the simulation.
 
