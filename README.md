@@ -9,13 +9,16 @@
 
 Dooders is a python library for complex model-based simulations.  
 
-To unpack the terminology a bit:  
+Unpacking the terminology a bit:  
 
 * **Complex**: The library simulates not only a single system, but systems of systems.[^1]  
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.[^2]  
 * **Simulation**: Continual experimentation and observing of models.  
 
-This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc. The code, content, and concepts will change over time as I explore different ideas.  
+This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, and adaptation.  
+
+***The code, content, and concepts will change over time as I explore different ideas.***  
+
 
 ### Primary Goal
 
@@ -23,23 +26,24 @@ To gain an intuition of the mechanics and dynamics of complex systems. The proje
 
 ### Primary Strategy
 
-Ongoing Complexification[^3] and Integration[^4]. Adding increased complexity and integration between the evolving models. See how changes affect the simulation and if any emergent[^5] properties surface.  
+Ongoing complexification[^3] and integration[^4]. See how changes affect the simulation and if any emergent[^5] properties surface.  
 
 ### Primary Concepts
 
 | Concept                                | Explanation                                                                      |
 | -------------------------------------- | -------------------------------------------------------------------------------- |
 | [**Dooder**](docs/Dooder.md)           | An agent object with an amount of causal 'control' in the simulation             |
-| [**Model**](docs/Model.md)             | Analogous to a system. In reality, just about everything is a system             |
-| [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment)    |
+| [**Model**](docs/Model.md)             | Analogous to a system. In reality, just about everything is a system of some kind           |
+| [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment, Society)    |
 | [**Experiment**](docs/Experiment.md)   | One or multiple simulations                                                      |
 | [**Environment**](docs/Environment.md) | Proxy for spatial interactions and effects. A lot like a game board              |
 | [**Energy**](docs/Energy.md)           | An object that allows a Dooder to perform “work” (execute movements and actions) |
 | [**Cycle**](docs/Cycle.md)             | An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps   |
-
+  
+  
 ## How it works
-
-
+  
+  
 
 ## Future Plans
 
