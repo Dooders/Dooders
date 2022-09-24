@@ -30,6 +30,8 @@ This project took a lot of inspiration and direction from:
 
 ## Primary Concepts
 
+| Concept | Explanation |
+| ------- | ----------- |
 | [**Dooder**](docs/Dooder.md) | An agent object with an amount of 'causal' control in the simulation |  
   
 
