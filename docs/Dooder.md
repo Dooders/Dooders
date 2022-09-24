@@ -4,11 +4,13 @@ A Dooder is the primary agent object in the [simulation](Simulation.md). An agen
 
 Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.[^2]
 
+
 A Dooder contains the following sub models:  
 
 - [Behavior](Behavior.md)
 - [Cognition](Cognition.md)
 - [Genetics](Genetics.md)
+
 
 A Dooder is also a component of higher level models like:  
 
@@ -17,16 +19,18 @@ A Dooder is also a component of higher level models like:
 - [Information](Information.md)
 
 
+## How will Dooders use energy?
 
-## Attributes
+Energy is the primary resource a Dooder has to interact in the environment. Every action will have a cost and energy will be allocated to the environment every cycle.
+
+The Resource model will manage the allocation of energy to the environment. Following a user defined strategy.
+
+The current strategy is to randomly select locations in the environment and place a variable number of energy units for Dooder's to consume. Each Dooder gets a Genetics defined starting energy level, max energy supply, and energy consumption rate.
 
 
 
-## Step Flow
+## Genetics and Behavior
 
-
-
-## Genetics
 
 
 
