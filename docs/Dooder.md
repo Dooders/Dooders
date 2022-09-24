@@ -31,6 +31,20 @@ The current strategy is to randomly select locations in the environment and plac
 
 ## Genetics and Behavior
 
+The initial seed population is generated based on the selected genetic attributes and the strategies to populate the attributes. The Genetics serve as a way to establish starting values that can be mutable or imutable.
+
+For example, the starting energy value is determined at Dooder creation as the energy_supply attribute and changes cycle to cycle. Permanent values might be something like Metabolism which defines the rate a Dooder will starve with no new energy.
+
+
+## Death
+
+A Dooder agent will continue as long as it meets defined comditions (or states). For example, hunger is represented by a function that will keep track of the number of cycles with `energy_supply = 0`.
+
+
+
+## Important Concepts
+
+
 
 
 
