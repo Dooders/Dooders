@@ -1,8 +1,10 @@
 ![dooders logo](./docs/dooder_logo.png)
 # Dooders
+  
+ 
 > Reality works; model it.  
-
-
+  
+  
 Dooders is a python library for complex model-based simulations.  
 
 To unpack the terminology a bit:  
@@ -26,6 +28,8 @@ This project took a lot of inspiration and direction from:
 
 ## Primary Concepts
 
+# change to a table
+
 - [**Dooder**](docs/Dooder.md) - An agent object with an amount of causal “control” in the simulation.
 
 - **Experiment** - One or multiple simulations.
@@ -47,7 +51,16 @@ This project took a lot of inspiration and direction from:
 
 ## Future Plans
 
+| Idea | Description |
+| ---- | ----------- |
+| Test | Testing 123 |  
+
 ## My Background
+  
+1. BS and MA to be an intelligence analyst
+2. Process Improvement
+3. Data Science and Ml/Dl
+4. Software engineering, fraud detection
 
 
 [^1]: complexity systems science
