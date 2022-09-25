@@ -66,6 +66,11 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 * [The Romance of Reality](https://www.amazon.com/Romance-Reality-Organizes-Consciousness-Complexity-ebook/dp/B09GW3G45J/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627602&sr=8-2)
 * [At Home in the Universe](https://www.amazon.com/At-Home-Universe-Self-Organization-Complexity-ebook/dp/B004VEEO12/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627686&sr=8-1)
 
+
+## Why?
+[A thoughtful and informative response](https://giphy.com/gifs/hero0fwar-idowhatiwant-whatever-i-do-what-want-whateveridowhatiwant-ihvwnO5pHKtyTYQWxU?utm_source=media-link&utm_medium=landing&utm_campaign=Media%20Links&utm_term=)  
+
+
 [^1]: complexity systems science  
 [^2]: notes on models  
 [^3]: Complexification creates conditions for emergent properties. A lot like: "if you complexify it, it will emerge"  
