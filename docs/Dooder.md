@@ -46,6 +46,11 @@ A Dooder agent will continue as long as it meets defined comditions (or states).
 
 ## Concepts, Strategies and Conditions
 
+Concepts like hunger, starvation, suffering, happiness
+
+Conditions (States)
+
+Strategies (Algorithms)
 
 
 
