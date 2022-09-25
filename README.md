@@ -49,10 +49,10 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 
 | Idea | Description |
 | ---- | ----------- |
-| Full featured frontend interface | Testing 123 |
+| Full featured frontend interface | |
 | Dockerized deployment | |
-| Dooders with "cognition" | |
-| Reproduction | |
+| Cognition model | |
+| Reproduction model | |  
 
 ## My Background
   
