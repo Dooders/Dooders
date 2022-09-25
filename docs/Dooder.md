@@ -19,7 +19,7 @@ A Dooder is also a component of higher level models like:
 - [Information](Information.md)
 
 
-## How will Dooders use energy?
+## Environment and Energy
 
 Energy is the primary resource a Dooder has to interact in the environment. Every action will have a cost and energy will be allocated to the environment every cycle.
 
@@ -37,14 +37,10 @@ For example, the starting energy value is determined at Dooder creation as the e
 
 
 
-## Death
+## Death and Reproduction
 
 A Dooder agent will continue as long as it meets defined comditions (or states). For example, hunger is represented by a function that will keep track of the number of cycles with `energy_supply = 0`.
 
-
-
-## Reproduction
-> TBD
 
 
 
