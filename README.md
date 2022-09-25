@@ -53,6 +53,7 @@ Ongoing complexification[^3] and integrate more models in the simulation. See ho
 | Dockerized deployment | Make it simple to spin up the entire platform |
 | Cognition model | Build out the Dooder capability to take in information and evaluate its value |
 | Reproduction model | Design a funtion to combine the Genetic models of two Dooders |  
+| Continous time | Switch from step based, to continous time. Brings on tons of potential issues |
 
 ## My Background
   
