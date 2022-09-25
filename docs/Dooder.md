@@ -53,6 +53,16 @@ Conditions (States)
 Strategies (Algorithms)
 
 
+## Information
+purpose of class
+collectors
+
+
+## Fate
+purpose of class
+probabilities
+
+
 
 
 ### Footnotes
