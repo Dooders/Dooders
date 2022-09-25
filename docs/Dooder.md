@@ -44,7 +44,7 @@ A Dooder agent will continue as long as it meets defined comditions (or states).
 
 
 
-## Strategies and Conditions
+## Concepts, Strategies and Conditions
 
 
 
