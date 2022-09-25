@@ -42,17 +42,17 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
   
   
 ## How it works
-  
+  ### TBD
   
 
 ## Future Plans
 
-| Idea | Description |
-| ---- | ----------- |
-| Full featured frontend interface | |
-| Dockerized deployment | |
-| Cognition model | |
-| Reproduction model | |  
+| Idea  | Description |
+| :---- | ----------- |
+| Full featured frontend interface | Responsive UI with many dashboards showing the simulation results |
+| Dockerized deployment | Make it simple to spin up the entire platform |
+| Cognition model | Build out the Dooder capability to take in information and evaluate its value |
+| Reproduction model | Design a funtion to combine the Genetic models of two Dooders |  
 
 ## My Background
   
@@ -79,7 +79,8 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 [A thoughtful and informative answer](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
   
   
-# Footnotes
+  
+### Footnotes
 
 [^1]: complexity systems science  
 [^2]: notes on models  
