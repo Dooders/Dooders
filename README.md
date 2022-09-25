@@ -84,5 +84,5 @@ Ongoing complexification[^3] and integrate more models in the simulation. See ho
 
 [^1]: complexity systems science  
 [^2]: notes on models  
-[^3]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie `Field of Dreams`: "if you complexify it, properties will emerge"  
+[^3]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie `Field of Dreams`: > "if you complexify it, properties will emerge"  
 [^4]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is "greater than the sum of its parts"  
