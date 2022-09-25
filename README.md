@@ -26,7 +26,7 @@ To gain an intuition of the mechanics and dynamics of complex systems. The proje
 
 ### Project Strategy
 
-Ongoing complexification[^3] and integrate more models in the simulation. See how changes affect the simulation and if any emergent[^4] properties surface.  
+Ongoing complexification[^3] and experimentation with more models and interactions between models. See how changes affect the results and if any emergent[^4] properties surface.  
 
 ### Main Concepts
 
