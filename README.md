@@ -68,7 +68,7 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 
 
 ## Why?
-[A thoughtful and informative response](https://giphy.com/gifs/hero0fwar-idowhatiwant-whatever-i-do-what-want-whateveridowhatiwant-ihvwnO5pHKtyTYQWxU?utm_source=media-link&utm_medium=landing&utm_campaign=Media%20Links&utm_term=)  
+[A thoughtful and informative response](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
 
 
 [^1]: complexity systems science  
