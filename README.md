@@ -31,7 +31,7 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 ### Primary Concepts
 
 | Concept                                | Explanation                                                                      |
-| -------------------------------------- | -------------------------------------------------------------------------------- |
+| :------------------------------------: | -------------------------------------------------------------------------------- |
 | [**Dooder**](docs/Dooder.md)           | An agent object with an amount of causal 'control' in the simulation             |
 | [**Model**](docs/Model.md)             | Analogous to a system. In reality, just about everything is a system of some kind           |
 | [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment, Society)    |
