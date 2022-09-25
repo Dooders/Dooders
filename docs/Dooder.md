@@ -36,18 +36,24 @@ The initial seed population is generated based on the selected genetic attribute
 For example, the starting energy value is determined at Dooder creation as the energy_supply attribute and changes cycle to cycle. Permanent values might be something like Metabolism which defines the rate a Dooder will starve with no new energy.
 
 
+
 ## Death
 
 A Dooder agent will continue as long as it meets defined comditions (or states). For example, hunger is represented by a function that will keep track of the number of cycles with `energy_supply = 0`.
 
 
 
-## Important Concepts
+## Reproduction
+> TBD
+
+
+
+## Strategies and Conditions
 
 
 
 
 
-
+### Footnotes
 [^1]: Put in reference
 [^2]: Put in reference
