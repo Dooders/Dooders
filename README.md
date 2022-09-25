@@ -7,7 +7,7 @@
 
 ## Overview
 
-Dooders is a python library for complex model-based simulations.  
+Dooders is a python library for *complex model-based simulations*.  
 
 Unpacking the terminology a bit:  
 
