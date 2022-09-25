@@ -78,11 +78,11 @@ Ongoing complexification[^3] and integrate more models in the simulation. See ho
 
 [A thoughtful and informative answer](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
   
-  
+
   
 ### Footnotes
 
 [^1]: A complex system has a number of components with non-linear (random or unpredictable) relationships. A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
-[^2]: In the library, just about everything is seperated by systems. Functionally that helps a lot, and it helps neatly contain concepts in code 
+[^2]: In the library, just about everything is seperated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code 
 [^3]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie *Field of Dreams*: `"if you complexify it, properties will emerge"`  
 [^4]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is `"greater than the sum of its parts"`    
