@@ -53,10 +53,14 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 
 ## My Background
   
-1. BS and MA to be an intelligence analyst
+1. BS in Geospatial Intelligence and a Master's in National Security Studies
+   * I was planning on being an intelligence analyst focusing on satellite imagery
 2. Process Improvement
-3. Data Science and Ml/Dl
+    * Needed a job after grad-school, that introduced me to the idea of process improvement. Learned a lot about the types of waste, inefficiencies, and the value of data
+3. Data Science with Machine Learning and Deep Learning
+    * Loved the idea of using data to make predictions and decisions. I had roles in different industries looking to identify patterns and trends in data
 4. Software engineering, fraud detection
+    * My current role is a mix of many different roles. I am now more focused on creating systems and process and better ways to catch undetected financial fraud
 
 
 ## Inspiration
@@ -68,8 +72,11 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 
 
 ## Why?
-[A thoughtful and informative answer](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
 
+[A thoughtful and informative answer](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
+  
+  
+# Footnotes
 
 [^1]: complexity systems science  
 [^2]: notes on models  
