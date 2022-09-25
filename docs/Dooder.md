@@ -36,7 +36,7 @@ Conditions (States)
 
 Strategies (Algorithms)  
 
-## Information
+## Information and Collectors
 
 purpose of class  
 collectors  
