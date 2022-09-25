@@ -24,11 +24,11 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 
 To gain an intuition of the mechanics and dynamics of complex systems. The project allows me to have a central location for experimentation and documentation.  
 
-### Primary Strategy
+### Project Strategy
 
-Ongoing complexification[^3] and integration[^4]. See how changes affect the simulation and if any emergent[^5] properties surface.  
+Ongoing complexification[^3] and integrate more models in the simulation. See how changes affect the simulation and if any emergent[^4] properties surface.  
 
-### Primary Concepts
+### Main Concepts
 
 | Concept                                | Explanation                                                                      |
 | :------------------------------------- | -------------------------------------------------------------------------------- |
@@ -84,6 +84,5 @@ Ongoing complexification[^3] and integration[^4]. See how changes affect the sim
 
 [^1]: complexity systems science  
 [^2]: notes on models  
-[^3]: Complexification creates conditions for emergent properties. A lot like: "if you complexify it, it will emerge"  
-[^4]: Adding more and more feedback loops and interfaces inside/between models  
-[^5]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is "greater than the sum of its parts"  
+[^3]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie `Field of Dreams`: "if you complexify it, properties will emerge"  
+[^4]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is "greater than the sum of its parts"  
