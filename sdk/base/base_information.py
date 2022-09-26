@@ -3,7 +3,7 @@ from typing import Callable, List
 
 import pandas as pd
 from pydantic import BaseModel
-from sdk.information.collectors import CollectorRegistry
+from sdk.information.collectors import Collectors
 
 
 class BaseCollector(BaseModel):
@@ -31,55 +31,11 @@ class BaseInformation:
         """
         self.collectors: dict = {}
         self.data: dict = {}
+        Collectors.compile_collectors(self)
 
-        for collector in CollectorRegistry.registry:
-            self._add_collector(collector)
-
-    def _add_collector(self, collector: BaseCollector) -> None:
-        """ 
-        Add a collector to the collector dictionary.
-
-        Args:
-            collector: Collector to be added.
-        """
-        collector = BaseCollector(**collector)
-        component = collector.component
-
-        if component not in self.collectors:
-            self.collectors[component] = {}
-            self.data[component] = {}
-
-        if type(collector.function) is str:
-            func = partial(self._getattr, collector.function)
-        else:
-            func = collector.function
-
-        self.collectors[component][collector.name] = func
-        self.data[component][collector.name] = []
 
     def _reporter_decorator(self, reporter):
         return reporter()
-
-    def _collect(self, component: str, simulation) -> None:
-        """
-        Run all the collectors for the given component.
-
-        Args:
-            component: Component to collect data from.
-            simulation: Simulation object to collect data from.
-        """
-        for name, func in self.collectors[component].items():
-
-            if callable(func):
-                # func = self._reporter_decorator(func)
-                self.data[component][name].append(func(simulation))
-            else:
-
-                if func[1] is None:
-                    self.data[component][name].append(func[0](simulation))
-                else:
-                    self.data[component][name].append(
-                        func[0](simulation, **func[1]))
 
     def collect(self, simulation) -> None:
         """
@@ -89,7 +45,7 @@ class BaseInformation:
             simulation: Simulation object to collect data from.
         """
         for component, collector in self.collectors.items():
-            self._collect(component, simulation)
+            Collectors.run_collectors(self, component, simulation)
 
     @staticmethod
     def _getattr(name, _object) -> object:

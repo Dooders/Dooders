@@ -15,11 +15,14 @@ A collector can return any type of information. Every Collector must input
 information from the simulation.
 """
 
+from functools import partial
 from statistics import mean
 from typing import Callable
 
+from sdk.base.base_information import BaseCollector
 
-class CollectorRegistry:
+
+class Collectors:
     """ 
     The factory class for creating collectors
 
@@ -49,25 +52,70 @@ class CollectorRegistry:
             return wrapped_class
 
         return inner_wrapper
+    
+    @classmethod
+    def compile_collectors(cls, Information):
+        for collector in cls.registry:
+            collector = BaseCollector(**collector)
+            component = collector.component
+
+            if component not in Information.collectors:
+                Information.collectors[component] = {}
+                Information.data[component] = {}
+
+            if type(collector.function) is str:
+                func = partial(Information._getattr, collector.function)
+            else:
+                func = collector.function
+
+            Information.collectors[component][collector.name] = func
+            Information.data[component][collector.name] = []
+            
+    @classmethod
+    def run_collectors(cls, Information, simulation):
+        for component in Information.collectors:
+            cls._collect(Information, component, simulation)
+            
+    def _collect(self, Information, component: str, simulation) -> None:
+        """
+        Run all the collectors for the given component.
+
+        Args:
+            Information: Information object to collect data from.
+            component: Component to collect data from.
+            simulation: Simulation object to collect data from.
+        """
+        for name, func in Information.collectors[component].items():
+
+            if callable(func):
+                Information.data[component][name].append(func(simulation))
+            else:
+
+                if func[1] is None:
+                    Information.data[component][name].append(func[0](simulation))
+                else:
+                    Information.data[component][name].append(
+                        func[0](simulation, **func[1]))
+
 
 
 # ===========================
 # Base Collectors
 # ===========================
 
-@CollectorRegistry.register_collector('DooderCount', 'Simulation')
+@Collectors.register_collector('DooderCount', 'Simulation')
 def get_dooder_count(simulation) -> int:
     """Return the number of dooders in the simulation."""
     return simulation.time.get_object_count('Dooder')
 
 
-@CollectorRegistry.register_collector('EnergyCount', 'Simulation')
+@Collectors.register_collector('EnergyCount', 'Simulation')
 def get_energy_count(simulation) -> int:
     """Return the number of energy in the simulation."""
     return simulation.environment.get_object_count('Energy')
 
 
-@CollectorRegistry.register_collector('DirectionCounts', 'Simulation')
+@Collectors.register_collector('DirectionCounts', 'Simulation')
 def get_direction_counts(simulation) -> dict:
     """Return the number of moves in each direction."""
     dooders = simulation.time.get_objects('Dooder')
@@ -79,7 +127,7 @@ def get_direction_counts(simulation) -> dict:
     return dict(direction_counts)
 
 
-@CollectorRegistry.register_collector('TotalDooderEnergySupply', 'Simulation')
+@Collectors.register_collector('TotalDooderEnergySupply', 'Simulation')
 def get_total_energy_supply(simulation) -> int:
     """ Return the total energy supply of all dooders in the simulation. """
     energy_supply = [
@@ -91,7 +139,7 @@ def get_total_energy_supply(simulation) -> int:
     return sum(energy_supply)
 
 
-@CollectorRegistry.register_collector('AverageEnergyAge', 'Simulation')
+@Collectors.register_collector('AverageEnergyAge', 'Simulation')
 def get_average_energy_age(simulation) -> float:
     """Return the average age of energy in the simulation."""
     energy_age = [
@@ -103,6 +151,6 @@ def get_average_energy_age(simulation) -> float:
     return round(mean(energy_age), 2)
 
 
-@CollectorRegistry.register_collector('AverageBehaviorProfile', 'PostCollect')
+@Collectors.register_collector('AverageBehaviorProfile', 'PostCollect')
 def get_average_behavior_profile(simulation) -> dict:
     pass
