@@ -30,7 +30,7 @@ class Information(BaseInformation):
     Class for collecting data from the simulation.
     """
 
-    def __init__(self, experiment_id: 'UniqueID', params: dict) -> None:
+    def __init__(self, simulation: 'Simulation') -> None:
         """
         Create a new Information component.
 
@@ -45,8 +45,8 @@ class Information(BaseInformation):
         """
         super().__init__()
         self.logger = get_logger()
-        self.granularity = params.Granularity
-        self.experiment_id = experiment_id
+        self.granularity = 2  # ! Fix this
+        self.experiment_id = simulation.experiment_id
 
     def collect(self, simulation: 'Simulation') -> None:
         """
@@ -55,7 +55,7 @@ class Information(BaseInformation):
         Args:
             simulation: The simulation to collect data from.
         """
-        super().collect(simulation)        
+        super().collect(simulation)
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """

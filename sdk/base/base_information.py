@@ -1,22 +1,10 @@
-from functools import partial
-from typing import Callable, List
-
 import pandas as pd
-from pydantic import BaseModel
 from sdk.information.collectors import Collectors
-
-
-class BaseCollector(BaseModel):
-    name: str
-    function: Callable
-    component: str
 
 
 class BaseInformation:
     """ 
     """
-
-    simulation = None
 
     def __init__(self) -> None:
         """ 
@@ -33,19 +21,14 @@ class BaseInformation:
         self.data: dict = {}
         Collectors.compile_collectors(self)
 
-
-    def _reporter_decorator(self, reporter):
-        return reporter()
-
     def collect(self, simulation) -> None:
         """
-        Collect all the data for the given simulation object.
-
+        Collect data from the simulation.
+        
         Args:
-            simulation: Simulation object to collect data from.
+            simulation: The simulation to collect data from.
         """
-        for component, collector in self.collectors.items():
-            Collectors.run_collectors(self, component, simulation)
+        Collectors.run_collectors(self, simulation)
 
     @staticmethod
     def _getattr(name, _object) -> object:

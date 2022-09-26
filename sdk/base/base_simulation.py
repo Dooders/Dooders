@@ -38,7 +38,7 @@ class BaseSimulation(ABC):
         
         # Initialize the simulation components
         self.environment = Environment(self.params.Environment)
-        self.information = Information(experiment_id, self.params.Information)
+        self.information = Information(self)
         self.time = Time()
         self.seed = ShortUUID()
 
