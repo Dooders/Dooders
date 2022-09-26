@@ -30,6 +30,8 @@ class BaseCollector(BaseModel):
     function: Callable
     component: str
 
+        
+#! Define 'scope' and a better way to manage and fetch scope based results
 
 class Collectors:
     """ 
