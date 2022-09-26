@@ -24,6 +24,10 @@ if TYPE_CHECKING:
     from sdk.data import UniqueID
     from sdk.simulation import Simulation
 
+    
+#! Add post_collect process to send results to db
+#! Have collectors stored in Collectors class
+#! Have a better way to run functions, scope by scope, with correct args
 
 class Information(BaseInformation):
     """
