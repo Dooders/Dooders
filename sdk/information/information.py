@@ -72,11 +72,13 @@ class Information(BaseInformation):
             A dictionary of the results of the experiment.
         """
         result_dict = dict()
-        result_dict['CycleCount'] = simulation.time.time
 
-        for _, values in self.data.items():
+        for scope, values in self.data.items():
+            result_dict[scope] = {}
+            result_dict[scope]['CycleNumber'] = simulation.time.time
+            result_dict[scope]['ExperimentID'] = self.experiment_id
             for column, value in values.items():
-                result_dict[column] = value[-1]  # get the last value
+                result_dict[scope][column] = value[-1]  # get the last value
 
         return result_dict
 
