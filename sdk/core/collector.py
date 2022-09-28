@@ -13,8 +13,6 @@ is then passed to the Information component.
 A collector can return any type of information. Every Collector must input 
 'simulation' as an argument. The simulation object is used to extract 
 information from the simulation.
-
-#! get scope based on filename from collectors folder
 """
 from functools import partial
 from statistics import mean
@@ -33,7 +31,7 @@ class BaseCollector(BaseModel):
     scope: str
 
 
-class Collectors:
+class Collector:
     """ 
     The factory class for creating collectors
 
@@ -121,60 +119,3 @@ class Collectors:
                 else:
                     information.data[scope][name].append(
                         func[0](simulation, **func[1]))
-
-
-# ===========================
-# Base Collectors
-# ===========================
-
-@Collectors.register('DooderCount', 'Simulation')
-def get_dooder_count(simulation) -> int:
-    """Return the number of dooders in the simulation."""
-    return simulation.time.get_object_count('Dooder')
-
-
-@Collectors.register('EnergyCount', 'Simulation')
-def get_energy_count(simulation) -> int:
-    """Return the number of energy in the simulation."""
-    return simulation.environment.get_object_count('Energy')
-
-
-@Collectors.register('DirectionCounts', 'Simulation')
-def get_direction_counts(simulation) -> dict:
-    """Return the number of moves in each direction."""
-    dooders = simulation.time.get_objects('Dooder')
-
-    from collections import Counter
-    direction_list = [dooder.direction for dooder in dooders]
-    direction_counts = Counter(direction_list)
-
-    return dict(direction_counts)
-
-
-@Collectors.register('TotalDooderEnergySupply', 'Simulation')
-def get_total_energy_supply(simulation) -> int:
-    """ Return the total energy supply of all dooders in the simulation. """
-    energy_supply = [
-        dooder.energy_supply for dooder in simulation.time.get_objects('Dooder')]
-
-    if len(energy_supply) == 0:
-        return 0
-
-    return sum(energy_supply)
-
-
-@Collectors.register('AverageEnergyAge', 'Simulation')
-def get_average_energy_age(simulation) -> float:
-    """Return the average age of energy in the simulation."""
-    energy_age = [
-        energy.cycle_count for energy in simulation.environment.get_objects('Energy')]
-
-    if len(energy_age) == 0:
-        return 0
-
-    return round(mean(energy_age), 2)
-
-
-@Collectors.register('AverageBehaviorProfile', 'PostCollect')
-def get_average_behavior_profile(simulation) -> dict:
-    pass
