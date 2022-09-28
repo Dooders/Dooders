@@ -19,6 +19,7 @@ from typing import TYPE_CHECKING, List
 
 from sdk.base.base_information import BaseInformation
 from sdk.logger import get_logger
+from sdk.util import upload_results
 
 if TYPE_CHECKING:
     from sdk.data import UniqueID
@@ -50,6 +51,7 @@ class Information(BaseInformation):
         super().__init__()
         self.logger = get_logger()
         self.granularity = 2  # ! Fix this
+        self.simulation = simulation
         self.experiment_id = simulation.experiment_id
 
     def collect(self, simulation: 'Simulation') -> None:
@@ -60,6 +62,12 @@ class Information(BaseInformation):
             simulation: The simulation to collect data from.
         """
         super().collect(simulation)
+        self.post_collect()
+        
+    def post_collect(self) -> None:
+        cycle_results = self.get_result_dict(self.simulation)['Simulation'] 
+        
+        upload_results(cycle_results)
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """

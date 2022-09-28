@@ -11,6 +11,10 @@ import os
 import uuid as _uu
 from typing import List, Optional
 
+import psycopg2
+import psycopg2.extras
+from pydantic import BaseModel
+
 
 def int_to_string(
     number: int, alphabet: List[str], padding: Optional[int] = None
@@ -102,7 +106,7 @@ class ShortUUID:
         if length is None:
             length = self._length
 
-        random_num = int(binascii.b2a_hex(os.urandom(length)), 16)
+        random_num = int(binascii.b2a_hex(os.random(length)), 16)
         return int_to_string(random_num, self._alphabet, padding=length)[:length]
 
     def get_alphabet(self) -> str:
@@ -124,3 +128,44 @@ class ShortUUID:
         """Return the string length of the shortened UUID."""
         factor = math.log(256) / math.log(self._alpha_len)
         return int(math.ceil(factor * num_bytes))
+
+
+
+class PostgresData(BaseModel):
+    ExperimentID: str
+    CycleNumber: int
+    DooderCount: int
+    EnergyCount: int
+    TotalDooderEnergySupply: int
+    AverageEnergyAge: float
+
+def upload_results(cycle_results: dict) -> None:
+    """Upload the results to the postgres server."""
+    
+    final_results = PostgresData.construct(**cycle_results).dict()
+
+    # Connect to the database
+    conn = psycopg2.connect(
+        host="192.168.1.220",
+        database="DooderDB",
+        user="postgres",
+        password="changeme"
+        )
+
+    # Create a cursor
+    cur = conn.cursor()
+
+    # Create a new record
+    sql = """
+    INSERT INTO public."SimulationResults" ("ExperimentID", "CycleNumber", "DooderCount", "EnergyCount", "TotalDooderEnergySupply", "AverageEnergyAge") 
+    VALUES (%(ExperimentID)s, %(CycleNumber)s, %(DooderCount)s, %(EnergyCount)s, %(TotalDooderEnergySupply)s, %(AverageEnergyAge)s);
+    """
+    cur.execute(sql, final_results)
+
+    # Commit the changes to the database
+    conn.commit()
+
+    # Close communication with the database
+    cur.close()
+    conn.close()
+    
