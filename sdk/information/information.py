@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, List
 
 from sdk.base.base_information import BaseInformation
 from sdk.logger import get_logger
-from sdk.util import upload_results
+from sdk.utils import Postgres
 
 if TYPE_CHECKING:
     from sdk.data import UniqueID
@@ -67,7 +67,7 @@ class Information(BaseInformation):
     def post_collect(self) -> None:
         cycle_results = self.get_result_dict(self.simulation)['Simulation'] 
         
-        upload_results(cycle_results)
+        Postgres.upload_results(cycle_results)
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """

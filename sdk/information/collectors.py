@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 class BaseCollector(BaseModel):
     name: str
     function: Callable
-    component: str
+    scope: str
 
 
 class Collectors:
