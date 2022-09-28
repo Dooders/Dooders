@@ -6,7 +6,7 @@ from fastapi import WebSocket
 from sdk.base.base_object import BaseObject
 from sdk.config import ExperimentParameters
 from sdk.simulation import Simulation
-from sdk.util import ShortUUID
+from sdk.utils import ShortID
 
 
 class Experiment:
@@ -28,7 +28,7 @@ class Experiment:
             parameters: The experiment parameters.
             seed: The seed of the experiment. Used in experiment_id generation.
         """
-        self.seed = ShortUUID()
+        self.seed = ShortID()
         self.parameters = parameters
         self.experiment_id = self.seed.uuid()
         self.simulation = Simulation(self.experiment_id, self.parameters)

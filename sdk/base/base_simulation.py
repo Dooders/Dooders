@@ -6,7 +6,7 @@ from sdk.config import ExperimentParameters
 from sdk.environment import Environment
 from sdk.information import Information
 from sdk.time import Time
-from sdk.util import ShortUUID
+from sdk.utils import ShortID
 
 # maybe have a dict that contains each simulation component (Environment, etc.)
 # Components (Society, Environment) and objects ( Dooders, Energy)
@@ -40,7 +40,7 @@ class BaseSimulation(ABC):
         self.environment = Environment(self.params.Environment)
         self.information = Information(self)
         self.time = Time()
-        self.seed = ShortUUID()
+        self.seed = ShortID()
 
     @abstractmethod
     def setup(self) -> None:
