@@ -3,6 +3,12 @@ Strategies
 ----------
 
 This module contains the strategies used by the simulation.
+
+A strategy is a technique to provide an output. Usually a valueor list of values
+A collector runs at the end pf each step based on the state at each step
+A strategy is an input for a step to process. The strategies will be inputs for different models
+A model defines a strategy through a yaml file.
+Add a new strategy with the register deckrator
 """
 
 from random import choices
@@ -18,9 +24,11 @@ if TYPE_CHECKING:
 
 class BaseStrategy(BaseModel):
     # What kind of value needs to be generated
+    # Currently Generation or Placement
     Type: str
 
     # The function generator to be executed
+    # Functions are registered from the register decorator
     Func: str
 
     # Arguments to pass to the StrategyFunc
@@ -30,13 +38,17 @@ class BaseStrategy(BaseModel):
     # If true, the strategy will be compiled later
     Dependency: Optional[str] = None
 
+    # Used for documentstion
     Description: Optional[str] = None
 
+    # This is meant to specifiy where the strategy is used
+    # No functional use. For documentstion only
     Used: Optional[str] = None
 
 
 class Strategies:
 
+    # update for dynamic strategy type dicts
     strategies = {
         'Generation': {},
         'Placement': {},
@@ -90,7 +102,7 @@ class Strategies:
         return cls.strategies[type][strategy]
 
 
-def compile_strategy(model: Any, raw_strategy: Any) -> dict:
+def compile_strategy(model: Any, raw_strategy: Any) -> dict[BaseStrategy]:
     """ 
     Compiles a strategy.
     
