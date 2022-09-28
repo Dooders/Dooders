@@ -30,8 +30,6 @@ class BaseCollector(BaseModel):
     function: Callable
     component: str
 
-        
-#! Define 'scope' and a better way to manage and fetch scope based results
 
 class Collectors:
     """ 
@@ -45,13 +43,13 @@ class Collectors:
     registry = []
 
     @classmethod
-    def register(cls, name: str, component: str) -> Callable:
+    def register(cls, name: str, scope: str) -> Callable:
         """ 
         Register a collector in the registry.
 
         Args:
             name: Name of the collector.
-            component: Component of the collector.
+            scope: Scope of the collector.
 
         Returns:
             The decorator function.
@@ -59,7 +57,7 @@ class Collectors:
 
         def inner_wrapper(wrapped_class: Callable) -> Callable:
             cls.registry.append(
-                {'name': name, 'function': wrapped_class, 'component': component})
+                {'name': name, 'function': wrapped_class, 'scope': scope})
             return wrapped_class
 
         return inner_wrapper
@@ -74,19 +72,19 @@ class Collectors:
         """
         for collector in cls.registry:
             collector = BaseCollector(**collector)
-            component = collector.component
+            scope = collector.scope
 
-            if component not in information.collectors:
-                information.collectors[component] = {}
-                information.data[component] = {}
+            if scope not in information.collectors:
+                information.collectors[scope] = {}
+                information.data[scope] = {}
 
             if type(collector.function) is str:
                 func = partial(information._getattr, collector.function)
             else:
                 func = collector.function
 
-            information.collectors[component][collector.name] = func
-            information.data[component][collector.name] = []
+            information.collectors[scope][collector.name] = func
+            information.data[scope][collector.name] = []
 
     @classmethod
     def run_collectors(cls, information: 'Information', simulation: 'Simulation') -> None:
@@ -97,10 +95,10 @@ class Collectors:
             information: Information object to collect data from.
             simulation: Simulation object to collect data from.
         """
-        for component in information.collectors:
-            cls._collect(information, component, simulation)
+        for scope in information.collectors:
+            cls._collect(information, scope, simulation)
 
-    def _collect(information, component: str, simulation) -> None:
+    def _collect(information, scope: str, simulation) -> None:
         """
         Run all the collectors for the given component.
 
@@ -109,17 +107,17 @@ class Collectors:
             component: Component to collect data from.
             simulation: Simulation object to collect data from.
         """
-        for name, func in information.collectors[component].items():
+        for name, func in information.collectors[scope].items():
 
             if callable(func):
-                information.data[component][name].append(func(simulation))
+                information.data[scope][name].append(func(simulation))
             else:
 
                 if func[1] is None:
-                    information.data[component][name].append(
+                    information.data[scope][name].append(
                         func[0](simulation))
                 else:
-                    information.data[component][name].append(
+                    information.data[scope][name].append(
                         func[0](simulation, **func[1]))
 
 
