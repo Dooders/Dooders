@@ -1,5 +1,5 @@
-from sdk.core.strategy import Strategies
+from sdk.core import Strategy
     
-@Strategies.register("Genetics")
+@Strategy.register()
 def random_genetics(value: int) -> int:
     return 'working'
