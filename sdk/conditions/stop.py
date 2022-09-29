@@ -4,13 +4,13 @@
 
 from typing import TYPE_CHECKING
 
-from sdk.conditions.conditions import Conditions
+from sdk.core import Condition
 
 if TYPE_CHECKING:
     from sdk import Simulation
 
 
-@Conditions.register('Max cycles')
+@Condition.register('Max cycles')
 def check_max_cycle(simulation: 'Simulation') -> bool:
     """ 
     Check if the maximum number of cycles has been reached.
@@ -19,7 +19,7 @@ def check_max_cycle(simulation: 'Simulation') -> bool:
         return True
 
 
-@Conditions.register('Simulation stopped')
+@Condition.register('Simulation stopped')
 def check_simulation_running(simulation: 'Simulation') -> bool:
     """ 
     Check if the simulation is still running.
@@ -28,7 +28,7 @@ def check_simulation_running(simulation: 'Simulation') -> bool:
         return True
 
 
-@Conditions.register('No more Dooders')
+@Condition.register('No more Dooders')
 def check_dooder_count(simulation: 'Simulation') -> bool:
     """ 
     Check if the number of dooders has reached zero.
