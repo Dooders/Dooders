@@ -8,16 +8,16 @@
 
 > Reality works; simulate it.  
 
-Systems are anything composed of interacting and dynamic components. For example, a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a complex ecosystem. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). 
-Systems are everywhere.  
+Systems are anything composed of interacting and dynamic components. For example, a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a complex ecosystem. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png).  
+Systems are everywhere.[^1]  
 
 Dooders is a python library for *complex model-based simulations*.  
 
 Unpacking the terminology a bit:  
 
-* **Complex**: The library simulates not only a single system, but systems of systems.[^1]  
-* **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.[^2]  
-* **Simulation**: Continual experimentation and observing of models.  
+* **Complex**: The library simulates not only a single system, but systems of systems.[^2]  
+* **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.[^3]  
+* **Simulation**: An imitation of a system through a model. Executed to study the result.  
 
 This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, and adaptation.  
 
@@ -30,7 +30,7 @@ To gain an intuition of the mechanics and dynamics of complex systems. The proje
 
 ### Project Strategy
 
-Ongoing complexification[^3] and experimentation with more models and interactions between models. See how changes affect the results and if any emergent[^4] properties surface.  
+Ongoing complexification[^4] and experimentation with more models and interactions between models. See how changes affect the results and if any emergent[^5] properties surface.  
 
 ### Main Concepts
 
@@ -81,13 +81,14 @@ Ongoing complexification[^3] and experimentation with more models and interactio
 
 ## Why?
 
-[A thoughtful and informative answer](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
+[A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
   
 
   
 ### Footnotes
 
-[^1]: A complex system has a number of components with non-linear (random or unpredictable) relationships. A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
-[^2]: In the library, just about everything is seperated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code 
-[^3]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie *Field of Dreams*: `"if you complexify it, properties will emerge"`  
-[^4]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is `"greater than the sum of its parts"`    
+[^1]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
+[^2]: A complex system has a number of components with non-linear (random or unpredictable) relationships. 
+[^3]: In the library, just about everything is seperated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code 
+[^4]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie *Field of Dreams*: `"if you complexify it, properties will emerge"`  
+[^5]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is `"greater than the sum of its parts"`    
