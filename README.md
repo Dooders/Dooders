@@ -3,11 +3,12 @@
 
 ![dooders logo](./docs/dooder_logo.png)
   
-> Reality works; simulate it.  
 
 ## Overview
 
-Systems are anything that is made of interacting and dynamic components, that may be unpredictable. For example, a reef tank is a complex ecological system. Systems can be digital too, like a company's internal network. Systems are everywhere.
+> Reality works; simulate it.  
+
+Systems are anything composed of interacting and dynamic components, that may be unpredictable. For example, a reef tank is a complex ecological system. Systems can be digital too, like a company's internal network. Systems are everywhere.  
 
 Dooders is a python library for *complex model-based simulations*.  
 
