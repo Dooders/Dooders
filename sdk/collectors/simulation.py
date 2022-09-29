@@ -1,18 +1,18 @@
 from sdk.core.collector import Collector
 
-@Collector.register('DooderCount', 'Simulation')
+@Collector.register('DooderCount')
 def get_dooder_count(simulation) -> int:
     """Return the number of dooders in the simulation."""
     return simulation.time.get_object_count('Dooder')
 
 
-@Collector.register('EnergyCount', 'Simulation')
+@Collector.register('EnergyCount')
 def get_energy_count(simulation) -> int:
     """Return the number of energy in the simulation."""
     return simulation.environment.get_object_count('Energy')
 
 
-@Collector.register('DirectionCounts', 'Simulation')
+@Collector.register('DirectionCounts')
 def get_direction_counts(simulation) -> dict:
     """Return the number of moves in each direction."""
     dooders = simulation.time.get_objects('Dooder')
@@ -24,7 +24,7 @@ def get_direction_counts(simulation) -> dict:
     return dict(direction_counts)
 
 
-@Collector.register('TotalDooderEnergySupply', 'Simulation')
+@Collector.register('TotalDooderEnergySupply')
 def get_total_energy_supply(simulation) -> int:
     """ Return the total energy supply of all dooders in the simulation. """
     energy_supply = [
@@ -36,7 +36,7 @@ def get_total_energy_supply(simulation) -> int:
     return sum(energy_supply)
 
 
-@Collector.register('AverageEnergyAge', 'Simulation')
+@Collector.register('AverageEnergyAge')
 def get_average_energy_age(simulation) -> float:
     """Return the average age of energy in the simulation."""
     energy_age = [
