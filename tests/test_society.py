@@ -1,7 +1,7 @@
 import pytest
 
 from sdk.dooder.society import Society
-from sdk.mocks import mock_simulation
+from sdk.utils.mocks import mock_simulation
 
 
 @pytest.fixture
