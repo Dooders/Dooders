@@ -51,6 +51,10 @@ class Society:
         """
         Generate seed population
         """
+        
+        #! make this function to recalculate or find a better way to update SeedPlacement if SeedCount changes
+        # if len(self.SeedPlacement) != self.SeedCount:
+        #     recompile_strategy(self, SeedStrategy, 'SeedPlacement')
 
         for position in self.SeedPlacement:
             self.generate_dooder(position)

@@ -134,6 +134,11 @@ def compile_strategy(model: Any, raw_strategy: Any):
 
     return compiled_strategy
 
+def recalculate_strategy(strategy, variable):
+    #! might need this to recalculate strategies that are dependent on a strategy that changes by user input
+    pass
+    
+
 
 #! add a linear increase based on past value and slope to determine delay in increasing probability or score
 #! add many different diff equations and distributions
