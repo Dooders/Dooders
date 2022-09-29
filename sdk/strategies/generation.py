@@ -1,11 +1,11 @@
 
-from sdk.core.strategy import Strategies
+from sdk.core import Strategy
 
 from scipy.stats import norm, randint
 
 
 
-@Strategies.register("Generation")
+@Strategy.register()
 def uniform_distribution(min: int, max: int) -> int:
     """ 
     Generates a random value between the given low and high values. 
@@ -21,7 +21,7 @@ def uniform_distribution(min: int, max: int) -> int:
     return randint.rvs(low=min, high=max)
 
 
-@Strategies.register("Generation")
+@Strategy.register()
 def normal_distribution(min: int, max: int, variation: float = None) -> float:
     """ 
     Generates a random value based on the given mean and standard deviation.
@@ -43,7 +43,7 @@ def normal_distribution(min: int, max: int, variation: float = None) -> float:
     return norm.rvs(loc=mean, scale=variation)
 
 
-@Strategies.register("Generation")
+@Strategy.register()
 def fixed_value(value: int) -> int:
     """ 
     Returns a fixed value.
