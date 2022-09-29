@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
-ResourceStrategy = Strategy.load_strategy('sdk/environment/resources.yml')
+ResourceStrategy = Strategy.load_strategy('resources')
     
 class Resources:
     """ 

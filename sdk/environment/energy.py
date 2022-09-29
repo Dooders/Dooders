@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from sdk.environment.resources import Resources
 
 
-EnergyStrategy = Strategy.load_strategy('sdk/environment/energy.yml')
+EnergyStrategy = Strategy.load_strategy('energy')
 
 
 class Energy:

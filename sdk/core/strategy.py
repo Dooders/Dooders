@@ -53,7 +53,7 @@ class Strategy(BaseCore):
     registry = {}
 
     @classmethod
-    def load_strategy(cls, path: str) -> dict:
+    def load_strategy(cls, name: str) -> dict:
         """ 
         Loads a strategy from a YAML file.
         
@@ -63,6 +63,8 @@ class Strategy(BaseCore):
         Returns:
             A dictionary of strategies.
         """
+        path = 'sdk/strategies/' + name + '.yml'
+        
         with open(path) as f:
             strategy = yaml.load(f, Loader=yaml.FullLoader)
 

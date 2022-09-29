@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
 
 
-SeedStrategy = Strategy.load_strategy('sdk/dooder/seed.yml')
+SeedStrategy = Strategy.load_strategy('seed')
 
 
 class Society:
