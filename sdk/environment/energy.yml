@@ -1,5 +1,5 @@
 ---
 Lifespan:
-  Type: "Generation"
+  Type: "generation"
   Func: "uniform_distribution"
   Args: { "min": 5, "max": 15 }

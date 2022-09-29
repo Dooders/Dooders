@@ -1,3 +1,4 @@
+from statistics import mean
 from sdk.core.collector import Collector
 
 @Collector.register('DooderCount')

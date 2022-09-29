@@ -7,7 +7,7 @@ interact with other objects.
 from typing import TYPE_CHECKING
 
 from sdk.base.base_object import BaseObject
-from sdk.conditions.conditions import Conditions
+from sdk.core import Condition
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.genetics import Genetics
@@ -93,7 +93,7 @@ class Dooder(BaseObject):
 
         #TODO: make this process a decorator or factory for easy creation of any conditional action
         """
-        result, reason = Conditions.check_conditions('death', self)
+        result, reason = Condition.check_conditions('death', self)
 
         if result:
             self.die(reason)

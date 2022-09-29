@@ -4,15 +4,16 @@ Strategies
 
 This module contains the strategies used by the simulation.
 
-A strategy is a technique to provide an output. Usually a valueor list of values
+A strategy is a technique to provide an output. Usually a value or list of values
 A collector runs at the end pf each step based on the state at each step
 A strategy is an input for a step to process. The strategies will be inputs for different models
 A model defines a strategy through a yaml file.
-Add a new strategy with the register deckrator
+Add a new strategy with the register decorator
 """
 
 from random import choices
-from typing import TYPE_CHECKING, Any, Callable, Optional
+from typing import TYPE_CHECKING, Any, Callable, Dict, Optional
+from sdk.base.base_core import BaseCore
 
 import yaml
 from pydantic import BaseModel
@@ -38,22 +39,18 @@ class BaseStrategy(BaseModel):
     # If true, the strategy will be compiled later
     Dependency: Optional[str] = None
 
-    # Used for documentstion
+    # Used for documentation
     Description: Optional[str] = None
 
-    # This is meant to specifiy where the strategy is used
-    # No functional use. For documentstion only
+    # This is meant to specify where the strategy is used
+    # No functional use. For documentation only
     Used: Optional[str] = None
 
 
-class Strategy:
+class Strategy(BaseCore):
 
     # update for dynamic strategy type dicts
-    strategies = {
-        'Generation': {},
-        'Placement': {},
-        'Genetics': {}
-    }
+    registry = {}
 
     @classmethod
     def load_strategy(cls, path: str) -> dict:
@@ -72,7 +69,7 @@ class Strategy:
         return strategy
 
     @classmethod
-    def register(cls, type: str) -> Callable:
+    def register(cls) -> Callable:
         """ 
         Register a collector in the registry.
         Args:
@@ -82,13 +79,16 @@ class Strategy:
             The decorator function.
         """
         def inner_wrapper(wrapped_class: Callable) -> Callable:
-            cls.strategies[type][wrapped_class.__name__] = wrapped_class
+            scope = cls.infer_scope(cls, wrapped_class)
+            if scope not in cls.registry:
+                cls.registry[scope] = {}
+            cls.registry[scope][wrapped_class.__name__] = wrapped_class
             return wrapped_class
 
         return inner_wrapper
 
     @classmethod
-    def get(cls, strategy: str, type: str) -> Callable:
+    def get(cls, strategy: str, scope: str) -> Callable:
         """ 
         Get a strategy from the registry.
         
@@ -99,10 +99,10 @@ class Strategy:
         Returns:    
             The strategy class.
         """
-        return cls.strategies[type][strategy]
 
+        return cls.registry[scope][strategy]
 
-def compile_strategy(model: Any, raw_strategy: Any) -> dict[BaseStrategy]:
+def compile_strategy(model: Any, raw_strategy: Any):
     """ 
     Compiles a strategy.
     
@@ -113,13 +113,14 @@ def compile_strategy(model: Any, raw_strategy: Any) -> dict[BaseStrategy]:
     Returns:
         A compiled strategy.
     """
+    
     compiled_strategy = {}
-
+    
     for strat_name, strat in raw_strategy.items():
         func = Strategy.get(strat['Func'], strat['Type'])
         args = strat['Args']
-
-        if strat['Type'] == 'Placement':
+        
+        if strat['Type'] == 'placement':
             compiled_strategy[strat_name] = func(
                 model.simulation, compiled_strategy[strat['Dependency']])
 
@@ -130,91 +131,6 @@ def compile_strategy(model: Any, raw_strategy: Any) -> dict[BaseStrategy]:
         setattr(model, key, value)
 
     return compiled_strategy
-
-
-#################################
-##### Generation Strategies #####
-#################################
-
-# @Strategies.register("Generation")
-# def uniform_distribution(min: int, max: int) -> int:
-#     """ 
-#     Generates a random value between the given low and high values. 
-#     Followings a uniform distribution.
-
-#     Args:
-#         low (int): The lower bound of the distribution.
-#         high (int): The upper bound of the distribution.
-
-#     Returns:
-#         The generated value.
-#     """
-#     return randint.rvs(low=min, high=max)
-
-
-# @Strategies.register("Generation")
-# def normal_distribution(min: int, max: int, variation: float = None) -> float:
-#     """ 
-#     Generates a random value based on the given mean and standard deviation.
-#     Followings a normal distribution.
-
-#     Args:
-#         mean (int): The mean of the distribution.
-#         std (int): The standard deviation of the distribution.
-
-#     Returns:
-#         The generated value.
-#     """
-
-#     mean = (max + min) / 2
-
-#     if variation is None:
-#         variation = (max - min) / 8
-
-#     return norm.rvs(loc=mean, scale=variation)
-
-
-# @Strategies.register("Generation")
-# def fixed_value(value: int) -> int:
-#     """ 
-#     Returns a fixed value.
-
-#     Args:
-#         value (int): The value to return.
-#     """
-#     return value
-
-
-# ################################
-# ##### Placement Strategies #####
-# ################################
-
-# @Strategies.register("Placement")
-# def random_location(simulation: 'Simulation', number: int) -> list:
-#     """ 
-#     Generates a list of locations for the given number of resources and based on the provided strategy.
-
-#     Args:
-#         simulation (Simulation): The simulation object.
-#         number (int): The number of locations to generate.
-
-#     Returns:
-#         A list of locations.
-#     """
-#     locations = [(loc[1], loc[2])
-#                  for loc in simulation.environment.coord_iter()]
-#     random_locations = choices(locations, k=number)
-
-#     return random_locations
-
-
-# ################################
-# ###### Genetic Strategies ######
-# ################################
-
-# @Strategies.register("Genetics")
-# def random_genetics(value: int) -> int:
-#     return 'working'
 
 
 #! add a linear increase based on past value and slope to determine delay in increasing probability or score

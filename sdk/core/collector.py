@@ -19,6 +19,7 @@ from statistics import mean
 from typing import TYPE_CHECKING, Callable
 
 from pydantic import BaseModel
+from sdk.base.base_core import BaseCore
 
 if TYPE_CHECKING:
     from sdk.information import Information
@@ -31,7 +32,7 @@ class BaseCollector(BaseModel):
     scope: str
 
 
-class Collector:
+class Collector(BaseCore):
     """ 
     The factory class for creating collectors
 
@@ -43,7 +44,7 @@ class Collector:
     registry = []
 
     @classmethod
-    def register(cls, name: str, scope: str) -> Callable:
+    def register(cls, name: str) -> Callable:
         """ 
         Register a collector in the registry.
 
@@ -56,6 +57,7 @@ class Collector:
         """
 
         def inner_wrapper(wrapped_class: Callable) -> Callable:
+            scope = cls.infer_scope(cls, wrapped_class)
             cls.registry.append(
                 {'name': name, 'function': wrapped_class, 'scope': scope})
             return wrapped_class

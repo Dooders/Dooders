@@ -8,13 +8,13 @@ agents. It also contains the functions to access the resources.
 from typing import TYPE_CHECKING
 
 from sdk.environment.energy import Energy
-from sdk.core.strategy import Strategies, compile_strategy
+from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
-ResourceStrategy = Strategies.load_strategy('sdk/environment/resources.yml')
+ResourceStrategy = Strategy.load_strategy('sdk/environment/resources.yml')
     
 class Resources:
     """ 

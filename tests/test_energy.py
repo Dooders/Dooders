@@ -1,11 +1,11 @@
 import pytest
-from sdk.core.strategy import Strategies
+from sdk.core import Strategy
 
 from tests.test_util import mock_simulation
 from sdk.environment import Energy
 from sdk.environment.resources import Resources
 
-EnergyStrategy = Strategies.load_strategy('sdk/environment/energy.yml')
+EnergyStrategy = Strategy.load_strategy('sdk/environment/energy.yml')
 
 @pytest.fixture
 def energy():

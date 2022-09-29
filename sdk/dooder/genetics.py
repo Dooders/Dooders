@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
-from sdk.core.strategy import Strategies, compile_strategy
+from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.dooder.dooder import Dooder
 
-GeneticStrategy = Strategies.load_strategy('sdk/dooder/genetics.yml')
+GeneticStrategy = Strategy.load_strategy('sdk/dooder/genetics.yml')
 
 
 class Genetics:

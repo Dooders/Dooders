@@ -12,7 +12,7 @@ from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.dooder.society import Society
 from sdk.environment.resources import Resources
-from sdk.conditions.conditions import Conditions
+from sdk.core import Condition
 
 class Simulation(BaseSimulation):
     """
@@ -126,7 +126,7 @@ class Simulation(BaseSimulation):
         Returns:
             True if the simulation should stop, False otherwise.
         """
-        result, reason = Conditions.check_conditions('stop', self)
+        result, reason = Condition.check_conditions('stop', self)
 
         if result:
             self.stop()

@@ -1,18 +1,18 @@
-from sdk.core.strategy import Strategies
+from sdk.core import Strategy
 
 
 def test_register():
-    @Strategies.register('Generation')
+    @Strategy.register()
     class TestStrategy:
         pass
 
-    assert 'TestStrategy' in Strategies.strategies['Generation']
-    assert Strategies.strategies['Generation']['TestStrategy'] == TestStrategy
+    assert 'TestStrategy' in Strategy.strategies['generation']
+    assert Strategy.strategies['generation']['TestStrategy'] == TestStrategy
     
     
 def test_get():
-    @Strategies.register('Generation')
+    @Strategy.register()
     class TestStrategy:
         pass
 
-    assert Strategies.get('TestStrategy', 'Generation') == TestStrategy
+    assert Strategy.get('TestStrategy', 'generation') == TestStrategy

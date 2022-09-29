@@ -1,5 +1,5 @@
 
-from sdk.core import Strategy
+from sdk.core.strategy import Strategy
 
 from scipy.stats import norm, randint
 

@@ -4,14 +4,14 @@
 
 from typing import TYPE_CHECKING
 
-from sdk.core.strategy import Strategies, compile_strategy
+from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.data import Position, UniqueID
     from sdk.environment.resources import Resources
 
 
-EnergyStrategy = Strategies.load_strategy('sdk/environment/energy.yml')
+EnergyStrategy = Strategy.load_strategy('sdk/environment/energy.yml')
 
 
 class Energy:

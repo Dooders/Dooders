@@ -5,9 +5,9 @@
 """
 
 from typing import Callable
+from sdk.base.base_core import BaseCore
 
-
-class Condition:
+class Condition(BaseCore):
     """ 
     The factory class to be used as a decorator to register a stop condition. 
     """
@@ -28,29 +28,16 @@ class Condition:
         """
 
         def inner_wrapper(wrapped_class: Callable) -> Callable:
-            purpose = cls.infer_purpose(cls, wrapped_class)
-            if purpose not in cls.registry:
-                cls.registry[purpose] = {}
-            cls.registry[purpose][name] = wrapped_class
+            scope = cls.infer_scope(cls, wrapped_class)
+            if scope not in cls.registry:
+                cls.registry[scope] = {}
+            cls.registry[scope][name] = wrapped_class
             return wrapped_class
 
         return inner_wrapper
 
-    def infer_purpose(self, condition: Callable) -> str:
-        """ 
-        Infer the purpose based on the filename
-
-        """
-        return condition.__module__.split('.')[-1]
-
-    def get_purpose(self, condition):
-        for purpose in self.registry:
-            if condition in self.registry[purpose]:
-                return purpose
-        return None
-
     @classmethod
-    def check_conditions(cls, purpose, *args, **kwargs):
+    def check_conditions(cls, scope, *args, **kwargs):
         """ 
         Check if any of the registered conditions are met.
 
@@ -62,8 +49,8 @@ class Condition:
         """
         # check in registry in each purpose to see what purpose is the condition from
 
-        for condition in cls.registry[purpose]:
-            func = cls.registry[purpose][condition]
+        for condition in cls.registry[scope]:
+            func = cls.registry[scope][condition]
             if func(*args, **kwargs):
                 return True, condition
         return False, None
