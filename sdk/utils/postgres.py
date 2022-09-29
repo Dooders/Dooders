@@ -1,3 +1,8 @@
+"""
+
+#! function to drop table if exists, compile table from incoming data, create new table
+"""
+
 import psycopg2
 from pydantic import BaseModel
 
