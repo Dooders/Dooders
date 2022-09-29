@@ -1,5 +1,5 @@
 import pandas as pd
-from sdk.information.collectors import Collectors
+from sdk.core import Collector
 
 
 #! Change this to an abstract class, with internal methods not needed in child class
@@ -21,7 +21,7 @@ class BaseInformation:
         """
         self.collectors: dict = {}
         self.data: dict = {}
-        Collectors.compile_collectors(self)
+        Collector.compile_collectors(self)
 
     def collect(self, simulation) -> None:
         """
@@ -30,23 +30,23 @@ class BaseInformation:
         Args:
             simulation: The simulation to collect data from.
         """
-        Collectors.run_collectors(self, simulation)
+        Collector.run_collectors(self, simulation)
 
     @staticmethod
     def _getattr(name, _object) -> object:
         """Turn around arguments of getattr to make it partially callable."""
         return getattr(_object, name, None)
 
-    def get_dataframe(self, component: str) -> pd.DataFrame:
+    def get_dataframe(self, scope: str) -> pd.DataFrame:
         """
         Get the collected data as a pandas DataFrame.
 
         Args:
-            component: Component to get data from.
+            scope: Scope to get data from.
 
         Returns:
             DataFrame of collected data.
         """
-        df = pd.DataFrame.from_dict(self.data[component], orient="columns")
+        df = pd.DataFrame.from_dict(self.data[scope], orient="columns")
 
         return df
