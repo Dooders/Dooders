@@ -1,5 +1,5 @@
 """ 
-The CollectorRegistry is a global registry of collectors. A new collector
+The Collector class is a global registry of collectors. A new collector
 is added through the register_collector() decorator. 
 
 The decorator takes the name of the collector and component as arguments. The
