@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 import psycopg2
+from pydantic import BaseModel
 
 
 class PostgresData(BaseModel):

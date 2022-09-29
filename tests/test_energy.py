@@ -1,5 +1,5 @@
 import pytest
-from sdk.strategies.strategies import Strategies
+from sdk.core.strategy import Strategies
 
 from tests.test_util import mock_simulation
 from sdk.environment import Energy

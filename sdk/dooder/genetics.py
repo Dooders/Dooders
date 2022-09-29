@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sdk.strategies.strategies import Strategies, compile_strategy
+from sdk.core.strategy import Strategies, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.dooder.dooder import Dooder

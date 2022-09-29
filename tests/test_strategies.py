@@ -1,4 +1,4 @@
-from sdk.strategies.strategies import Strategies
+from sdk.core.strategy import Strategies
 
 
 def test_register():

@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 import networkx as nx
 from sdk.data import Position, UniqueID
 from sdk.dooder import Dooder
-from sdk.strategies.strategies import Strategies, compile_strategy
+from sdk.core.strategy import Strategies, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
