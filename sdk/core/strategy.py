@@ -46,7 +46,7 @@ class BaseStrategy(BaseModel):
     Used: Optional[str] = None
 
 
-class Strategies:
+class Strategy:
 
     # update for dynamic strategy type dicts
     strategies = {
@@ -116,7 +116,7 @@ def compile_strategy(model: Any, raw_strategy: Any) -> dict[BaseStrategy]:
     compiled_strategy = {}
 
     for strat_name, strat in raw_strategy.items():
-        func = Strategies.get(strat['Func'], strat['Type'])
+        func = Strategy.get(strat['Func'], strat['Type'])
         args = strat['Args']
 
         if strat['Type'] == 'Placement':
