@@ -1,4 +1,4 @@
-from sdk.core.strategy import Strategies
+from sdk.core import Strategy
 
 from random import choices
 from typing import TYPE_CHECKING
@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
-@Strategies.register("Placement")
+@Strategy.register()
 def random_location(simulation: 'Simulation', number: int) -> list:
     """ 
     Generates a list of locations for the given number of resources and based on the provided strategy.
