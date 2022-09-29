@@ -4,13 +4,13 @@
 
 from typing import TYPE_CHECKING
 
-from sdk.conditions.conditions import Conditions
+from sdk.core import Condition
 
 if TYPE_CHECKING:
     from sdk.dooder import Dooder
 
 
-@Conditions.register('starvation')
+@Condition.register('starvation')
 def starvation(dooder: 'Dooder') -> bool:
     #! maybe have a process that you supply attribute and default value, and if it doesnt exsist in the dooder object, it creates it
     # create a days hungry attribute if it doesn't exist
