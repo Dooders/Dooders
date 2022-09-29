@@ -8,7 +8,8 @@
 
 > Reality works; simulate it.  
 
-Systems are anything composed of interacting and dynamic components, that may be unpredictable. For example, a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a complex ecosystem. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). Systems are everywhere.  
+Systems are anything composed of interacting and dynamic components. For example, a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a complex ecosystem. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). 
+Systems are everywhere.  
 
 Dooders is a python library for *complex model-based simulations*.  
 
