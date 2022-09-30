@@ -18,7 +18,7 @@ Unpacking the terminology a bit:
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.[^3]  
 * **Simulation**: An imitation of a system through a model. Executed to study the result.  
 
-This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, and adaptation.  
+This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, and a lot more.  
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
