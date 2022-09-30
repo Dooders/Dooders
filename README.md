@@ -56,7 +56,8 @@ Ongoing complexification[^4] and experimentation with more models and interactio
 | Dockerized deployment | Make it simple to spin up the entire platform |
 | Cognition model | Build out the Dooder capability to take in information and evaluate its value |
 | Reproduction model | Design a funtion to combine the Genetic models of two Dooders |  
-| Continous time | Switch from step based, to continous time. Brings on tons of potential issues |
+| Continous time | Switch from step based, to continous time. Brings on tons of potential issues
+| Performance | Right now I'm focused on function but that will quickly hit the performance wall if I dont optimize at some point |  
 
 ## My Background
   
