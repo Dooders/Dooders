@@ -13,6 +13,7 @@ from sdk.config import ExperimentParameters
 from sdk.dooder.society import Society
 from sdk.environment.resources import Resources
 from sdk.core import Condition
+from sdk.utils import postgres as Postgres
 
 class Simulation(BaseSimulation):
     """
@@ -53,6 +54,7 @@ class Simulation(BaseSimulation):
         self.society.generate_seed_population()
 
         self.running = True
+        Postgres.clear_table('SimulationResults')
         self.information.collect(self)
         
     def step(self) -> None:
