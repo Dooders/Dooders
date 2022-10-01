@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from experiment import Experiment, SessionManager
-from sdk.parameters import ExperimentParameters
+from sdk.config import default_config
+from sdk.strategies import *
 
 app = FastAPI()
 manager = SessionManager()
@@ -60,7 +61,7 @@ async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     
     try:
-        experiment = Experiment(ExperimentParameters)
+        experiment = Experiment(default_config)
         manager.add_experiment(experiment)
 
         while True:
@@ -72,7 +73,7 @@ async def websocket_endpoint(websocket: WebSocket):
             while experiment.simulation.running == True:
                 experiment.execute_cycle()
                 results = experiment.get_cycle_results()
-                await websocket.send_json(results)
+                await websocket.send_json(results['simulation'])
                 # snooze for 1 second
                 await asyncio.sleep(.1)
                 
