@@ -55,8 +55,7 @@ class Simulation(BaseSimulation):
         self.running = True
         self.information.collect(self)
         
-
-    def cycle(self) -> None:
+    def step(self) -> None:
         """
         Advance the simulation by one cycle.        
         """
@@ -71,12 +70,16 @@ class Simulation(BaseSimulation):
 
         self.cycles += 1
 
+    def cycle(self) -> None:
+        if self.stop_conditions():
+            self.step()
+            
     def run_simulation(self) -> None:
         """Run the simulation for a specified number of steps."""
         self.setup()
 
         while self.stop_conditions():
-            self.cycle()
+            self.step()
 
     def reset(self) -> None:
         """
