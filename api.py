@@ -58,6 +58,7 @@ async def websocket_endpoint(websocket: WebSocket):
     Sends experiment data to the client every time the simulation finishes a step. 
     """
     await manager.connect(websocket)
+    
     try:
         experiment = Experiment(ExperimentParameters)
         manager.add_experiment(experiment)
@@ -68,12 +69,13 @@ async def websocket_endpoint(websocket: WebSocket):
 
             experiment.setup_experiment()
 
-            while experiment.simulation.stop_conditions():
+            while experiment.simulation.running == True:
                 experiment.execute_cycle()
                 results = experiment.get_cycle_results()
                 await websocket.send_json(results)
                 # snooze for 1 second
                 await asyncio.sleep(.1)
+                
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         print("Websocket disconnected")
