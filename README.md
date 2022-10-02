@@ -16,7 +16,7 @@ Unpacking the terminology a bit:
 
 * **Complex**: The library simulates not only a single system, but systems of systems.[^2]  
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.[^3]  
-* **Simulation**: An imitation of a system through a model. Executed to study the result.  
+* **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
 
 This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, and a lot more.  
 
