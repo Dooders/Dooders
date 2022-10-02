@@ -1,8 +1,8 @@
 import yaml
-from sdk.dooder.dooder import Dooder
-from sdk.environment.energy import Energy
+from sdk.models.dooder import Dooder
+from sdk.models.energy import Energy
 from sdk.simulation import Simulation
-from sdk.environment.resources import Resources
+from sdk.models.resources import Resources
 
 
 # with open("sdk/config.json", "r") as f:

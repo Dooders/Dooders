@@ -9,11 +9,11 @@ from typing import TYPE_CHECKING
 from sdk.base.base_object import BaseObject
 from sdk.core import Condition
 from sdk.data import Position, UniqueID
-from sdk.dooder.cognition import Cognition
-from sdk.dooder.fate import Fate
-from sdk.dooder.genetics import Genetics
-from sdk.dooder.util import get_direction
-from sdk.environment.energy import Energy
+from sdk.modules.cognition import Cognition
+from sdk.core.fate import Fate
+from sdk.models.genetics import Genetics
+from sdk.utils.get_direction import get_direction
+from sdk.models.energy import Energy
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation

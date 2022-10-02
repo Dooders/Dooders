@@ -1,4 +1,4 @@
-from sdk.dooder.genetics import Genetics
+from sdk.models.genetics import Genetics
 from tests.test_util import mock_simulation
 
 simulation = mock_simulation()

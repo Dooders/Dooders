@@ -7,7 +7,7 @@ agents. It also contains the functions to access the resources.
 
 from typing import TYPE_CHECKING
 
-from sdk.environment.energy import Energy
+from sdk.models.energy import Energy
 from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:

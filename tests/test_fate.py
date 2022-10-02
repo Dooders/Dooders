@@ -1,4 +1,4 @@
-from sdk.dooder.fate import Fate
+from sdk.core.fate import Fate
     
     
 def test_ask_fate():

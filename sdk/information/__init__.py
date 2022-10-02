@@ -1,1 +1,0 @@
-from sdk.information.information import Information as Information

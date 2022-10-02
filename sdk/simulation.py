@@ -10,8 +10,8 @@ from random import choices
 
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
-from sdk.dooder.society import Society
-from sdk.environment.resources import Resources
+from sdk.models.society import Society
+from sdk.models.resources import Resources
 from sdk.core import Condition
 from sdk.utils import postgres as Postgres
 

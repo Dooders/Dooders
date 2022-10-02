@@ -1,5 +1,5 @@
 import pytest
-from sdk.environment.resources import Resources
+from sdk.models.resources import Resources
 
 from tests.test_util import mock_simulation
 

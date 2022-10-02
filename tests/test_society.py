@@ -1,6 +1,6 @@
 import pytest
 
-from sdk.dooder.society import Society
+from sdk.models.society import Society
 from sdk.utils.mocks import mock_simulation
 
 

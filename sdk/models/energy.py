@@ -8,7 +8,7 @@ from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.data import Position, UniqueID
-    from sdk.environment.resources import Resources
+    from sdk.models.resources import Resources
 
 
 EnergyStrategy = Strategy.load_strategy('energy')

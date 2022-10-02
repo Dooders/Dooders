@@ -3,9 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 from sdk.config import ExperimentParameters
-from sdk.environment import Environment
-from sdk.information import Information
-from sdk.time import Time
+from sdk.models import Environment, Information, Time
 from sdk.utils import ShortID
 
 # maybe have a dict that contains each simulation component (Environment, etc.)
