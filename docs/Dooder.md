@@ -20,7 +20,10 @@ The initial seed population is generated based on the selected genetic attribute
 
 For example, the starting energy value is determined at Dooder creation as the `energy_supply` attribute and changes cycle to cycle. Permanent values might be something like Metabolism which defines the rate a Dooder will starve with no new energy.  
 
-A Dooder's behavior is an expression of both its genetics and environment. Some attributes can change over time, like the energy supply, while others can be immutable, like the metabolism.  
+A Dooder's behavior is an expression of both its genetics and environment. Some attributes can change over time, like the energy supply, while others can be immutable, like the metabolism. 
+
+## Modules
+  
 
 ## Death and Reproduction
 
