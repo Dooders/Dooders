@@ -3,7 +3,6 @@
 
 ![dooders logo](./docs/dooder_logo.png)
   
-
 ## Overview
 
 > Reality works; simulate it.  
@@ -22,7 +21,6 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
-
 ### Primary Goal
 
 To gain an intuition of the mechanics and dynamics of complex systems. The project allows me to have a central location for experimentation and documentation.  
@@ -33,40 +31,38 @@ I will continue to complexify[^4] the library and experiment with more models an
 
 ### Main Concepts
 
-| Concept                                | Explanation                                                                      |
-| :------------------------------------- | -------------------------------------------------------------------------------- |
-| [**Dooder**](docs/Dooder.md)           | An agent object with an amount of causal 'control' in the simulation             |
-| [**Model**](docs/Concepts.md#Model)             | Analogous to a system. In reality, just about everything is a system of some kind           |
-| [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment, Society)    |
-| [**Experiment**](docs/Experiment.md)   | One or multiple simulations                                                      |
-| [**Environment**](docs/Environment.md) | Proxy for spatial interactions and effects. A lot like a game board              |
-| [**Energy**](docs/Energy.md)           | An object that allows a Dooder to perform “work” (execute movements and actions) |
-| [**Cycle**](docs/Concepts.md)             | An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps   |
-  
+| Concept                                | Explanation                                                                            |
+| :------------------------------------- | -------------------------------------------------------------------------------------- |
+| [**Dooder**](docs/Dooder.md)           | An agent object with an amount of causal 'control' in the simulation                   |
+| [**Model**](docs/Concepts.md#Model)    | Analogous to a system. In reality, just about everything is a system of some kind      |
+| [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment, Society) |
+| [**Experiment**](docs/Experiment.md)   | One or multiple simulations                                                            |
+| [**Environment**](docs/Environment.md) | Proxy for spatial interactions and effects. A lot like a game board                    |
+| [**Energy**](docs/Energy.md)           | An object that allows a Dooder to perform “work” (execute movements and actions)       |
+| [**Cycle**](docs/Concepts.md)          | An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps         |
   
 ## How it works
+
    > TBD
   
-
 ## Future Plans
 
-| Idea  | Description |
-| :---- | ----------- |
-| Full featured frontend interface | Responsive UI with many dashboards showing the simulation results |
-| Dockerized deployment | Make it simple to spin up the entire platform |
-| Cognition model | Build out the Dooder capability to take in information and evaluate its value |
-| Reproduction model | Design a funtion to combine the Genetic models of two Dooders |  
-| Continous time | Switch from step based, to continous time. Brings on tons of potential issues
-| Performance | Right now I'm focused on function and composition but that will quickly hit the performance wall if I dont optimize at some point |  
+| Idea                             | Description                                                                                                                        |
+| :------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Full featured frontend interface | Responsive UI with many dashboards showing the simulation results                                                                  |
+| Dockerize deployment             | Make it simple to spin up the entire platform                                                                                      |
+| Cognition model                  | Build out the Dooder capability to take in information and evaluate its value                                                      |
+| Reproduction model               | Design a function to combine the Genetic models of two Dooders                                                                     |
+| Continuous time                  | Switch from step based, to continuous time. Brings on tons of potential issues                                                     |
+| Performance                      | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point |
 
 ## My Background
 
-My educational background was aimed towards becoming an intelligence analyst, focusing on remote sensing. After graduate school I needed a job and started at a large insurance company where I disvoered the power of data.
+My educational background was aimed towards becoming an intelligence analyst, focusing on remote sensing. After graduate school I needed a job and started at a large insurance company where I discovered the power of data.  
 
-The love of data grew and opene me up to python and the world of Data Science. I had a few roles using my Data Science skills in both the insurance industry, but fintech as well. At the start of the pandemic, I decided to finally go deep into deep learning and neural networks. This period was huge in showing me just how many applications nueral networks have.
+The love of data grew and directed me to python and the world of Data Science. I had a few roles using my Data Science skills in the insurance and financial industry. At the start of the pandemic, I decided to finally go deep into deep learning and neural networks.  
 
-Now, I'm focusing more on software engineering a developing good design principles. This project is the perfect opportunity for me to work on it as I want, and have enough coverage to never get bored. 
-
+Now, I'm focusing more on software engineering a developing good design principles. This project is the perfect opportunity for me to work on it as I want, and have enough coverage to never get bored.  
 
 ## Inspiration
 
@@ -75,17 +71,14 @@ Now, I'm focusing more on software engineering a developing good design principl
 * [The Romance of Reality](https://www.amazon.com/Romance-Reality-Organizes-Consciousness-Complexity-ebook/dp/B09GW3G45J/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627602&sr=8-2)
 * [At Home in the Universe](https://www.amazon.com/At-Home-Universe-Self-Organization-Complexity-ebook/dp/B004VEEO12/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627686&sr=8-1)
 
-
 ## Why?
 
 [A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
   
-
-  
 ### Footnotes
 
 [^1]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
-[^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships. 
-[^3]: In the library, just about everything is seperated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code 
+[^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships.  
+[^3]: In the library, just about everything is separated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code.  
 [^4]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie *Field of Dreams*: `"if you complexify it, properties will emerge"`  
-[^5]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is `"greater than the sum of its parts"`    
+[^5]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is `"greater than the sum of its parts"`  
