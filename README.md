@@ -29,7 +29,7 @@ To gain an intuition of the mechanics and dynamics of complex systems. The proje
 
 ### Project Strategy
 
-Ongoing complexification[^4] and experimentation with more models and interactions between models. See how changes affect the results and if any emergent[^5] properties surface.  
+I will continue to complexify[^4] the library and experiment with more models and observe the interactions inside the simulation. This strategy will help me see how changes affect the results and if any emergent[^5] properties surface.  
 
 ### Main Concepts
 
@@ -60,15 +60,12 @@ Ongoing complexification[^4] and experimentation with more models and interactio
 | Performance | Right now I'm focused on function and composition but that will quickly hit the performance wall if I dont optimize at some point |  
 
 ## My Background
-  
-1. BS in Geospatial Intelligence and a Master's in National Security Studies
-   * I was planning on being an intelligence analyst focusing on satellite imagery
-2. Process Improvement
-    * Needed a job after grad-school, that introduced me to the idea of process improvement. Learned a lot about the types of waste, inefficiencies, and the value of data
-3. Data Science with Machine Learning and Deep Learning
-    * Loved the idea of using data to make predictions and decisions. I had roles in different industries looking to identify patterns and trends in data
-4. Software engineering, fraud detection
-    * My current role is a mix of many different roles. I am now more focused on creating systems and process and better ways to catch undetected financial fraud
+
+My educational background was aimed towards becoming an intelligence analyst, focusing on remote sensing. After graduate school I needed a job and started at a large insurance company where I disvoered the power of data. I specifically took imterest to process improvement. Basically putting effort into comtinually optimizing business processes.
+
+The love of data grew and opene me up to python and the world of Data Science. I had a few roles using my Data Science skills in both the insurance industry, but fintech as well. I've built machine learning models to predict new policy risk, litigation propencety and a bunch of cool Natural Language Processing (NLP) tasks. At the start of the pandemic, I decided to finally go deep into deep learning and neural networks. This period was huge in showing me just how many applications nueral networks have.
+
+Now, I'm focusing more on software engineering a developing good design principles. This project is the perfect opportunity for me to work on it as I want, and have enough coverage to never get bored. 
 
 
 ## Inspiration
