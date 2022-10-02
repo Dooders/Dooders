@@ -13,9 +13,9 @@ Graph:
 from typing import TYPE_CHECKING
 
 import networkx as nx
+from sdk.core import Strategy, compile_strategy
 from sdk.data import Position, UniqueID
 from sdk.dooder import Dooder
-from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -29,7 +29,7 @@ class Society:
 
     """
 
-    active_dooders = {}
+    active_dooders = {} #! make easy to return random active dooder
     graph = nx.Graph()
     total_created_dooders = 0
     graveyard = {}

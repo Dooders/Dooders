@@ -8,18 +8,15 @@ from typing import TYPE_CHECKING
 
 from sdk.base.base_object import BaseObject
 from sdk.core import Condition
+from sdk.data import Position, UniqueID
 from sdk.dooder.cognition import Cognition
 from sdk.dooder.fate import Fate
 from sdk.dooder.genetics import Genetics
 from sdk.dooder.util import get_direction
 from sdk.environment.energy import Energy
-from sdk.data import Position, UniqueID
-
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
-    
-    
 
 
 class Dooder(BaseObject):
@@ -204,6 +201,21 @@ class Dooder(BaseObject):
         #! maybe come up with better formatting
         return f"ID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}"
 
+    @property
+    def stats(self) -> dict:
+        """
+        Return a dictionary of the dooder's stats.
+        """
+        stats = {
+            'unique_id': self.unique_id,
+            'position': self.position,
+            'energy_supply': self.energy_supply,
+            'direction': self.direction,
+            'age': self.age,
+            'genetics': self.genetics
+        }
+
+        return stats
 
 # Todo: Create an Effects class (can be temporary or permanent)
 
