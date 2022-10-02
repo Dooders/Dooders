@@ -23,7 +23,8 @@ For example, the starting energy value is determined at Dooder creation as the `
 A Dooder's behavior is an expression of both its genetics and environment. Some attributes can change over time, like the energy supply, while others can be immutable, like the metabolism. 
 
 ## Modules
-  
+
+How the dooder takes in information; how it processes that information; and what it does with that information.
 
 ## Death and Reproduction
 
