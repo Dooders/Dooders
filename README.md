@@ -61,9 +61,9 @@ I will continue to complexify[^4] the library and experiment with more models an
 
 ## My Background
 
-My educational background was aimed towards becoming an intelligence analyst, focusing on remote sensing. After graduate school I needed a job and started at a large insurance company where I disvoered the power of data. I specifically took imterest to process improvement. Basically putting effort into comtinually optimizing business processes.
+My educational background was aimed towards becoming an intelligence analyst, focusing on remote sensing. After graduate school I needed a job and started at a large insurance company where I disvoered the power of data.
 
-The love of data grew and opene me up to python and the world of Data Science. I had a few roles using my Data Science skills in both the insurance industry, but fintech as well. I've built machine learning models to predict new policy risk, litigation propencety and a bunch of cool Natural Language Processing (NLP) tasks. At the start of the pandemic, I decided to finally go deep into deep learning and neural networks. This period was huge in showing me just how many applications nueral networks have.
+The love of data grew and opene me up to python and the world of Data Science. I had a few roles using my Data Science skills in both the insurance industry, but fintech as well. At the start of the pandemic, I decided to finally go deep into deep learning and neural networks. This period was huge in showing me just how many applications nueral networks have.
 
 Now, I'm focusing more on software engineering a developing good design principles. This project is the perfect opportunity for me to work on it as I want, and have enough coverage to never get bored. 
 
