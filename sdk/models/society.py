@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 import networkx as nx
 from sdk.core import Strategy, compile_strategy
-from sdk.data import Position, UniqueID
+from sdk.core.data import Position, UniqueID
 from sdk.models import Dooder
 
 if TYPE_CHECKING:

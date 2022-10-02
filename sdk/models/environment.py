@@ -9,7 +9,7 @@ from sdk.base.base_environment import BaseEnvironment
 from sdk.base.base_object import BaseObject
 
 if TYPE_CHECKING:
-    from sdk.data import Location, UniqueID
+    from sdk.core.data import Location, UniqueID
 
 
 GridCell = List[Any]

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from sdk.core import Strategy, compile_strategy
 
 if TYPE_CHECKING:
-    from sdk.data import Position, UniqueID
+    from sdk.core.data import Position, UniqueID
     from sdk.models.resources import Resources
 
 

@@ -22,7 +22,7 @@ from sdk.utils.logger import get_logger
 from sdk.utils import Postgres
 
 if TYPE_CHECKING:
-    from sdk.data import UniqueID
+    from sdk.core.data import UniqueID
     from sdk.simulation import Simulation
 
     
