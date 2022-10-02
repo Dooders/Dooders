@@ -8,7 +8,7 @@
 
 > Reality works; simulate it.  
 
-Systems are anything composed of interacting and dynamic components. For example, Earth's environment is a complex ecological system. A [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a chaotic chemical system. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). Systems are everywhere.[^1]  
+Systems are anything composed of interacting and dynamic components. For example, Earth's environment is a complex ecological system. A [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a ever-changing chemical system. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). Systems are everywhere.[^1]  
 
 Dooders is a python library for *complex model-based simulations*.  
 
