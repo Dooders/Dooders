@@ -207,6 +207,7 @@ class Dooder(BaseObject):
         Return a dictionary of the dooder's stats.
         """
         stats = {
+            'cycle_number': self.simulation.time.time,
             'unique_id': self.unique_id,
             'position': self.position,
             'energy_supply': self.energy_supply,
