@@ -211,8 +211,7 @@ class Dooder(BaseObject):
             'position': self.position,
             'energy_supply': self.energy_supply,
             'direction': self.direction,
-            'age': self.age,
-            'genetics': self.genetics
+            'age': self.age
         }
 
         return stats

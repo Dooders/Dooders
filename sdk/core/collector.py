@@ -22,7 +22,7 @@ from pydantic import BaseModel
 from sdk.base.base_core import BaseCore
 
 if TYPE_CHECKING:
-    from sdk.information import Information
+    from sdk.models import Information
     from sdk.simulation import Simulation
 
 
