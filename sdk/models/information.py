@@ -15,6 +15,7 @@ level of detail. 3 is the highest and most detailed level of detail, including
 when energy dissipation occurs, failed movements, and failed actions, etc..
 """
 
+import ast
 from typing import TYPE_CHECKING, List
 
 from sdk.base.base_information import BaseInformation
@@ -145,3 +146,14 @@ class Information(BaseInformation):
         for line in self.get_experiment_log():
             if object_id in line:
                 print(line)
+                
+    def get_log(self) -> List[dict]:
+        logs = []
+        with open(f"logs/log.log", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                if self.experiment_id in line:
+                    final = line[:-2]
+                    logs.append(ast.literal_eval(final))
+                    
+        return logs
