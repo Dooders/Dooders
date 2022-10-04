@@ -1,3 +1,4 @@
+import ast
 from random import choices
 from typing import Dict, List
 
@@ -45,9 +46,22 @@ class Experiment:
         """
         self.simulation.cycle()
 
-    def get_log(self, n: int = 20) -> List[str]:
+    def get_log(self) -> List[str]:
         """ 
-        Fetch the past n log entries.
+        Fetch the log for the current experiment, append each line to logs list and return a list of dictionaries.
+        """
+        logs = []
+        with open(f"logs/log.log", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                if self.experiment_id in line:
+                    final = line[:-2]
+                    logs.append(ast.literal_eval(final))
+                    
+                    
+    def print_log(self, n: int = 20) -> List[str]:
+        """ 
+        Print the past n log entries.
         """
         with open(f"logs/log.log", "r") as f:
             lines = f.readlines()[-n:]
