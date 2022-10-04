@@ -47,6 +47,13 @@ class BaseInformation:
         Returns:
             DataFrame of collected data.
         """
-        df = pd.DataFrame.from_dict(self.data[scope], orient="columns")
+        data = self.data[scope]
+        
+        
+        if scope == 'dooder':
+            sub_data = data['Stat']
+            data = [item for sublist in sub_data for item in sublist]
+        
+        df = pd.DataFrame.from_dict(data, orient="columns")
 
         return df

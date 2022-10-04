@@ -78,6 +78,7 @@ class Simulation(BaseSimulation):
             
     def run_simulation(self) -> None:
         """Run the simulation for a specified number of steps."""
+        #! do a try, except, finally here. Or a post simulation clean up/send results
         self.setup()
 
         while self.stop_conditions():
