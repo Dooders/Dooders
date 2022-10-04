@@ -55,6 +55,7 @@ class Simulation(BaseSimulation):
 
         self.running = True
         Postgres.clear_table('SimulationResults')
+        Postgres.clear_table('DooderResults')
         self.information.collect(self)
         
     def step(self) -> None:
@@ -78,11 +79,22 @@ class Simulation(BaseSimulation):
             
     def run_simulation(self) -> None:
         """Run the simulation for a specified number of steps."""
-        #! do a try, except, finally here. Or a post simulation clean up/send results
-        self.setup()
+        try:
+            self.setup()
 
-        while self.stop_conditions():
-            self.step()
+            while self.stop_conditions():
+                self.step()
+        except Exception as e:
+            print('Simulation failed')
+            
+        finally:
+            self.post_simulation()
+         
+    def post_simulation(self) -> None:
+        df = self.information.get_dataframe('dooder')
+        Postgres.df_to_db(df, 'DooderResults')
+        df = self.information.get_dataframe('simulation')
+        Postgres.df_to_db(df, 'SimulationResults')
 
     def reset(self) -> None:
         """

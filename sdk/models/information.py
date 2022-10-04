@@ -65,9 +65,10 @@ class Information(BaseInformation):
         self.post_collect()
         
     def post_collect(self) -> None:
-        cycle_results = self.get_result_dict(self.simulation)['simulation'] 
+        # cycle_results = self.get_result_dict(self.simulation)['simulation'] 
         
-        Postgres.upload_results(cycle_results)
+        # Postgres.upload_results(cycle_results)
+        pass
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """
