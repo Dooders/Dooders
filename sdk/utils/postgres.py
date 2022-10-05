@@ -6,6 +6,10 @@
 import psycopg2
 import psycopg2.extras as extras
 from pydantic import BaseModel
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class PostgresData(BaseModel):
@@ -23,10 +27,10 @@ def create_connection():
     """
     # Connect to the database
     conn = psycopg2.connect(
-        host="192.168.1.220",
-        database="DooderDB",
-        user="postgres",
-        password="changeme"
+        host=os.environ.get("POSTGRES_HOST"),
+        database=os.environ.get("POSTGRES_DB"),
+        user=os.environ.get("POSTGRES_USER"),
+        password=os.environ.get("POSTGRES_PASSWORD"),
     )
 
     return conn
