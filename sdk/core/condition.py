@@ -5,7 +5,9 @@
 """
 
 from typing import Callable
+
 from sdk.base.base_core import BaseCore
+
 
 class Condition(BaseCore):
     """ 

@@ -1,6 +1,7 @@
 import inspect
 import sys
 
+
 def threshold(attribute, operator, value):
     """
     Returns a function that can be used as a filter for a query.

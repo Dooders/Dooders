@@ -3,11 +3,12 @@
 #! function to drop table if exists, compile table from incoming data, create new table
 """
 
+import os
+
 import psycopg2
 import psycopg2.extras as extras
-from pydantic import BaseModel
-import os
 from dotenv import load_dotenv
+from pydantic import BaseModel
 
 load_dotenv()
 

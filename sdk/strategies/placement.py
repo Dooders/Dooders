@@ -1,8 +1,7 @@
-from sdk.core import Strategy
-
 from random import choices
 from typing import TYPE_CHECKING
 
+from sdk.core import Strategy
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation

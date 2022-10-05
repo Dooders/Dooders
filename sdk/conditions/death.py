@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from sdk.core import Condition
 
 if TYPE_CHECKING:
-    from sdk.dooder import Dooder
+    from sdk.core import Dooder
 
 
 @Condition.register('starvation')

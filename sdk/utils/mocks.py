@@ -1,5 +1,5 @@
-from experiment import Experiment
 import yaml
+from experiment import Experiment
 
 
 def mock_simulation():

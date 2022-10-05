@@ -15,7 +15,6 @@ A collector can return any type of information. Every Collector must input
 information from the simulation.
 """
 from functools import partial
-from statistics import mean
 from typing import TYPE_CHECKING, Callable
 
 from pydantic import BaseModel

@@ -19,8 +19,8 @@ import ast
 from typing import TYPE_CHECKING, List
 
 from sdk.base.base_information import BaseInformation
-from sdk.utils.logger import get_logger
 from sdk.utils import Postgres
+from sdk.utils.logger import get_logger
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID

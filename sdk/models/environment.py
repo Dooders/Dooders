@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 GridCell = List[Any]
 
+
 class Environment(BaseEnvironment):
     """ 
 

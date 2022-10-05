@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
+
 from base_object import BaseObject
+
 
 #! Mess with this at some point
 class BaseComponent(ABC):

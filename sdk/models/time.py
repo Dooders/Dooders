@@ -11,15 +11,16 @@ from sdk.base.base_time import BaseTime, ClassObject
 
 TimeT = Union[float, int]
 
+
 class Time(BaseTime):
     """ 
-    
+
     """
 
     def __init__(self) -> None:
         """
         Create a new, empty BaseScheduler.
-        
+
         Attributes:
             steps: Number of steps taken in the simulation
             time: Current time in the simulation
@@ -34,7 +35,7 @@ class Time(BaseTime):
     def add(self, object: 'BaseObject') -> None:
         """
         Add an object to the schedule.
-        
+
         Args:
             object: Object to add to the schedule
         """
@@ -49,7 +50,7 @@ class Time(BaseTime):
     def remove(self, object: 'BaseObject') -> None:
         """
         Remove all instances of a given agent from the schedule.
-        
+
         Args:
             object: An object being removed.
         """
@@ -58,7 +59,7 @@ class Time(BaseTime):
     def _step(self, object_class: Type[ClassObject], shuffle_objects: bool = True) -> None:
         """ 
         Step through the objects of a given class
-        
+
         Args:
             object_class: Class of objects to step through
             shuffle_objects: Whether to shuffle the objects before stepping through them
@@ -72,7 +73,7 @@ class Time(BaseTime):
     def step(self, shuffle_types: bool = True, shuffle_objects: bool = True) -> None:
         """
         Execute the step of all the agents, one at a time.
-        
+
         Args:
             shuffle_types: Whether to shuffle the types of objects before stepping through them
             shuffle_objects: Whether to shuffle the objects before stepping through them
@@ -88,10 +89,10 @@ class Time(BaseTime):
     def get_object_count(self, object_type: str) -> int:
         """
         Returns the current number of objects in the queue.
-        
+
         Args:
             object_type: Class of objects to count
-            
+
         Returns:
             The current number of objects in the queue.
         """
@@ -100,10 +101,10 @@ class Time(BaseTime):
     def get_objects(self, object_class: ClassObject) -> List[ClassObject]:
         """ 
         Returns a list of all objects of a given class.
-        
+
         Args:
             object_class: Class of objects to return
-            
+
         Returns:
             A list of all objects of a given class.
         """
@@ -112,11 +113,11 @@ class Time(BaseTime):
     def get_object(self, object_class: ClassObject, unique_id: int) -> ClassObject:
         """ 
         Returns an object of a given class with a given unique_id.
-        
+
         Args:
             object_class: Class of object to return
             unique_id: Unique id of object to return
-            
+
         Returns:
             An object of a given class with a given unique_id.
         """

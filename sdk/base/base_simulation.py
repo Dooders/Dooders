@@ -1,6 +1,5 @@
 import random
 from abc import ABC, abstractmethod
-from typing import Dict
 
 from sdk.config import ExperimentParameters
 from sdk.models import Environment, Information, Time

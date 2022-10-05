@@ -1,8 +1,6 @@
 
-from sdk.core.strategy import Strategy
-
 from scipy.stats import norm, randint
-
+from sdk.core.strategy import Strategy
 
 
 @Strategy.register()

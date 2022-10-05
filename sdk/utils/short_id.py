@@ -10,10 +10,6 @@ import os
 import uuid as _uu
 from typing import List, Optional
 
-import psycopg2
-import psycopg2.extras
-from pydantic import BaseModel
-
 
 def int_to_string(
     number: int, alphabet: List[str], padding: Optional[int] = None
@@ -121,11 +117,10 @@ class ShortUUID:
             self._alphabet = new_alphabet
             self._alpha_len = len(self._alphabet)
         else:
-            raise ValueError("Alphabet with more than " "one unique symbols required.")
+            raise ValueError(
+                "Alphabet with more than " "one unique symbols required.")
 
     def encoded_length(self, num_bytes: int = 16) -> int:
         """Return the string length of the shortened UUID."""
         factor = math.log(256) / math.log(self._alpha_len)
         return int(math.ceil(factor * num_bytes))
-
-

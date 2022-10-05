@@ -1,7 +1,6 @@
 import pandas as pd
 from sdk.core import Collector
 
-
 #! Change this to an abstract class, with internal methods not needed in child class
 
 class BaseInformation:

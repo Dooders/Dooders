@@ -11,16 +11,11 @@ A model defines a strategy through a yaml file.
 Add a new strategy with the register decorator
 """
 
-from random import choices
-from typing import TYPE_CHECKING, Any, Callable, Dict, Optional
-from sdk.base.base_core import BaseCore
+from typing import Any, Callable, Optional
 
 import yaml
 from pydantic import BaseModel
-from scipy.stats import norm, randint
-
-if TYPE_CHECKING:
-    from sdk.simulation import Simulation
+from sdk.base.base_core import BaseCore
 
 
 class BaseStrategy(BaseModel):
