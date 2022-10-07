@@ -2,17 +2,21 @@
   
 ## Base
 
-This folder contains the classes for the base functionality of the library.  
+This folder contains the baseclasses for the functionality of the library.  
 
-It includes:
-* base_information.py
-* base_object.py
 
-## Models
+## Models 
+
+Contains functional representation of a system, like a Dooder, Society, Environment, etc.  
 
 ## Modules
 
-## Core
+Contains the modules used in the various model, specifically with the Dooder agent model.  
+
+## Core 
+
+Core classes for the plug-in design for Collectors, Strategies, and Conditions.  
+
 
 ## Utils
 
