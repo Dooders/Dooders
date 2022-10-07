@@ -1,5 +1,5 @@
 import pytest
-from sdk.dooder import Dooder
+from sdk.models import Dooder
 from sdk.utils.mocks import mock_dooder, mock_simulation
 
 

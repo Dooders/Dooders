@@ -1,6 +1,6 @@
 import pytest
 
-from sdk.time import Time
+from sdk.models import Time
 from tests.test_util import DooderTestObject, EnergyTestObject
 
 

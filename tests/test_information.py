@@ -1,19 +1,18 @@
 import pytest
 
 
-from sdk.information import Information
+from sdk.models import Information
 from tests.test_util import simulation
 
 
 @pytest.fixture
 def information():
-    information = Information('1', simulation.params.Information)
+    information = Information(simulation)
     return information
 
 
 def test_information_init(information):
-    information = Information('1', simulation.params.Information)
-    assert information.experiment_id == '1'
+    assert Information(simulation)
 
 
 def test_information_collect(information):

@@ -37,13 +37,13 @@ def test_place_dooder(society):
     assert simulation.environment.grid[1][1] != None
     
     
-def test_properties():
-    simulation = mock_simulation()
-    society = Society(simulation)
-    assert society.active_dooders == {}
-    assert society.total_created_dooders == 0
-    assert society.graveyard == {}
-    assert society.graph != None
+# def test_properties():
+#     simulation = mock_simulation()
+#     society = Society(simulation)
+#     assert society.active_dooders == {}
+#     assert society.total_created_dooders == 0
+#     assert society.graveyard == {}
+#     assert society.graph != None
     
 #! need to make this work
 # def test_terminate_dooder(society):

@@ -5,3 +5,5 @@ test_path = path + '\\tests'
 
 sys.path.append(path)
 sys.path.append(test_path)
+
+from sdk.strategies import *
