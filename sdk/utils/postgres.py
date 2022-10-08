@@ -98,7 +98,8 @@ def df_to_db(df, table_name: str) -> None:
         cursor.close()
         return 1
     cursor.close()
-
+    
+#! Add current dooder status to the dooder log
 
 COLUMNS = {
     'DooderResults': [
