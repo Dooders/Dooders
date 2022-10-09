@@ -102,6 +102,7 @@ class Simulation(BaseSimulation):
         # Postgres.df_to_db(df, 'SimulationResults')
         logs = self.information.get_log()
         df = pd.DataFrame(logs)
+        print(df.head())
         Postgres.df_to_db(df, 'SimulationLogs')
 
     def reset(self) -> None:
@@ -175,10 +176,10 @@ class Simulation(BaseSimulation):
         cycle_number = self.time.time
 
         log_dict = {
-            'scope': scope,
-            'cycle_number': cycle_number,
-            'granularity': granularity,
-            'message': message
+            'Scope': scope,
+            'CycleNumber': cycle_number,
+            'Granularity': granularity,
+            'Message': message
         }
 
         final_message = str(log_dict).strip('{}')

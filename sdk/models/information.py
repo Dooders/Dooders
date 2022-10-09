@@ -101,7 +101,7 @@ class Information(BaseInformation):
             granularity: The granularity of the message.
         """
         if granularity <= self.granularity:  # environment variable???
-            message_string = f"'experiment_id':'{self.experiment_id}', {message}"
+            message_string = f"'ExperimentID':'{self.experiment_id}', {message}"
             self.logger.info(message_string)
 
     def read_log(self) -> List[str]:

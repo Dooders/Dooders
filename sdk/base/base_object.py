@@ -41,11 +41,11 @@ class BaseObject(ABC):
         cycle_number = self.simulation.time.time
 
         log_dict = {
-            'scope': scope,
-            'id': self.unique_id,
-            'cycle_number': cycle_number,
-            'granularity': granularity,
-            'message': message
+            'Scope': scope,
+            'ID': self.unique_id,
+            'CycleNumber': cycle_number,
+            'Granularity': granularity,
+            'Message': message
         }
 
         final_message = str(log_dict).strip('{}')

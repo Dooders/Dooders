@@ -117,12 +117,12 @@ COLUMNS = {
         'TotalDooderEnergySupply',
         'AverageEnergyAge'],
     'SimulationLogs': [
-        'timestamp',
-        'experiment_id',
-        'scope',
-        'id',
-        'cycle_number',
-        'granularity',
-        'message'
+        'Timestamp',
+        'ExperimentID',
+        'Scope',
+        'ID',
+        'CycleNumber',
+        'Granularity',
+        'Message'
         ]
 }
