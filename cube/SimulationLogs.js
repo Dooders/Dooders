@@ -1,54 +1,52 @@
 cube(`SimulationLogs`, {
-    sql: `SELECT * FROM public."SimulationLogs"`,
-    
-    preAggregations: {
-      // Pre-Aggregations definitions go here
-      // Learn more here: https://cube.dev/docs/caching/pre-aggregations/getting-started  
+  sql: `SELECT * FROM public."SimulationLogs"`,
+
+  preAggregations: {
+    // Pre-Aggregations definitions go here
+    // Learn more here: https://cube.dev/docs/caching/pre-aggregations/getting-started
+  },
+
+  joins: {},
+
+  measures: {
+    count: {
+      type: `count`,
+      drillMembers: [experimentId, id, timestamp],
     },
-    
-    joins: {
-      
+  },
+
+  dimensions: {
+    ExperimentID: {
+      sql: `${CUBE}."ExperimentID"`,
+      type: `string`,
     },
-    
-    measures: {
-      count: {
-        type: `count`,
-        drillMembers: [experimentId, id, timestamp]
-      },
-      
-      cycleNumber: {
-        sql: `cycle_number`,
-        type: `sum`
-      }
+
+    CycleNumber: {
+      sql: `${CUBE}."CycleNumber"`,
+      type: `number`,
     },
-    
-    dimensions: {
-      experimentId: {
-        sql: `experiment_id`,
-        type: `string`
-      },
-      
-      scope: {
-        sql: `scope`,
-        type: `string`
-      },
-      
-      id: {
-        sql: `id`,
-        type: `string`,
-        primaryKey: true
-      },
-      
-      message: {
-        sql: `message`,
-        type: `string`
-      },
-      
-      timestamp: {
-        sql: `timestamp`,
-        type: `string`
-      }
+
+    Scope: {
+      sql: `${CUBE}."Scope"`,
+      type: `string`,
     },
-    
-    dataSource: `default`
-  });
+
+    ID: {
+      sql: `${CUBE}."ID"`,
+      type: `id`,
+      primaryKey: true,
+    },
+
+    Message: {
+      sql: `${CUBE}."Message"`,
+      type: `string`,
+    },
+
+    Timestamp: {
+      sql: `${CUBE}."Timestamp"`,
+      type: `timestamp`,
+    },
+  },
+
+  dataSource: `default`,
+});

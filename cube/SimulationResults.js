@@ -14,39 +14,39 @@ cube(`SimulationResults`, {
       drillMembers: [experimentid, cyclenumber],
     },
 
-    doodercount: {
+    DooderCount: {
       sql: `${CUBE}."DooderCount"`,
       type: `sum`,
     },
 
-    energycount: {
+    EnergyCount: {
       sql: `${CUBE}."EnergyCount"`,
       type: `sum`,
     },
 
-    totalenergysupply: {
+    TotalEnergySupply: {
       sql: `${CUBE}."TotalDooderEnergySupply"`,
       type: `sum`,
     },
 
-    avgenergysupply: {
+    AvgEnergySupply: {
       sql: `${CUBE}."TotalDooderEnergySupply"`,
       type: `avg`,
     },
 
-    energyage: {
+    AvgEnergyAge: {
       sql: `${CUBE}."AverageEnergyAge"`,
       type: `avg`,
     },
   },
 
   dimensions: {
-    experimentid: {
+    ExperimentID: {
       sql: `${CUBE}."ExperimentID"`,
       type: `string`,
     },
 
-    cyclenumber: {
+    CycleNumber: {
       sql: `${CUBE}."CycleNumber"`,
       type: `number`,
     },
