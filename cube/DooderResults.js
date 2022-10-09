@@ -11,7 +11,7 @@ cube(`DooderResults`, {
   measures: {
     count: {
       type: `count`,
-      drillMembers: [uniqueid, cyclenumber],
+      drillMembers: [UniqueID, CycleNumber],
     },
 
     TotalAge: {

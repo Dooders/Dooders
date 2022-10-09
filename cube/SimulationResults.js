@@ -11,7 +11,7 @@ cube(`SimulationResults`, {
   measures: {
     count: {
       type: `count`,
-      drillMembers: [experimentid, cyclenumber],
+      drillMembers: [ExperimentID, CycleNumber],
     },
 
     DooderCount: {

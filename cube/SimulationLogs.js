@@ -11,7 +11,7 @@ cube(`SimulationLogs`, {
   measures: {
     count: {
       type: `count`,
-      drillMembers: [experimentId, id, timestamp],
+      drillMembers: [ExperimentID, ID, Timestamp],
     },
   },
 
@@ -33,7 +33,7 @@ cube(`SimulationLogs`, {
 
     ID: {
       sql: `${CUBE}."ID"`,
-      type: `id`,
+      type: `string`,
       primaryKey: true,
     },
 
@@ -44,7 +44,7 @@ cube(`SimulationLogs`, {
 
     Timestamp: {
       sql: `${CUBE}."Timestamp"`,
-      type: `timestamp`,
+      type: `time`,
     },
   },
 
