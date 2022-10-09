@@ -98,8 +98,8 @@ class Simulation(BaseSimulation):
     def post_simulation(self) -> None:
         df = self.information.get_dataframe('dooder')
         Postgres.df_to_db(df, 'DooderResults')
-        df = self.information.get_dataframe('simulation')
-        Postgres.df_to_db(df, 'SimulationResults')
+        # df = self.information.get_dataframe('simulation')
+        # Postgres.df_to_db(df, 'SimulationResults')
         logs = self.information.get_log()
         df = pd.DataFrame(logs)
         Postgres.df_to_db(df, 'SimulationLogs')
