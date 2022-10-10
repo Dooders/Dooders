@@ -3,6 +3,9 @@ from typing import Callable, List
 
 from pydantic import BaseModel, Field
 
+#! Need better config, and a way to change settings on the fly
+#! will also need a settings view on the front-end
+
 
 class BaseCollector(BaseModel):
     """ Base class for all collectors """
