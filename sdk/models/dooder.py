@@ -87,8 +87,6 @@ class Dooder(BaseObject):
     def death_check(self) -> None:
         """
         Checking if the dooder should be dead based on conditions of current state
-
-        #TODO: make this process a decorator or factory for easy creation of any conditional action
         """
         result, reason = Condition.check_conditions('death', self)
 
@@ -108,8 +106,6 @@ class Dooder(BaseObject):
         Returns:
             origin: The origin of the move.
             destination: The destination after the move.
-
-        #TODO: Movement based on a selected strategy
         """
         # Pick the next cell from the adjacent cells.
         possible_moves = self.simulation.environment.get_neighborhood(
@@ -131,10 +127,6 @@ class Dooder(BaseObject):
         * Check if the dooder should move and where
         * Move the dooder if success check is true
         * Check if the dooder should die based on step end state conditions
-
-        #TODO Better step flow design
-        #TODO Make it simple to change step flow
-
         """
         #! need to double check doing this twice is a good idea or necessary
         if self.death_check():
