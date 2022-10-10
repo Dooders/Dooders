@@ -6,7 +6,7 @@ Another way of thinking about it is an agent can take in information and use tha
 
 ## Environment and Energy
 
-The [Environment](Environment.md) model is responsible for managing any object that has a spatial component like a Dooder or Energy object.  
+The [Environment](Environment.md) model is responsible for managing any object that has a spatial component like a Dooder or Energy object. These objects move to different locations within a grid and interact with each other.  
 
 [Energy](Energy.md) is the primary resource a Dooder has to interact in the environment. Every action will have a cost and energy will be allocated to the environment every cycle.  
 
