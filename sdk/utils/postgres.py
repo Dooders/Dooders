@@ -13,7 +13,7 @@ from pydantic import BaseModel
 load_dotenv()
 
 
-class PostgresData(BaseModel):
+class SimulationResults(BaseModel):
     ExperimentID: str
     CycleNumber: int
     DooderCount: int
