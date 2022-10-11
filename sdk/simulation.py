@@ -96,6 +96,11 @@ class Simulation(BaseSimulation):
             self.post_simulation()
          
     def post_simulation(self) -> None:
+        """
+        Post cycle processes. Like sending data to a postgres db
+        
+        #! better way to send data to db
+        """
         df = self.information.get_dataframe('dooder')
         Postgres.df_to_db(df, 'DooderResults')
         # df = self.information.get_dataframe('simulation')
