@@ -1,6 +1,7 @@
 """
 
 #! function to drop table if exists, compile table from incoming data, create new table
+#! what other tables will I create?
 """
 
 import os
