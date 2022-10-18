@@ -8,7 +8,7 @@ import {
   useRef
 } from "react";
 import { useCubeQuery } from '@cubejs-client/react';
-import { BarChart, XAxis, CartesianGrid, YAxis, Tooltip, Bar } from "recharts";
+import { BarChart, XAxis, CartesianGrid, YAxis, Tooltip, Bar, Legend } from "recharts";
 
 
 const ChartApp = () => {
@@ -37,11 +37,13 @@ const ChartApp = () => {
   return (
     <div>
       <BarChart width={1200} height={350} data={resultSet.series()[0].series}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="x" />
+      <CartesianGrid strokeDasharray="5 5" />
+      <XAxis dataKey="x">
+      </XAxis>
       <YAxis />
       <Tooltip />
-      <Bar dataKey="value" fill="#8884d8" />
+      <Legend verticalAlign="top" height={36} />
+      <Bar name="DooderCount" dataKey="value" fill="#8884d8" />
       </BarChart>
     
       </div>
