@@ -7,11 +7,96 @@ import {
   useEffect,
   useRef
 } from "react";
+import { useCubeQuery } from '@cubejs-client/react';
+import { BarChart, XAxis, CartesianGrid, YAxis, Tooltip, Bar } from "recharts";
+
+
+const ChartApp = () => {
+
+  const { resultSet, isLoading, error, progress } = useCubeQuery({
+    measures: ["SimulationResults.DooderCount"],
+    dimensions: ["SimulationResults.CycleNumber"],
+    order: [["SimulationResults.CycleNumber","asc"]]
+  });
+  if (isLoading) {
+    return (
+      <div>
+        {(progress && progress.stage && progress.stage.stage) || "Loading..."}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>{error.toString()}</div>;
+  }
+
+  if (!resultSet) {
+    return null;
+  }
+
+  return (
+    <div>
+      <BarChart width={1200} height={350} data={resultSet.series()[0].series}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="x" />
+      <YAxis />
+      <Tooltip />
+      <Bar dataKey="value" fill="#8884d8" />
+      </BarChart>
+    
+      </div>
+);
+};
+
+        
+
+
+// export default ChartApp;
+
 
 const App = () => {
     const [sessionData, setSessionData] = useState([]);
     const [previousResults, setPreviousResults] = useState([]);
     const webSocket = useRef(null);
+
+    // const { resultSet, isLoading, error, progress } = useCubeQuery({
+    // measures: ["SimulationResults.DooderCount"],
+    // dimensions: ["SimulationResults.CycleNumber"],
+    // order: [["SimulationResults.CycleNumber","asc"]]});
+
+    // console.log(resultSet);
+
+    // if (isLoading) {
+    //   return (
+    //     <div>
+    //       {(progress && progress.stage && progress.stage.stage) || "Loading..."}
+    //     </div>
+    //   );
+    // }
+  
+    // if (error) {
+    //   return <div>{error.toString()}</div>;
+    // }
+  
+    // if (!resultSet) {
+    //   return null;
+    // }
+  
+    // //Transform data for visualization
+    // const labels = resultSet
+    //   .seriesNames({
+    //     x: [],
+    //     y: ["Orders.createdAt"]
+    //   })
+    //   .map((column) => (column.value ? column.value : column.key));
+  
+    // const datasets = resultSet.series().map((item, i) => {
+    //   return {
+    //     label: item.title,
+    //     data: item.series.map((item) => item.value)
+    //   };
+    // });
+
 
     // const sessionData = [
     //   { StepCount: 0, AgentCount: 4000 },
@@ -64,6 +149,7 @@ const App = () => {
       <Toolbar socket={webSocket} setter={setSessionData}/>
       <Dashboard data={previousResults}/>
       <ExperimentChart data={sessionData} />
+      <ChartApp />
     </Box>
   );
 };

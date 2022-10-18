@@ -8,10 +8,42 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Home } from "./Home";
 import { About } from "./About";
 import { NoMatch } from "./NoMatch";
+import cubejs from '@cubejs-client/core';
+import { CubeProvider, useCubeQuery } from '@cubejs-client/react';
+
+const cubejsApi = cubejs(
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjUzNTY2ODksImV4cCI6MTY2NTQ0MzA4OX0.pXe8XjU80esG34OmcisRenU_02z8RNv2TmFBu0KbIJg',
+  { apiUrl: 'http://192.168.1.220:4000/cubejs-api/v1' }
+);
 
 export default function App() {
+
+  // const { resultSet, isLoading, error, progress } = useCubeQuery({
+  //   measures: ["SimulationResults.DooderCount"],
+  //   dimensions: ["SimulationResults.CycleNumber"],
+  //   order: [["SimulationResults.CycleNumber","asc"]]
+  // });
+
+  // if (isLoading) {
+  //   return (
+  //     <div>
+  //       {(progress && progress.stage && progress.stage.stage) || "Loading..."}
+  //     </div>
+  //   );
+  // }
+
+  // if (error) {
+  //   return <div>{error.toString()}</div>;
+  // }
+
+  // if (!resultSet) {
+  //   return null;
+  // }
+
   return (
+    
     <Router>
+      <CubeProvider cubejsApi={cubejsApi}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <ResponsiveAppBar />
@@ -27,8 +59,11 @@ export default function App() {
             <Route path="/home" element={<Home />} />
             <Route element={<NoMatch />} />
           </Routes>
+          
         </Box>
       </Box>
+      </CubeProvider>
     </Router>
+    
   );
 }
