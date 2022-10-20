@@ -34,7 +34,7 @@ const DooderCycle = () => {
 
   return (
     <div>
-      <ResponsiveContainer width="40%" height={350}>
+      <ResponsiveContainer width="100%" height={350}>
         <LineChart data={resultSet.series()[0].series}>
           <CartesianGrid strokeDasharray="5 5" />
           <XAxis dataKey="x"></XAxis>

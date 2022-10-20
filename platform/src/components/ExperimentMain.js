@@ -5,7 +5,7 @@ import ExperimentChart from "./ExperimentChart/ExperimentChart";
 import { useState, useEffect, useRef } from "react";
 import DooderCycle from "./Charts/DooderCycle";
 import EnergyCycle from "./Charts/EnergyCycle";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 
 const App = () => {
   const [sessionData, setSessionData] = useState([]);
@@ -49,15 +49,23 @@ const App = () => {
   }, [sessionData]);
 
   return (
-    <Box>
+    <div>
       <Toolbar socket={webSocket} setter={setSessionData} />
       <Dashboard data={previousResults} />
       <ExperimentChart data={sessionData} />
-      <Grid>
-        <EnergyCycle /> 
-        <DooderCycle />
+      <Grid container spacing={2}>
+        <Grid item sm={6}>
+          <Box textAlign="center">
+            <EnergyCycle />
+          </Box>
+        </Grid>
+        <Grid item sm={6}>
+          <Box textAlign="center">
+            <DooderCycle />
+          </Box>
+        </Grid>
       </Grid>
-    </Box>
+    </div>
   );
 };
 

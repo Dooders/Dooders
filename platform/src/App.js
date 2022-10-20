@@ -9,7 +9,7 @@ import { Home } from "./Home";
 import { About } from "./About";
 import { NoMatch } from "./NoMatch";
 import cubejs from '@cubejs-client/core';
-import { CubeProvider, useCubeQuery } from '@cubejs-client/react';
+import { CubeProvider } from '@cubejs-client/react';
 
 const cubejsApi = cubejs(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjUzNTY2ODksImV4cCI6MTY2NTQ0MzA4OX0.pXe8XjU80esG34OmcisRenU_02z8RNv2TmFBu0KbIJg',
@@ -17,28 +17,6 @@ const cubejsApi = cubejs(
 );
 
 export default function App() {
-
-  // const { resultSet, isLoading, error, progress } = useCubeQuery({
-  //   measures: ["SimulationResults.DooderCount"],
-  //   dimensions: ["SimulationResults.CycleNumber"],
-  //   order: [["SimulationResults.CycleNumber","asc"]]
-  // });
-
-  // if (isLoading) {
-  //   return (
-  //     <div>
-  //       {(progress && progress.stage && progress.stage.stage) || "Loading..."}
-  //     </div>
-  //   );
-  // }
-
-  // if (error) {
-  //   return <div>{error.toString()}</div>;
-  // }
-
-  // if (!resultSet) {
-  //   return null;
-  // }
 
   return (
     
