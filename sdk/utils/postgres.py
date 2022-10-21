@@ -58,7 +58,7 @@ def execute_query(query: str, params={}) -> None:
 def upload_results(cycle_results: dict) -> None:
     """Upload the results to the postgres server."""
 
-    final_results = PostgresData.construct(**cycle_results).dict()
+    # final_results = PostgresData.construct(**cycle_results).dict()
 
     # Create a new record
     sql = """
@@ -66,7 +66,7 @@ def upload_results(cycle_results: dict) -> None:
     VALUES (%(ExperimentID)s, %(CycleNumber)s, %(DooderCount)s, %(EnergyCount)s, %(TotalDooderEnergySupply)s, %(AverageEnergyAge)s);
     """
 
-    execute_query(sql, final_results)
+    execute_query(sql, cycle_results)
 
 
 def clear_table(table_name: str) -> None:

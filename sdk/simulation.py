@@ -6,7 +6,7 @@ The simulation class is the main class of the simulation. It is responsible for
 initializing the simulation, running the simulation, and displaying the results.
 """
 
-from random import choices
+import traceback
 
 import pandas as pd
 
@@ -90,6 +90,7 @@ class Simulation(BaseSimulation):
             while self.stop_conditions():
                 self.step()
         except Exception as e:
+            print(traceback.format_exc())
             print('Simulation failed')
             
         finally:
@@ -107,7 +108,6 @@ class Simulation(BaseSimulation):
         # Postgres.df_to_db(df, 'SimulationResults')
         logs = self.information.get_log()
         df = pd.DataFrame(logs)
-        print(df.head())
         Postgres.df_to_db(df, 'SimulationLogs')
 
     def reset(self) -> None:
