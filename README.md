@@ -51,7 +51,7 @@ I will continue to complexify[^4] the library and experiment with more models an
 | :------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | Full featured interface | Responsive UI with many dashboards showing the simulation results                                                                  |
 | Dockerize deployment             | Make it simple to spin up the entire platform                                                                                      |
-| Cognition model                  | Build out the Dooder capability to take in information and evaluate its value                                                      |
+| [Cognition model](https://github.com/csmangum/Dooders/blob/main/docs/plans/CognitionModel.md)                | Build out the Dooder capability to take in information and evaluate its value                                                      |
 | Reproduction model               | Design a function to combine the Genetic models of two Dooders                                                                     |
 | Continuous time                  | Switch from step based, to continuous time. Brings on tons of potential issues                                                     |
 | Performance & Efficiency                   | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point |
