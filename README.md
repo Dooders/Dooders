@@ -68,10 +68,18 @@ Now, I'm focusing more on software engineering a developing good design principl
 
 ## Inspiration
 
+### Libraries:
 * [Mesa agent-based modeling](https://github.com/projectmesa/mesa)
-* [NetLogo](https://github.com/NetLogo/NetLogo)
+
+### Books:
 * [The Romance of Reality](https://www.amazon.com/Romance-Reality-Organizes-Consciousness-Complexity-ebook/dp/B09GW3G45J/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627602&sr=8-2)
 * [At Home in the Universe](https://www.amazon.com/At-Home-Universe-Self-Organization-Complexity-ebook/dp/B004VEEO12/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627686&sr=8-1)
+
+### Papers
+
+
+### Lectures/Courses
+
 
 ## Why?
 
