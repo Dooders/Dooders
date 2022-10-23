@@ -49,13 +49,14 @@ I will continue to complexify[^4] the library and experiment with more models an
 
 | Idea                             | Description                                                                                                                        |
 | :------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Full featured frontend interface | Responsive UI with many dashboards showing the simulation results                                                                  |
+| Full featured interface | Responsive UI with many dashboards showing the simulation results                                                                  |
 | Dockerize deployment             | Make it simple to spin up the entire platform                                                                                      |
-| Cognition model                  | Build out the Dooder capability to take in information and evaluate its value                                                      |
+| [Cognition model](https://github.com/csmangum/Dooders/blob/main/docs/plans/CognitionModel.md)                | Build out the Dooder capability to take in information and evaluate its value                                                      |
 | Reproduction model               | Design a function to combine the Genetic models of two Dooders                                                                     |
 | Continuous time                  | Switch from step based, to continuous time. Brings on tons of potential issues                                                     |
 | Performance & Efficiency                   | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point |
 | Simulation parameters | Make it so simulation strategies and parameters can be changed easily |
+| Senses model | Right now a Dooder has no way to aquire information that isn't directly fed to it. A senses model allows a Dooder to aquire information from the environment |
 
 ## My Background
 
@@ -67,10 +68,19 @@ Now, I'm focusing more on software engineering a developing good design principl
 
 ## Inspiration
 
+### Libraries:
 * [Mesa agent-based modeling](https://github.com/projectmesa/mesa)
-* [NetLogo](https://github.com/NetLogo/NetLogo)
+
+### Books:
 * [The Romance of Reality](https://www.amazon.com/Romance-Reality-Organizes-Consciousness-Complexity-ebook/dp/B09GW3G45J/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627602&sr=8-2)
 * [At Home in the Universe](https://www.amazon.com/At-Home-Universe-Self-Organization-Complexity-ebook/dp/B004VEEO12/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1661627686&sr=8-1)
+* [Fooled by Randomness](https://www.amazon.com/gp/product/B001FA0W5W/ref=dbs_a_def_awm_bibl_vppi_i3)
+
+### Papers
+
+
+### Lectures/Courses
+
 
 ## Why?
 
