@@ -7,7 +7,7 @@ from fastapi import WebSocket
 from sdk.base.base_object import BaseObject
 from sdk.config import ExperimentParameters
 from sdk.simulation import Simulation
-from sdk.utils import ShortID
+from sdk.utils import ShortID, postgres
 
 
 class Experiment:
@@ -141,6 +141,12 @@ class Experiment:
                 return 'No active Dooders'
 
         return self.simulation.information.get_object_history(object_id)
+    
+    def experiment_summary(self):
+        """
+        Returns a summary of the experiment.
+        """
+        return self.simulation.information.get_experiment_summary()
 
     @property
     def is_running(self) -> bool:

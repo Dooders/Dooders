@@ -33,6 +33,8 @@ class Resources:
     
     available_resources = {}
     total_allocated_energy = 0
+    total_dissipated_energy = 0
+    total_consumed_energy = 0
     
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation

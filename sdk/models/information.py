@@ -132,6 +132,17 @@ class Information(BaseInformation):
         for line in self.read_log():
             if experiment_id in line:
                 yield line
+                
+    def get_experiment_summary(self) -> dict:
+        
+        experiment_summary = {
+            "ExperimentID": self.experiment_id,
+            "CycleCount": self.simulation.time.time,
+            "StartingDooderCount": self.data['simulation']['DooderCount'][0],
+            "EndingDooderCount": self.data['simulation']['DooderCount'][-1],
+        }
+        
+        return experiment_summary
 
     def get_object_history(self, object_id: str) -> List[str]:
         """
