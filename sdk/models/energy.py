@@ -16,19 +16,19 @@ EnergyStrategy = Strategy.load_strategy('energy')
 
 class Energy:
     """ 
-    
+
     """
-    
-    def __init__(self, 
-                 unique_id: 'UniqueID', 
-                 position: 'Position', 
+
+    def __init__(self,
+                 unique_id: 'UniqueID',
+                 position: 'Position',
                  resources: 'Resources') -> None:
         """ 
         Args:
             unique_id: Unique ID of the object.
             position: Position of the object.
             resources: Resources object.
-            
+
         Attributes:
             unique_id: See Args.
             position: See Args.
@@ -41,7 +41,7 @@ class Energy:
         self.position = position
         self.cycle_count = 0
         self.resources = resources
-        
+
     def step(self) -> None:
         """
         Step through for the object.
@@ -58,13 +58,14 @@ class Energy:
         """
         Consume the energy object and remove it from the environment.
         """
-    
+
         self.resources.remove(self)
         self.resources.simulation.environment.remove_object(self)
         if type is None:
             self.resources.total_consumed_energy += 1
+
         self.resources.log(
-                granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
+            granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
 
     @property
     def name(self) -> str:
