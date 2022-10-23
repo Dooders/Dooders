@@ -1,7 +1,8 @@
 import { Box, Container, Grid } from "@mui/material";
 import { CountCard } from "../CountCard/CountCard";
 import { DashboardLayout } from "./dashboard-layout";
-
+import TopRow from "./TopRow";
+ 
 const Dashboard = ({ data }) => {
   const cycleCount = data.CycleCount || 0;
   const dooderCount = data.DooderCount || 0;
@@ -32,6 +33,7 @@ const Dashboard = ({ data }) => {
           </Grid>
         </Container>
       </Box>
+      <TopRow />
     </>
   );
 };
