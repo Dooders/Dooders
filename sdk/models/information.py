@@ -138,6 +138,9 @@ class Information(BaseInformation):
         experiment_summary = {
             "ExperimentID": self.experiment_id,
             "CycleCount": self.simulation.time.time,
+            "TotalEnergy": self.simulation.resources.total_allocated_energy,
+            "DissipatedEnergy": self.simulation.resources.total_dissipated_energy,
+            "ConsumedEnergy": self.simulation.resources.total_consumed_energy,
             "StartingDooderCount": self.data['simulation']['DooderCount'][0],
             "EndingDooderCount": self.data['simulation']['DooderCount'][-1],
         }
