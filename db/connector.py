@@ -6,6 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://usr:pass@localhost:5432/sqlalchemy')
+postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
+
 
 class DBConnect:
 
