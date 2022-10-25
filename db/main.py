@@ -6,11 +6,6 @@ from typing import List
 
 Base = declarative_base()
 
-from connector import DBConnect
-
-connection = DBConnect()
-engine = connection.engine
-
 
 class CompanyOrm(Base):
     __tablename__ = 'companies'
