@@ -14,15 +14,6 @@ from pydantic import BaseModel
 load_dotenv()
 
 
-class SimulationResults(BaseModel):
-    ExperimentID: str
-    CycleNumber: int
-    DooderCount: int
-    EnergyCount: int
-    TotalDooderEnergySupply: int
-    AverageEnergyAge: float
-
-
 def create_connection():
     """
 
@@ -99,8 +90,6 @@ def df_to_db(df, table_name: str) -> None:
         cursor.close()
         return 1
     cursor.close()
-    
-#! Add current dooder status to the dooder log
 
 COLUMNS = {
     'DooderResults': [
