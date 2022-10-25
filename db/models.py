@@ -60,3 +60,11 @@ class CycleResults(Base):
         self.EnergyCount = EnergyCount
         self.TotalDooderEnergySupply = TotalDooderEnergySupply
         self.AverageEnergyAge = AverageEnergyAge
+        
+        
+class DooderResults(Base):
+    
+    __tablename__ = "DooderResults"
+    
+    ExperimentID = Column(String(255), primary_key=True)    
+ 
