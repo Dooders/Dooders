@@ -14,3 +14,9 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement="auto")
     username = Column(String(255), unique=True, nullable=False)
     password = Column(Text, nullable=False)
+    
+class SimulationSummary(Base):
+    
+    __tablename__ = "SimulationSummary"
+    
+    
