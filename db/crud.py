@@ -1,6 +1,9 @@
 
 from connector import DBConnect
 
+connection = DBConnect()
+engine = connection.engine
+
 class CRUD:
     def __init__(self):
         self.db = DBConnect()
