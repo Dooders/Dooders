@@ -2,8 +2,14 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel, constr
+from typing import List
 
 Base = declarative_base()
+
+from connector import DBConnect
+
+connection = DBConnect()
+engine = connection.engine
 
 
 class CompanyOrm(Base):
@@ -18,7 +24,7 @@ class CompanyModel(BaseModel):
     id: int
     public_key: constr(max_length=20)
     name: constr(max_length=63)
-    domains: list[constr(max_length=255)]
+    domains: List[constr(max_length=255)]
 
     class Config:
         orm_mode = True

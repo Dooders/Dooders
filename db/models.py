@@ -2,9 +2,7 @@ from sqlalchemy import Column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import Integer, Text, String
 
-
 Base = declarative_base()
-
     
 class SimulationSummary(Base):
     

@@ -3,24 +3,20 @@ import os
 import psycopg2
 import psycopg2.extras as extras
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 load_dotenv()
-
-from sqlalchemy import create_engine
-engine = create_engine('postgresql://usr:pass@localhost:5432/sqlalchemy')
-postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
 
 
 class DBConnect:
 
     def __init__(self):
-        self.conn = psycopg2.connect(
-            host=os.environ.get("POSTGRES_HOST"),
-            database=os.environ.get("POSTGRES_DB"),
-            user=os.environ.get("POSTGRES_USER"),
-            password=os.environ.get("POSTGRES_PASSWORD"),
-        )
-        self.cur = self.conn.cursor()
+        host = os.environ.get("POSTGRES_HOST")
+        database = os.environ.get("POSTGRES_DB")
+        user = os.environ.get("POSTGRES_USER")
+        password = os.environ.get("POSTGRES_PASSWORD")
+        self.engine = create_engine(
+            f"postgresql+psycopg2://{user}:{password}@{host}:5432/{database}")
 
     def execute_query(self, query: str, params={}):
         self.cur.execute(query, params)
