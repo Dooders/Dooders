@@ -66,8 +66,8 @@ class DooderResults(Base):
 
     __tablename__ = "DooderResults"
 
-    ExperimentID = Column(String(255), primary_key=True)
-    UniqueID = Column(Integer, nullable=False)
+    # ExperimentID = Column(String(255), primary_key=True)
+    UniqueID = Column(String(255), primary_key=True)
     CycleNumber = Column(Integer, nullable=False)
     Position = Column(String(255), nullable=False)
     EnergySupply = Column(Integer, nullable=False)
@@ -83,7 +83,7 @@ class DooderResults(Base):
                  Direction,
                  Age):
 
-        self.ExperimentID = ExperimentID
+        # self.ExperimentID = ExperimentID
         self.UniqueID = UniqueID
         self.CycleNumber = CycleNumber
         self.Position = Position
