@@ -69,7 +69,6 @@ class Information(BaseInformation):
         cycle_results = self.get_result_dict(self.simulation)['simulation'] 
         
         Postgres.upload_results(cycle_results)
-        pass
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """
