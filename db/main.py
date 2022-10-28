@@ -9,7 +9,7 @@ from db.models import Base
 load_dotenv()
 
 
-class DBAdmin:
+class DB:
 
     def __init__(self):
         self.base = Base
@@ -25,9 +25,16 @@ class DBAdmin:
             f"postgresql+psycopg2://{user}:{password}@{host}:5432/{database}")
 
         return engine
+    
+    def reset(self):
+        self.tear_down()
+        self.build_up()
+        print("DB reset successfully")
 
     def build_up(self):
         self.base.metadata.create_all(self.engine)
+        print("DB Tables created")
 
     def tear_down(self):
         self.base.metadata.drop_all(self.engine)
+        print("DB Tables dropped")
