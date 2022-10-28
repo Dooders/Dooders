@@ -4,15 +4,9 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from db.models import Base
+from db.models import Base, RecordTypes
 
 load_dotenv()
-
-
-class RecordTypes:
-    CycleResults = ''
-    SimulationSummary = ''
-    SimulationLogs = ''
 
 
 class DB:
@@ -33,7 +27,10 @@ class DB:
         return engine
     
     def add_record(self, record_type):
-        pass
+        # have class that when init it returns a desired result. like a vending machine. This class sacrifices itself. send a class and do something based on the type of class. basically encoding then decoding
+        record = RecordTypes(record_type)
+        
+        self.session.add(record)
     
     def reset(self):
         self.tear_down()
