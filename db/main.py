@@ -9,6 +9,12 @@ from db.models import Base
 load_dotenv()
 
 
+class RecordTypes:
+    CycleResults = ''
+    SimulationSummary = ''
+    SimulationLogs = ''
+
+
 class DB:
 
     def __init__(self):
@@ -25,6 +31,9 @@ class DB:
             f"postgresql+psycopg2://{user}:{password}@{host}:5432/{database}")
 
         return engine
+    
+    def add_record(self, record_type):
+        pass
     
     def reset(self):
         self.tear_down()
