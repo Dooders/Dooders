@@ -2,14 +2,6 @@ from sqlalchemy import Column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import DateTime, Integer, String, Text
 
-
-class RecordTypes:
-    CycleResults = CycleResults
-    SimulationSummary = SimulationSummary
-    SimulationLogs = SimulationLogs
-    DooderResults = DooderResults
-
-
 Base = declarative_base()
 
 

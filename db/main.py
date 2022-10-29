@@ -4,9 +4,20 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from db.models import Base, RecordTypes
+from db.models import Base, CycleResults, SimulationSummary, SimulationLogs, DooderResults
 
 load_dotenv()
+
+
+class RecordTypes:
+    CycleResults = CycleResults
+    SimulationSummary = SimulationSummary
+    SimulationLogs = SimulationLogs
+    DooderResults = DooderResults
+
+    @classmethod
+    def get(cls, record_type):
+        return getattr(cls, record_type)
 
 
 class DB:
@@ -25,28 +36,28 @@ class DB:
             f"postgresql+psycopg2://{user}:{password}@{host}:5432/{database}")
 
         return engine
-    
+
     def df_to_db(self, df, record_type):
         # maybe have a decorator that creates and closes a session
         df_dict = df.to_dict('rows')
-        
+
         self.session = self.create_session()
-        
+
         for record in df_dict.values():
-            serialized_record = RecordTypes(record, record_type) 
-            self._add_record(serialized_record)
-            
+            self.add_record(record, record_type)
+
         self.session.commit()
         self.session.close()
-    
-    def add_record(self, record):
+
+    def add_record(self, record: dict, record_type: str):
         # have class that when init it returns a desired result. like a vending machine. This class sacrifices itself. send a class and do something based on the type of class. basically encoding then decoding
-        
-        self.session.add(record)
-        
+        serializer = RecordTypes.get(record_type)
+        serialized_record = serializer(**record)
+        self.session.add(serialized_record)
+
     def _add_record(self, record):
         self.session.add(record)
-    
+
     def reset(self):
         self.tear_down()
         self.build_up()
