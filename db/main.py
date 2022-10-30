@@ -8,7 +8,6 @@ from db.models import Base, CycleResults, SimulationSummary, SimulationLogs, Doo
 
 load_dotenv()
 
-
 class RecordTypes:
     CycleResults = CycleResults
     SimulationSummary = SimulationSummary
@@ -19,6 +18,28 @@ class RecordTypes:
     def get(cls, record_type):
         return getattr(cls, record_type)
 
+#! Need to make this work more with classmethods
+#! Maybe decorator to create session then close it
+
+def create_engine():
+    host = os.environ.get("POSTGRES_HOST")
+    database = os.environ.get("POSTGRES_DB")
+    user = os.environ.get("POSTGRES_USER")
+    password = os.environ.get("POSTGRES_PASSWORD")
+    engine = create_engine(
+        f"postgresql+psycopg2://{user}:{password}@{host}:5432/{database}")
+
+    return engine
+
+def session_decorator(func):
+    def wrapper(*args, **kwargs):
+        engine = create_engine()
+        session = sessionmaker(bind=engine)()
+        result = func(*args, session=session, **kwargs)
+        session.close()
+        return result
+
+    return wrapper
 
 class DB:
 
