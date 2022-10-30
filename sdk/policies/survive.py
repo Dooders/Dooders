@@ -8,7 +8,8 @@ class Survive:
   # get data from Information? -> apply policy to data and goal -> execute action or "recommend" action?
   # should policy just recomemd and not do execution? How to train then? policy waits for result? can i async a task that only continues if something happens?
   
-  def __init__(self):
+  @classmethod
+  def execute(policy):
     pass
   
   
