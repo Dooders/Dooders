@@ -28,13 +28,12 @@ class Survival:
             return wrapped_class
 
         return inner_wrapper
-
-    @classmethod
-    def execute(policy):
-        """ 
-
-        """
-        pass
+    
+    def __call__(self, policy, object):
+        feched_policy = self.policies[policy]
+        policy_results = feched_policy.execute(object)
+        
+        return policy_results
 
 
 @Survival.register()
@@ -45,9 +44,6 @@ class RandomMove:
 
     __query__ = {'type': 'environment',
                  'information': 'neighborhood'}
-
-    def __init__(self):
-        pass
 
     @classmethod
     def execute(self, dooder) -> tuple:
