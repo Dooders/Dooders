@@ -1,7 +1,10 @@
 # looking to consume energy. max or min a goal, like survival days
 # base goals: consume energy to maximize cycles, reproduce
 
+from random import choice
 from typing import Callable
+
+from sdk.models.energy import Energy
 
 
 class Survival:
@@ -46,8 +49,12 @@ class RandomMove:
     def __init__(self):
         pass
 
-    def execute(self, dooder):
-        pass
+    @classmethod
+    def execute(self, dooder) -> tuple:
+        neighborhood = dooder.neighborhood
+        random_cell = choice(neighborhood)
+        
+        return random_cell
 
     # random, rule-based, NNs
     # rule example: any location > 0 energy, move and comsume. If multiple, choose random.
@@ -58,3 +65,6 @@ class RandomMove:
 
     # maybe this recomemds to always be comsuming. it can be base policy that can be overcome/overpowered
     # weights that led to survive longer,
+    
+# need to make a dataclass for the required output of the policy
+# maybe even a dataclass for the input

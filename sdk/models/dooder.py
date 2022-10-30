@@ -208,6 +208,15 @@ class Dooder(BaseObject):
         }
 
         return stats
+    
+    @property
+    def neighborhood(self) -> list:
+        """
+        Return a list of cell contents in the dooder's neighborhood.
+        """
+        neighborhood = self.simulation.environment.get_neighborhood(self.position, include_center=True)
+        return self.simulation.environment.get_cell_list_contents(neighborhood)
+   
 
 # Todo: Create an Effects class (can be temporary or permanent)
 
