@@ -6,6 +6,7 @@ from typing import Callable
 
 from sdk.models.energy import Energy
 from sdk.core.policies import Policies
+from sdk.base.base_policy import BasePolicy
 
     # input: needed data, dooder, goal
     # output: action and eval?
@@ -15,7 +16,7 @@ from sdk.core.policies import Policies
 
 
 @Policies.register()
-class RandomMove:
+class RandomMove(BasePolicy):
     """ 
 
     """
