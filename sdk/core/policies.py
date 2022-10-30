@@ -1,6 +1,4 @@
-
-
-
+from typing import Callable
 
 
 class Policies:
@@ -8,8 +6,7 @@ class Policies:
     policies = {}
     
     def __init__(self):
-      # import all the policies from policy fooder
-      pass
+      from sdk import policies
 
     @classmethod
     def register(cls) -> Callable:
