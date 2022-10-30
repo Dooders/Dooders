@@ -5,38 +5,16 @@ from random import choice
 from typing import Callable
 
 from sdk.models.energy import Energy
+from sdk.core.policies import Policies
 
-
-class Survival:
     # input: needed data, dooder, goal
     # output: action and eval?
     # plugin like
     # get data from Information? -> apply policy to data and goal -> execute action or "recommend" action?
     # should policy just recomemd and not do execution? How to train then? policy waits for result? can i async a task that only continues if something happens?
 
-    policies = {}
 
-    @classmethod
-    def register(cls) -> Callable:
-        """ 
-
-        """
-
-        def inner_wrapper(wrapped_class: Callable) -> Callable:
-            cls.policies[wrapped_class.__name__] = wrapped_class
-
-            return wrapped_class
-
-        return inner_wrapper
-    
-    def __call__(self, policy, object):
-        feched_policy = self.policies[policy]
-        policy_results = feched_policy.execute(object)
-        
-        return policy_results
-
-
-@Survival.register()
+@Policies.register()
 class RandomMove:
     """ 
 
