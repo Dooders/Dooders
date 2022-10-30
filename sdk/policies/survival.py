@@ -17,7 +17,9 @@ from sdk.base.base_policy import BasePolicy
 
 @Policies.register()
 class RandomMove(BasePolicy):
-    """ 
+    """
+    Given a Dooder object, returns a random location in the objects neighborhood
+    A neighborhood is all surrounding positions, including the current position
 
     """
 
