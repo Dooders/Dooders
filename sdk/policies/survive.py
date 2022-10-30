@@ -13,6 +13,8 @@ class Survive:
   
   
   # random, rule-based, NNs
+  # rule example: any location > 0 energy, move and comsume. If multiple, choose random.
+  # random example: choose any square, move, consume energy if there.
   # maybe new dooders get a product of weights from parents.
   # genetic starting weights, learned weights. get product of that and those weights combine with another dooder during repro
   # genetic weights are a sequence of weights for other activities and policies. all can be contained in single array (with partitions)
