@@ -212,10 +212,19 @@ class Dooder(BaseObject):
     @property
     def neighborhood(self) -> list:
         """
+        Return a list of the dooder's neighborhood locations.
+        """
+        return self.simulation.environment.get_neighborhood(self.position, include_center=True)
+    
+    @property
+    def neighbors(self) -> list:
+        """
         Return a list of cell contents in the dooder's neighborhood.
         """
         neighborhood = self.simulation.environment.get_neighborhood(self.position, include_center=True)
-        return self.simulation.environment.get_cell_list_contents(neighborhood)
+        neighbors = self.simulation.environment.get_cell_list_contents(neighborhood)
+        
+        return [n for n in neighbors if n.unique_id != self.unique_id]
    
 
 # Todo: Create an Effects class (can be temporary or permanent)
