@@ -19,7 +19,8 @@ import ast
 from typing import TYPE_CHECKING, List
 
 from sdk.base.base_information import BaseInformation
-from sdk.utils import Postgres
+# from sdk.utils import Postgres
+from db.main import DB
 from sdk.utils.logger import get_logger
 
 if TYPE_CHECKING:
@@ -68,7 +69,7 @@ class Information(BaseInformation):
     def post_collect(self) -> None:
         cycle_results = self.get_result_dict(self.simulation)['simulation'] 
         
-        Postgres.upload_results(cycle_results)
+        DB.add(cycle_results, 'CycleResults')
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """

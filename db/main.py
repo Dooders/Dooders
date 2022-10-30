@@ -55,8 +55,12 @@ class DB:
         serialized_record = serializer(**record)
         self.session.add(serialized_record)
 
-    def _add_record(self, record):
-        self.session.add(record)
+    def add(self, record: dict, record_type: str):
+        self.session = self.create_session()
+        self.add_record(record, record_type)
+        
+        self.session.commit()
+        self.session.close()
 
     def reset(self):
         self.tear_down()

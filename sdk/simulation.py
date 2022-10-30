@@ -15,7 +15,8 @@ from sdk.config import ExperimentParameters
 from sdk.core import Condition
 from sdk.models.resources import Resources
 from sdk.models.society import Society
-from sdk.utils import postgres as Postgres
+# from sdk.utils import postgres as Postgres
+from db.main import DB
 
 
 class Simulation(BaseSimulation):
@@ -57,10 +58,10 @@ class Simulation(BaseSimulation):
         self.society.generate_seed_population()
 
         self.running = True
-        #! make it take in a list of what to clear
-        Postgres.clear_table('SimulationResults')
-        Postgres.clear_table('DooderResults')
-        Postgres.clear_table('SimulationLogs')
+
+        # Postgres.clear_table('SimulationResults')
+        # Postgres.clear_table('DooderResults')
+        # Postgres.clear_table('SimulationLogs')
         self.information.collect(self)
         
     def step(self) -> None:
@@ -103,12 +104,12 @@ class Simulation(BaseSimulation):
         #! better way to send data to db
         """
         df = self.information.get_dataframe('dooder')
-        Postgres.df_to_db(df, 'DooderResults')
+        DB.df_to_db(df, 'DooderResults')
         # df = self.information.get_dataframe('simulation')
         # Postgres.df_to_db(df, 'SimulationResults')
         logs = self.information.get_log()
         df = pd.DataFrame(logs)
-        Postgres.df_to_db(df, 'SimulationLogs')
+        DB.df_to_db(df, 'SimulationLogs')
 
     def reset(self) -> None:
         """
