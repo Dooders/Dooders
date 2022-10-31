@@ -42,7 +42,7 @@ class BaseObject(ABC):
 
         log_dict = {
             'Scope': scope,
-            'ID': self.unique_id,
+            'UniqueID': self.unique_id,
             'CycleNumber': cycle_number,
             'Granularity': granularity,
             'Message': message

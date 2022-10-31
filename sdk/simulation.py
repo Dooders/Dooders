@@ -104,6 +104,7 @@ class Simulation(BaseSimulation):
         #! better way to send data to db
         """
         df = self.information.get_dataframe('dooder')
+        df['ExperimentID'] = self.experiment_id
         DB.df_to_db(df, 'DooderResults')
         # df = self.information.get_dataframe('simulation')
         # Postgres.df_to_db(df, 'SimulationResults')

@@ -191,7 +191,7 @@ class Dooder(BaseObject):
         Return string of class attributes and genetics.
         """
         #! maybe come up with better formatting
-        return f"ID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}"
+        return f"UniqueID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}"
 
     @property
     def stats(self) -> dict:

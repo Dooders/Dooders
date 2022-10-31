@@ -15,16 +15,16 @@ def get_energy_count(simulation) -> int:
     return simulation.environment.get_object_count('Energy')
 
 
-@Collector.register('DirectionCounts')
-def get_direction_counts(simulation) -> dict:
-    """Return the number of moves in each direction."""
-    dooders = simulation.time.get_objects('Dooder')
+# @Collector.register('DirectionCounts')
+# def get_direction_counts(simulation) -> dict:
+#     """Return the number of moves in each direction."""
+#     dooders = simulation.time.get_objects('Dooder')
 
-    from collections import Counter
-    direction_list = [dooder.direction for dooder in dooders]
-    direction_counts = Counter(direction_list)
+#     from collections import Counter
+#     direction_list = [dooder.direction for dooder in dooders]
+#     direction_counts = Counter(direction_list)
 
-    return dict(direction_counts)
+#     return dict(direction_counts)
 
 
 @Collector.register('TotalDooderEnergySupply')

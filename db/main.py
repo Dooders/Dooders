@@ -18,10 +18,7 @@ class RecordTypes:
     def get(cls, record_type):
         return getattr(cls, record_type)
 
-#! Need to make this work more with classmethods
-#! Maybe decorator to create session then close it
-
-def create_engine():
+def create_connection():
     host = os.environ.get("POSTGRES_HOST")
     database = os.environ.get("POSTGRES_DB")
     user = os.environ.get("POSTGRES_USER")
@@ -31,67 +28,55 @@ def create_engine():
 
     return engine
 
-def session_decorator(func):
+def session(func):
     def wrapper(*args, **kwargs):
-        engine = create_engine()
+        engine = create_connection()
         session = sessionmaker(bind=engine)()
         result = func(*args, session=session, **kwargs)
+        session.commit()
         session.close()
         return result
 
     return wrapper
 
 class DB:
+    # refactor to create sessions more efficiently
+    
+    base = Base
 
-    def __init__(self):
-        self.base = Base
-        self.engine = self.create_engine()
-        self.session = sessionmaker(bind=self.engine)()
-
-    def create_engine(self):
-        host = os.environ.get("POSTGRES_HOST")
-        database = os.environ.get("POSTGRES_DB")
-        user = os.environ.get("POSTGRES_USER")
-        password = os.environ.get("POSTGRES_PASSWORD")
-        engine = create_engine(
-            f"postgresql+psycopg2://{user}:{password}@{host}:5432/{database}")
-
-        return engine
-
-    def df_to_db(self, df, record_type):
+    @classmethod
+    def df_to_db(cls, df, record_type):
         # maybe have a decorator that creates and closes a session
-        df_dict = df.to_dict('rows')
+        df_list = df.to_dict('records')
 
-        self.session = self.create_session()
+        for record in df_list:
+            cls.add_record(record, record_type)
 
-        for record in df_dict.values():
-            self.add_record(record, record_type)
-
-        self.session.commit()
-        self.session.close()
-
-    def add_record(self, record: dict, record_type: str):
-        # have class that when init it returns a desired result. like a vending machine. This class sacrifices itself. send a class and do something based on the type of class. basically encoding then decoding
+    @classmethod
+    @session
+    def add_record(cls, record: dict, record_type: str, *args, **kwargs):
+        session = kwargs.get('session')
         serializer = RecordTypes.get(record_type)
         serialized_record = serializer(**record)
-        self.session.add(serialized_record)
-
-    def add(self, record: dict, record_type: str):
-        self.session = self.create_session()
-        self.add_record(record, record_type)
+        cls._add(session, serialized_record)
         
-        self.session.commit()
-        self.session.close()
+    @classmethod
+    def _add(cls, session, record):
+        session.add(record)
 
-    def reset(self):
-        self.tear_down()
-        self.build_up()
+    @classmethod
+    def reset(cls):
+        cls.engine = create_connection()
+        cls.tear_down()
+        cls.build_up()
         print("DB reset successfully")
 
-    def build_up(self):
-        self.base.metadata.create_all(self.engine)
+    @classmethod
+    def build_up(cls):
+        cls.base.metadata.create_all(cls.engine)
         print("DB Tables created")
 
-    def tear_down(self):
-        self.base.metadata.drop_all(self.engine)
+    @classmethod
+    def tear_down(cls):
+        cls.base.metadata.drop_all(cls.engine)
         print("DB Tables dropped")
