@@ -29,7 +29,7 @@ class Society:
 
     """
 
-    active_dooders = {} #! make easy to return random active dooder
+    active_dooders = {}  # ! make easy to return random active dooder
     graph = nx.Graph()
     total_created_dooders = 0
     graveyard = {}
@@ -51,7 +51,7 @@ class Society:
         """
         Generate seed population
         """
-        
+
         #! make this function to recalculate or find a better way to update SeedPlacement if SeedCount changes
         # if len(self.SeedPlacement) != self.SeedCount:
         #     recompile_strategy(self, SeedStrategy, 'SeedPlacement')

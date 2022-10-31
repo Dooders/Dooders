@@ -7,21 +7,22 @@ initializing the simulation, running the simulation, and displaying the results.
 """
 
 import traceback
+from datetime import datetime
+from statistics import mean
 
 import pandas as pd
+from db.main import DB
 
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.core import Condition
 from sdk.models.resources import Resources
 from sdk.models.society import Society
-# from sdk.utils import postgres as Postgres
-from db.main import DB
 
 
 class Simulation(BaseSimulation):
     """
-    
+
     """
 
     def __init__(
@@ -35,12 +36,12 @@ class Simulation(BaseSimulation):
         Args:
             experiment_id: The id of the experiment this simulation is a part of.
             params: Experiment parameters.
-        
+
         Attributes:
             cycles: The number of cycles that have passed.
         """
         super().__init__(experiment_id, params)
-        
+
         self.resources = Resources(self)
         self.society = Society(self)
         self.running = False
@@ -63,7 +64,7 @@ class Simulation(BaseSimulation):
         # Postgres.clear_table('DooderResults')
         # Postgres.clear_table('SimulationLogs')
         self.information.collect(self)
-        
+
     def step(self) -> None:
         """
         Advance the simulation by one cycle.        
@@ -82,7 +83,7 @@ class Simulation(BaseSimulation):
     def cycle(self) -> None:
         if self.stop_conditions():
             self.step()
-            
+
     def run_simulation(self) -> None:
         """Run the simulation for a specified number of steps."""
         try:
@@ -93,14 +94,14 @@ class Simulation(BaseSimulation):
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
-            
+
         finally:
             self.post_simulation()
-         
+
     def post_simulation(self) -> None:
         """
         Post cycle processes. Like sending data to a postgres db
-        
+
         #! better way to send data to db
         """
         df = self.information.get_dataframe('dooder')
@@ -111,6 +112,8 @@ class Simulation(BaseSimulation):
         logs = self.information.get_log()
         df = pd.DataFrame(logs)
         DB.df_to_db(df, 'SimulationLogs')
+        summary = self.simulation_summary()
+        DB.add_record(summary, 'SimulationSummary')
 
     def reset(self) -> None:
         """
@@ -137,7 +140,7 @@ class Simulation(BaseSimulation):
     def get_results(self) -> dict:
         """
         Get the step results of the simulation.
-        
+
         Returns:
             A dictionary of the results.
         """
@@ -146,7 +149,7 @@ class Simulation(BaseSimulation):
     def generate_id(self) -> int:
         """
         Generate a new id for an object.
-        
+
         Returns:
             A uuid4 short id.
         """
@@ -156,7 +159,7 @@ class Simulation(BaseSimulation):
         #! maybe make a decorator to implement this nicely
         """
         Check if the simulation should stop.
-        
+
         Returns:
             True if the simulation should stop, False otherwise.
         """
@@ -164,17 +167,18 @@ class Simulation(BaseSimulation):
 
         if result:
             self.stop()
-            self.log(1, f"Simulation stopped because of {reason}", 'Simulation')
+            self.log(
+                1, f"Simulation stopped because of {reason}", 'Simulation')
 
             return False
 
         else:
             return True
-        
+
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
         Log a message to the logger.
-        
+
         Args:
             granularity: The granularity of the message. 1 is the least granular.
             message: The message to log.
@@ -190,24 +194,26 @@ class Simulation(BaseSimulation):
         }
 
         final_message = str(log_dict).strip('{}')
-        
+
         self.information.log(final_message, granularity)
-        
+
     def simulation_summary(self):
         return {'ExperimentID': self.experiment_id,
-                   'CycleCount': self.cycles,
-                   'TotalEnergy': self.resources.total_allocated_energy,
-                   'DissipatedEnergy': self.resources.total_dissipated_energy,
-                   'ConsumedEnergy': self.resources.total_consumed_energy,
-                   'StartingDooderCount': self.society.total_created_dooders,
-                   'EndingDooderCount': len(self.society.active_dooders),
-                  }
-    
+                'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
+                'CycleCount': self.cycles,
+                'TotalEnergy': self.resources.total_allocated_energy,
+                'DissipatedEnergy': self.resources.total_dissipated_energy,
+                'ConsumedEnergy': self.resources.total_consumed_energy,
+                'StartingDooderCount': self.society.total_created_dooders,
+                'EndingDooderCount': len(self.society.active_dooders),
+                'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
+                }
+
     @property
     def cycle_number(self) -> int:
         """ 
         Get the current cycle number.
-        
+
         Returns:
             The current cycle number.
         """

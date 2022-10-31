@@ -1,7 +1,7 @@
 from sqlalchemy import Column
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import DateTime, Integer, String, Text
-from sqlalchemy.dialects import postgresql
 
 Base = declarative_base()
 
@@ -11,29 +11,35 @@ class SimulationSummary(Base):
     __tablename__ = "SimulationSummary"
 
     ExperimentID = Column(String(255), primary_key=True)
+    Timestamp = Column(DateTime)
     CycleCount = Column(Integer, nullable=False)
     TotalEnergy = Column(Integer, nullable=False)
     DissipatedEnergy = Column(Integer, nullable=False)
     ConsumedEnergy = Column(Integer, nullable=False)
     StartingDooderCount = Column(Integer, nullable=False)
     EndingDooderCount = Column(Integer, nullable=False)
+    AverageAge = Column(Integer, nullable=False)
 
     def __init__(self,
                  ExperimentID,
+                 Timestamp,
                  CycleCount,
                  TotalEnergy,
                  DissipatedEnergy,
                  ConsumedEnergy,
                  StartingDooderCount,
-                 EndingDooderCount):
+                 EndingDooderCount,
+                 AverageAge):
 
         self.ExperimentID = ExperimentID
         self.CycleCount = CycleCount
+        self.Timestamp = Timestamp
         self.TotalEnergy = TotalEnergy
         self.DissipatedEnergy = DissipatedEnergy
         self.ConsumedEnergy = ConsumedEnergy
         self.StartingDooderCount = StartingDooderCount
         self.EndingDooderCount = EndingDooderCount
+        self.AverageAge = AverageAge
 
 
 class CycleResults(Base):

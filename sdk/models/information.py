@@ -18,16 +18,15 @@ when energy dissipation occurs, failed movements, and failed actions, etc..
 import ast
 from typing import TYPE_CHECKING, List
 
-from sdk.base.base_information import BaseInformation
-# from sdk.utils import Postgres
 from db.main import DB
+from sdk.base.base_information import BaseInformation
 from sdk.utils.logger import get_logger
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
     from sdk.simulation import Simulation
 
-    
+
 #! Add post_collect process to send results to db
 #! Have collectors stored in Collectors class
 #! Have a better way to run functions, scope by scope, with correct args
@@ -65,11 +64,11 @@ class Information(BaseInformation):
         """
         super().collect(simulation)
         self.post_collect()
-        
+
     def post_collect(self) -> None:
-        cycle_results = self.get_result_dict(self.simulation)['simulation'] 
+        cycle_results = self.get_result_dict(self.simulation)['simulation']
         cycle_results['ID'] = self.simulation.generate_id()
-        
+
         DB.add_record(cycle_results, 'CycleResults')
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
@@ -133,20 +132,6 @@ class Information(BaseInformation):
         for line in self.read_log():
             if experiment_id in line:
                 yield line
-                
-    def get_experiment_summary(self) -> dict:
-        
-        experiment_summary = {
-            "ExperimentID": self.experiment_id,
-            "CycleCount": self.simulation.time.time,
-            "TotalEnergy": self.simulation.resources.total_allocated_energy,
-            "DissipatedEnergy": self.simulation.resources.total_dissipated_energy,
-            "ConsumedEnergy": self.simulation.resources.total_consumed_energy,
-            "StartingDooderCount": self.data['simulation']['DooderCount'][0],
-            "EndingDooderCount": self.data['simulation']['DooderCount'][-1],
-        }
-        
-        return experiment_summary
 
     def get_object_history(self, object_id: str) -> List[str]:
         """
@@ -161,7 +146,7 @@ class Information(BaseInformation):
         for line in self.get_experiment_log():
             if object_id in line:
                 print(line)
-                
+
     def get_log(self) -> List[dict]:
         logs = []
         with open(f"logs/log.log", "r") as f:
@@ -170,5 +155,5 @@ class Information(BaseInformation):
                 if self.experiment_id in line:
                     final = line[:-2]
                     logs.append(ast.literal_eval(final))
-                    
+
         return logs
