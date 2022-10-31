@@ -192,6 +192,13 @@ class Simulation(BaseSimulation):
         final_message = str(log_dict).strip('{}')
         
         self.information.log(final_message, granularity)
+        
+    def simulation_summary(self):
+        summary = {'ExperimentID': self.experiment_id,
+                   'CycleCount': self.cycles,
+                  }
+        
+        return summary
     
     @property
     def cycle_number(self) -> int:
