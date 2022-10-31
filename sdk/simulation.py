@@ -194,11 +194,14 @@ class Simulation(BaseSimulation):
         self.information.log(final_message, granularity)
         
     def simulation_summary(self):
-        summary = {'ExperimentID': self.experiment_id,
+        return {'ExperimentID': self.experiment_id,
                    'CycleCount': self.cycles,
+                   'TotalEnergy': self.resources.total_allocated_energy,
+                   'DissipatedEnergy': self.resources.total_dissipated_energy,
+                   'ConsumedEnergy': self.resources.total_consumed_energy,
+                   'StartingDooderCount': self.society.total_created_dooders,
+                   'EndingDooderCount': len(self.society.active_dooders),
                   }
-        
-        return summary
     
     @property
     def cycle_number(self) -> int:
