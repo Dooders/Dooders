@@ -32,6 +32,29 @@ class RandomMove(BasePolicy):
         random_cell = choice(neighborhood)
         
         return random_cell
+    
+    
+@Policies.register()
+class RuleBased(BasePolicy):
+    """
+    Given a Dooder object, returns a random location in the objects neighborhood that has energy.
+    A neighborhood is all surrounding positions, including the current position
+
+    """
+
+    @classmethod
+    def execute(self, dooder) -> tuple:
+        neighbors = dooder.neighbors
+        energy = [n for n in neighbors if is isinstance(obj, Energy)]
+        
+        if energy:
+            energy_positions = [e.position for e in energy]
+            random_cell = choice(energy_positions)
+            
+        else:
+            random_cell = dooder.position
+
+        return random_cell
 
     # random, rule-based, NNs
     # rule example: any location > 0 energy, move and comsume. If multiple, choose random.
