@@ -16,7 +16,7 @@ class Experiment:
 
     """
 
-    def __init__(self, parameters: ExperimentParameters):
+    def __init__(self, parameters: ExperimentParameters, send_to_db=True):
         """
         Initializes an experiment.
 
@@ -32,7 +32,7 @@ class Experiment:
         self.seed = ShortID()
         self.parameters = parameters
         self.experiment_id = self.seed.uuid()
-        self.simulation = Simulation(self.experiment_id, self.parameters)
+        self.simulation = Simulation(self.experiment_id, self.parameters, send_to_db)
 
     def setup_experiment(self) -> None:
         """ 
