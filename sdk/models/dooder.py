@@ -157,7 +157,9 @@ class Dooder(BaseObject):
                 pass
 
             if Fate.ask_fate(self.MoveProbability):  # if true, decide where to move
-                origin, destination = self.choose_random_move()
+                # origin, destination = self.choose_random_move()
+                destination = self.simulation.policies('RandomMove', self)
+                origin = self.position
 
                 if origin != None:
                     new_direction = get_direction(origin, destination)
