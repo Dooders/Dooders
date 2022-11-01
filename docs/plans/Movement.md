@@ -22,4 +22,13 @@ Develop and test different movement possibilities for a Dooder
 
 ## Details
 
+### RandomMove
+This policy will take a list of all adjacent locations and will choose a random location 
+
+### RuleBased
+This policy will identify all neighboring objects and creates a list of locations with energy. Then a random locstion is chosen, if there are no neighboring energy objects, the Dooder will not move.
+
+### Simple Artificial Neural Network
+
+
 ## Thoughts
