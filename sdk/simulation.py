@@ -15,7 +15,7 @@ from db.main import DB
 
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
-from sdk.core import Condition
+from sdk.core import Condition, Policies
 from sdk.models.resources import Resources
 from sdk.models.society import Society
 
@@ -44,6 +44,7 @@ class Simulation(BaseSimulation):
 
         self.resources = Resources(self)
         self.society = Society(self)
+        self.policies = Policies()
         self.running = False
         self.cycles: int = 0
 
