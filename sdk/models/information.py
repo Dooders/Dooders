@@ -68,8 +68,9 @@ class Information(BaseInformation):
     def post_collect(self) -> None:
         cycle_results = self.get_result_dict(self.simulation)['simulation']
         cycle_results['ID'] = self.simulation.generate_id()
-
-        DB.add_record(cycle_results, 'CycleResults')
+        
+        if self.simulation.send_to_db:
+            DB.add_record(cycle_results, 'CycleResults')
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """
