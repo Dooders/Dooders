@@ -36,7 +36,7 @@ class RuleBased(BasePolicy):
     @classmethod
     def execute(self, dooder) -> tuple:
         neighbors = dooder.neighbors
-        energy = [n for n in neighbors if is isinstance(obj, Energy)]
+        energy = [n for n in neighbors if isinstance(n, Energy)]
         
         if energy:
             energy_positions = [e.position for e in energy]
