@@ -8,12 +8,6 @@ from sdk.models.energy import Energy
 from sdk.core.policies import Policies
 from sdk.base.base_policy import BasePolicy
 
-    # input: needed data, dooder, goal
-    # output: action and eval?
-    # plugin like
-    # get data from Information? -> apply policy to data and goal -> execute action or "recommend" action?
-    # should policy just recomemd and not do execution? How to train then? policy waits for result? can i async a task that only continues if something happens?
-
 
 @Policies.register()
 class RandomMove(BasePolicy):
@@ -22,9 +16,6 @@ class RandomMove(BasePolicy):
     A neighborhood is all surrounding positions, including the current position
 
     """
-
-    __query__ = {'type': 'environment',
-                 'information': 'neighborhood'}
 
     @classmethod
     def execute(self, dooder) -> tuple:
@@ -57,8 +48,6 @@ class RuleBased(BasePolicy):
         return random_cell
 
     # random, rule-based, NNs
-    # rule example: any location > 0 energy, move and comsume. If multiple, choose random.
-    # random example: choose any square, move, consume energy if there.
     # maybe new dooders get a product of weights from parents.
     # genetic starting weights, learned weights. get product of that and those weights combine with another dooder during repro
     # genetic weights are a sequence of weights for other activities and policies. all can be contained in single array (with partitions)
