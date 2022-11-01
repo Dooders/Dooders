@@ -28,7 +28,8 @@ class Simulation(BaseSimulation):
     def __init__(
             self,
             experiment_id: int,
-            params: ExperimentParameters) -> None:
+            params: ExperimentParameters,
+            send_to_db = True) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
         many different models
@@ -46,6 +47,7 @@ class Simulation(BaseSimulation):
         self.society = Society(self)
         self.policies = Policies()
         self.running = False
+        self.send_to_db = send_to_db
         self.cycles: int = 0
 
     def setup(self) -> None:
@@ -97,7 +99,8 @@ class Simulation(BaseSimulation):
             print('Simulation failed')
 
         finally:
-            self.post_simulation()
+            if self.send_to_sb:
+                self.post_simulation()
 
     def post_simulation(self) -> None:
         """
