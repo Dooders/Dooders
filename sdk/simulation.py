@@ -27,7 +27,7 @@ class Simulation(BaseSimulation):
 
     def __init__(
             self,
-            experiment_id: int,
+            simulation_id: int,
             params: ExperimentParameters,
             send_to_db = True,
             details = None) -> None:
@@ -42,7 +42,7 @@ class Simulation(BaseSimulation):
         Attributes:
             cycles: The number of cycles that have passed.
         """
-        super().__init__(experiment_id, params)
+        super().__init__(simulation_id, params)
 
         self.resources = Resources(self)
         self.society = Society(self)
@@ -111,7 +111,7 @@ class Simulation(BaseSimulation):
         #! better way to send data to db
         """
         df = self.information.get_dataframe('dooder')
-        df['ExperimentID'] = self.experiment_id
+        df['SimulationID'] = self.simulation_id
         DB.df_to_db(df, 'DooderResults')
         # df = self.information.get_dataframe('simulation')
         # Postgres.df_to_db(df, 'SimulationResults')
@@ -128,7 +128,7 @@ class Simulation(BaseSimulation):
 
         This is useful for resetting the simulation after a parameter change.
         """
-        self.__init__(self.experiment_id, self.params)
+        self.__init__(self.simulation_id, self.params)
 
     def stop(self) -> None:
         """Stop the simulation."""
@@ -205,7 +205,7 @@ class Simulation(BaseSimulation):
         self.information.log(final_message, granularity)
 
     def simulation_summary(self):
-        return {'ExperimentID': self.experiment_id,
+        return {'SimulationID': self.simulation_id,
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
                 'CycleCount': self.cycles,
                 'TotalEnergy': self.resources.total_allocated_energy,
