@@ -19,6 +19,7 @@ class SimulationSummary(Base):
     StartingDooderCount = Column(Integer, nullable=False)
     EndingDooderCount = Column(Integer, nullable=False)
     AverageAge = Column(Integer, nullable=False)
+    Details = Column(postgresql.JSONB, nullable=False)
 
     def __init__(self,
                  ExperimentID,
@@ -29,7 +30,8 @@ class SimulationSummary(Base):
                  ConsumedEnergy,
                  StartingDooderCount,
                  EndingDooderCount,
-                 AverageAge):
+                 AverageAge,
+                 Details):
 
         self.ExperimentID = ExperimentID
         self.CycleCount = CycleCount
@@ -40,6 +42,7 @@ class SimulationSummary(Base):
         self.StartingDooderCount = StartingDooderCount
         self.EndingDooderCount = EndingDooderCount
         self.AverageAge = AverageAge
+        self.Details = Details
 
 
 class CycleResults(Base):

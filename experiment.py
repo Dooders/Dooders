@@ -15,8 +15,10 @@ class Experiment:
     Class to manage the overall experiment and each simulation.
 
     """
+    
+    results = {}
 
-    def __init__(self, parameters: ExperimentParameters, send_to_db=True):
+    def __init__(self, parameters: ExperimentParameters, send_to_db=True, details=None) -> None:
         """
         Initializes an experiment.
 
@@ -32,19 +34,34 @@ class Experiment:
         self.seed = ShortID()
         self.parameters = parameters
         self.experiment_id = self.seed.uuid()
-        self.simulation = Simulation(self.experiment_id, self.parameters, send_to_db)
-
-    def setup_experiment(self) -> None:
+        self.send_to_db = send_to_db
+        self.details = details
+        
+    def simulate(self, n: int = 1) -> None:
         """ 
-        Setup the experiment.    
-        """
-        self.simulation.setup()
+        Simulate n cycles.
 
-    def execute_cycle(self) -> None:
-        """  
-        Execute a cycle. 
+        Args:
+            n: The number of cycles to simulate.
         """
-        self.simulation.cycle()
+        for i in range(n):
+            simulation_id = self.seed.uuid()
+            self.simulation = Simulation(simulation_id, self.parameters, self.send_to_db, self.details)
+            self.simulation.run_simulation()
+            self.results[i] = self.simulation.simulation_summary()
+    
+    
+    # def setup_experiment(self) -> None:
+    #     """ 
+    #     Setup the experiment.    
+    #     """
+    #     self.simulation.setup()
+
+    # def execute_cycle(self) -> None:
+    #     """  
+    #     Execute a cycle. 
+    #     """
+    #     self.simulation.cycle()
 
     def get_log(self) -> List[str]:
         """ 

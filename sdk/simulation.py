@@ -29,7 +29,8 @@ class Simulation(BaseSimulation):
             self,
             experiment_id: int,
             params: ExperimentParameters,
-            send_to_db = True) -> None:
+            send_to_db = True,
+            details = None) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
         many different models
@@ -48,6 +49,7 @@ class Simulation(BaseSimulation):
         self.policies = Policies()
         self.running = False
         self.send_to_db = send_to_db
+        self.details = details
         self.cycles: int = 0
 
     def setup(self) -> None:
@@ -117,6 +119,7 @@ class Simulation(BaseSimulation):
         df = pd.DataFrame(logs)
         DB.df_to_db(df, 'SimulationLogs')
         summary = self.simulation_summary()
+        summary['Details'] = self.details
         DB.add_record(summary, 'SimulationSummary')
 
     def reset(self) -> None:
