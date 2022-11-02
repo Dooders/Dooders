@@ -41,11 +41,11 @@ class Information(BaseInformation):
         Create a new Information component.
 
         Args:
-            experiment_id: The unique ID of the experiment.
+            simulation_id: The unique ID of the experiment.
             params: The parameters of the experiment.
 
         Attributes:
-            experiment_id: The unique ID of the experiment.
+            simulation_id: The unique ID of the experiment.
             logger: The logger for the experiment.
             granularity: The granularity of the experiment.
         """
@@ -121,7 +121,7 @@ class Information(BaseInformation):
         Get the log for a given experiment.
 
         Args:
-            experiment_id: The id of the experiment.
+            simulation_id: The id of the experiment.
 
         Yields:
             A list of the lines in the log file.
@@ -153,7 +153,7 @@ class Information(BaseInformation):
         with open(f"logs/log.log", "r") as f:
             lines = f.readlines()
             for line in lines:
-                if self.experiment_id in line:
+                if self.simulation_id in line:
                     final = line[:-2]
                     logs.append(ast.literal_eval(final))
 
