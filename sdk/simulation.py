@@ -99,7 +99,7 @@ class Simulation(BaseSimulation):
             print('Simulation failed')
 
         finally:
-            if self.send_to_sb:
+            if self.send_to_db:
                 self.post_simulation()
 
     def post_simulation(self) -> None:

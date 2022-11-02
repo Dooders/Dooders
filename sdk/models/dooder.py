@@ -130,7 +130,8 @@ class Dooder(BaseObject):
         """
         #! need to double check doing this twice is a good idea or necessary
         if self.death_check():
-            print("{} died in its sleep".format(self.unique_id))
+            # print("{} died in its sleep".format(self.unique_id))
+            pass
 
         else:
             self.age += 1
@@ -186,7 +187,8 @@ class Dooder(BaseObject):
             self.direction = direction
 
             if self.death_check():
-                print('{} died during its cycle'.format(self.unique_id))
+                # print('{} died during its cycle'.format(self.unique_id))
+                pass
 
     def __str__(self) -> str:
         """
