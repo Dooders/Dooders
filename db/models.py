@@ -10,7 +10,8 @@ class SimulationSummary(Base):
 
     __tablename__ = "SimulationSummary"
 
-    ExperimentID = Column(String(255), primary_key=True)
+    ExperimentID = Column(String(255), nullable=False)
+    SimulationID = Column(String(255), primary_key=True)
     Timestamp = Column(DateTime)
     CycleCount = Column(Integer, nullable=False)
     TotalEnergy = Column(Integer, nullable=False)
@@ -23,6 +24,7 @@ class SimulationSummary(Base):
 
     def __init__(self,
                  ExperimentID,
+                 SimulationID,
                  Timestamp,
                  CycleCount,
                  TotalEnergy,
@@ -34,6 +36,7 @@ class SimulationSummary(Base):
                  Details):
 
         self.ExperimentID = ExperimentID
+        self.SimulationID = SimulationID
         self.CycleCount = CycleCount
         self.Timestamp = Timestamp
         self.TotalEnergy = TotalEnergy
@@ -50,7 +53,7 @@ class CycleResults(Base):
     __tablename__ = "CycleResults"
 
     ID = Column(Integer, primary_key=True, autoincrement=True)
-    ExperimentID = Column(String(255), nullable=False)
+    SimulationID = Column(String(255), nullable=False)
     CycleNumber = Column(Integer, nullable=False)
     DooderCount = Column(Integer, nullable=False)
     EnergyCount = Column(Integer, nullable=False)
@@ -59,14 +62,14 @@ class CycleResults(Base):
 
     def __init__(self,
                  ID,
-                 ExperimentID,
+                 SimulationID,
                  CycleNumber,
                  DooderCount,
                  EnergyCount,
                  TotalDooderEnergySupply,
                  AverageEnergyAge):
 
-        self.ExperimentID = ExperimentID
+        self.SimulationID = SimulationID
         self.CycleNumber = CycleNumber
         self.DooderCount = DooderCount
         self.EnergyCount = EnergyCount
@@ -79,7 +82,7 @@ class DooderResults(Base):
     __tablename__ = "DooderResults"
 
     ID = Column(Integer, primary_key=True, autoincrement=True)
-    ExperimentID = Column(String(255))
+    SimulationID = Column(String(255))
     UniqueID = Column(String(255), primary_key=True)
     CycleNumber = Column(Integer, nullable=False)
     Position = Column(String(255), nullable=False)
@@ -88,7 +91,7 @@ class DooderResults(Base):
     Age = Column(Integer, nullable=False)
 
     def __init__(self,
-                 ExperimentID,
+                 SimulationID,
                  UniqueID,
                  CycleNumber,
                  Position,
@@ -96,7 +99,7 @@ class DooderResults(Base):
                  Direction,
                  Age):
 
-        self.ExperimentID = ExperimentID
+        self.SimulationID = SimulationID
         self.UniqueID = UniqueID
         self.CycleNumber = CycleNumber
         self.Position = Position
@@ -110,7 +113,7 @@ class SimulationLogs(Base):
     __tablename__ = "SimulationLogs"
 
     ID = Column(Integer, primary_key=True, autoincrement=True)
-    ExperimentID = Column(String(255), nullable=False)
+    SimulationID = Column(String(255), nullable=False)
     Scope = Column(String(255), nullable=False)
     UniqueID = Column(String(255), nullable=False)
     CycleNumber = Column(Integer, nullable=False)
@@ -119,7 +122,7 @@ class SimulationLogs(Base):
     Timestamp = Column(String(255), nullable=False)
 
     def __init__(self,
-                 ExperimentID,
+                 SimulationID,
                  Scope,
                  UniqueID,
                  CycleNumber,
@@ -127,7 +130,7 @@ class SimulationLogs(Base):
                  Message,
                  Timestamp):
 
-        self.ExperimentID = ExperimentID
+        self.SimulationID = SimulationID
         self.Scope = Scope
         self.UniqueID = UniqueID
         self.CycleNumber = CycleNumber
