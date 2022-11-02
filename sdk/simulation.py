@@ -27,7 +27,8 @@ class Simulation(BaseSimulation):
 
     def __init__(
             self,
-            simulation_id: int,
+            simulation_id: str,
+            experiment_id: str,
             params: ExperimentParameters,
             send_to_db = True,
             details = None) -> None:
@@ -42,7 +43,7 @@ class Simulation(BaseSimulation):
         Attributes:
             cycles: The number of cycles that have passed.
         """
-        super().__init__(simulation_id, params)
+        super().__init__(simulation_id, experiment_id, params)
 
         self.resources = Resources(self)
         self.society = Society(self)
@@ -120,6 +121,7 @@ class Simulation(BaseSimulation):
         DB.df_to_db(df, 'SimulationLogs')
         summary = self.simulation_summary()
         summary['Details'] = self.details
+        summary['ExperimentID'] = self.experiment_id
         DB.add_record(summary, 'SimulationSummary')
 
     def reset(self) -> None:

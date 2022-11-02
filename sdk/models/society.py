@@ -44,6 +44,8 @@ class Society:
             SeedStrategy (dict): strategy to use for seed dooders
 
         """
+        self.active_dooders = {}
+        self.graveyard = {}
         self.simulation = simulation
         self.seed = compile_strategy(self, SeedStrategy)
 

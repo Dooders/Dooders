@@ -14,7 +14,7 @@ class BaseSimulation(ABC):
     """ 
     """
 
-    def __init__(self, simulation_id: int, params: ExperimentParameters):
+    def __init__(self, simulation_id: str, experiment_id: str, params: ExperimentParameters):
         """ 
         Args:
             experiment_id: Unique ID for the experiment
@@ -29,6 +29,7 @@ class BaseSimulation(ABC):
             components: Dictionary of components for the simulation
         """
         self.simulation_id = simulation_id
+        self.experiment_id = experiment_id
         self.random = random
         self.params = ExperimentParameters.parse_obj(params)
         self.components = [] #! this will house all the components. Makes it easier to abstract

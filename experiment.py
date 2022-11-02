@@ -46,9 +46,10 @@ class Experiment:
         """
         for i in range(n):
             simulation_id = self.seed.uuid()
-            self.simulation = Simulation(simulation_id, self.parameters, self.send_to_db, self.details)
+            self.simulation = Simulation(simulation_id, self.experiment_id, self.parameters, self.send_to_db, self.details)
             self.simulation.run_simulation()
             self.results[i] = self.simulation.simulation_summary()
+            del self.simulation
     
     
     # def setup_experiment(self) -> None:
