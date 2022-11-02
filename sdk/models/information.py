@@ -53,7 +53,7 @@ class Information(BaseInformation):
         self.logger = get_logger()
         self.granularity = 2  # ! Fix this
         self.simulation = simulation
-        self.experiment_id = simulation.experiment_id
+        self.simulation_id = simulation.simulation_id
 
     def collect(self, simulation: 'Simulation') -> None:
         """
@@ -87,7 +87,7 @@ class Information(BaseInformation):
         for scope, values in self.data.items():
             result_dict[scope] = {}
             result_dict[scope]['CycleNumber'] = simulation.time.time
-            result_dict[scope]['ExperimentID'] = self.experiment_id
+            result_dict[scope]['SimulationID'] = self.simulation_id
             for column, value in values.items():
                 result_dict[scope][column] = value[-1]  # get the last value
 
@@ -102,7 +102,7 @@ class Information(BaseInformation):
             granularity: The granularity of the message.
         """
         if granularity <= self.granularity:  # environment variable???
-            message_string = f"'ExperimentID':'{self.experiment_id}', {message}"
+            message_string = f"'SimulationID':'{self.simulation_id}', {message}"
             self.logger.info(message_string)
 
     def read_log(self) -> List[str]:
@@ -116,7 +116,7 @@ class Information(BaseInformation):
             for line in f:
                 yield line
 
-    def get_experiment_log(self, experiment_id: 'UniqueID' = 'Current') -> List[str]:
+    def get_experiment_log(self, simulation_id: 'UniqueID' = 'Current') -> List[str]:
         """
         Get the log for a given experiment.
 
@@ -127,11 +127,11 @@ class Information(BaseInformation):
             A list of the lines in the log file.
         """
 
-        if experiment_id == 'Current':
-            experiment_id = self.experiment_id
+        if simulation_id == 'Current':
+            simulation_id = self.simulation_id
 
         for line in self.read_log():
-            if experiment_id in line:
+            if simulation_id in line:
                 yield line
 
     def get_object_history(self, object_id: str) -> List[str]:
