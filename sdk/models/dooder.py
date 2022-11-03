@@ -157,32 +157,32 @@ class Dooder(BaseObject):
             else:  # No energy to consume
                 pass
 
-            if Fate.ask_fate(self.MoveProbability):  # if true, decide where to move
+            # if Fate.ask_fate(self.MoveProbability):  # if true, decide where to move
                 # origin, destination = self.choose_random_move()
-                destination = self.simulation.policies('RuleBased', self)
-                origin = self.position
+            destination = self.simulation.policies('RuleBased', self)
+            origin = self.position
 
-                if origin != None:
-                    new_direction = get_direction(origin, destination)
-                else:
-                    new_direction = get_direction(self.position, destination)
-
-                # if true, successfully move
-                if Fate.ask_fate(self.MoveSuccessProbability):
-                    self.simulation.environment.move_object(self, destination)
-                    self.energy_supply -= 1
-                    direction = new_direction
-                    self.position = destination
-                    self.log(
-                        granularity=2, message=f"Moved {direction} from {origin} to {destination}", scope='Dooder')
-                else:
-                    self.energy_supply -= 1
-                    self.log(
-                        granularity=3, message=f"Failed to move {direction} from {origin} to {destination}", scope='Dooder')
+            if origin != None:
+                new_direction = get_direction(origin, destination)
             else:
-                direction = 'None'
-                self.log(
-                    granularity=3, message=f"Skipped move", scope='Dooder')
+                new_direction = get_direction(self.position, destination)
+
+            # if true, successfully move
+            # if Fate.ask_fate(self.MoveSuccessProbability):
+            self.simulation.environment.move_object(self, destination)
+            self.energy_supply -= 1
+            direction = new_direction
+            self.position = destination
+            self.log(
+                granularity=2, message=f"Moved {direction} from {origin} to {destination}", scope='Dooder')
+            # else:
+            #     self.energy_supply -= 1
+            #     self.log(
+            #         granularity=3, message=f"Failed to move {direction} from {origin} to {destination}", scope='Dooder')
+            # else:
+            #     direction = 'None'
+            #     self.log(
+            #         granularity=3, message=f"Skipped move", scope='Dooder')
 
             self.direction = direction
 

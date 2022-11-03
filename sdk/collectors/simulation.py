@@ -1,5 +1,7 @@
 from statistics import mean
 
+import pandas as pd
+
 from sdk.core.collector import Collector
 
 
@@ -52,4 +54,13 @@ def get_average_energy_age(simulation) -> float:
 
 @Collector.register('AverageGenetics')
 def get_average_genetics(simulation):
-    pass
+    dooders = simulation.society.active_dooders
+    
+    genetic_list = []
+
+    for dooder in dooders.values():
+        genetic_list.append(dooder.genetics)
+        
+    df = pd.DataFrame.from_dict(genetic_list)
+    
+    return dict(df.mean())

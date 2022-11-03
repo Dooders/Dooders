@@ -1,8 +1,8 @@
 ---
 SeedCount:
   Type: generation
-  Func: uniform_distribution
-  Args: { "min": 10, "max": 15 }
+  Func: fixed_value
+  Args: { "value": 50 }
 SeedPlacement:
   Type: placement
   Func: random_location
