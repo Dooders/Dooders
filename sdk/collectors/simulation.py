@@ -49,3 +49,7 @@ def get_average_energy_age(simulation) -> float:
         return 0
 
     return round(mean(energy_age), 2)
+
+@Collector.register('AverageGenetics')
+def get_average_genetics(simulation):
+    pass
