@@ -1,6 +1,15 @@
 from typing import Tuple
 
-Position = Tuple[int,int]
-Location = Tuple[int,int]
-Cycle = int
-UniqueID = str
+PositionType = Tuple[int,int]
+LocationType = Tuple[int,int]
+CycleType = int
+IDType = str
+
+
+# maybe extend tuple type
+class Location:
+  x: int
+  y: int
+  objects: dict
+    
+ 
