@@ -4,9 +4,9 @@
 from random import choice
 from typing import Callable
 
-from sdk.models.energy import Energy
-from sdk.core.policies import Policies
 from sdk.base.base_policy import BasePolicy
+from sdk.core.policies import Policies
+from sdk.models.energy import Energy
 
 
 @Policies.register()
@@ -46,7 +46,17 @@ class RuleBased(BasePolicy):
             random_cell = dooder.position
 
         return random_cell
-
+    
+    
+@Policies.register()
+class NeuralNetwork(BasePolicy):
+    
+    @classmethod
+    def execute(self, dooder) -> tuple:
+        neighbors = dooder.neighbors
+        energy_list = [1 if isinstance(n, Energy) else 0 for n in neighbors]
+        
+        
     # random, rule-based, NNs
     # maybe new dooders get a product of weights from parents.
     # genetic starting weights, learned weights. get product of that and those weights combine with another dooder during repro
