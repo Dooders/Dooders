@@ -23,8 +23,8 @@ class Dooder(BaseObject):
     """
 
     def __init__(self,
-                 unique_id: 'UniqueID',
-                 position: 'Position',
+                 unique_id,
+                 position,
                  simulation: 'BaseSimulation') -> None:
         """
         Create a new Dooder object.
@@ -80,11 +80,10 @@ class Dooder(BaseObject):
                 self.hunger = 0
             # elif self.hunger <= 0:
             #     self.hunger += -1
-            self.simulation.environment.remove_object(food)
             self.log(
                 granularity=2, message=f"Consumed energy: {food.unique_id}", scope='Dooder')
         else:
-            hunger += 1
+            self.hunger += 1
 
     def kill(self, dooder: BaseObject) -> None:
         """ 
@@ -147,6 +146,7 @@ class Dooder(BaseObject):
 
             destination = self.simulation.policies('RuleBased', self)
             self.move(destination)
+            self.consume()
 
             #! make hunger death based on days without food. Once in that state, they die. food starts the clock again
 
