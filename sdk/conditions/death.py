@@ -17,7 +17,7 @@ def starvation(dooder: 'Dooder') -> bool:
     """
 
     # The higher the dooder's hunger, the more likely they are to starve
-    probabilities = [0, 1, 5, 10, 20, 30, 50]
+    probabilities = [0, 1, 2, 3, 20, 30, 50]
     
     
 
