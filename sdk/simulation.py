@@ -215,7 +215,7 @@ class Simulation(BaseSimulation):
                 'ConsumedEnergy': self.resources.total_consumed_energy,
                 'StartingDooderCount': self.society.total_created_dooders,
                 'EndingDooderCount': len(self.society.active_dooders),
-                'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
+                # 'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
                 }
 
     @property

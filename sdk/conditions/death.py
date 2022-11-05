@@ -4,7 +4,7 @@
 
 from typing import TYPE_CHECKING
 
-from sdk.core import Condition
+from sdk.core import Condition, Fate
 
 if TYPE_CHECKING:
     from sdk.core import Dooder
@@ -12,19 +12,14 @@ if TYPE_CHECKING:
 
 @Condition.register('starvation')
 def starvation(dooder: 'Dooder') -> bool:
-    #! maybe have a process that you supply attribute and default value, and if it doesnt exsist in the dooder object, it creates it
-    # create a days hungry attribute if it doesn't exist
-    if not hasattr(dooder, 'days_hungry'):
-        dooder.days_hungry = 0
+    """
+    Check if the dooder is starving
+    """
 
-    # if the dooder is hungry, increment the days hungry attribute
-    if dooder.energy_supply <= 0:
-        dooder.days_hungry += 1
-    else:
-        dooder.days_hungry = 0
+    # The higher the dooder's hunger, the more likely they are to starve
+    probabilities = [0, 0.05, 0.1, 0.2, 0.5, 0.75, 0.99]
 
-    # if the dooder has been hungry for 3 days, return true
-    if dooder.days_hungry >= 3:
-        return True
+    if dooder.hunger >= 1:
+        return Fate.ask_fate(probabilities[dooder.hunger])
     else:
         return False

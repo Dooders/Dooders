@@ -8,8 +8,6 @@ from typing import TYPE_CHECKING
 
 from sdk.base.base_object import BaseObject
 from sdk.core import Condition
-from sdk.core.data import Position, UniqueID
-from sdk.core.fate import Fate
 from sdk.models.energy import Energy
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition

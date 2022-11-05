@@ -14,7 +14,6 @@ from typing import TYPE_CHECKING
 
 import networkx as nx
 from sdk.core import Strategy, compile_strategy
-from sdk.core.data import Position, UniqueID
 from sdk.models import Dooder
 
 if TYPE_CHECKING:
@@ -61,7 +60,7 @@ class Society:
         for position in self.SeedPlacement:
             self.generate_dooder(position)
 
-    def generate_dooder(self, position: 'Position') -> None:
+    def generate_dooder(self, position) -> None:
         """
         Generate a new dooder
 
@@ -72,7 +71,7 @@ class Society:
                         self.simulation)
         self.place_dooder(dooder, position)
 
-    def place_dooder(self, dooder: 'Dooder', position: 'Position') -> None:
+    def place_dooder(self, dooder: 'Dooder', position) -> None:
         """
         Place dooder in environment
 
@@ -102,7 +101,7 @@ class Society:
         self.simulation.time.remove(dooder)
         self.simulation.environment.remove_object(dooder)
 
-    def get_dooder(self, dooder_id: 'UniqueID') -> 'Dooder':
+    def get_dooder(self) -> 'Dooder':
         """
         Get dooder based on the ID
 

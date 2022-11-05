@@ -29,16 +29,16 @@ def get_energy_count(simulation) -> int:
 #     return dict(direction_counts)
 
 
-@Collector.register('TotalDooderEnergySupply')
-def get_total_energy_supply(simulation) -> int:
-    """ Return the total energy supply of all dooders in the simulation. """
-    energy_supply = [
-        dooder.energy_supply for dooder in simulation.time.get_objects('Dooder')]
+# @Collector.register('TotalDooderEnergySupply')
+# def get_total_energy_supply(simulation) -> int:
+#     """ Return the total energy supply of all dooders in the simulation. """
+#     energy_supply = [
+#         dooder.energy_supply for dooder in simulation.time.get_objects('Dooder')]
 
-    if len(energy_supply) == 0:
-        return 0
+#     if len(energy_supply) == 0:
+#         return 0
 
-    return sum(energy_supply)
+#     return sum(energy_supply)
 
 
 @Collector.register('AverageEnergyAge')
