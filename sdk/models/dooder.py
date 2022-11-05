@@ -41,7 +41,7 @@ class Dooder(BaseObject):
             unique_id: see Args
             position: see Args
             simulation: see Args
-            energy_supply: The energy level of the dooder.
+            hunger: Hunger level of the dooder.
             direction: The direction the dooder is facing.
             moore: The Moore neighborhood of the dooder.
             cognition: The cognition of the dooder.
@@ -53,22 +53,41 @@ class Dooder(BaseObject):
         self.genetics = Genetics.compile_genetics(self)
         self.behavior = self.genetics.copy()
         self.cognition = Cognition()
-        self.energy_supply = self.StartingEnergySupply
+        self.hunger = 0
         self.direction = 'Origin'
         self.moore = True
         self.age = 0
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
-    
     def move(self, position):
-        pass
-    
+        if position == self.position:
+            pass
+        else:
+            self.direction = get_direction(self.position, position)
+            self.simulation.environment.move_object(self, position)
+            self.position = position
+            self.log(
+                granularity=2, message=f"Moved {self.direction} from {self.position} to {position}", scope='Dooder')
+
     def consume(self):
-        pass
-    
-    
-    
+        cell_contents = self.simulation.environment.get_cell_list_contents(
+            self.position)
+        energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
+
+        if energy:
+            food = energy[0]
+            food.consume()
+            if self.hunger > 0:
+                self.hunger = 0
+            # elif self.hunger <= 0:
+            #     self.hunger += -1
+            self.simulation.environment.remove_object(food)
+            self.log(
+                granularity=2, message=f"Consumed energy: {food.unique_id}", scope='Dooder')
+        else:
+            hunger += 1
+
     def kill(self, dooder: BaseObject) -> None:
         """ 
         Kill a dooder. 
@@ -108,23 +127,6 @@ class Dooder(BaseObject):
         else:
             return False
 
-    def choose_random_move(self) -> Position:
-        """
-        Step one cell in any allowable direction.
-
-        Returns:
-            origin: The origin of the move.
-            destination: The destination after the move.
-        """
-        # Pick the next cell from the adjacent cells.
-        possible_moves = self.simulation.environment.get_neighborhood(
-            self.position, self.moore, True)
-
-        origin = self.position
-        destination = self.random.choice(possible_moves)
-
-        return origin, destination
-
     def step(self) -> None:
         """
         Step flow for a dooder.
@@ -144,56 +146,11 @@ class Dooder(BaseObject):
 
         else:
             self.age += 1
-            direction = 'None'
-            cell_contents = self.simulation.environment.get_cell_list_contents(
-                self.position)
-            energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
-            neighbors = [
-                obj for obj in cell_contents if isinstance(obj, Dooder)]
 
-            #! clean up this to log when first if statement is true
-            if isinstance(energy, Energy):
-                self.energy_supply += 1
-                energy[0].consume()
-
-            elif len(energy) == 1:
-                self.energy_supply += 1
-                e = energy[0]
-                e.consume()
-                self.log(
-                    granularity=2, message=f"Consumed energy: {e.unique_id}", scope='Dooder')
-
-            else:  # No energy to consume
-                pass
-
-            # if Fate.ask_fate(self.MoveProbability):  # if true, decide where to move
-                # origin, destination = self.choose_random_move()
             destination = self.simulation.policies('RuleBased', self)
-            origin = self.position
+            self.move(destination)
 
-            if origin != None:
-                new_direction = get_direction(origin, destination)
-            else:
-                new_direction = get_direction(self.position, destination)
-
-            # if true, successfully move
-            # if Fate.ask_fate(self.MoveSuccessProbability):
-            self.simulation.environment.move_object(self, destination)
-            self.energy_supply -= 1 #! make hunger death based on days without food. Once im that state, they die. food starts the clock again
-            direction = new_direction
-            self.position = destination
-            self.log(
-                granularity=2, message=f"Moved {direction} from {origin} to {destination}", scope='Dooder')
-            # else:
-            #     self.energy_supply -= 1
-            #     self.log(
-            #         granularity=3, message=f"Failed to move {direction} from {origin} to {destination}", scope='Dooder')
-            # else:
-            #     direction = 'None'
-            #     self.log(
-            #         granularity=3, message=f"Skipped move", scope='Dooder')
-
-            self.direction = direction
+            #! make hunger death based on days without food. Once in that state, they die. food starts the clock again
 
             if self.death_check():
                 # print('{} died during its cycle'.format(self.unique_id))
@@ -204,7 +161,7 @@ class Dooder(BaseObject):
         Return string of class attributes and genetics.
         """
         #! maybe come up with better formatting
-        return f"UniqueID: {self.unique_id} \n Position: {self.position} \n Energy: {self.energy_supply} \n Age: {self.age} \n Genetics: {self.genetics}"
+        return f"UniqueID: {self.unique_id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
 
     @property
     def stats(self) -> dict:
@@ -215,30 +172,32 @@ class Dooder(BaseObject):
             'CycleNumber': self.simulation.time.time,
             'UniqueID': self.unique_id,
             'Position': self.position,
-            'EnergySupply': self.energy_supply,
+            'Hunger': self.hunger,
             'Direction': self.direction,
             'Age': self.age
         }
 
         return stats
-    
+
     @property
     def neighborhood(self) -> list:
         """
         Return a list of the dooder's neighborhood locations.
         """
         return self.simulation.environment.get_neighborhood(self.position, include_center=True)
-    
+
     @property
     def neighbors(self) -> list:
         """
         Return a list of cell contents in the dooder's neighborhood.
         """
-        neighborhood = self.simulation.environment.get_neighborhood(self.position, include_center=True)
-        neighbors = self.simulation.environment.get_cell_list_contents(neighborhood)
-        
+        neighborhood = self.simulation.environment.get_neighborhood(
+            self.position, include_center=True)
+        neighbors = self.simulation.environment.get_cell_list_contents(
+            neighborhood)
+
         return [n for n in neighbors if n.unique_id != self.unique_id]
-   
+
 
 # Todo: Create an Effects class (can be temporary or permanent)
 
