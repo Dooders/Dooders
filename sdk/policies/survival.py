@@ -50,6 +50,8 @@ class RuleBased(BasePolicy):
     
 @Policies.register()
 class NeuralNetwork(BasePolicy):
+    # policies can take control of the object and do whatever is needed.
+    # self contained functionality
     
     @classmethod
     def execute(self, dooder) -> tuple:
