@@ -60,6 +60,15 @@ class Dooder(BaseObject):
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
+    
+    def move(self, position):
+        pass
+    
+    def consume(self):
+        pass
+    
+    
+    
     def kill(self, dooder: BaseObject) -> None:
         """ 
         Kill a dooder. 
@@ -170,7 +179,7 @@ class Dooder(BaseObject):
             # if true, successfully move
             # if Fate.ask_fate(self.MoveSuccessProbability):
             self.simulation.environment.move_object(self, destination)
-            self.energy_supply -= 1
+            self.energy_supply -= 1 #! make hunger death based on days without food. Once im that state, they die. food starts the clock again
             direction = new_direction
             self.position = destination
             self.log(
