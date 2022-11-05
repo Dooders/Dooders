@@ -2,7 +2,7 @@
 EnergyPerCycle:
   Type: "generation"
   Func: "uniform_distribution"
-  Args: { "min": 50, "max": 75 }
+  Args: { "min": 5, "max": 15 }
 MaxTotalEnergy:
   Type: "generation"
   Func: "normal_distribution"

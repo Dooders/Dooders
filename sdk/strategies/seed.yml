@@ -2,7 +2,7 @@
 SeedCount:
   Type: generation
   Func: fixed_value
-  Args: { "value": 50 }
+  Args: { "value": 10 }
 SeedPlacement:
   Type: placement
   Func: random_location

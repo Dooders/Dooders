@@ -17,11 +17,13 @@ def starvation(dooder: 'Dooder') -> bool:
     """
 
     # The higher the dooder's hunger, the more likely they are to starve
-    probabilities = [0.05, 0.1, 0.2, 0.5, 0.75, 0.99]
+    probabilities = [0, 1, 5, 10, 20, 30, 50]
     
     
 
-    if dooder.hunger >= 1:
+    if dooder.hunger >= 1 and dooder.hunger < 5:
         return Fate.ask_fate(probabilities[dooder.hunger])
+    elif dooder.hunger >= 5:
+        return Fate.ask_fate(probabilities[-1])
     else:
         return False
