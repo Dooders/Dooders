@@ -46,6 +46,9 @@ class Strategy(BaseCore):
 
     # update for dynamic strategy type dicts
     registry = {}
+    
+    def __init__(self):
+      from sdk import strategies
 
     @classmethod
     def load_strategy(cls, name: str) -> dict:

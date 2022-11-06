@@ -17,7 +17,89 @@ Information:
   Collectors: [DooderCount, EnergyCount, DirectionCount]
   Granularity: 2
 Strategies:
-  Lifespan: [Uniform, { "min": 1, "max": 10 }]
-  EnergyPerCycle: [Fixed, { "value": 10 }]
-  MaxTotalEnergy: [Normal, { "mean": 50, "deviation": 10 }]
-  Placement: RandomLocation
+  SeedCount:
+    Type: generation
+    Func: fixed_value
+    Args: { "value": 10 }
+  SeedPlacement:
+    Type: placement
+    Func: random_location
+    Args: ~
+    Dependency: SeedCount
+  EnergyPerCycle:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 5, "max": 15 }
+  MaxTotalEnergy:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 100 }
+  EnergyPlacement:
+    Type: "placement"
+    Func: "random_location"
+    Args: None
+    Dependency: "EnergyPerCycle"
+  StartingEnergySupply:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 10, "max": 15 }
+    Description: The amount of energy the Dooder will start with
+  MaxEnergySupply:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 30, "max": 50 }
+    Description: The max amount of energy that a Dooder can hold at one time
+  Metabolism:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 2 }
+    Description: A value between 1.0 and 2.0 that is used as an exponential value
+  SurvivalProbability:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 100 }
+    Description:
+  ReproductionProbability:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 100 }
+    Description:
+  ReproductionEnergyCost:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 1, "max": 5 }
+    Description:
+  ReproductionSuccessProbability:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 100 }
+    Description:
+  MoveProbability:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 100, 'variation': 10 }
+    Description:
+  MoveSuccessProbability:
+    Type: "generation"
+    Func: "normal_distribution"
+    Args: { "min": 1, "max": 100 }
+    Description:
+  MovementEnergyCost:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 1, "max": 3 }
+    Description:
+  ActionSuccessProbability:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 5, "max": 15 }
+    Description: The probability that the chosen action will be successful
+  TakeActionProbability:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 5, "max": 15 }
+    Description: The probability that the dooder will make an action during its turn
+  EnergyLifespan:
+    Type: "generation"
+    Func: "uniform_distribution"
+    Args: { "min": 5, "max": 15 }
