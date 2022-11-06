@@ -66,9 +66,6 @@ class Simulation(BaseSimulation):
 
         self.running = True
 
-        # Postgres.clear_table('SimulationResults')
-        # Postgres.clear_table('DooderResults')
-        # Postgres.clear_table('SimulationLogs')
         self.information.collect(self)
 
     def step(self) -> None:
