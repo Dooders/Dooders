@@ -129,26 +129,20 @@ class Dooder(BaseObject):
         Step flow for a dooder.
 
         Current flow:
-        * Check if the dooder should die
-        * Get cell contents
-        * If there is energy in the current location, consume it
-        * Check if the dooder should move and where
-        * Move the dooder if success check is true
-        * Check if the dooder should die based on step end state conditions
+        * TBD
         """
-        #! need to double check doing this twice is a good idea or necessary
+
+        self.age += 1
+
         if self.death_check():
             # print("{} died in its sleep".format(self.unique_id))
             pass
 
         else:
-            self.age += 1
 
             destination = self.simulation.policies('RuleBased', self)
             self.move(destination)
             self.consume()
-
-            #! make hunger death based on days without food. Once in that state, they die. food starts the clock again
 
             if self.death_check():
                 # print('{} died during its cycle'.format(self.unique_id))
