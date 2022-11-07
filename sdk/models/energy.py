@@ -48,7 +48,7 @@ class Energy:
         If the object gets to its max age, it will be dissipated.
         """
         self.cycle_count += 1
-        if self.cycle_count >= self.Lifespan:
+        if self.cycle_count >= self.EnergyLifespan:
             self.consume('dissipate')
             self.resources.total_dissipated_energy += 1
             self.resources.log(
