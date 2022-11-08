@@ -49,6 +49,13 @@ class EnvironmentParameters(BaseModel):
     Height: int = Field(10, description="Height of the environment")
     Torus: bool = Field(True, description="Whether the environment is torus")
 
+
+class StrategyParameters(BaseModel):
+    pass
+    
+    
+    
+    
 class ExperimentParameters(BaseModel):
     """ Parameters for the Experiment """
     Simulation = SimulationParameters()
