@@ -139,7 +139,7 @@ class Dooder(BaseObject):
             pass
 
         else:
-            policy = self.simulation.Strategies['move_policy']
+            policy = self.simulation.params.get('Policies').MovePolicy
             destination = self.simulation.policies(policy, self)
             self.move(destination)
             self.consume()

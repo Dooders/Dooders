@@ -50,8 +50,8 @@ class EnvironmentParameters(BaseModel):
     Torus: bool = Field(True, description="Whether the environment is torus")
 
 
-class StrategyParameters(BaseModel):
-    pass
+class PolicyParameters(BaseModel):
+    MovePolicy: str = Field("RuleBased", description="Move policy")
     
     
     
@@ -63,6 +63,7 @@ class ExperimentParameters(BaseModel):
     Dooder = DooderParameters()
     Energy = EnergyParameters()
     Information = InformationParameters()
+    Policies = PolicyParameters()
     
     def get(self, key: str) -> object:
         """ 

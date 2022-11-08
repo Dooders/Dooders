@@ -16,6 +16,8 @@ Energy:
 Information:
   Collectors: [DooderCount, EnergyCount, DirectionCount]
   Granularity: 2
+Policies:
+  MovePolicy: RuleBased
 Strategies:
   SeedCount:
     Type: generation
