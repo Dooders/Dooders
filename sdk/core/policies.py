@@ -1,5 +1,7 @@
 from typing import Callable
 
+#! need to make a dataclass for the required output of the policy
+#! maybe even a dataclass for the input
 
 class Policies:
 
