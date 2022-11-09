@@ -1,6 +1,8 @@
 import random
 from abc import ABC, abstractmethod
 
+import yaml
+
 from sdk.config import ExperimentParameters
 from sdk.models import Environment, Information, Time
 from sdk.utils import ShortID
@@ -14,12 +16,12 @@ class BaseSimulation(ABC):
     """ 
     """
 
-    def __init__(self, simulation_id: str, experiment_id: str, params: ExperimentParameters):
+    def __init__(self, simulation_id: str, experiment_id: str, params: dict = None):
         """ 
         Args:
             experiment_id: Unique ID for the experiment
             params: Parameters for the experiment
-            
+
         Attributes:
             experiment_id: Unique ID for the experiment
             params: Parameters for the experiment
@@ -33,17 +35,23 @@ class BaseSimulation(ABC):
         self.config = self.load_config(params)
         self.random = random
         self.params = ExperimentParameters.parse_obj(self.config)
-        self.components = [] #! this will house all the components. Makes it easier to abstract
-        
+
         # Initialize the simulation components
         self.environment = Environment(self.params.Environment)
         self.information = Information(self)
         self.time = Time()
         self.seed = ShortID()
-            
-            
+
     def load_config(self, params):
-        pass     
+        with open('sdk/config.yml') as f:
+            default_config = yaml.load(f, Loader=yaml.FullLoader)
+
+        if params:
+            for k, v in params.items():
+                for value in v:
+                    default_config[k][value] = params[k][value]
+
+        return default_config
 
     @abstractmethod
     def setup(self) -> None:
