@@ -40,16 +40,10 @@ class BaseSimulation(ABC):
         self.information = Information(self)
         self.time = Time()
         self.seed = ShortID()
-        
-        
-    def update_config(self, config_change):
-        for config in config_change:
-            pass
             
             
     def load_config(self, params):
-        pass
-            
+        pass     
 
     @abstractmethod
     def setup(self) -> None:
