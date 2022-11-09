@@ -135,18 +135,16 @@ class Dooder(BaseObject):
         self.age += 1
 
         if self.death_check():
-            # print("{} died in its sleep".format(self.unique_id))
-            pass
+            self.log(granularity=1, message="Terminated between cycles", scope='Dooder')
 
         else:
-            policy = self.simulation.params.get('Policies').MovePolicy
+            policy = self.simulation.params.get('Policies').Movement
             destination = self.simulation.policies(policy, self)
             self.move(destination)
             self.consume()
 
             if self.death_check():
-                # print('{} died during its cycle'.format(self.unique_id))
-                pass
+                self.log(granularity=1, message="Terminated during cycle", scope='Dooder')
 
     def __str__(self) -> str:
         """

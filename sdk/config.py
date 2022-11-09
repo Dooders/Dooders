@@ -51,7 +51,7 @@ class EnvironmentParameters(BaseModel):
 
 
 class PolicyParameters(BaseModel):
-    MovePolicy: str = Field("RuleBased", description="Move policy")
+    Movement: str = Field("RuleBased", description="Move policy")
     
     
     
