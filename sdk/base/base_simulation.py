@@ -30,8 +30,9 @@ class BaseSimulation(ABC):
         """
         self.simulation_id = simulation_id
         self.experiment_id = experiment_id
+        self.config = self.load_config(params)
         self.random = random
-        self.params = ExperimentParameters.parse_obj(params)
+        self.params = ExperimentParameters.parse_obj(self.config)
         self.components = [] #! this will house all the components. Makes it easier to abstract
         
         # Initialize the simulation components
@@ -39,6 +40,16 @@ class BaseSimulation(ABC):
         self.information = Information(self)
         self.time = Time()
         self.seed = ShortID()
+        
+        
+    def update_config(self, config_change):
+        for config in config_change:
+            pass
+            
+            
+    def load_config(self, params):
+        pass
+            
 
     @abstractmethod
     def setup(self) -> None:
