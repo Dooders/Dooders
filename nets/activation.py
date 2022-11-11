@@ -5,14 +5,12 @@ https://nnfs.io/
 
 import numpy as np
 
-from nets.loss import Loss_CategoricalCrossentropy
-
 
 # ReLU activation
 class Activation_ReLU:
 
     # Forward pass
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         # Remember input values
         self.inputs = inputs
         # Calculate output values from inputs
@@ -27,18 +25,23 @@ class Activation_ReLU:
         # Zero gradient where input values were negative
         self.dinputs[self.inputs <= 0] = 0
 
+    # Calculate predictions for outputs
+    def predictions(self, outputs):
+        return outputs
+
 
 # Softmax activation
 class Activation_Softmax:
 
     # Forward pass
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         # Remember input values
         self.inputs = inputs
 
         # Get unnormalized probabilities
         exp_values = np.exp(inputs - np.max(inputs, axis=1,
                                             keepdims=True))
+
         # Normalize them for each sample
         probabilities = exp_values / np.sum(exp_values, axis=1,
                                             keepdims=True)
@@ -64,40 +67,45 @@ class Activation_Softmax:
             self.dinputs[index] = np.dot(jacobian_matrix,
                                          single_dvalues)
 
-# Softmax classifier - combined Softmax activation
-# and cross-entropy loss for faster backward step
+    # Calculate predictions for outputs
+    def predictions(self, outputs):
+        return np.argmax(outputs, axis=1)
 
 
-class Activation_Softmax_Loss_CategoricalCrossentropy():
-
-    # Creates activation and loss function objects
-    def __init__(self):
-        self.activation = Activation_Softmax()
-        self.loss = Loss_CategoricalCrossentropy()
+# Sigmoid activation
+class Activation_Sigmoid:
 
     # Forward pass
-    def forward(self, inputs, y_true):
-        # Output layer's activation function
-        self.activation.forward(inputs)
-        # Set the output
-        self.output = self.activation.output
-        # Calculate and return loss value
-        return self.loss.calculate(self.output, y_true)
+    def forward(self, inputs, training):
+        # Save input and calculate/save output
+        # of the sigmoid function
+        self.inputs = inputs
+        self.output = 1 / (1 + np.exp(-inputs))
 
     # Backward pass
-    def backward(self, dvalues, y_true):
+    def backward(self, dvalues):
+        # Derivative - calculates from output of the sigmoid function
+        self.dinputs = dvalues * (1 - self.output) * self.output
 
-        # Number of samples
-        samples = len(dvalues)
+    # Calculate predictions for outputs
+    def predictions(self, outputs):
+        return (outputs > 0.5) * 1
 
-        # If labels are one-hot encoded,
-        # turn them into discrete values
-        if len(y_true.shape) == 2:
-            y_true = np.argmax(y_true, axis=1)
 
-        # Copy so we can safely modify
+# Linear activation
+class Activation_Linear:
+
+    # Forward pass
+    def forward(self, inputs, training):
+        # Just remember values
+        self.inputs = inputs
+        self.output = inputs
+
+    # Backward pass
+    def backward(self, dvalues):
+        # derivative is 1, 1 * dvalues = dvalues - the chain rule
         self.dinputs = dvalues.copy()
-        # Calculate gradient
-        self.dinputs[range(samples), y_true] -= 1
-        # Normalize gradient
-        self.dinputs = self.dinputs / samples
+
+    # Calculate predictions for outputs
+    def predictions(self, outputs):
+        return outputs

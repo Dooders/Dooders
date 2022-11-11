@@ -6,6 +6,8 @@ https://nnfs.io/
 import numpy as np
 
 # SGD optimizer
+
+
 class Optimizer_SGD:
 
     # Initialize optimizer - set settings,
@@ -36,7 +38,6 @@ class Optimizer_SGD:
                 # If there is no momentum array for weights
                 # The array doesn't exist for biases yet either.
                 layer.bias_momentums = np.zeros_like(layer.biases)
-
             # Build weight updates with momentum - take previous
             # updates multiplied by retain factor and update with
             # current gradients
@@ -64,7 +65,6 @@ class Optimizer_SGD:
         layer.biases += bias_updates
 
     # Call once after any parameter updates
-
     def post_update_params(self):
         self.iterations += 1
 
@@ -209,7 +209,6 @@ class Optimizer_Adam:
         # Update cache with squared current gradients
         layer.weight_cache = self.beta_2 * layer.weight_cache + \
             (1 - self.beta_2) * layer.dweights**2
-
         layer.bias_cache = self.beta_2 * layer.bias_cache + \
             (1 - self.beta_2) * layer.dbiases**2
         # Get corrected cache
@@ -230,5 +229,6 @@ class Optimizer_Adam:
              self.epsilon)
 
     # Call once after any parameter updates
+
     def post_update_params(self):
         self.iterations += 1
