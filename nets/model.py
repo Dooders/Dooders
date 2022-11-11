@@ -3,9 +3,10 @@ Code taken from "Neural Networks from Scratch"
 https://nnfs.io/
 """
 
-import numpy as np
-
-# Model class
+from nets.activation import Activation_Softmax
+from nets.layer import Layer_Input
+from nets.loss import (Activation_Softmax_Loss_CategoricalCrossentropy,
+                       Loss_CategoricalCrossentropy)
 
 
 class Model:
