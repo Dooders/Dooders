@@ -4,6 +4,7 @@ Each object will have the ability to move around the environment and
 interact with other objects.
 """
 
+import copy
 from typing import TYPE_CHECKING
 
 from sdk.base.base_object import BaseObject
@@ -146,6 +147,21 @@ class Dooder(BaseObject):
             if self.death_check():
                 self.log(granularity=1, message="Terminated during cycle", scope='Dooder')
 
+    
+    def clone(self):
+        """
+        Clone the dooder.
+        """
+        clone = copy.deepcopy(self)
+        clone.unique_id = self.simulation.seed.uuid()
+        
+        return clone
+    
+    
+    def build_model(self, schematic):
+        pass
+    
+    
     def __str__(self) -> str:
         """
         Return string of class attributes and genetics.

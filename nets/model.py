@@ -3,10 +3,11 @@ Code taken from "Neural Networks from Scratch"
 https://nnfs.io/
 """
 
-from nets.activation import Activation_Softmax
-from nets.layer import Layer_Input
-from nets.loss import (Activation_Softmax_Loss_CategoricalCrossentropy,
-                       Loss_CategoricalCrossentropy)
+from nets.activation import *
+from nets.layer import *
+from nets.loss import *
+from nets.optimizer import *
+from nets.eval import *
 
 
 class Model:
@@ -201,3 +202,18 @@ class Model:
         # in reversed order passing dinputs as a parameter
         for layer in reversed(self.layers):
             layer.backward(layer.next.dinputs)
+            
+            
+def base_model():
+    model = Model()
+    model.add(Layer_Dense(9, 512))
+    model.add(Activation_ReLU())
+    model.add(Layer_Dense(512, 9))
+    model.add(Activation_Softmax())
+    model.set(
+        loss=Loss_CategoricalCrossentropy(),
+        optimizer=Optimizer_Adam(decay=5e-7),
+        accuracy=Accuracy_Categorical()
+    )
+    model.finalize()
+    return model
