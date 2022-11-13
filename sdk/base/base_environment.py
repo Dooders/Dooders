@@ -318,7 +318,7 @@ class BaseEnvironment(ABC):
     def is_cell_empty(self, position: Coordinate) -> bool:
         """Returns a bool of the contents of a cell."""
         x, y = position
-        return self.grid[x][y] == self.default_val()
+        return self.grid[x][y].status == 'empty'
 
     def exists_empty_cells(self) -> bool:
         """Return True if any cells empty else False."""
