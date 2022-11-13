@@ -13,6 +13,8 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
 
 import numpy as np
 from sdk.base.base_object import BaseObject
+from sdk.modules.neighborhood import Neighborhood
+from sdk. modules.location import Location
 
 Coordinate = Tuple[int, int]
 Position = Coordinate
@@ -68,7 +70,7 @@ class BaseEnvironment(ABC):
         for x in range(self.width):
             col: List[GridContent] = []
             for y in range(self.height):
-                col.append(self.default_val())
+                col.append(Location(x, y))
             self.grid.append(col)
 
         # Add all cells to the empties list.

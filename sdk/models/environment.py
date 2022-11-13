@@ -9,7 +9,7 @@ from sdk.base.base_environment import BaseEnvironment
 from sdk.base.base_object import BaseObject
 
 if TYPE_CHECKING:
-    from sdk.core.data import Location, UniqueID
+    from sdk.core.data import UniqueID
 
 
 GridCell = List[Any]
@@ -38,7 +38,7 @@ class Environment(BaseEnvironment):
         """
         super().__init__(params)
 
-    def place_object(self, object: 'BaseObject', location: 'Location') -> None:
+    def place_object(self, object: 'BaseObject', location) -> None:
         """
         Place an object at the given location.
 
@@ -46,9 +46,10 @@ class Environment(BaseEnvironment):
             object: The object to place.
             location: The location to place the object.
         """
+        #! Verify this works
         x, y = location
         if object not in self.grid[x][y]:
-            self.grid[x][y].append(object)
+            self.grid[x][y].add(object)
         object.position = location
         self.empties.discard(location)
 
@@ -59,6 +60,7 @@ class Environment(BaseEnvironment):
         Args:
             object: The object to remove.
         """
+        #! update this code to remove via new design
         location = object.position
         x, y = location
         self.grid[x][y].remove(object)
@@ -66,7 +68,7 @@ class Environment(BaseEnvironment):
             self.empties.add(location)
         object.position = None
 
-    def move_object(self, object: 'BaseObject', location: 'Location') -> None:
+    def move_object(self, object: 'BaseObject', location) -> None:
         """ 
         Move an object to a new location.
 
