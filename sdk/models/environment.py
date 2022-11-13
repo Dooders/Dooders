@@ -48,8 +48,7 @@ class Environment(BaseEnvironment):
         """
         #! Verify this works
         x, y = location
-        if object not in self.grid[x][y]:
-            self.grid[x][y].add(object)
+        self.grid[x][y].add(object)
         object.position = location
         self.empties.discard(location)
 
@@ -91,7 +90,7 @@ class Environment(BaseEnvironment):
         object_types = []
         for x in range(self.width):
             for y in range(self.height):
-                for obj in self.grid[x][y]:
+                for obj in self.grid[x][y].contents.values():
                     if obj.name not in object_types:
                         object_types.append(obj.__class__.__name__)
         return object_types
@@ -112,7 +111,7 @@ class Environment(BaseEnvironment):
         objects = []
         for x in range(self.width):
             for y in range(self.height):
-                for obj in self.grid[x][y]:
+                for obj in self.grid[x][y].contents.values():
                     if obj.name in object_type:
                         objects.append(obj)
         return objects
@@ -129,7 +128,7 @@ class Environment(BaseEnvironment):
         """
         for x in range(self.width):
             for y in range(self.height):
-                for obj in self.grid[x][y]:
+                for obj in self.grid[x][y].contents.values():
                     if obj.unique_id == object_id:
                         return obj
 

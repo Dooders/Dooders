@@ -5,7 +5,8 @@ neighborhood in the simulation. A neighborhood is a list of locations.
 
 import random
 
-from sdk.models import Energy, Dooder
+from sdk.models.dooder import Dooder
+from sdk.models.energy import Energy
 
 
 class Neighborhood(list):

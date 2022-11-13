@@ -341,5 +341,5 @@ class BaseEnvironment(ABC):
             A iterator of the contents of the cells identified in cell_list
         """
         return itertools.chain.from_iterable(
-            self[x][y] for x, y in cell_list if not self.is_cell_empty((x, y))
+            self[x][y].contents.values() for x, y in cell_list if not self.is_cell_empty((x, y))
         )

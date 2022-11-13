@@ -3,13 +3,14 @@ Location class
 """
 
 import random
-from sdk.models import Energy, Dooder
+from sdk.models.dooder import Dooder
+from sdk.models.energy import Energy
 
 
 class Location:
 
     # List of all contents in the location
-    contents: str = {}
+    contents: dict = {}
 
     def __init__(self, x, y):
         """ 
