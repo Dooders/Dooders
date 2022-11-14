@@ -24,7 +24,7 @@ Develop and test different movement possibilities for a Dooder
 
 ### RandomMove
 
-This policy will take a list of all adjacent locations and will choose a random location 
+This policy will take a list of all adjacent locations and will choose a random location
 
 ### RuleBased
 
