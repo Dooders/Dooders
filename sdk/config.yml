@@ -104,4 +104,4 @@ Strategies:
   EnergyLifespan:
     Type: "generation"
     Func: "uniform_distribution"
-    Args: { "min": 5, "max": 15 }
+    Args: { "min": 2, "max": 5 }
