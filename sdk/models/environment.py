@@ -162,7 +162,7 @@ class Environment(BaseEnvironment):
 
         return objects
 
-    def get_random_neighborhoods(self, location: 'Location', n: int = 1) -> List['Location']:
+    def get_random_neighborhoods(self, location, n: int = 1):
         """
         Get all objects in the neighborhood of the given location.
 
