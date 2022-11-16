@@ -10,8 +10,6 @@ from sdk.models.energy import Energy
 class Location:
 
     # List of all contents in the location
-    contents: dict = {}
-
     def __init__(self, x, y):
         """ 
         Initialize a location object with a unique id and coordinates
@@ -23,6 +21,7 @@ class Location:
         Returns:
             A location object
         """
+        self.contents: dict = {}
         self.x = x
         self.y = y
         self.coordinates = (x, y)
@@ -46,6 +45,7 @@ class Location:
             object: The object to remove from the location
         """
         self.contents.pop(object.unique_id, None)
+
         if len(self.contents) == 0:
             self.status = 'empty'
 

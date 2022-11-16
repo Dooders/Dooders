@@ -38,7 +38,7 @@ class Environment(BaseEnvironment):
         """
         super().__init__(params)
 
-    def place_object(self, object: 'BaseObject', location) -> None:
+    def place_object(self, object: 'BaseObject', position) -> None:
         """
         Place an object at the given location.
 
@@ -47,10 +47,11 @@ class Environment(BaseEnvironment):
             location: The location to place the object.
         """
         #! Verify this works
-        x, y = location
-        self.grid[x][y].add(object)
-        object.position = location
-        self.empties.discard(location)
+        x, y = position
+        location = self.grid[x][y]
+        location.add(object)
+        object.position = position
+        self.empties.discard(position)
 
     def remove_object(self, object: 'BaseObject') -> None:
         """

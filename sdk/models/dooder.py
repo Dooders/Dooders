@@ -71,6 +71,9 @@ class Dooder(BaseObject):
             self.position = destination
             
     def consume(self):
+        #! get_cell_list_contents not working
+        #! dooders are getting added to each location
+        
         cell_contents = self.simulation.environment.get_cell_list_contents(
             self.position)
         energy = [obj for obj in cell_contents if isinstance(obj, Energy)]

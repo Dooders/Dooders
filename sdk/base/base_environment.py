@@ -14,7 +14,7 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
 import numpy as np
 from sdk.base.base_object import BaseObject
 from sdk.modules.neighborhood import Neighborhood
-from sdk. modules.location import Location
+from sdk.modules.location import Location
 
 Coordinate = Tuple[int, int]
 Position = Coordinate
@@ -65,12 +65,13 @@ class BaseEnvironment(ABC):
         self.width = params.Width
         self.torus = params.Torus
 
-        self.grid: List[List[GridContent]] = []
+        self.grid = []
 
         for x in range(self.width):
-            col: List[GridContent] = []
+            col = []
             for y in range(self.height):
-                col.append(Location(x, y))
+                location = Location(x, y)
+                col.append(location)
             self.grid.append(col)
 
         # Add all cells to the empties list.
