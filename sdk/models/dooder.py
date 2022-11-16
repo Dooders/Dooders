@@ -59,16 +59,17 @@ class Dooder(BaseObject):
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
-    def move(self, position):
-        if position == self.position:
+    def move(self, destination):
+        if destination == self.position:
             pass
         else:
-            self.direction = get_direction(self.position, position)
-            self.simulation.environment.move_object(self, position)
-            self.position = position
+            origin = self.position
+            self.direction = get_direction(origin, destination)
+            self.simulation.environment.move_object(self, destination)
             self.log(
-                granularity=2, message=f"Moved {self.direction} from {self.position} to {position}", scope='Dooder')
-
+                granularity=2, message=f"Moved {self.direction} from {origin} to {destination}", scope='Dooder')
+            self.position = destination
+            
     def consume(self):
         cell_contents = self.simulation.environment.get_cell_list_contents(
             self.position)
@@ -141,6 +142,7 @@ class Dooder(BaseObject):
         else:
             policy = self.simulation.params.get('Policies').Movement
             destination = self.simulation.policies(policy, self)
+            print(destination)
             self.move(destination)
             self.consume()
 

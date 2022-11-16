@@ -23,7 +23,7 @@ class Policies:
         return inner_wrapper
     
     def __call__(self, policy, object):
-        feched_policy = self.policies[policy]
-        policy_results = feched_policy.execute(object)
+        matched_policy = self.policies[policy]
+        policy_results = matched_policy.execute(object)
         
         return policy_results
