@@ -142,7 +142,6 @@ class Dooder(BaseObject):
         else:
             policy = self.simulation.params.get('Policies').Movement
             destination = self.simulation.policies(policy, self)
-            print(destination)
             self.move(destination)
             self.consume()
 
