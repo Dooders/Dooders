@@ -46,7 +46,6 @@ class Environment(BaseEnvironment):
             object: The object to place.
             location: The location to place the object.
         """
-        #! Verify this works
         x, y = position
         location = self.grid[x][y]
         location.add(object)
@@ -60,7 +59,6 @@ class Environment(BaseEnvironment):
         Args:
             object: The object to remove.
         """
-        #! update this code to remove via new design
         location = object.position
         x, y = location
         self.grid[x][y].remove(object)

@@ -64,3 +64,15 @@ def get_average_genetics(simulation):
     df = pd.DataFrame.from_dict(genetic_list)
     
     return dict(df.mean())
+
+
+# @Collector.register('AverageDooderAge')
+# def get_average_energy_age(simulation) -> float:
+#     """Return the average age of energy in the simulation."""
+#     dooder_age = [
+#         dooder.age for dooder in simulation.environment.get_objects('Dooder')]
+
+#     if len(dooder_age) == 0:
+#         return 0
+
+#     return round(mean(dooder_age), 2)
