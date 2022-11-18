@@ -61,9 +61,14 @@ class Location:
         """
         return random.choice(list(self.contents.values()))
 
-    @property
-    def has(self, object_type):
+    def has(self, object_type, ignore=None):
         """ 
         Return a boolean indicating if the location contains a specific object type
         """
-        return any([isinstance(x, object_type) for x in self.contents])
+        for object in self.contents.values():
+            if object.__class__.__name__ == object_type:
+                if ignore.unique_id == object.unique_id:
+                    pass
+                else:
+                    return True
+        return False

@@ -12,6 +12,7 @@ from sdk.core import Condition
 from sdk.models.energy import Energy
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
+from sdk.modules.neighborhood import Neighborhood
 from sdk.utils.get_direction import get_direction
 
 if TYPE_CHECKING:
@@ -69,11 +70,11 @@ class Dooder(BaseObject):
             self.log(
                 granularity=2, message=f"Moved {self.direction} from {origin} to {destination}", scope='Dooder')
             self.position = destination
-            
+
     def consume(self):
         #! get_cell_list_contents not working
         #! dooders are getting added to each location
-        
+
         cell_contents = self.simulation.environment.get_cell_list_contents(
             self.position)
         energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
@@ -140,7 +141,8 @@ class Dooder(BaseObject):
         self.age += 1
 
         if self.death_check():
-            self.log(granularity=1, message="Terminated between cycles", scope='Dooder')
+            self.log(granularity=1,
+                     message="Terminated between cycles", scope='Dooder')
 
         else:
             policy = self.simulation.params.get('Policies').Movement
@@ -149,23 +151,21 @@ class Dooder(BaseObject):
             self.consume()
 
             if self.death_check():
-                self.log(granularity=1, message="Terminated during cycle", scope='Dooder')
+                self.log(granularity=1,
+                         message="Terminated during cycle", scope='Dooder')
 
-    
     def clone(self):
         """
         Clone the dooder.
         """
         clone = copy.deepcopy(self)
         clone.unique_id = self.simulation.seed.uuid()
-        
+
         return clone
-    
-    
+
     def build_model(self, schematic):
         pass
-    
-    
+
     def __str__(self) -> str:
         """
         Return string of class attributes and genetics.
@@ -194,19 +194,10 @@ class Dooder(BaseObject):
         """
         Return a list of the dooder's neighborhood locations.
         """
-        return self.simulation.environment.get_neighborhood(self.position, include_center=True)
+        locations = self.simulation.environment.get_neighbor_locations(
+            (self.position))
 
-    @property
-    def neighbors(self) -> list:
-        """
-        Return a list of cell contents in the dooder's neighborhood.
-        """
-        neighborhood = self.simulation.environment.get_neighborhood(
-            self.position, include_center=True)
-        neighbors = self.simulation.environment.get_cell_list_contents(
-            neighborhood)
-
-        return [n for n in neighbors if n.unique_id != self.unique_id]
+        return Neighborhood(locations, self)
 
 
 # Todo: Create an Effects class (can be temporary or permanent)

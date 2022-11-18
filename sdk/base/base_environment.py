@@ -184,6 +184,34 @@ class BaseEnvironment(ABC):
         """
         yield from self.get_neighborhood(position, moore, include_center, radius)
 
+    def get_neighbor_locations(
+        self,
+        position: Coordinate,
+        moore: bool = True,
+        include_center: bool = True,
+        radius: int = 1,
+    ) -> List[Location]:
+        """Return a list of locations that are in the neighborhood of a
+        certain point.
+        Args:
+            position: Coordinate tuple for the neighborhood to get.
+            moore: If True, return Moore neighborhood
+                        (including diagonals)
+                   If False, return Von Neumann neighborhood
+                        (exclude diagonals)
+            include_center: If True, return the (x, y) cell as well.
+                            Otherwise, return surrounding cells only.
+            radius: radius, in cells, of neighborhood to get.
+        Returns:
+            A list of locations representing the neighborhood. For
+            example with radius 1, it will return list with number of elements
+            equals at most 9 (8) if Moore, 5 (4) if Von Neumann (if not
+            including the center).
+        """
+        neighborhood = self.get_neighborhood(position, moore, include_center, radius)
+        return [self.grid[pos[0]][pos[1]] for pos in neighborhood]
+    
+    
     def get_neighborhood(
         self,
         position: Coordinate,
@@ -211,7 +239,7 @@ class BaseEnvironment(ABC):
         neighborhood = self._neighborhood_cache.get(cache_key, None)
 
         if neighborhood is None:
-            coordinates: Set[Coordinate] = set()
+            coordinates = []
 
             x, y = position
             for dy in range(-radius, radius + 1):
@@ -230,9 +258,9 @@ class BaseEnvironment(ABC):
                             continue
                         coord = self.torus_adj(coord)
 
-                    coordinates.add(coord)
+                    coordinates.append(coord)
 
-            neighborhood = sorted(coordinates)
+            neighborhood = coordinates
             self._neighborhood_cache[cache_key] = neighborhood
 
         return neighborhood

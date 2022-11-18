@@ -9,10 +9,10 @@ Currently there are three policies:
 from random import choice
 from typing import TYPE_CHECKING
 
+from nets.model import base_model
 from sdk.base.base_policy import BasePolicy
 from sdk.core.policies import Policies
 from sdk.models.energy import Energy
-from nets.model import base_model
 
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
@@ -34,7 +34,7 @@ class RandomMove(BasePolicy):
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
         neighborhood = dooder.neighborhood
-        random_cell = choice(neighborhood)
+        random_cell = choice(neighborhood.coordinates)
 
         return random_cell
 
@@ -51,11 +51,10 @@ class RuleBased(BasePolicy):
     Returns:
         A random location in the Dooder's neighborhood that has energy
     """
-
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
-        neighbors = dooder.neighbors
-        energy = [n for n in neighbors if isinstance(n, Energy)]
+        neighborhood = dooder.neighborhood
+        energy = neighborhood.fetch('Energy')
 
         if energy:
             energy_positions = [e.position for e in energy]
@@ -81,14 +80,14 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
-        neighbors = dooder.neighbors
-        energy_list = [1 if isinstance(n, Energy) else 0 for n in neighbors]
-        
+        neighborhood = dooder.neighborhood
+        has_energy = neighborhood.contains('Energy')
+
         if hasattr(dooder, 'move_action'):
             model = dooder.move_action
-            
+
         else:
             model = base_model()
             dooder.move_action = model
 
-        output = model.forward(energy_list, training=True)
+        output = model.forward(has_energy, training=True)

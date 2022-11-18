@@ -9,9 +9,6 @@ neighborhood in the simulation. A neighborhood is a list of locations.
 
 import random
 
-from sdk.models.dooder import Dooder
-from sdk.models.energy import Energy
-
 
 class Neighborhood(list):
     """ 
@@ -19,8 +16,18 @@ class Neighborhood(list):
     including the dooder's current location
     """
 
-    __mapping__ = {0: 'N', 1: 'NE', 2: 'E', 3: 'SE',
-                   4: 'S', 5: 'SW', 6: 'W', 7: 'NW', 8: '-'}
+    __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
+                   4: '-', 5: 'E', 6: 'SW', 7: 'S', 8: 'SE'}
+
+    def __init__(self, locations, dooder):
+        """ 
+        Initialize a neighborhood object
+
+        Args:
+            dooder: The dooder to create the neighborhood around
+        """
+        self.dooder = dooder
+        super().__init__(locations)
 
     def to_direction(self, location):
         """ 
@@ -32,21 +39,9 @@ class Neighborhood(list):
         Returns:
             The direction of the location
         """
-        return self.__mapping__[self.index(location)]
+        return self.__mapping__[location]
 
-    def to_location(self, direction):
-        """ 
-        Return the location in a given direction
-
-        Args:
-            direction: The direction to find the location in
-
-        Returns:
-            The location in the given direction
-        """
-        return self[self.__mapping__.index(direction)]
-
-    def contains(self, object_type):
+    def contains(self, object_type: str):
         """ 
         Return whether the neighborhood contains a given object type
 
@@ -56,21 +51,29 @@ class Neighborhood(list):
         Returns:
             True if the neighborhood contains the object type, False otherwise
         """
-        return [1 if isinstance(location, object_type) else 0 for location in self]
+        result = []
+        for location in self:
+            result.append(location.has(object_type, ignore=self.dooder))
 
-    @property
-    def energy(self):
-        """ 
-        Return the energy in the neighborhood
-        """
-        return any([isinstance(x, Energy) for x in self])
+        return result
 
-    @property
-    def dooder(self):
+    def fetch(self, object_type: str):
         """ 
-        Return if dooder in the neighborhood
+        Return a list of objects of a given type in the neighborhood
+
+        Args:
+            object_type: The object type to fetch
+
+        Returns:
+            A list of objects of the given type
         """
-        return any([isinstance(x, Dooder) for x in self])
+        result = []
+        for location in self:
+            for contents in location.contents.values():
+                if contents.__class__.__name__ == object_type:
+                    result.append(contents)
+
+        return result
 
     @property
     def locations(self):
