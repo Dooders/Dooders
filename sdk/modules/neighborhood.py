@@ -1,10 +1,6 @@
 """ 
 This module contains the Neighborhood class, which is used to represent a
 neighborhood in the simulation. A neighborhood is a list of locations.
-
-#! make a neighborhood object that contains different data that usually comes bundled. Returns a list of location objects
-#! attribute that returns a list of booleans. neighborhood.has('Energy') --> [0,1,0,0,0,1,1,0,0,0]
-#! return only objects --> neighborhood.return('Energy') Energy, Dooder, Locations
 """
 
 import random
