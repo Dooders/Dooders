@@ -3,8 +3,6 @@ Location class
 """
 
 import random
-from sdk.models.dooder import Dooder
-from sdk.models.energy import Energy
 
 
 class Location:
