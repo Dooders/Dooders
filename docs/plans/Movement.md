@@ -5,7 +5,7 @@ Develop and test different movement possibilities for a Dooder
 ## Goals
 
 - [ X ] Create a movement system that allows the Dooder to move in 1 of 9 directions (includes the current position)
-- [ ] Develop and test three movement policies (Random, Rule-based, and Simple Neural Network)
+- [ ] Develop and test five movement policies (Random, Rule-based, Simple Neural Network, Reinforcement Learning, and Bayesian Decision Theory)
 - [ ] Determine which policy maximizes Energy consumption and a Dooder's lifespan
 
 ## Requirements
