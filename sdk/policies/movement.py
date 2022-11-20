@@ -9,10 +9,11 @@ Currently there are three policies:
 from random import choice
 from typing import TYPE_CHECKING
 
-from nets.model import base_model
+import numpy as np
+
+from sdk.learning.nets.model import SimpleNeuralNet
 from sdk.base.base_policy import BasePolicy
 from sdk.core.policies import Policies
-from sdk.models.energy import Energy
 
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
@@ -80,14 +81,29 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
-        neighborhood = dooder.neighborhood
-        has_energy = neighborhood.contains('Energy')
 
+        # Check if there is Energy in the Dooder's neighborhood
+        neighborhood = dooder.neighborhood
+        has_energy = np.array([neighborhood.contains('Energy')], dtype='uint8')
+
+        # Get model if it exists
         if hasattr(dooder, 'move_action'):
             model = dooder.move_action
 
+        # Initialize model if it doesn't exist
         else:
-            model = base_model()
+            model = SimpleNeuralNet()
             dooder.move_action = model
 
-        output = model.forward(has_energy, training=True)
+        # Predict where to move
+        prediction = model.predict(has_energy)
+        predicted_location = neighborhood.coordinates[prediction]
+
+        # Learn from the reality
+        # Note: Prediction happens before learning. Learning happens after action
+        correct_choices = [location[0] for location in enumerate(
+            neighborhood.contains('Energy')) if location[1] == True]
+
+        model.learn(correct_choices)
+
+        return predicted_location
