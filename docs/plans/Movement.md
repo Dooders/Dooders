@@ -4,9 +4,9 @@ Develop and test different movement possibilities for a Dooder
 
 ## Goals
 
-- [ X ] Create a movement system that allows the Dooder to move in 1 of 9 directions (includes the current position)
-- [ ] Develop and test five movement policies (Random, Rule-based, Simple Neural Network, Reinforcement Learning, and Bayesian Decision Theory)
-- [ ] Determine which policy maximizes Energy consumption and a Dooder's lifespan
+- [x] Create a movement system that allows the Dooder to move in 1 of 9 directions (includes the current position)
+- [x] Develop and test three movement policies (Random, Rule-based and Simple Neural Network)
+- [x] Determine which policy maximizes Energy consumption and a Dooder's lifespan
 
 ## Requirements
 
@@ -32,6 +32,28 @@ This policy will identify all neighboring objects and creates a list of location
 
 ### Simple Artificial Neural Network
 
-This policy will use a simple ANN to determine the best location to move to. The model, for the time being, will have 9 inputs (one for each location) and 9 outputs (one for each location). I will also only do a forward feed with no backpropagation. I want to see how random weights and biases will behave, and possibly curate Dooders that make it the most cycles.
+This policy will use a simple ANN to determine the best location to move to. The model, for the time being, will have 9 inputs (one for each location) and 9 outputs (one for each location). The neural network will need to select the best option, and will learn over its lifetime.
 
+## Results
+
+Current energy allocation strategy is a random number of energy objects, placed randomly in the environment. The Dooder will consume energy if it is in the same location as an energy object. The Dooder will also consume energy if it moves to a location with an energy object.
+
+I ran 10,000 simulations for each movement policy. The results are as follows:
+
+| Metric                     | RandomMove | RuleBased | SimpleNeuralNetwork |
+| -------------------------- | ---------- | --------- | ------------------- |
+| **Mean Cycle Count**       | 22.33      | 99.74     | 66.02               |
+| **Median Cycle Count**     | 21.00      | 100.00    | 67.00               |
+| **Mean Energy Consumed**   | 18.28      | 380.17    | 72.21               |
+| **Median Energy Consumed** | 17.00      | 382.00    | 69.00               |
+
+Not surprisingly, the RuleBased policy performed the best. That's because it will always choose a location with energy. The RandomMove policy is a good benchmark for an agent with zero "intelligence". The RuleBased is also not representative of an intelligent agent.
+
+The NeuralNetwork policy is the best choice for a policy that allows for a Dooder to learn, and apply that to the environment. It also allows for learning from new conditions, which RuleBased does not allow.
+
+## Next Steps
+
+- Work on a Reproduction Policy
+- Develop more Movement Policies. Leveraging Reinforcement Learning and other decision making strategies
+  
 ## Thoughts
