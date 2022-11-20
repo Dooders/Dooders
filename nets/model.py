@@ -202,7 +202,18 @@ class Model:
         # in reversed order passing dinputs as a parameter
         for layer in reversed(self.layers):
             layer.backward(layer.next.dinputs)
+
             
+class BaseModel:
+    
+    def __init__(self):
+        self.model = Model()
+        
+    def predict(self, input_array):
+        self.input = input_array
+    
+    def learn(self, reality):
+        self.reality = reality
             
 def base_model():
     model = Model()
