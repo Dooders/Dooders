@@ -4,10 +4,10 @@ https://nnfs.io/
 """
 
 from nets.activation import *
+from nets.eval import *
 from nets.layer import *
 from nets.loss import *
 from nets.optimizer import *
-from nets.eval import *
 
 
 class Model:
@@ -203,28 +203,58 @@ class Model:
         for layer in reversed(self.layers):
             layer.backward(layer.next.dinputs)
 
-            
-class BaseModel:
-    
+
+class SimpleNeuralNet:
+    """ 
+    A simple neural network with 2 hidden layers
+    """
+
     def __init__(self):
+        """ 
+        Initialize the model
+        """
         self.model = Model()
-        
-    def predict(self, input_array):
+        self.model.add(Layer_Dense(9, 512))
+        self.model.add(Activation_ReLU())
+        self.model.add(Layer_Dense(512, 9))
+        self.model.add(Activation_Softmax())
+        self.model.set(
+            loss=Loss_CategoricalCrossentropy(),
+            optimizer=Optimizer_Adam(decay=5e-7),
+            accuracy=Accuracy_Categorical()
+        )
+        self.model.finalize()
+
+    def predict(self, input_array: np.ndarray) -> int:
+        """ 
+        Predict the class of the input data
+
+        Args:
+            input_array (np.ndarray): The input data
+
+        Returns:
+            int: The predicted class
+        """
         self.input = input_array
-    
-    def learn(self, reality):
+        self.output = self.model.forward(input_array, training=True)
+        prediction = self.model.output_layer_activation.predictions(
+            self.output)
+
+        return prediction[0]
+
+    def learn(self, reality: list) -> None:
+        """ 
+        Learn from the reality
+
+        Args:
+            reality (list): The reality of the simulation
+        """
         self.reality = reality
-            
-def base_model():
-    model = Model()
-    model.add(Layer_Dense(9, 512))
-    model.add(Activation_ReLU())
-    model.add(Layer_Dense(512, 9))
-    model.add(Activation_Softmax())
-    model.set(
-        loss=Loss_CategoricalCrossentropy(),
-        optimizer=Optimizer_Adam(decay=5e-7),
-        accuracy=Accuracy_Categorical()
-    )
-    model.finalize()
-    return model
+        reality_array = np.array(self.reality, dtype='uint8')
+
+        # Optimize parameters
+        self.model.backward(self.output, reality_array)
+        self.model.optimizer.pre_update_params()
+        for layer in self.model.trainable_layers:
+            self.model.optimizer.update_params(layer)
+        self.model.optimizer.post_update_params()

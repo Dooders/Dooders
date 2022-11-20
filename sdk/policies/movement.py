@@ -8,12 +8,12 @@ Currently there are three policies:
 
 from random import choice
 from typing import TYPE_CHECKING
+
 import numpy as np
 
-from nets.model import base_model
+from nets.model import SimpleNeuralNet
 from sdk.base.base_policy import BasePolicy
 from sdk.core.policies import Policies
-from sdk.models.energy import Energy
 
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
@@ -81,31 +81,29 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
+
+        # Check if there is Energy in the Dooder's neighborhood
         neighborhood = dooder.neighborhood
         has_energy = np.array([neighborhood.contains('Energy')], dtype='uint8')
 
+        # Get model if it exists
         if hasattr(dooder, 'move_action'):
             model = dooder.move_action
 
+        # Initialize model if it doesn't exist
         else:
-            model = base_model()
+            model = SimpleNeuralNet()
             dooder.move_action = model
 
-        # Feed forward with prediction
-        output = model.forward(has_energy, training=True)
-        prediction = model.output_layer_activation.predictions(output)
-        neighbor_number = prediction[0]
-        predicted_location = neighborhood.coordinates[neighbor_number]
+        # Predict where to move
+        prediction = model.predict(has_energy)
+        predicted_location = neighborhood.coordinates[prediction]
 
-        # ---- Learning (after prediction is made) ----
+        # Learn from the reality
+        # Note: Prediction happens before learning. Learning happens after action
         correct_choices = [location[0] for location in enumerate(
             neighborhood.contains('Energy')) if location[1] == True]
-        correct_choices_array = np.array(correct_choices, dtype='uint8')
 
-        model.backward(output, correct_choices_array)
-        model.optimizer.pre_update_params()
-        for layer in model.trainable_layers:
-            model.optimizer.update_params(layer)
-        model.optimizer.post_update_params()
+        model.learn(correct_choices)
 
         return predicted_location
