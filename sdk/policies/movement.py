@@ -8,6 +8,7 @@ Currently there are three policies:
 
 from random import choice
 from typing import TYPE_CHECKING
+import numpy as np
 
 from nets.model import base_model
 from sdk.base.base_policy import BasePolicy
@@ -81,7 +82,7 @@ class NeuralNetwork(BasePolicy):
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
         neighborhood = dooder.neighborhood
-        has_energy = neighborhood.contains('Energy')
+        has_energy = np.array([neighborhood.contains('Energy')], dtype='uint8')
 
         if hasattr(dooder, 'move_action'):
             model = dooder.move_action
@@ -90,4 +91,21 @@ class NeuralNetwork(BasePolicy):
             model = base_model()
             dooder.move_action = model
 
+        # Feed forward with prediction
         output = model.forward(has_energy, training=True)
+        prediction = model.output_layer_activation.predictions(output)
+        neighbor_number = prediction[0]
+        predicted_location = neighborhood.coordinates[neighbor_number]
+
+        # ---- Learning (after prediction is made) ----
+        correct_choices = [location[0] for location in enumerate(
+            neighborhood.contains('Energy')) if location[1] == True]
+        correct_choices_array = np.array(correct_choices, dtype='uint8')
+
+        model.backward(output, correct_choices_array)
+        model.optimizer.pre_update_params()
+        for layer in model.trainable_layers:
+            model.optimizer.update_params(layer)
+        model.optimizer.post_update_params()
+
+        return predicted_location
