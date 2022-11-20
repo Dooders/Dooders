@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from nets.model import SimpleNeuralNet
+from sdk.learning.nets.model import SimpleNeuralNet
 from sdk.base.base_policy import BasePolicy
 from sdk.core.policies import Policies
 
