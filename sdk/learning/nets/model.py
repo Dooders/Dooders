@@ -3,11 +3,11 @@ Code taken from "Neural Networks from Scratch"
 https://nnfs.io/
 """
 
-from nets.activation import *
-from nets.eval import *
-from nets.layer import *
-from nets.loss import *
-from nets.optimizer import *
+from sdk.learning.nets.activation import *
+from sdk.learning.nets.eval import *
+from sdk.learning.nets.layer import *
+from sdk.learning.nets.loss import *
+from sdk.learning.nets.optimizer import *
 
 
 class Model:
