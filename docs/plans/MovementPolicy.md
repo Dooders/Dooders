@@ -1,12 +1,12 @@
 # Movement Policy
 
-Develop and test different movement possibilities for a Dooder
+Develop and test different movement policies available to a Dooder. A movement policy provides a decision point on what a Dooder will do next. Currently, the goal is to find more energy to consume, to prolong its life.
 
 ## Goals
 
 - [x] Create a movement system that allows the Dooder to move in 1 of 9 directions (includes the current position)
 - [x] Develop and test three movement policies (Random, Rule-based and Simple Neural Network)
-- [x] Determine which policy maximizes Energy consumption and a Dooder's lifespan
+- [x] Determine which policy maximizes Energy consumption, a Dooder's lifespan, and it's ability to learn
 
 ## Requirements
 
@@ -55,5 +55,3 @@ The NeuralNetwork policy is the best choice for a policy that allows for a Doode
 
 - Work on a Reproduction Policy
 - Develop more Movement Policies. Leveraging Reinforcement Learning and other decision making strategies
-  
-## Thoughts
