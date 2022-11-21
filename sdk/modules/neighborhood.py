@@ -1,9 +1,15 @@
 """ 
+Neighborhood Class
+
 This module contains the Neighborhood class, which is used to represent a
-neighborhood in the simulation. A neighborhood is a list of locations.
+neighborhood in the simulation. A neighborhood is a list of locations adjacent to a Dooder.
 """
 
 import random
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .location import Location
 
 
 class Neighborhood(list):
@@ -15,17 +21,18 @@ class Neighborhood(list):
     __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
                    4: '-', 5: 'E', 6: 'SW', 7: 'S', 8: 'SE'}
 
-    def __init__(self, locations, dooder):
+    def __init__(self, locations: list[Location], dooder: object) -> None:
         """ 
         Initialize a neighborhood object
 
         Args:
+            locations: A list of locations adjacent to the dooder
             dooder: The dooder to create the neighborhood around
         """
         self.dooder = dooder
         super().__init__(locations)
 
-    def to_direction(self, location):
+    def to_direction(self, location: Location) -> str:
         """ 
         Return the direction of a location in the neighborhood
 
@@ -37,7 +44,7 @@ class Neighborhood(list):
         """
         return self.__mapping__[location]
 
-    def contains(self, object_type: str):
+    def contains(self, object_type: str) -> bool:
         """ 
         Return whether the neighborhood contains a given object type
 
@@ -53,7 +60,7 @@ class Neighborhood(list):
 
         return result
 
-    def fetch(self, object_type: str):
+    def fetch(self, object_type: str) -> object:
         """ 
         Return a list of objects of a given type in the neighborhood
 
@@ -72,21 +79,21 @@ class Neighborhood(list):
         return result
 
     @property
-    def locations(self):
+    def locations(self) -> list[Location]:
         """ 
         Return the locations in the neighborhood
         """
         return self
 
     @property
-    def coordinates(self):
+    def coordinates(self) -> list[tuple[int, int]]:
         """ 
         Return the coordinates of the locations in the neighborhood
         """
         return [x.coordinates for x in self]
 
     @property
-    def random(self):
+    def random(self) -> Location:
         """ 
         Return a random location in the neighborhood
         """
