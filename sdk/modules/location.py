@@ -57,11 +57,11 @@ class Location:
 
         if len(self.contents) == 0:
             self.status = 'empty'
-            
+
     def has(self, object_type: str, ignore=None) -> bool:
         """ 
         Return a boolean indicating if the location contains a specific object type
-        
+
         Args:
             object_type: The type of object to check for
             ignore: A list of object to ignore (Specifically the involved Dooder)
@@ -87,20 +87,17 @@ class Location:
         Return a random object in the location
         """
         return random.choice(list(self.contents.values()))
-    
+
     @property
     def is_empty(self) -> bool:
         """ 
         Return a boolean indicating if the location is empty
         """
         return self.status == 'empty'
-    
+
     @property
     def is_occupied(self) -> bool:
         """ 
         Return a boolean indicating if the location is occupied
         """
         return self.status == 'occupied'
-    
-
-
