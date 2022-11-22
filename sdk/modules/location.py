@@ -12,7 +12,6 @@ import random
 
 class Location:
 
-    # List of all contents in the location
     def __init__(self, x: int, y: int) -> None:
         """ 
         Initialize a location object with a unique id and coordinates
