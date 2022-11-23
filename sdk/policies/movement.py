@@ -81,19 +81,24 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
+        
+        #! Need to make based on the goal (Energy or Reproduction)
+        #! Need a better way to manage multiple models for a dooder
+        #! Target-based movement models
+        target = dooder.target
 
         # Check if there is Energy in the Dooder's neighborhood
         neighborhood = dooder.neighborhood
-        has_energy = np.array([neighborhood.contains('Energy')], dtype='uint8')
+        has_energy = np.array([neighborhood.contains(target)], dtype='uint8')
 
         # Get model if it exists
         if hasattr(dooder, 'move_action'):
-            model = dooder.move_action
+            model = dooder.movement
 
         # Initialize model if it doesn't exist
         else:
             model = SimpleNeuralNet()
-            dooder.move_action = model
+            dooder.movement = model
 
         # Predict where to move
         prediction = model.predict(has_energy)
@@ -102,7 +107,7 @@ class NeuralNetwork(BasePolicy):
         # Learn from the reality
         # Note: Prediction happens before learning. Learning happens after action
         correct_choices = [location[0] for location in enumerate(
-            neighborhood.contains('Energy')) if location[1] == True]
+            neighborhood.contains(target)) if location[1] == True]
 
         model.learn(correct_choices)
 
