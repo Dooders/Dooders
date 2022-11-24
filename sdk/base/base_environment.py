@@ -1,19 +1,18 @@
 """
-Enviromenment base class.
+Environment base class.
 =================
 Heavily based on the space component in the Mesa library
 https://github.com/projectmesa/mesa/blob/main/mesa/space.py
 """
 
 import itertools
-from abc import ABC, abstractmethod
 from numbers import Real
 from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
-                    Set, Tuple, TypeVar, Union, cast, overload)
+                    Tuple, TypeVar, Union, cast, overload)
 
 import numpy as np
+
 from sdk.base.base_object import BaseObject
-from sdk.modules.neighborhood import Neighborhood
 from sdk.modules.location import Location
 
 Coordinate = Tuple[int, int]
@@ -208,10 +207,10 @@ class BaseEnvironment(ABC):
             equals at most 9 (8) if Moore, 5 (4) if Von Neumann (if not
             including the center).
         """
-        neighborhood = self.get_neighborhood(position, moore, include_center, radius)
+        neighborhood = self.get_neighborhood(
+            position, moore, include_center, radius)
         return [self.grid[pos[0]][pos[1]] for pos in neighborhood]
-    
-    
+
     def get_neighborhood(
         self,
         position: Coordinate,
