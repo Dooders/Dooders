@@ -258,3 +258,17 @@ class SimpleNeuralNet:
         for layer in self.model.trainable_layers:
             self.model.optimizer.update_params(layer)
         self.model.optimizer.post_update_params()
+        
+    @property
+    def weights(self) -> np.ndarray:
+        """ 
+        Get the weights of the neural network from every dense layer
+
+        Returns:
+            np.ndarray: The weights of the neural network
+        """
+        weights = []
+        for layer in self.model.layers:
+            if isinstance(layer, Layer_Dense):
+                weights.append(layer.weights)
+        return weights
