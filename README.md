@@ -21,14 +21,6 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
-### Primary Goal
-
-To gain an intuition of the mechanics and dynamics of complex systems. The project allows me to have a central location for experimentation and documentation.  
-
-### Project Strategy
-
-I will continue to complexify[^4] the library and experiment with more models and observe the interactions inside the simulation. This strategy will help me see how changes affect the results and if any emergent[^5] properties surface.  
-
 ### Main Concepts
 
 | Concept                                | Explanation                                                                            |
