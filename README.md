@@ -82,6 +82,4 @@ Now, I'm focusing more on software engineering a developing good design principl
 
 [^1]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
 [^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships.  
-[^3]: In the library, just about everything is separated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code.  
-[^4]: Complexification creates conditions for emergent properties. Borrowing the slogan from the classic movie *Field of Dreams*: `"if you complexify it, properties will emerge"`  
-[^5]: Emergent properties are properties that only exist from the interactions inside/between models. A property that is `"greater than the sum of its parts"`  
+[^3]: In the library, just about everything is separated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code. 
