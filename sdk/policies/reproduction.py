@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 from sdk.base.base_policy import BasePolicy
 from sdk.core.policies import Policies
-import numpy as np
 
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
-    
+
 
 @Policies.register()
 class AverageWeights(BasePolicy):
@@ -57,8 +58,8 @@ class RangeWeights(BasePolicy):
         for layerA, layerB in zip(dooderA.movement.weights, dooderB.movement.weights):
             new_weights.append(np.random.uniform(layerA, layerB))
         return new_weights
-        
-        
+
+
 @Policies.register()
 class SplitWeights(BasePolicy):
     """
@@ -84,5 +85,5 @@ class SplitWeights(BasePolicy):
         new_weights = []
         new_weights.append(dooderA.movement.weights[0])
         new_weights.append(dooderB.movement.weights[1])
-        
+
         return new_weights
