@@ -6,10 +6,10 @@ neighborhood in the simulation. A neighborhood is a list of locations adjacent t
 """
 
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Tuple
 
 if TYPE_CHECKING:
-    from .location import Location
+    from sdk.modules.location import Location
 
 
 class Neighborhood(list):
@@ -21,7 +21,7 @@ class Neighborhood(list):
     __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
                    4: '-', 5: 'E', 6: 'SW', 7: 'S', 8: 'SE'}
 
-    def __init__(self, locations: list[Location], dooder: object) -> None:
+    def __init__(self, locations, dooder: object) -> None:
         """ 
         Initialize a neighborhood object
 
@@ -32,7 +32,7 @@ class Neighborhood(list):
         self.dooder = dooder
         super().__init__(locations)
 
-    def to_direction(self, location: Location) -> str:
+    def to_direction(self, location: 'Location') -> str:
         """ 
         Return the direction of a location in the neighborhood
 
@@ -79,21 +79,21 @@ class Neighborhood(list):
         return result
 
     @property
-    def locations(self) -> list[Location]:
+    def locations(self) -> List['Location']:
         """ 
         Return the locations in the neighborhood
         """
         return self
 
     @property
-    def coordinates(self) -> list[tuple[int, int]]:
+    def coordinates(self) -> List[Tuple[int, int]]:
         """ 
         Return the coordinates of the locations in the neighborhood
         """
         return [x.coordinates for x in self]
 
     @property
-    def random(self) -> Location:
+    def random(self) -> 'Location':
         """ 
         Return a random location in the neighborhood
         """

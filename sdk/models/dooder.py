@@ -14,6 +14,7 @@ from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
 from sdk.modules.neighborhood import Neighborhood
 from sdk.utils.get_direction import get_direction
+from sdk.actions.reproduce import reproduce
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -72,8 +73,9 @@ class Dooder(BaseObject):
             self.position = destination
 
     def consume(self):
-        #! get_cell_list_contents not working
-        #! dooders are getting added to each location
+        """ 
+        Consume energy from the environment
+        """
 
         cell_contents = self.simulation.environment.get_cell_list_contents(
             self.position)
@@ -149,6 +151,7 @@ class Dooder(BaseObject):
             destination = self.simulation.policies(policy, self)
             self.move(destination)
             self.consume()
+            reproduce(self)
 
             if self.death_check():
                 self.log(granularity=1,
@@ -162,10 +165,19 @@ class Dooder(BaseObject):
         clone.unique_id = self.simulation.seed.uuid()
 
         return clone
+    
+    def find_partner(self) -> 'Dooder':
+        """
+        Find another Dooder from current position.
+        """
+        near_dooders = self.simulation.environment.get_cell_list_contents(self.position)
 
-    def build_model(self, schematic):
-        pass
+        for object in near_dooders:
+            if isinstance(object, Dooder):
+                return object
 
+        return None
+        
     def __str__(self) -> str:
         """
         Return string of class attributes and genetics.

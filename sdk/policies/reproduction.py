@@ -28,7 +28,7 @@ class AverageWeights(BasePolicy):
         """
         #! create model method to easily get layer weights
         new_weights = []
-        for layerA, layerB in zip(dooderA.model.weights, dooderB.model.weights):
+        for layerA, layerB in zip(dooderA.movement.weights, dooderB.movement.weights):
             new_weights.append((layerA + layerB) / 2)
         return new_weights
 
@@ -54,7 +54,7 @@ class RangeWeights(BasePolicy):
         """
         #! create model method to easily get layer weights
         new_weights = []
-        for layerA, layerB in zip(dooderA.model.weights, dooderB.model.weights):
+        for layerA, layerB in zip(dooderA.movement.weights, dooderB.movement.weights):
             new_weights.append(np.random.uniform(layerA, layerB))
         return new_weights
         
@@ -82,9 +82,7 @@ class SplitWeights(BasePolicy):
         """
         #! create model method to easily get layer weights
         new_weights = []
-        for layerA, layerB in zip(dooderA.model.weights, dooderB.model.weights):
-            if layerA == dooderA.model.weights[0]:
-                new_weights.append(layerA)
-            else:
-                new_weights.append(layerB)
+        new_weights.append(dooderA.movement.weights[0])
+        new_weights.append(dooderB.movement.weights[1])
+        
         return new_weights
