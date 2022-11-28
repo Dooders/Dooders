@@ -50,14 +50,6 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 | Simulation parameters | Make it so simulation strategies and parameters can be changed easily |
 | Senses model | Right now a Dooder has no way to aquire information that isn't directly fed to it. A senses model allows a Dooder to aquire information from the environment |
 
-## My Background
-
-My educational background was aimed towards becoming an intelligence analyst, focusing on remote sensing. After graduate school I needed a job and started at a large insurance company where I discovered the power of data.  
-
-The love of data grew and directed me to python and the world of Data Science. I had a few roles using my Data Science skills in the insurance and financial industry. At the start of the pandemic, I decided to finally go deep into deep learning and neural networks.  
-
-Now, I'm focusing more on software engineering a developing good design principles. This project is the perfect opportunity for me to work on it as I want, and have enough coverage to never get bored.  
-
 ## Why?
 
 [A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  (A better [answer](https://rememberization.substack.com/p/why-dooders))
