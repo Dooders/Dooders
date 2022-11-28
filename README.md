@@ -60,7 +60,7 @@ Now, I'm focusing more on software engineering a developing good design principl
 
 ## Why?
 
-[A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  
+[A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  (A better [answer](https://rememberization.substack.com/p/why-dooders))
   
 ### Footnotes
 
