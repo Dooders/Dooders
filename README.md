@@ -14,7 +14,7 @@ Dooders is a python library for *complex model-based simulations*.
 Unpacking the terminology a bit:  
 
 * **Complex**: The library simulates not only a single system, but systems of systems.[^2]  
-* **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.[^3]  
+* **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
 
 This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, and a lot more.  
@@ -58,4 +58,3 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 
 [^1]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
 [^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships.  
-[^3]: In the library, just about everything is separated into models (systems). Functionally that helps a lot, and it helps neatly contain concepts in code. 
