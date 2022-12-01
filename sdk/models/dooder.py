@@ -58,6 +58,7 @@ class Dooder(BaseObject):
         self.direction = 'Origin'
         self.moore = True
         self.age = 0
+        self.internal_models = {}
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 

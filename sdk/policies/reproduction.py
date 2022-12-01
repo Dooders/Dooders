@@ -29,7 +29,10 @@ class AverageWeights(BasePolicy):
         """
         #! create model method to easily get layer weights
         new_weights = []
-        for layerA, layerB in zip(dooderA.movement.weights, dooderB.movement.weights):
+        weightsA = dooderA.internal_models['movement'].weights
+        weightsB = dooderB.internal_models['movement'].weights
+        
+        for layerA, layerB in zip(weightsA, weightsB):
             new_weights.append((layerA + layerB) / 2)
         return new_weights
 

@@ -9,6 +9,7 @@ def reproduce(dooderA):
     Args:
         dooderA (Dooder): The first Dooder.
     """
+    #! need to fix to do variable internal models
     from sdk.core import Policies
     reproduction_policy = Policies.policies['AverageWeights']
 
@@ -20,9 +21,9 @@ def reproduce(dooderA):
             genetics = reproduction_policy.execute(dooderA, dooderB)
             offspring = dooderA.simulation.society._generate_dooder(
                 dooderA.position)
-            offspring.movement = copy.deepcopy(
-                dooderA.movement)  # ! this doesn't work
-            offspring.movement.inherit_weights(genetics)
+            offspring.internal_models = copy.deepcopy(
+                dooderA.internal_models)
+            offspring.internal_models['movement'].inherit_weights(genetics)
             offspring.simulation.society.place_dooder(
                 offspring, offspring.position)
 

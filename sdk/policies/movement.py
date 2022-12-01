@@ -93,15 +93,14 @@ class NeuralNetwork(BasePolicy):
         has_energy = np.array([neighborhood.contains('Energy')], dtype='uint8')
 
         # Get model if it exists
-        if hasattr(dooder, 'movement'):
-            model = dooder.movement
-        # Initialize model if it doesn't exist
-        else:
-            model = SimpleNeuralNet()
-            dooder.movement = model
+        movement_model = dooder.internal_models.get('movement', None)
+        
+        if movement_model is None:
+            movement_model = SimpleNeuralNet()
+            dooder.internal_models['movement'] = movement_model
 
         # Predict where to move
-        prediction = model.predict(has_energy)
+        prediction = movement_model.predict(has_energy)
         predicted_location = neighborhood.coordinates[prediction]
 
         # Learn from the reality
@@ -109,6 +108,6 @@ class NeuralNetwork(BasePolicy):
         correct_choices = [location[0] for location in enumerate(
             neighborhood.contains('Energy')) if location[1] == True]
 
-        model.learn(correct_choices)
+        movement_model.learn(correct_choices)
 
         return predicted_location
