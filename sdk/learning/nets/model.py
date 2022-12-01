@@ -258,3 +258,28 @@ class SimpleNeuralNet:
         for layer in self.model.trainable_layers:
             self.model.optimizer.update_params(layer)
         self.model.optimizer.post_update_params()
+
+    def inherit_weights(self, genetics) -> None:
+        """ 
+        Update the weights based on provided derived genetics
+        from parent Dooders
+
+        Args:
+            genetics list[ndarray]: The derived genetics from parent Dooders
+        """
+        self.model.layers[0].weights = genetics[0]
+        self.model.layers[2].weights = genetics[1]
+
+    @property
+    def weights(self) -> np.ndarray:
+        """ 
+        Get the weights of the neural network from every dense layer
+
+        Returns:
+            np.ndarray: The weights of the neural network
+        """
+        weights = []
+        for layer in self.model.layers:
+            if isinstance(layer, Layer_Dense):
+                weights.append(layer.weights)
+        return weights

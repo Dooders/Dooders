@@ -60,16 +60,30 @@ class Society:
         for position in self.SeedPlacement:
             self.generate_dooder(position)
 
-    def generate_dooder(self, position) -> None:
+    def _generate_dooder(self, position) -> 'Dooder':
         """
         Generate a new dooder
 
         Args:
             position (tuple): position to place dooder
+
+        Returns:
+            Dooder: dooder object
         """
-        dooder = Dooder(self.simulation.generate_id(), position,
-                        self.simulation)
+        dooder = Dooder(self.simulation.generate_id(),
+                        position, self.simulation)
+        return dooder
+
+    def generate_dooder(self, position) -> None:
+        """
+        Generate a new dooder and place it
+
+        Args:
+            position (tuple): position to place dooder
+        """
+        dooder = self._generate_dooder(position)
         self.place_dooder(dooder, position)
+        dooder.log(granularity=1, message=f"Created {dooder.unique_id}", scope='Dooder') #! remove duplicate log call
 
     def place_dooder(self, dooder: 'Dooder', position) -> None:
         """
@@ -85,6 +99,7 @@ class Society:
         self.active_dooders[dooder.unique_id] = dooder
 
         # ! add dooder attributes to node
+        #! WIP
         self.graph.add_node(dooder.unique_id)
         self.total_created_dooders += 1
 
