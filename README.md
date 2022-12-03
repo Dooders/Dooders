@@ -53,6 +53,9 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 ## Why?
 
 [A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  (A better [answer](https://rememberization.substack.com/p/why-dooders))
+
+## Links
+
   
 ### Footnotes
 
