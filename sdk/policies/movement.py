@@ -93,11 +93,10 @@ class NeuralNetwork(BasePolicy):
         goal = cls.infer_goal(dooder, neighborhood)
         target = base_goals[goal]
         
-        # Check if there is Energy in the Dooder's neighborhood
-
+        # Check if the target is inside the Dooder's neighborhood
         has_target = np.array([neighborhood.contains(target)], dtype='uint8')
 
-        # Get model if it exists
+        # Get model if it exists, else return an empty dict
         movement_model = dooder.internal_models.get('move', {})
             
         model = movement_model.get(target, None):
@@ -121,7 +120,7 @@ class NeuralNetwork(BasePolicy):
      
      @classmethod
      def infer_goal(cls, dooder, neighborhood):
-            if dooder.hungry:
+            if dooder.hunger < 0:
                 return 'Consume'
             elif neighborhood.contains('Dooder'): # maybe have a way to return any, all, none, etc
                 return 'Reproduce'
