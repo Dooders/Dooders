@@ -81,33 +81,55 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
-        
         #! Need to make based on the goal (Energy or Reproduction)
         #! Need a better way to manage multiple models for a dooder
         #! Target-based movement models
-        #! Need a better way to create internal models from Dooder class directly
-        # target = dooder.target
-
-        # Check if there is Energy in the Dooder's neighborhood
+        #! Need a better way to create internal models from Dooder class directly        
+        
         neighborhood = dooder.neighborhood
-        has_energy = np.array([neighborhood.contains('Energy')], dtype='uint8')
+        
+        base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}
+        
+        goal = cls.infer_goal(dooder, neighborhood)
+        target = base_goals[goal]
+        
+        # Check if there is Energy in the Dooder's neighborhood
+
+        has_target = np.array([neighborhood.contains(target)], dtype='uint8')
 
         # Get model if it exists
-        movement_model = dooder.internal_models.get('movement', None)
+        movement_model = dooder.internal_models.get('move', None)
         
         if movement_model is None:
-            movement_model = SimpleNeuralNet()
-            dooder.internal_models['movement'] = movement_model
+            movement_model = {}
+            
+        model = movement_model.get(target, None):
+            
+        if model is None:
+            model = SimpleNeuralNet()
+            dooder.internal_models['move'][target] = model
 
         # Predict where to move
-        prediction = movement_model.predict(has_energy)
+        prediction = model.predict(has_target)
         predicted_location = neighborhood.coordinates[prediction]
 
         # Learn from the reality
         # Note: Prediction happens before learning. Learning happens after action
         correct_choices = [location[0] for location in enumerate(
-            neighborhood.contains('Energy')) if location[1] == True]
+            neighborhood.contains(target)) if location[1] == True]
 
-        movement_model.learn(correct_choices)
+        model.learn(correct_choices)
 
         return predicted_location
+     
+     @classmethod
+     def infer_goal(cls, dooder, neighborhood):
+            if dooder.hungry:
+                return 'Consume'
+            elif neighborhood.contains('Dooder'): # maybe have a way to return any, all, none, etc
+                return 'Reproduce'
+            else:
+                return 'Consume'
+    
+    
+    
