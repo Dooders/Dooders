@@ -18,12 +18,12 @@ def reproduce(dooderA):
         dooderB = dooderA.find_partner()
 
         if dooderB:
-            genetics = reproduction_policy.execute(dooderA, dooderB)
+            genetics = reproduction_policy.execute(dooderA, dooderB) #! make sure this will execute for all internal_models
             offspring = dooderA.simulation.society._generate_dooder(
                 dooderA.position)
             offspring.internal_models = copy.deepcopy(
                 dooderA.internal_models)
-            offspring.internal_models['movement'].inherit_weights(genetics)
+            offspring.internal_models['move'].inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models
             offspring.simulation.society.place_dooder(
                 offspring, offspring.position)
 
