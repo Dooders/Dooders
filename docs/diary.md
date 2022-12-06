@@ -6,6 +6,10 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-05 Building out the Dooder step process
+
+I'm first going to create a custom dictionary class to handle the imternal models.
+
 ## 2022-12-04: Managing multiple learning models
 
 Right now I'm working out the best design to manage multiple learning models. Currently a Dooder only has a model to determine where to move (saved as a class attribute called internal_models). I'll be adding many more models going further so I need a consistent design.
