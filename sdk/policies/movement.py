@@ -69,38 +69,37 @@ class RuleBased(BasePolicy):
 
 @Policies.register()
 class NeuralNetwork(BasePolicy):
-    """
-    Given a Dooder object, returns a selected location based on neural network output
 
-    Args:
-        dooder: The Dooder object to move
-
-    Returns:
-        A location based on neural network output
-    """
+    base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}
 
     @classmethod
-    def execute(self, dooder: 'Dooder') -> tuple:
-        #! Need to make based on the goal (Energy or Reproduction)
-        #! Need a better way to manage multiple models for a dooder
-        #! Target-based movement models
-        #! Need a better way to create internal models from Dooder class directly        
-        
+    def execute(cls, dooder: 'Dooder') -> tuple:
+        """ 
+        Given a Dooder object, returns a selected location based on neural network output
+        The neural network is trained to predict the location of the nearest target source
+        This function will first determine to goal of the Dooder (Reproduce or Consume)
+        Then a model is trained for each target source (Dooder or Energy)
+
+        Args:
+            dooder: The Dooder object to move
+
+        Returns:
+            A location based on neural network output
+        """
+
         neighborhood = dooder.neighborhood
-        
-        base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}
-        
+
         goal = cls.infer_goal(dooder, neighborhood)
-        target = base_goals[goal]
-        
+        target = cls.base_goals[goal]
+
         # Check if the target is inside the Dooder's neighborhood
         has_target = np.array([neighborhood.contains(target)], dtype='uint8')
 
         # Get model if it exists, else return an empty dict
         movement_model = dooder.internal_models.get('move', {})
-            
-        model = movement_model.get(target, None):
-            
+
+        model = movement_model.get(target, None)
+
         if model is None:
             model = SimpleNeuralNet()
             dooder.internal_models['move'][target] = model
@@ -117,15 +116,26 @@ class NeuralNetwork(BasePolicy):
         model.learn(correct_choices)
 
         return predicted_location
-     
-     @classmethod
-     def infer_goal(cls, dooder, neighborhood):
-            if dooder.hunger < 0:
-                return 'Consume'
-            elif neighborhood.contains('Dooder'): # maybe have a way to return any, all, none, etc
-                return 'Reproduce'
-            else:
-                return 'Consume'
-    
-    
-    
+
+    @classmethod
+    def infer_goal(cls, dooder, neighborhood) -> str:
+        """ 
+        Function to infer the goal of the Dooder
+        The goal is to reproduce or consume energy
+        If the Dooder has hunger below 0, it will consume energy
+        If there are any Dooders nearby, it will reproduce
+        The default goal is to consume energy
+
+        Args:
+            dooder: The Dooder object to move
+            neighborhood: The Dooder's neighborhood
+
+        Returns:
+            The goal of the Dooder 'Consume' or 'Reproduce'
+        """
+        if dooder.hunger < 0:
+            return 'Consume'
+        elif any(neighborhood.contains('Dooder')):
+            return 'Reproduce'
+        else:
+            return 'Consume'

@@ -9,7 +9,6 @@ def reproduce(dooderA):
     Args:
         dooderA (Dooder): The first Dooder.
     """
-    #! need to fix to do variable internal models
     from sdk.core import Policies
     reproduction_policy = Policies.policies['AverageWeights']
 

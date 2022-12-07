@@ -8,7 +8,9 @@ Sorted by the most recent entry
 
 ## 2022-12-05 Building out the Dooder step process
 
-I'm first going to create a custom dictionary class to handle the imternal models.
+I'm first going to create a custom dictionary class to handle the internal models. That way I can easily access the weights and biases of every model
+
+Then I'm going to update the movement policy to be goal-based. The goal will be inferred by the Dooder's state.
 
 ## 2022-12-04: Managing multiple learning models
 
