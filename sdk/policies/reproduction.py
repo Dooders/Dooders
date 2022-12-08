@@ -27,13 +27,23 @@ class AverageWeights(BasePolicy):
         Returns:
             Dooder: The new Dooder weights
         """
-        #! create model method to easily get layer weights
-        new_weights = []
-        weightsA = dooderA.internal_models['move'].weights
-        weightsB = dooderB.internal_models['move'].weights
-        
-        for layerA, layerB in zip(weightsA, weightsB):
-            new_weights.append((layerA + layerB) / 2)
+        # {'move': {'consume': np.ndarray, 'reproduce': np.ndarray}}
+
+        new_weights = {}
+        weightsA = dooderA.internal_models.weights
+        weightsB = dooderB.internal_models.weights
+
+        for key in weightsA.keys():
+            modelA = weightsA[key]
+            modelB = weightsB[key]
+
+            new_weights[key] = {}
+
+            for k in modelA.keys():
+                mA = modelA[k]
+                mB = modelB[k]
+                new_weights[key][k] = [((mA + mB) / 2)]
+
         return new_weights
 
 
@@ -56,10 +66,21 @@ class RangeWeights(BasePolicy):
         Returns:
             Dooder: The new Dooder weights
         """
-        #! create model method to easily get layer weights
-        new_weights = []
-        for layerA, layerB in zip(dooderA.movement.weights, dooderB.movement.weights):
-            new_weights.append(np.random.uniform(layerA, layerB))
+        new_weights = {}
+        weightsA = dooderA.internal_models.weights
+        weightsB = dooderB.internal_models.weights
+
+        for key in weightsA.keys():
+            modelA = weightsA[key]
+            modelB = weightsB[key]
+
+            new_weights[key] = {}
+
+            for k in modelA.keys():
+                mA = modelA[k]
+                mB = modelB[k]
+                new_weights[key][k] = [np.random.uniform(mA, mB)]
+
         return new_weights
 
 
@@ -84,9 +105,19 @@ class SplitWeights(BasePolicy):
         Returns:
             Dooder: The new Dooder weights
         """
-        #! create model method to easily get layer weights
-        new_weights = []
-        new_weights.append(dooderA.movement.weights[0])
-        new_weights.append(dooderB.movement.weights[1])
+        new_weights = {}
+        weightsA = dooderA.internal_models.weights
+        weightsB = dooderB.internal_models.weights
+
+        for key in weightsA.keys():
+            modelA = weightsA[key]
+            modelB = weightsB[key]
+
+            new_weights[key] = {}
+
+            for k in modelA.keys():
+                mA = modelA[k]
+                mB = modelB[k]
+                new_weights[key][k] = [mA[0], mB[1]]
 
         return new_weights
