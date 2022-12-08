@@ -6,28 +6,49 @@ class InternalModels(dict):
     the weights of the internal models.
     """
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super(InternalModels, self).__init__(*args, **kwargs)
         
-    def inherit_weights(self, weights):
+    def inherit_weights(self, weights: dict) -> None:
         """ 
         Take a dictionary of weights and inherit them into the internal models.
+        
+        Args:
+            weights (dict): A dictionary of weights to inherit.
         """
-        pass
+        for key in self.keys():
+            self[key].inherit_weights(weights[key])
     
     @property
-    def weights(self):
+    def weights(self) -> dict:
         """ 
         Return a dictionary of weights from the internal models.
         
+        Returns:
+            dict: A dictionary of weights from the internal models.
         """
-        pass
+        keys = self.keys()
+        weights = dict()
+        
+        for key in keys:
+            weights[key] = self[key].weights
+            
+        return weights
     
     @property
-    def biases(self):
+    def biases(self) -> dict:
         """ 
         Return a dictionary of biases from the internal models.
+        
+        Returns:
+            dict: A dictionary of biases from the internal models.
         """
-        pass
+        keys = self.keys()
+        biases = dict()
+        
+        for key in keys:
+            biases[key] = self[key].biases
+            
+        return biases
     
     

@@ -7,14 +7,15 @@ interact with other objects.
 import copy
 from typing import TYPE_CHECKING
 
+from sdk.actions.reproduce import reproduce
 from sdk.base.base_object import BaseObject
 from sdk.core import Condition
 from sdk.models.energy import Energy
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
+from sdk.modules.internal_models import InternalModels
 from sdk.modules.neighborhood import Neighborhood
 from sdk.utils.get_direction import get_direction
-from sdk.actions.reproduce import reproduce
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -58,7 +59,7 @@ class Dooder(BaseObject):
         self.direction = 'Origin'
         self.moore = True
         self.age = 0
-        self.internal_models = {}
+        self.internal_models = InternalModels()
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
