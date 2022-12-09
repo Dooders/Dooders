@@ -6,6 +6,14 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-08 Actions and Step Phases
+
+Next step on the design updates is to build out an Action class to manage all the different actions possible in the simulation. At first will there will only be the consume, move and reproduce actions.
+
+Secondly, taking a "phase" approach to the Dooder step functions. It will be React, Move, Act (in that order). React will be to resolve any "debts" to the simulation, in other words, any situations that affect a Dooder while outside the Dooder's turn, must be resolved first.
+
+The Move phase will allow the Dooder to improve it's situation by moving to another Location, or it can decide not to move. The Act phase will contain all the more planned/inferred actions the Dooder will take. This phase allows more "thinking" where the React phase restricts actions that are much simpler and rule-like.  
+
 ## 2022-12-07: InternalModels class
 
 I finished up the InternalModels class. It's a dictionary-like class that holds the internal models for each Dooder. It allows for easy access to the weights and biases of the NeuralNetworks. It also allows for easy access to the models themselves.  
