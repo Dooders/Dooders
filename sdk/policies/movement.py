@@ -96,8 +96,12 @@ class NeuralNetwork(BasePolicy):
         has_target = np.array([neighborhood.contains(target)], dtype='uint8')
 
         # Get model if it exists, else return an empty dict
-        movement_model = dooder.internal_models.get('move', {})
-
+        movement_model = dooder.internal_models.get('move', None)
+        
+        if movement_model is None:
+            dooder.internal_models['move'] = {}
+            movement_model = dooder.internal_models['move']
+            
         model = movement_model.get(target, None)
 
         if model is None:

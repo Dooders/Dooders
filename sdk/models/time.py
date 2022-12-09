@@ -7,7 +7,7 @@ from collections import defaultdict
 from typing import List, Type, Union
 
 from sdk.base.base_object import BaseObject
-from sdk.base.base_time import BaseTime, ClassObject
+from sdk.base.base_time import BaseTime
 
 TimeT = Union[float, int]
 
@@ -56,7 +56,7 @@ class Time(BaseTime):
         """
         del self._objects[object.name][object.unique_id]
 
-    def _step(self, object_class: Type[ClassObject], shuffle_objects: bool = True) -> None:
+    def _step(self, object_class, shuffle_objects: bool = True) -> None:
         """ 
         Step through the objects of a given class
 
@@ -98,7 +98,7 @@ class Time(BaseTime):
         """
         return len(self._objects[object_type])
 
-    def get_objects(self, object_class: ClassObject) -> List[ClassObject]:
+    def get_objects(self, object_class):
         """ 
         Returns a list of all objects of a given class.
 
@@ -110,7 +110,7 @@ class Time(BaseTime):
         """
         return list(self._objects[object_class].values())
 
-    def get_object(self, object_class: ClassObject, unique_id: int) -> ClassObject:
+    def get_object(self, object_class, unique_id: int):
         """ 
         Returns an object of a given class with a given unique_id.
 

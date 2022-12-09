@@ -6,6 +6,7 @@ https://github.com/projectmesa/mesa/blob/main/mesa/space.py
 """
 
 import itertools
+from abc import ABC
 from numbers import Real
 from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
                     Tuple, TypeVar, Union, cast, overload)
