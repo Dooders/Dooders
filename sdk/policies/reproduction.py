@@ -42,7 +42,7 @@ class AverageWeights(BasePolicy):
             for k in modelA.keys():
                 mA = modelA[k]
                 mB = modelB[k]
-                new_weights[key][k] = [((mA + mB) / 2)]
+                new_weights[key][k] = ((mA + mB) / 2)
 
         return new_weights
 

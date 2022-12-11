@@ -18,8 +18,9 @@ class InternalModels(dict):
         Args:
             weights (dict): A dictionary of weights to inherit.
         """
-        for key in self.keys():
-            self[key].inherit_weights(weights[key])
+        for type in self.keys():
+            for name, model in self[type].items():
+                model.inherit_weights(weights[type][name])
     
     @property
     def weights(self) -> dict:
@@ -29,13 +30,15 @@ class InternalModels(dict):
         Returns:
             dict: A dictionary of weights from the internal models.
         """
-        keys = self.keys()
-        weights = dict()
+        model_types = self.keys()
+        model_weights = dict()
         
-        for key in keys:
-            weights[key] = self[key].weights
+        for type in model_types:
+            model_weights[type] = dict()
+            for name, model in self[type].items():
+                model_weights[type][name] = model.weights
             
-        return weights
+        return model_weights
     
     @property
     def biases(self) -> dict:

@@ -102,11 +102,11 @@ class NeuralNetwork(BasePolicy):
             dooder.internal_models['move'] = {}
             movement_model = dooder.internal_models['move']
             
-        model = movement_model.get(target, None)
+        model = movement_model.get(goal, None)
 
         if model is None:
             model = SimpleNeuralNet()
-            dooder.internal_models['move'][target] = model
+            dooder.internal_models['move'][goal] = model
 
         # Predict where to move
         prediction = model.predict(has_target)
