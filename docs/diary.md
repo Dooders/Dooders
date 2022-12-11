@@ -6,6 +6,10 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-11 InternalModels fix
+
+I discovered a bug where the models are only created when called the first time. I need to make it so all simulation actions have the required models loaded first. I noticed the bug when testing if the weights of parent Dooders are combined with the different policies.
+
 ## 2022-12-08 Actions and Step Phases
 
 Next step on the design updates is to build out an Action class to manage all the different actions possible in the simulation. At first will there will only be the consume, move and reproduce actions.
