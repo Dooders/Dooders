@@ -4,6 +4,8 @@ class InternalModels(dict):
     """ 
     Work like a normal dictionary but with a method to easily replace
     the weights of the internal models.
+    
+    The InternalModels class models a Dooder's learned behaviors.
     """
     
     def __init__(self, *args, **kwargs) -> None:
