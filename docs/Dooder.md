@@ -1,8 +1,21 @@
 # Dooder
 
-A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power, or has the ability to interact with its environment.[^1]
+A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power, in other words, it has the ability to interact with its environment.[^1]
 
 Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.[^2]  
+
+Laws:
+
+- A Dooder executes a step function every cycle
+- A Dooder will progress step after step until it reaches a terminal state (starvation, death, etc.)
+- A step has a specific phases of execution (React, Move, Act)
+- During the React phase, a Dooder will resolve any debts to the simulation
+  - A debt is a situation that affects a Dooder while outside the Dooder's turn
+- During the Move phase, a Dooder can relocate to a new location
+- During the Act phase, a Dooder can execute more intentional actions
+- The React phase is restricted to simple and quick actions, while the Act phase allows for more complex actions
+- A Dooder needs Energy to survive
+- Each cycle without consuming Energy will add to it's "hunger" state, increasing the chance of starvation
 
 ## Environment and Energy
 
