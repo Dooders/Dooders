@@ -1,4 +1,4 @@
-
+from sdk.learning.nets.model import SimpleNeuralNet
 
 class InternalModels(dict):
     """ 
@@ -8,8 +8,16 @@ class InternalModels(dict):
     The InternalModels class models a Dooder's learned behaviors.
     """
     
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, model_list, *args, **kwargs) -> None:
+        self.build(model_list)
         super(InternalModels, self).__init__(*args, **kwargs)
+    
+    def build(self, model_list):
+        """
+        
+        """
+        for model in model_list:
+            self[model] = SimpleNeuralNet()
         
     def inherit_weights(self, weights: dict) -> None:
         """ 
