@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from sdk.learning.nets.model import SimpleNeuralNet
 from sdk.base.base_policy import BasePolicy
 from sdk.core.policies import Policies
 
@@ -95,19 +94,13 @@ class NeuralNetwork(BasePolicy):
         # Check if the target is inside the Dooder's neighborhood
         has_target = np.array([neighborhood.contains(target)], dtype='uint8')
 
-        # Get model if it exists, else return an empty dict
-        movement_model = dooder.internal_models.get('move', None)
-        
-        if movement_model is None:
-            dooder.internal_models['move'] = {}
-            movement_model = dooder.internal_models['move']
-            
-        model = movement_model.get(goal, None)
+        # Get model if it exists, else return an error  
+        model = dooder.internal_models.get(goal, None)
 
         if model is None:
-            model = SimpleNeuralNet()
-            dooder.internal_models['move'][goal] = model
-
+            # raise error
+            pass
+        
         # Predict where to move
         prediction = model.predict(has_target)
         predicted_location = neighborhood.coordinates[prediction]
