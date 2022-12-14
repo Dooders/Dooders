@@ -4,7 +4,9 @@ A Dooder is the primary agent object in the [simulation](Simulation.md). An agen
 
 Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.[^2]  
 
-Laws:
+Below is a breakdown of the main laws for a Dooder. A law is an aspect of the simulation the Dooder cannot control.
+
+Dooder Laws:
 
 - A Dooder executes a step function every cycle
 - A Dooder will progress step after step until it reaches a terminal state (starvation, death, etc.)
@@ -16,6 +18,8 @@ Laws:
 - The React phase is restricted to simple and quick actions, while the Act phase allows for more complex actions
 - A Dooder needs Energy to survive
 - Each cycle without consuming Energy will add to it's "hunger" state, increasing the chance of starvation
+
+## A Dooder executes a step function every cycle
 
 ## Environment and Energy
 
