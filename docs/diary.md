@@ -6,6 +6,14 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-13 Actions, Policies, and Models
+
+Working through my current goal to better handle the internal models. I've mostly worked out the Action class will register all possible actions and handle the execution of an action, like Move or Reproduce.
+
+Actions will contain policies that determine how the action behaves. Models are one way to learn and interact with the environment.
+
+Next step is to start building that out.
+
 ## 2022-12-11 InternalModels fix
 
 I discovered a bug where the models are only created when called the first time. I need to make it so all simulation actions have the required models loaded first. I noticed the bug when testing if the weights of parent Dooders are combined with the different policies.
