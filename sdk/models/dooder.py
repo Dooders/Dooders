@@ -20,6 +20,9 @@ from sdk.utils.get_direction import get_direction
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
 
+    
+MotivationList = ['Consume', 'Reproduction']
+    
 
 class Dooder(BaseObject):
     """ 
@@ -59,7 +62,7 @@ class Dooder(BaseObject):
         self.direction = 'Origin'
         self.moore = True
         self.age = 0
-        self.internal_models = InternalModels()
+        self.internal_models = InternalModels(MotivationList)
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
