@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
 
     
-MotivationList = ['Consume', 'Reproduction']
+MotivationList = ['Consume', 'Reproduce']
     
 
 class Dooder(BaseObject):
