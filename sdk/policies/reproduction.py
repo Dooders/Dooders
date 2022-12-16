@@ -36,13 +36,7 @@ class AverageWeights(BasePolicy):
         for key in weightsA.keys():
             modelA = weightsA[key]
             modelB = weightsB[key]
-
-            new_weights[key] = {}
-
-            for k in modelA.keys():
-                mA = modelA[k]
-                mB = modelB[k]
-                new_weights[key][k] = ((mA + mB) / 2)
+            new_weights[key] = [(A + B) / 2 for A,B in zip(modelA, modelB)]
 
         return new_weights
 
