@@ -1,6 +1,8 @@
 import copy
+from sdk.core.actions import Actions
 
 
+@Actions.register()
 def reproduce(dooderA):
     """
     Apply the reproduction policy to two dooders, create the offspring dooder
