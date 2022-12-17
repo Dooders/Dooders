@@ -1,4 +1,4 @@
-from sdk.core.actions import Actions
+from sdk.core.action import Actions
 from sdk.utils.get_direction import get_direction
 
 

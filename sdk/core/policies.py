@@ -22,8 +22,8 @@ class Policies:
 
         return inner_wrapper
     
-    def __call__(self, policy, object):
+    def __call__(self, policy, *args, **kwargs):
         matched_policy = self.policies[policy]
-        policy_results = matched_policy.execute(object)
+        policy_results = matched_policy.execute(*args, **kwargs)
         
         return policy_results

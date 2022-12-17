@@ -1,11 +1,12 @@
 from typing import Callable
 
-from sdk import actions
-
 
 class Actions:
 
     actions = {}
+
+    def __init__(self):
+        from sdk import actions
 
     @classmethod
     def register(cls) -> Callable:
@@ -21,6 +22,6 @@ class Actions:
 
     def __call__(self, object, action):
         matched_action = self.actions[action]
-        action_results = matched_action.execute(object)
+        action_results = matched_action(object)
 
         return action_results

@@ -11,11 +11,12 @@ from datetime import datetime
 from statistics import mean
 
 import pandas as pd
-from db.main import DB
 
+from db.main import DB
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.core import Condition, Policies
+from sdk.core.action import Actions
 from sdk.models.resources import Resources
 from sdk.models.society import Society
 
@@ -30,8 +31,8 @@ class Simulation(BaseSimulation):
             simulation_id: str,
             experiment_id: str,
             params: ExperimentParameters,
-            send_to_db = True,
-            details = None) -> None:
+            send_to_db=True,
+            details=None) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
         many different models
@@ -48,6 +49,7 @@ class Simulation(BaseSimulation):
         self.resources = Resources(self)
         self.society = Society(self)
         self.policies = Policies()
+        self.actions = Actions()
         self.running = False
         self.send_to_db = send_to_db
         self.details = details
@@ -160,6 +162,15 @@ class Simulation(BaseSimulation):
             A uuid4 short id.
         """
         return self.seed.uuid()
+    
+    def random_dooder(self):
+        """
+        Get a random dooder from the simulation.
+
+        Returns:
+            A random dooder.
+        """
+        return self.society.get_dooder()
 
     def stop_conditions(self) -> bool:
         #! maybe make a decorator to implement this nicely

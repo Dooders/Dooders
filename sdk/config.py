@@ -52,6 +52,7 @@ class EnvironmentParameters(BaseModel):
 
 class PolicyParameters(BaseModel):
     Movement: str = Field("RuleBased", description="Move policy")
+    Reproduction: str = Field("AverageWeights", description="Reproduction policy")
     
     
     

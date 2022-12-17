@@ -116,7 +116,7 @@ class Society:
         self.simulation.time.remove(dooder)
         self.simulation.environment.remove_object(dooder)
 
-    def get_dooder(self) -> 'Dooder':
+    def get_dooder(self, dooder_id=None ) -> 'Dooder':
         """
         Get dooder based on the ID
 
@@ -126,7 +126,15 @@ class Society:
         Returns:
             Dooder: dooder object
         """
-        return self.active_dooders[dooder_id]
+
+        if dooder_id is None:
+            if len(self.active_dooders) == 0:
+                return self.simulation.random.choice(list(self.graveyard.values()))
+            else:
+                return self.simulation.random.choice(list(self.active_dooders.values()))
+        else:
+        
+            return self.active_dooders[dooder_id]
 
     @property
     def active_dooder_count(self) -> int:

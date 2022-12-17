@@ -1,4 +1,4 @@
-from sdk.core.actions import Actions
+from sdk.core.action import Actions
 
 
 @Actions.register()
@@ -10,15 +10,14 @@ def reproduce(dooderA):
     Args:
         dooderA (Dooder): The first Dooder.
     """
-    from sdk.core import Policies
-    reproduction_policy = Policies.policies['AverageWeights']
+    reproduction_policy = dooderA.simulation.params.get('Policies').Reproduction
 
     if dooderA.hunger == 0 and dooderA.age > 5:
 
         dooderB = dooderA.find_partner()
 
         if dooderB:
-            genetics = reproduction_policy.execute(dooderA, dooderB) #! make sure this will execute for all internal_models
+            genetics = dooderA.simulation.policies(reproduction_policy, dooderA, dooderB) #! make sure this will execute for all internal_models
             offspring = dooderA.simulation.society._generate_dooder(
                 dooderA.position)
             offspring.internal_models.inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models

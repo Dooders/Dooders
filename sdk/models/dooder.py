@@ -66,6 +66,9 @@ class Dooder(BaseObject):
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
+    def act(self, action):
+        self.simulation.actions(self, action)
+    
     def move(self, destination):
         if destination == self.position:
             pass
@@ -152,9 +155,10 @@ class Dooder(BaseObject):
                      message="Terminated between cycles", scope='Dooder')
 
         else:
-            policy = self.simulation.params.get('Policies').Movement
-            destination = self.simulation.policies(policy, self)
-            self.move(destination)
+            # policy = self.simulation.params.get('Policies').Movement
+            # destination = self.simulation.policies(policy, self)
+            # self.move(destination)
+            self.act('move')
             self.consume()
             reproduce(self)
 
