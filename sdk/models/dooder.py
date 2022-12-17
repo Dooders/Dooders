@@ -20,6 +20,16 @@ if TYPE_CHECKING:
 
 MotivationList = ['Consume', 'Reproduce']
 
+class DooderStats:
+    ID: str = None
+    Age: int = 0
+    Birth: int = 0
+    Position: tuple: = None
+    Status: str = 'Born'
+    ReproductionCount: int = 0
+    MoveCount: int = 0
+    EnergyConsumed: int = 0
+    
 
 class Dooder(BaseObject):
     """ 
