@@ -26,8 +26,11 @@ class BaseObject(ABC):
         self.unique_id = unique_id
         self.simulation = simulation
         self.position = position
-        self.environment = simulation.environment
-        self.information = simulation.information
+        
+#! have 'create' method here
+#! change to BaseAgent and add the AgentStats part
+#! make sure the atts I deleted didnt break it
+#! what can I bring from Dooder class over to here
 
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
