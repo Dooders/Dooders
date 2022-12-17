@@ -6,6 +6,10 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-16 Actions done
+
+Finished the Actions class buildout. Also had to refactor some other classes to make it wall work. Next step might be working on the data/metric side of things. I want a better way to collect data from the simulation, and improve the specific data that I want to see.  
+
 ## 2022-12-13 Actions, Policies, and Models
 
 Working through my current goal to better handle the internal models. I've mostly worked out the Action class will register all possible actions and handle the execution of an action, like Move or Reproduce.
