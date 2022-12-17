@@ -7,22 +7,19 @@ interact with other objects.
 import copy
 from typing import TYPE_CHECKING
 
-from sdk.actions.reproduce import reproduce
 from sdk.base.base_object import BaseObject
 from sdk.core import Condition
-from sdk.models.energy import Energy
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
 from sdk.modules.internal_models import InternalModels
 from sdk.modules.neighborhood import Neighborhood
-from sdk.utils.get_direction import get_direction
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
 
-    
+
 MotivationList = ['Consume', 'Reproduce']
-    
+
 
 class Dooder(BaseObject):
     """ 
@@ -68,38 +65,6 @@ class Dooder(BaseObject):
 
     def act(self, action):
         self.simulation.actions(self, action)
-    
-    def move(self, destination):
-        if destination == self.position:
-            pass
-        else:
-            origin = self.position
-            self.direction = get_direction(origin, destination)
-            self.simulation.environment.move_object(self, destination)
-            self.log(
-                granularity=2, message=f"Moved {self.direction} from {origin} to {destination}", scope='Dooder')
-            self.position = destination
-
-    def consume(self):
-        """ 
-        Consume energy from the environment
-        """
-
-        cell_contents = self.simulation.environment.get_cell_list_contents(
-            self.position)
-        energy = [obj for obj in cell_contents if isinstance(obj, Energy)]
-
-        if energy:
-            food = energy[0]
-            food.consume()
-            if self.hunger > 0:
-                self.hunger = 0
-            # elif self.hunger <= 0:
-            #     self.hunger += -1
-            self.log(
-                granularity=2, message=f"Consumed energy: {food.unique_id}", scope='Dooder')
-        else:
-            self.hunger += 1
 
     def kill(self, dooder: BaseObject) -> None:
         """ 
@@ -155,12 +120,9 @@ class Dooder(BaseObject):
                      message="Terminated between cycles", scope='Dooder')
 
         else:
-            # policy = self.simulation.params.get('Policies').Movement
-            # destination = self.simulation.policies(policy, self)
-            # self.move(destination)
             self.act('move')
-            self.consume()
-            reproduce(self)
+            self.act('consume')
+            self.act('reproduce')
 
             if self.death_check():
                 self.log(granularity=1,
@@ -174,25 +136,29 @@ class Dooder(BaseObject):
         clone.unique_id = self.simulation.seed.uuid()
 
         return clone
-    
+
     def find_partner(self) -> 'Dooder':
         """
         Find another Dooder from current position.
         """
-        near_dooders = self.simulation.environment.get_cell_list_contents(self.position)
+        near_dooders = self.simulation.environment.get_cell_list_contents(
+            self.position)
 
         for object in near_dooders:
             if isinstance(object, Dooder):
                 return object
 
         return None
-        
+
     def __str__(self) -> str:
         """
         Return string of class attributes and genetics.
         """
-        #! maybe come up with better formatting
         return f"UniqueID: {self.unique_id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
+
+    @property
+    def history(self):
+        pass
 
     @property
     def stats(self) -> dict:
