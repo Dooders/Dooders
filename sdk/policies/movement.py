@@ -130,7 +130,7 @@ class NeuralNetwork(BasePolicy):
         Returns:
             The goal of the Dooder 'Consume' or 'Reproduce'
         """
-        if dooder.hunger < 0:
+        if dooder.hunger > 0:
             return 'Consume'
         elif any(neighborhood.contains('Dooder')):
             return 'Reproduce'
