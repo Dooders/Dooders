@@ -271,7 +271,7 @@ class BaseEnvironment(ABC):
         moore: bool = True,
         include_center: bool = False,
         radius: int = 1,
-    ) -> Iterator[BaseObject]:
+    ) -> Iterator[BaseAgent]:
         """Return an iterator over neighbors to a certain point.
         Args:
             pos: Coordinates for the neighborhood to get.
@@ -298,7 +298,7 @@ class BaseEnvironment(ABC):
         moore: bool = True,
         include_center: bool = False,
         radius: int = 1,
-    ) -> List[BaseObject]:
+    ) -> List[BaseAgent]:
         """Return a list of neighbors to a certain point.
         Args:
             position: Coordinate tuple for the neighborhood to get.
@@ -333,7 +333,7 @@ class BaseEnvironment(ABC):
         return x < 0 or x >= self.width or y < 0 or y >= self.height
 
     @accept_tuple_argument
-    def get_cell_list_contents(self, cell_list: Iterable[Coordinate]) -> List[BaseObject]:
+    def get_cell_list_contents(self, cell_list: Iterable[Coordinate]) -> List[BaseAgent]:
         """Returns a list of the contents of the cells
         identified in cell_list.
         Note: this method returns a list of `Agent`'s; `None` contents are excluded.
