@@ -23,6 +23,8 @@ def reproduce(dooderA):
             offspring.internal_models.inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models
             offspring.simulation.society.place_dooder(
                 offspring, offspring.position)
+            
+            offspring.parents = (dooderA.unique_id, dooderB.unique_id)
 
             dooderA.log(granularity=1,
                         message=f"Reproduced with {dooderB.unique_id} and created {offspring.unique_id}",
