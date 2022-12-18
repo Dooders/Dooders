@@ -4,7 +4,7 @@ from typing import Dict, List
 
 from fastapi import WebSocket
 
-from sdk.base.base_object import BaseObject
+from sdk.base.base_agent import BaseAgent
 from sdk.config import ExperimentParameters
 from sdk.simulation import Simulation
 from sdk.utils import ShortID
@@ -15,7 +15,7 @@ class Experiment:
     Class to manage the overall experiment and each simulation.
 
     """
-    
+
     results = {}
 
     def __init__(self, parameters: ExperimentParameters, send_to_db=True, details=None) -> None:
@@ -36,7 +36,7 @@ class Experiment:
         self.experiment_id = self.seed.uuid()
         self.send_to_db = send_to_db
         self.details = details
-        
+
     def simulate(self, n: int = 1) -> None:
         """ 
         Simulate n cycles.
@@ -46,21 +46,21 @@ class Experiment:
         """
         for i in range(n):
             simulation_id = self.seed.uuid()
-            self.simulation = Simulation(simulation_id, self.experiment_id, self.parameters, self.send_to_db, self.details)
+            self.simulation = Simulation(
+                simulation_id, self.experiment_id, self.parameters, self.send_to_db, self.details)
             self.simulation.run_simulation()
             self.results[i] = self.simulation.simulation_summary()
             # del self.simulation
-    
-    
+
     # def setup_experiment(self) -> None:
-    #     """ 
-    #     Setup the experiment.    
+    #     """
+    #     Setup the experiment.
     #     """
     #     self.simulation.setup()
 
     # def execute_cycle(self) -> None:
-    #     """  
-    #     Execute a cycle. 
+    #     """
+    #     Execute a cycle.
     #     """
     #     self.simulation.cycle()
 
@@ -86,7 +86,7 @@ class Experiment:
                 if self.experiment_id in line:
                     print(line)
 
-    def get_object(self, object_id: str) -> BaseObject:
+    def get_object(self, object_id: str) -> BaseAgent:
         """ 
         Fetch an object by its id.
 
@@ -99,7 +99,7 @@ class Experiment:
         """
         return self.simulation.environment.get_object(object_id)
 
-    def get_objects(self, object_type: str = 'BaseObject') -> List[BaseObject]:
+    def get_objects(self, object_type: str = 'BaseAgent') -> List[BaseAgent]:
         """ 
         Get all objects of a given type.
         Returns all objects if no type is given.
@@ -112,7 +112,7 @@ class Experiment:
         """
         return self.simulation.environment.get_objects(object_type)
 
-    def get_random_objects(self, object_type: str = 'BaseObject', n: int = 1) -> List[BaseObject]:
+    def get_random_objects(self, object_type: str = 'BaseAgent', n: int = 1) -> List[BaseAgent]:
         """ 
         Get n random objects of a given type.
         Returns all objects if no type is given.

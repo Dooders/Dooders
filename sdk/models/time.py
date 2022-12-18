@@ -4,9 +4,9 @@
 
 import random
 from collections import defaultdict
-from typing import List, Type, Union
+from typing import Union
 
-from sdk.base.base_object import BaseObject
+from sdk.base.base_agent import BaseAgent
 from sdk.base.base_time import BaseTime
 
 TimeT = Union[float, int]
@@ -32,7 +32,7 @@ class Time(BaseTime):
         self.time: TimeT = 0  # ! What is the difference between time and steps?
         self._objects = defaultdict(dict)
 
-    def add(self, object: 'BaseObject') -> None:
+    def add(self, object: 'BaseAgent') -> None:
         """
         Add an object to the schedule.
 
@@ -47,7 +47,7 @@ class Time(BaseTime):
 
         self._objects[object.name][object.unique_id] = object
 
-    def remove(self, object: 'BaseObject') -> None:
+    def remove(self, object: 'BaseAgent') -> None:
         """
         Remove all instances of a given agent from the schedule.
 

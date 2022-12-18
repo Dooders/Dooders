@@ -7,7 +7,7 @@ interact with other objects.
 import copy
 from typing import TYPE_CHECKING
 
-from sdk.base.base_object import BaseObject
+from sdk.base.base_agent import BaseAgent
 from sdk.core import Condition
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
@@ -32,7 +32,7 @@ class DooderStats:
     EnergyConsumed: int = 0
 
 
-class Dooder(BaseObject):
+class Dooder(BaseAgent):
     """ 
     Primary Dooder class
     """
@@ -77,7 +77,7 @@ class Dooder(BaseObject):
     def act(self, action):
         self.simulation.actions(self, action)
 
-    def kill(self, dooder: BaseObject) -> None:
+    def kill(self, dooder: BaseAgent) -> None:
         """ 
         Kill a dooder. 
 

@@ -13,12 +13,12 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
 
 import numpy as np
 
-from sdk.base.base_object import BaseObject
+from sdk.base.base_agent import BaseAgent
 from sdk.modules.location import Location
 
 Coordinate = Tuple[int, int]
 Position = Coordinate
-GridContent = Union[BaseObject, None]
+GridContent = Union[BaseAgent, None]
 MultiGridContent = List[GridContent]
 F = TypeVar("F", bound=Callable[..., Any])
 

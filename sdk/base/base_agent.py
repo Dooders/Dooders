@@ -2,7 +2,7 @@ import random
 from abc import ABC, abstractmethod
 
 
-class BaseObject(ABC):
+class BaseAgent(ABC):
     """ 
 
     """

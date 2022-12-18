@@ -6,7 +6,7 @@ from random import choices
 from typing import TYPE_CHECKING, Any, List
 
 from sdk.base.base_environment import BaseEnvironment
-from sdk.base.base_object import BaseObject
+from sdk.base.base_agent import BaseAgent
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
@@ -38,7 +38,7 @@ class Environment(BaseEnvironment):
         """
         super().__init__(params)
 
-    def place_object(self, object: 'BaseObject', position) -> None:
+    def place_object(self, object: 'BaseAgent', position) -> None:
         """
         Place an object at the given location.
 
@@ -52,7 +52,7 @@ class Environment(BaseEnvironment):
         object.position = position
         self.empties.discard(position)
 
-    def remove_object(self, object: 'BaseObject') -> None:
+    def remove_object(self, object: 'BaseAgent') -> None:
         """
         Remove an object from the grid.
 
@@ -66,7 +66,7 @@ class Environment(BaseEnvironment):
             self.empties.add(location)
         object.position = None
 
-    def move_object(self, object: 'BaseObject', location) -> None:
+    def move_object(self, object: 'BaseAgent', location) -> None:
         """ 
         Move an object to a new location.
 
@@ -79,7 +79,7 @@ class Environment(BaseEnvironment):
         self.place_object(object, position)
         object.position = position
 
-    def get_object_types(self) -> List[BaseObject]:
+    def get_object_types(self) -> List[BaseAgent]:
         """
         Get all object types in the environment.
 
@@ -94,7 +94,7 @@ class Environment(BaseEnvironment):
                         object_types.append(obj.__class__.__name__)
         return object_types
 
-    def get_objects(self, object_type: str = 'BaseObject') -> List[BaseObject]:
+    def get_objects(self, object_type: str = 'BaseAgent') -> List[BaseAgent]:
         """
         Get all objects of a given type.
 
@@ -104,7 +104,7 @@ class Environment(BaseEnvironment):
         Returns:
             A list of all objects of the given type.
         """
-        if object_type == 'BaseObject':
+        if object_type == 'BaseAgent':
             object_type = self.get_object_types()
 
         objects = []
@@ -115,7 +115,7 @@ class Environment(BaseEnvironment):
                         objects.append(obj)
         return objects
 
-    def get_object(self, object_id: 'UniqueID') -> BaseObject:
+    def get_object(self, object_id: 'UniqueID') -> BaseAgent:
         """
         Get an object by its id.
 
@@ -134,8 +134,8 @@ class Environment(BaseEnvironment):
         return 'No object found'
 
     def get_random_neighbors(self,
-                             object: 'BaseObject',
-                             object_type: BaseObject = 'BaseObject') -> List[BaseObject]:
+                             object: 'BaseAgent',
+                             object_type: BaseAgent = 'BaseAgent') -> List[BaseAgent]:
         """
         Get all objects in the neighborhood of the given object.
 
@@ -146,7 +146,7 @@ class Environment(BaseEnvironment):
         Returns:    
             A list of all objects in the neighborhood of the given object.
         """
-        if object_type == 'BaseObject':
+        if object_type == 'BaseAgent':
             object_type_list = self.get_object_types()
         else:
             object_type_list = [object_type]
@@ -179,5 +179,5 @@ class Environment(BaseEnvironment):
 
         return random_neighborhoods
 
-    def get_object_count(self, object_type: str = 'BaseObject') -> int:
+    def get_object_count(self, object_type: str = 'BaseAgent') -> int:
         return len(self.get_objects(object_type))
