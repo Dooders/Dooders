@@ -2,6 +2,7 @@ import random
 from abc import ABC, abstractmethod
 
 import yaml
+import ast
 
 from sdk.config import ExperimentParameters
 from sdk.models import Environment, Information, Time
@@ -52,6 +53,23 @@ class BaseSimulation(ABC):
                     default_config[k][value] = params[k][value]
 
         return default_config
+    
+    def load_log(self) -> list:
+        """ 
+        Load the log file for the simulation
+        
+        Returns:
+            A list of dictionaries containing the logs for the simulation
+        """
+        logs = []
+        with open(f"logs/log.json", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                if self.simulation_id in line:
+                    final = line[:-2]
+                    logs.append(ast.literal_eval(final))
+                    
+        return logs
 
     @abstractmethod
     def setup(self) -> None:

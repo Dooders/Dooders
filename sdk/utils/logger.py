@@ -15,7 +15,7 @@ def get_logger():
 
     # Build Log File Full Path
     logPath = log_file_name if os.path.exists(log_file_name) else os.path.join(
-        log_dir, (str(log_file_name) + '.log'))
+        log_dir, (str(log_file_name) + '.json'))
 
     # Create logger object and set the format for logging and other attributes
     logger = logging.Logger(log_file_name)

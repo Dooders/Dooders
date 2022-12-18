@@ -169,7 +169,12 @@ class Dooder(BaseAgent):
 
     @property
     def history(self):
-        pass
+        """ 
+        Return the dooder's history.
+        """
+        for log in self.simulation.load_log():
+            if log.get('UniqueID') == self.unique_id:
+                print(log)
 
     @property
     def stats(self) -> dict:
