@@ -1,6 +1,19 @@
 import random
 from abc import ABC, abstractmethod
 
+from pydantic import BaseModel
+
+
+class BaseStats(BaseModel):
+    unique_id: str = None
+    age: int = 0
+    birth: int = 0
+    position: tuple = None
+    status: str = 'Alive'
+    reproduction_count: int = 0
+    move_count: int = 0
+    energy_consumed: int = 0
+
 
 class BaseAgent(ABC):
     """ 
@@ -23,14 +36,10 @@ class BaseAgent(ABC):
             information: Information object for the object
             environment: Environment object for the object
         """
-        self.unique_id = unique_id
         self.simulation = simulation
-        self.information = simulation.information #? is this needed?
-        self.position = position
         
-#! have 'create' method here
-#! change to BaseAgent and add the AgentStats part
-#! what can I bring from Dooder class over to here
+        for attribute in BaseStats(unique_id=unique_id, position=position):
+            setattr(self, attribute[0], attribute[1])
 
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
@@ -53,7 +62,7 @@ class BaseAgent(ABC):
 
         final_message = str(log_dict).strip('{}')
 
-        self.information.log(final_message, granularity)
+        self.simulation.information.log(final_message, granularity)
 
     @abstractmethod
     def step(self) -> None:

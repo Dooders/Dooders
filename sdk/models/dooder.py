@@ -21,17 +21,6 @@ if TYPE_CHECKING:
 MotivationList = ['Consume', 'Reproduce']
 
 
-class DooderStats:
-    ID: str = None
-    Age: int = 0
-    Birth: int = 0
-    Position: tuple = None
-    Status: str = 'Born'
-    ReproductionCount: int = 0
-    MoveCount: int = 0
-    EnergyConsumed: int = 0
-
-
 class Dooder(BaseAgent):
     """ 
     Primary Dooder class
@@ -172,9 +161,11 @@ class Dooder(BaseAgent):
         """ 
         Return the dooder's history.
         """
+        logs = []
         for log in self.simulation.load_log():
             if log.get('UniqueID') == self.unique_id:
-                print(log)
+                logs.append(log)
+        return logs
 
     @property
     def stats(self) -> dict:
