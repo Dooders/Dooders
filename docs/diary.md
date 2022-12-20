@@ -6,6 +6,12 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-19 BaseStats
+
+Created the BaseStats class to better manage agent creation and creation of necessary attributes. I've worked out what I want at the individual Dooder level, next will be simulation level, then society level.
+
+Building out the data that I want to see from each perspective.
+
 ## 2022-12-16 Actions done
 
 Finished the Actions class buildout. Also had to refactor some other classes to make it wall work. Next step might be working on the data/metric side of things. I want a better way to collect data from the simulation, and improve the specific data that I want to see.  
