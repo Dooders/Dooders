@@ -13,6 +13,7 @@ class BaseStats(BaseModel):
     reproduction_count: int = 0
     move_count: int = 0
     energy_consumed: int = 0
+    hunger: int = 0
 
 
 class BaseAgent(ABC):
