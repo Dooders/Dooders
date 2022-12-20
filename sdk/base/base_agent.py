@@ -38,7 +38,7 @@ class BaseAgent(ABC):
         """
         self.simulation = simulation
         
-        for attribute in BaseStats(unique_id=unique_id, position=position):
+        for attribute in BaseStats(unique_id=unique_id, position=position, birth=simulation.time):
             setattr(self, attribute[0], attribute[1])
 
     def log(self, granularity: int, message: str, scope: str) -> None:
