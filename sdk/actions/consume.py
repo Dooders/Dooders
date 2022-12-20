@@ -17,6 +17,8 @@ def consume(dooder):
         food.consume()
         if dooder.hunger > 0:
             dooder.hunger = 0
+            
+        dooder.energy_consumed += 1
 
         dooder.log(
             granularity=2, message=f"Consumed energy: {food.unique_id}", scope='Dooder')
