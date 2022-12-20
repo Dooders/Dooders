@@ -25,6 +25,9 @@ def reproduce(dooderA):
                 offspring, offspring.position)
             
             offspring.parents = (dooderA.unique_id, dooderB.unique_id)
+            
+            dooderA.reproduction_count += 1
+            dooderB.reproduction_count += 1
 
             dooderA.log(granularity=1,
                         message=f"Reproduced with {dooderB.unique_id} and created {offspring.unique_id}",
