@@ -13,6 +13,7 @@ def move(dooder):
         origin = dooder.position
         dooder.direction = get_direction(origin, destination)
         dooder.simulation.environment.move_object(dooder, destination)
+        dooder.move_count += 1
         dooder.log(
             granularity=2, message=f"Moved {dooder.direction} from {origin} to {destination}", scope='Dooder')
         dooder.position = destination
