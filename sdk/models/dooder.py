@@ -55,10 +55,8 @@ class Dooder(BaseAgent):
         self.genetics = Genetics.compile_genetics(self)
         self.behavior = self.genetics.copy()
         self.cognition = Cognition()
-        self.hunger = 0
         self.direction = 'Origin'
         self.moore = True
-        self.age = 0
         self.internal_models = InternalModels(MotivationList)
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
