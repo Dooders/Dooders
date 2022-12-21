@@ -3,23 +3,27 @@
 
 ## Dooder-based
 
-- unique_id
-- age
-- birth
-- position: tuple = None
-- status
-- reproduction_count
-- move_count
-- energy_consumed
-- hunger
+Information for a individual dooder
+
+- unique_id (value)
+- age (value)
+- birth (value)
+- position (value)
+- status (value)
+- reproduction_count (value)
+- move_count (value)
+- energy_consumed (value)
+- hunger (value)
 
 ## Simulation-based
 
-- TotalEnergy (value and time series)
-- DissipatedEnergy (value and time series)
-- StartingDooderCount (value)
-- EndingDooderCount (value)
-- DooderCount (time series)
+Information from a simulation
+
+- total_energy (value and time series)
+- dissipated_energy (value and time series)
+- starting_dooder_count (value)
+- ending_dooder_count (value)
+- dooder_count (time series)
 
 ## Society-based
 
