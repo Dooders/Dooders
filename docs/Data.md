@@ -24,6 +24,8 @@ Information from a simulation
 - starting_dooder_count (value)
 - ending_dooder_count (value)
 - dooder_count (time series)
+- birth_count (value and time series)
+- death_count (value and time series)
 
 ## Society-based
 
@@ -32,4 +34,12 @@ Information from a simulation
 
 
 ## Experiment-based
+
+Information from multiple simulations in an experiment
+
+- min/max/avg: total_energy (value and time series)
+- min/max/avg: dissipated_energy (value and time series)
+- min/max/avg: starting_dooder_count (value)
+- min/max/avg: ending_dooder_count (value)
+- min/max/avg: dooder_count (time series)
 
