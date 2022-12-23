@@ -29,9 +29,7 @@ Information from a simulation
 
 ## Society-based
 
-
 ## Environment-based
-
 
 ## Experiment-based
 
@@ -42,4 +40,5 @@ Information from multiple simulations in an experiment
 - min/max/avg: starting_dooder_count (value)
 - min/max/avg: ending_dooder_count (value)
 - min/max/avg: dooder_count (time series)
-
+- min/max/avg: birth_count (value and time series)
+- min/max/avg: death_count (value and time series)
