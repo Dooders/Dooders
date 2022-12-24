@@ -6,6 +6,16 @@ Sorted by the most recent entry
 
 ---
 
+## 2022-12-23 Foresight, Perception, and Perspective
+
+I've been thinking over a few future ideas that I want look into at some point. Thinking about how the Dooder interacts in the simulation.
+
+First is Foresight. Adding functionality that allows a Dooder to use past experience to predict the future. This would be a way to improve the Dooder's ability to make decisions. It would also be a way to improve the Dooder's ability to learn.
+
+Second is Perception. Adding functionality that allows a Dooder to perceive the environment. Essentially, it's how much data (Information) the Dooder can "consume" from the environment. There is a lot of data and noise, so a Dooder can only perceive a small amount of it. But that amount can grow.
+
+The third is Perspective. Perspective would work like a lense. The particular perception influences how a Dooder evaluates it's perception. So, information the Dooder collects can be evaluated differently based on a "perspective"; that I still need to work out. Perspective would be influence by a whole host of factors.
+
 ## 2022-12-19 BaseStats
 
 Created the BaseStats class to better manage agent creation and creation of necessary attributes. I've worked out what I want at the individual Dooder level, next will be simulation level, then society level.
