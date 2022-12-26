@@ -5,8 +5,8 @@
 from random import choices
 from typing import TYPE_CHECKING, Any, List
 
-from sdk.base.base_environment import BaseEnvironment
 from sdk.base.base_agent import BaseAgent
+from sdk.base.base_environment import BaseEnvironment
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
