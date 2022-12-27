@@ -7,3 +7,4 @@
 * [Feed Forward Learning](https://github.com/mohammadpz/pytorch_forward_forward)
 * [Bayesian Neural Network](https://towardsdatascience.com/from-theory-to-practice-with-bayesian-neural-network-using-python-9262b611b825)
 * [Graph Neural Networks](https://towardsdatascience.com/graph-neural-networks-as-gradient-flows-4dae41fb2e8a)
+* [Habits](https://jamesclear.com/atomic-habits)
