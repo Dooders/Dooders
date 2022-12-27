@@ -21,6 +21,10 @@ if TYPE_CHECKING:
 MotivationList = ['Consume', 'Reproduce']
 
 
+class MainStats(base_model):
+    pass
+
+
 class Dooder(BaseAgent):
     """ 
     Primary Dooder class
@@ -179,7 +183,7 @@ class Dooder(BaseAgent):
             'Age': self.age
         }
 
-        return stats
+        return MainStats(**stats)
 
     @property
     def neighborhood(self) -> list:
