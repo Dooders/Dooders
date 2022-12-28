@@ -100,7 +100,6 @@ class Dooder(BaseAgent):
 
         if result:
             self.die(reason)
-            del self  # ! is this necessary?
 
             return True
 
