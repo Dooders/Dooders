@@ -12,6 +12,10 @@ from sdk.models.energy import Energy
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
+    
+    
+class MainStats(BaseModel):
+    pass
 
 
 ResourceStrategy = Strategy.load_strategy('resources')
@@ -66,6 +70,10 @@ class Resources:
             
         self.strategies = compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
+        
+        
+    def stats(self):
+        pass
             
     def remove(self, resource: 'Energy') -> None:
         """ 
