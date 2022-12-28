@@ -7,6 +7,8 @@ interact with other objects.
 import copy
 from typing import TYPE_CHECKING
 
+from pydantic import BaseModel
+
 from sdk.base.base_agent import BaseAgent
 from sdk.core import Condition
 from sdk.models.genetics import Genetics
@@ -21,8 +23,16 @@ if TYPE_CHECKING:
 MotivationList = ['Consume', 'Reproduce']
 
 
-class MainStats(base_model):
-    pass
+class MainStats(BaseModel):
+    unique_id: str
+    position: tuple
+    hunger: int
+    age: int
+    birth: int
+    status: str
+    reproduction_count: int
+    move_count: int
+    energy_consumed: int
 
 
 class Dooder(BaseAgent):
@@ -162,16 +172,15 @@ class Dooder(BaseAgent):
     @property
     def stats(self) -> dict:
         """
-        Return a dictionary of the dooder's stats.
+        The base stats of the dooder.
+        
+        Returns:
+            stats: A dictionary of the dooder's main stats.
+            for example: {'unique_id': '1234', 'position': (0,0), 'hunger': 0, 'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0, 'move_count': 0, 'energy_consumed': 0}
         """
-        stats = {
-            'CycleNumber': self.simulation.time.time,
-            'UniqueID': self.unique_id,
-            'Position': self.position,
-            'Hunger': self.hunger,
-            'Direction': self.direction,
-            'Age': self.age
-        }
+        stats = {}
+        for stat in MainStats.__fields__:
+            stats[stat] = getattr(self, stat)
 
         return MainStats(**stats)
 
