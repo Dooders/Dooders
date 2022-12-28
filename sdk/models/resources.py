@@ -70,8 +70,12 @@ class Resources:
             
         self.strategies = compile_strategy(self, ResourceStrategy)   
         self.allocate_resources()
+        self.collect()
         
-        
+    
+    def collect(self):
+        pass
+    
     def stats(self):
         pass
             
