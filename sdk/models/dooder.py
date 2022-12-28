@@ -68,16 +68,6 @@ class Dooder(BaseAgent):
     def act(self, action):
         self.simulation.actions(self, action)
 
-    def kill(self, dooder: BaseAgent) -> None:
-        """ 
-        Kill a dooder. 
-
-        Args:
-            dooder: The dooder to kill.
-        """
-        message = f"Killed by {self.unique_id}"
-        dooder.die(message)
-
     def die(self, reason: str = 'Unknown') -> None:
         """
         Removing a dooder from the simulation, 
