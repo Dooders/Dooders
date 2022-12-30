@@ -33,8 +33,7 @@ class Attributes(BaseModel):
 
 class Society:
     """ 
-#! make a decorator to register a function to be called on each step. 
-#! This way we can easily add models to time
+
     """
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
@@ -53,9 +52,31 @@ class Society:
         self.history = {}
         self.simulation = simulation
         self.seed = compile_strategy(self, SeedStrategy)
-        
+
         for attribute in Attributes():
             setattr(self, attribute[0], attribute[1])
+
+    def step(self) -> None:
+        """
+        Step the society forward
+        """
+        self.collect()
+
+    def collect(self) -> None:
+        """
+        Collect data from society
+        """
+
+        self.dooders_alive = len(self.active_dooders)
+
+        for attribute in Attributes.__fields__:
+
+            if self.history.get(attribute) is None:
+                self.history[attribute] = []
+
+            current_total = getattr(self, attribute)
+            self.history[attribute].append(current_total)
+            setattr(self, attribute, 0)
 
     def generate_seed_population(self) -> None:
         """
@@ -92,7 +113,9 @@ class Society:
         """
         dooder = self._generate_dooder(position)
         self.place_dooder(dooder, position)
-        dooder.log(granularity=1, message=f"Created {dooder.unique_id}", scope='Dooder') #! remove duplicate log call
+        # ! remove duplicate log call
+        dooder.log(granularity=1,
+                   message=f"Created {dooder.unique_id}", scope='Dooder')
 
     def place_dooder(self, dooder: 'Dooder', position) -> None:
         """
@@ -126,7 +149,7 @@ class Society:
         self.simulation.environment.remove_object(dooder)
         self.dooders_died += 1
 
-    def get_dooder(self, dooder_id=None ) -> 'Dooder':
+    def get_dooder(self, dooder_id=None) -> 'Dooder':
         """
         Get dooder based on the ID
 
@@ -143,7 +166,7 @@ class Society:
             else:
                 return self.simulation.random.choice(list(self.active_dooders.values()))
         else:
-        
+
             return self.active_dooders[dooder_id]
 
     @property

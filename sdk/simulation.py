@@ -83,6 +83,9 @@ class Simulation(BaseSimulation):
         # collect data at the end of the cycle
         self.information.collect(self)
 
+        # collect stats
+        self.society.step()
+
         self.cycles += 1
 
     def cycle(self) -> None:
@@ -162,7 +165,7 @@ class Simulation(BaseSimulation):
             A uuid4 short id.
         """
         return self.seed.uuid()
-    
+
     def random_dooder(self):
         """
         Get a random dooder from the simulation.
