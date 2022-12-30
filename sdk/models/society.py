@@ -13,6 +13,8 @@ Graph:
 from typing import TYPE_CHECKING
 
 import networkx as nx
+from pydantic import BaseModel
+
 from sdk.core import Strategy, compile_strategy
 from sdk.models import Dooder
 
@@ -23,15 +25,17 @@ if TYPE_CHECKING:
 SeedStrategy = Strategy.load_strategy('seed')
 
 
+class Attributes(BaseModel):
+    dooders_created: int = 0
+    dooders_died: int = 0
+    dooders_alive: int = 0
+
+
 class Society:
     """ 
-
+#! make a decorator to register a function to be called on each step. 
+#! This way we can easily add models to time
     """
-
-    active_dooders = {}  # ! make easy to return random active dooder
-    graph = nx.Graph()
-    total_created_dooders = 0
-    graveyard = {}
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
         """ 
@@ -43,10 +47,15 @@ class Society:
             SeedStrategy (dict): strategy to use for seed dooders
 
         """
+        self.graph = nx.Graph()
         self.active_dooders = {}
         self.graveyard = {}
+        self.history = {}
         self.simulation = simulation
         self.seed = compile_strategy(self, SeedStrategy)
+        
+        for attribute in Attributes():
+            setattr(self, attribute[0], attribute[1])
 
     def generate_seed_population(self) -> None:
         """
@@ -101,7 +110,7 @@ class Society:
         # ! add dooder attributes to node
         #! WIP
         self.graph.add_node(dooder.unique_id)
-        self.total_created_dooders += 1
+        self.dooders_created += 1
 
     def terminate_dooder(self, dooder: 'Dooder') -> None:
         """
@@ -115,6 +124,7 @@ class Society:
         self.active_dooders.pop(dooder.unique_id)
         self.simulation.time.remove(dooder)
         self.simulation.environment.remove_object(dooder)
+        self.dooders_died += 1
 
     def get_dooder(self, dooder_id=None ) -> 'Dooder':
         """
@@ -154,4 +164,4 @@ class Society:
         Returns:
             int: total number of dooders created
         """
-        return self.total_created_dooders
+        return self.dooders_created

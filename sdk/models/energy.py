@@ -50,7 +50,7 @@ class Energy:
         self.cycle_count += 1
         if self.cycle_count >= self.EnergyLifespan:
             self.consume('dissipate')
-            self.resources.total_dissipated_energy += 1
+            self.resources.dissipated_energy += 1
             self.resources.log(
                 granularity=3, message=f"Energy {self.unique_id} dissipated", scope='Energy')
 
@@ -62,7 +62,7 @@ class Energy:
         self.resources.remove(self)
         self.resources.simulation.environment.remove_object(self)
         if type is None:
-            self.resources.total_consumed_energy += 1
+            self.resources.consumed_energy += 1
 
         self.resources.log(
             granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
