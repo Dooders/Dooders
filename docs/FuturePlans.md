@@ -8,4 +8,5 @@
 * [Bayesian Neural Network](https://towardsdatascience.com/from-theory-to-practice-with-bayesian-neural-network-using-python-9262b611b825)
 * [Graph Neural Networks](https://towardsdatascience.com/graph-neural-networks-as-gradient-flows-4dae41fb2e8a)
 * [Habits](https://jamesclear.com/atomic-habits)
-* [Engrams](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7577560/pdf/nihms-1636529.pdf)
+* [Memory Engrams](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7577560/pdf/nihms-1636529.pdf)
+* [Relationships](https://en.m.wikipedia.org/wiki/Reciprocity_(social_psychology))
