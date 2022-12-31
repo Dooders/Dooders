@@ -28,7 +28,6 @@ SeedStrategy = Strategy.load_strategy('seed')
 class Attributes(BaseModel):
     dooders_created: int = 0
     dooders_died: int = 0
-    dooders_alive: int = 0
 
 
 class Society:
@@ -52,41 +51,25 @@ class Society:
         self.history = {}
         self.simulation = simulation
         self.seed = compile_strategy(self, SeedStrategy)
-
-        for attribute in Attributes():
-            setattr(self, attribute[0], attribute[1])
+        self.reset()
 
     def step(self) -> None:
         """
         Step the society forward
         """
-        self.collect()
+        self.reset()
 
-    def collect(self) -> None:
+    def reset(self) -> None:
         """
-        Collect data from society
+        reset main attributes
         """
-
-        self.dooders_alive = len(self.active_dooders)
-
-        for attribute in Attributes.__fields__:
-
-            if self.history.get(attribute) is None:
-                self.history[attribute] = []
-
-            current_total = getattr(self, attribute)
-            self.history[attribute].append(current_total)
-            setattr(self, attribute, 0)
+        for attribute in Attributes():
+            setattr(self, attribute[0], attribute[1])
 
     def generate_seed_population(self) -> None:
         """
         Generate seed population
         """
-
-        #! make this function to recalculate or find a better way to update SeedPlacement if SeedCount changes
-        # if len(self.SeedPlacement) != self.SeedCount:
-        #     recompile_strategy(self, SeedStrategy, 'SeedPlacement')
-
         for position in self.SeedPlacement:
             self.generate_dooder(position)
 
