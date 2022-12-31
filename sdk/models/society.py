@@ -161,13 +161,3 @@ class Society:
             int: number of active dooders
         """
         return len(self.active_dooders)
-
-    @property
-    def total_dooder_count(self) -> int:
-        """
-        Get the total number of dooders created
-
-        Returns:
-            int: total number of dooders created
-        """
-        return self.dooders_created
