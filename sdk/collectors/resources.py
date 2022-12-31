@@ -21,5 +21,7 @@ def get_stats(simulation):
 
 @Collector.register('DissipatedEnergy')
 def get_stats(simulation):
+    
+    result = simulation.resources.allocated_energy - simulation.resources.consumed_energy
 
-    return simulation.resources.dissipated_energy
+    return result

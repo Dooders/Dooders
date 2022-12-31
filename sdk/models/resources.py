@@ -72,8 +72,8 @@ class Resources:
             resource.step()
 
         self.strategies = compile_strategy(self, ResourceStrategy)
-        self.allocate_resources()
         self.reset()
+        self.allocate_resources()
 
     def reset(self):
         """ 

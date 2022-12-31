@@ -74,14 +74,14 @@ class Simulation(BaseSimulation):
         """
         Advance the simulation by one cycle.        
         """
-        # place new energy
-        self.resources.step()
-
         # advance every agent by a step
         self.time.step()
 
         # collect data at the end of the cycle
         self.information.collect(self)
+        
+        # place new energy
+        self.resources.step()
 
         # collect stats
         self.society.step()
