@@ -41,14 +41,11 @@ class Resources:
     """
 
     available_resources = {}
-    history = {}
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
         self.strategies = compile_strategy(self, ResourceStrategy)
-        
-        for attribute in Attributes():
-            setattr(self, attribute[0], attribute[1])
+        self.reset()
 
     def allocate_resources(self) -> None:
         """ 
@@ -76,30 +73,16 @@ class Resources:
 
         self.strategies = compile_strategy(self, ResourceStrategy)
         self.allocate_resources()
-        self.collect()
+        self.reset()
 
-    def collect(self):
+    def reset(self):
         """ 
         Collects the data from the simulation.
-        
+
         Takes the current total and subtracts the previous total to get the difference. That will be to incremental change since the previous cycle
         """
-
-        for attribute in Attributes.__fields__:
-            
-            # previous value 
-            # current value 127
-            # history [13.25,11,21,34,]
-            
-            if self.history.get(attribute) is None:
-                self.history[attribute] = []
-            
-            current_total = getattr(self, attribute)
-            self.history[attribute].append(current_total)
-            setattr(self, attribute, 0)
-
-    def stats(self):
-        pass
+        for attribute in Attributes():
+            setattr(self, attribute[0], attribute[1])
 
     def remove(self, resource: 'Energy') -> None:
         """ 
