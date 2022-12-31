@@ -48,7 +48,6 @@ class Society:
         self.graph = nx.Graph()
         self.active_dooders = {}
         self.graveyard = {}
-        self.history = {}
         self.simulation = simulation
         self.seed = compile_strategy(self, SeedStrategy)
         self.reset()
@@ -70,11 +69,6 @@ class Society:
         """
         Generate seed population
         """
-
-        #! make this function to recalculate or find a better way to update SeedPlacement if SeedCount changes
-        # if len(self.SeedPlacement) != self.SeedCount:
-        #     recompile_strategy(self, SeedStrategy, 'SeedPlacement')
-
         for position in self.SeedPlacement:
             self.generate_dooder(position)
 
