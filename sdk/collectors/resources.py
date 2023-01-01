@@ -17,11 +17,3 @@ def get_stats(simulation):
 def get_stats(simulation):
 
     return simulation.resources.allocated_energy
-
-
-@Collector.register('DissipatedEnergy')
-def get_stats(simulation):
-    
-    result = simulation.resources.allocated_energy - simulation.resources.consumed_energy
-
-    return result

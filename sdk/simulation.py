@@ -222,7 +222,6 @@ class Simulation(BaseSimulation):
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
                 'CycleCount': self.cycles,
                 'TotalEnergy': sum(self.information.data['resources']['AllocatedEnergy']),
-                'DissipatedEnergy': sum(self.information.data['resources']['DissipatedEnergy']),
                 'ConsumedEnergy': sum(self.information.data['resources']['ConsumedEnergy']),
                 'StartingDooderCount': self.information.data['society']['CreatedDooderCount'][0],
                 'EndingDooderCount': len(self.society.active_dooders),
