@@ -6,6 +6,12 @@ Sorted by the most recent entry
 
 ---
 
+## 2023-01-02
+
+I'm going to start working on finishing out the unit tests. Fixing some of the broken ones and adding more tests to cover the new features. I'll need to think more on more complex testing.
+
+Also thinking of using the Issues part of the repo to track new features I want to work on and bugs I still need to fix. This should make it a lot easier to manage than doing it somewhere else.
+
 ## 2023-01-01 Metrics
 
 I finished up with some of the metrics to be collected at each cycle. I will need to improve the way a model is added to do the cycle collection and reset attributes after.
