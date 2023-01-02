@@ -7,7 +7,7 @@ from tests.test_util import test_config
 
 @pytest.fixture
 def simulation():
-    return Simulation('test', test_config)
+    return Simulation('testing', 'testing', test_config)
 
 
 @pytest.fixture

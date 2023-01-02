@@ -1,10 +1,8 @@
-import yaml
 from experiment import Experiment
 
 
 def mock_simulation():
-    with open('sdk/config.yml') as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
+    config = {'Policies': {'Movement': 'NeuralNetwork'}, 'Simulation': {'MaxCycles':100}}
         
     experiment = Experiment(config)
     

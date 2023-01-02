@@ -34,7 +34,7 @@ class Experiment:
         self.seed = ShortID()
         self.parameters = parameters
         self.experiment_id = self.seed.uuid()
-        self.send_to_db = send_to_db
+        self.send_to_db = False
         self.details = details
 
     def simulate(self, n: int = 1) -> None:
