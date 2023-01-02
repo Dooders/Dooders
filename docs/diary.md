@@ -6,6 +6,12 @@ Sorted by the most recent entry
 
 ---
 
+## 2023-01-01 Metrics
+
+I finished up with some of the metrics to be collected at each cycle. I will need to improve the way a model is added to do the cycle collection and reset attributes after.
+
+I've also been thinking of specific experiment scenarios I might want to have written where I want to answer specific questions (Does the simulation plateau?, etc). This could make experiment assessment a lot more descriptive and valuable.
+
 ## 2022-12-23 Foresight, Perception, and Perspective
 
 I've been thinking over a few future ideas that I want look into at some point. Thinking about how the Dooder interacts in the simulation.
