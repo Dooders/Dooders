@@ -36,6 +36,19 @@ class Experiment:
         self.experiment_id = self.seed.uuid()
         self.send_to_db = False
         self.details = details
+        self.create_simulation()
+        
+    def create_simulation(self, simulation_id: str = None) -> None:
+        """
+        Create a simulation.
+
+        Args:
+            simulation_id: The id of the simulation. If None, a random id will be assigned.
+        """
+        if simulation_id is None:
+            simulation_id = self.seed.uuid()
+        self.simulation = Simulation(
+            simulation_id, self.experiment_id, self.parameters, self.send_to_db, self.details)
 
     def simulate(self, n: int = 1) -> None:
         """ 
