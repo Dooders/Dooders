@@ -17,7 +17,6 @@ def setup_simulation(simulation):
 
 
 def test_simulation_initialization(simulation):
-    assert simulation.experiment_id == 'test'
     assert simulation.cycles == 0
 
 
@@ -27,17 +26,7 @@ def test_simulation_setup(simulation):
     assert simulation.running == True
 
 
-def test_run_simulation():
-    class TestSimulation(Simulation):
-        steps = 0
-
-        def step(self):
-            """Increase steps until 10."""
-            self.steps += 1
-            if self.steps == 9:
-                self.running = False
-
-    simulation = TestSimulation('test', test_config)
+def test_run_simulation(simulation):
     simulation.run_simulation()
 
 

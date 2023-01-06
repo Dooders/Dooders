@@ -27,8 +27,8 @@ ResourceStrategy = Strategy.load_strategy('resources')
 
 class Resources:
     """ 
-    Resources are the objects that are consumed by agents to perform actions.
-    They are generated and placed in random locations based on the provided strategy.
+    Class manages Energy objects in the simulation.
+    They are generated and placed based on the selected strategy.
 
     Args:
     simulation : Simulation object
