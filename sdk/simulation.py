@@ -31,7 +31,7 @@ class Simulation(BaseSimulation):
             simulation_id: str,
             experiment_id: str,
             params: ExperimentParameters,
-            send_to_db=True,
+            send_to_db=False,
             details=None) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
