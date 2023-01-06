@@ -21,14 +21,14 @@ def test_generate_seed_population(society):
     society, _ = society
     society.generate_seed_population()
     assert society.active_dooders != {}
-    assert society.total_created_dooders > 0
+    assert society.dooders_created > 0
     
     
 def test_generate_dooder(society):
     society, _ = society
     society.generate_dooder((1,1))
     assert society.active_dooders != {}
-    assert society.total_created_dooders > 0
+    assert society.dooders_created > 0
 
 
 def test_place_dooder(society):
