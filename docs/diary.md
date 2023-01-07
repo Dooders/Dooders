@@ -6,7 +6,19 @@ Sorted by the most recent entry
 
 ---
 
-## 2023-01-02
+## 2023-01-06 Dooder Step Process
+
+I've been working on an idea for a step process design. The last part I need to figure out, is with that proccess, how will the Dooder learn. I'm not too sure what the answer will be. Basically it would follow:
+
+* Step 1: Identify all possible actions
+* Step 2: Predict the outcomes
+* Step 3: Choose the likely outcome
+* Step 4: Quantify the value of that outcome to self (based on goals, "desires", etc.)
+* Step 5: Choose the action to take
+
+Each step itself would be a neural network, so this would be an ensemble of neural networks.
+
+## 2023-01-02 Unit Tests
 
 I'm going to start working on finishing out the unit tests. Fixing some of the broken ones and adding more tests to cover the new features. I'll need to think more on more complex testing.
 
