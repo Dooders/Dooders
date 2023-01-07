@@ -56,7 +56,6 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 
 ## Links
 
-[Development diary](https://github.com/csmangum/Dooders/blob/main/docs/diary.md)  
   
 ### Footnotes
 
