@@ -6,6 +6,10 @@ Sorted by the most recent entry
 
 ---
 
+## 2023-01-07
+
+I'm going to start formalizing via [Issues](https://github.com/csmangum/Dooders/issues) some of the ideas or reasearch I want to explore further. I'll use Githib for as many aspects of the project that I can.
+
 ## 2023-01-06 Dooder Step Process
 
 I've been working on an idea for a step process design. The last part I need to figure out, is with that proccess, how will the Dooder learn. I'm not too sure what the answer will be. Basically it would follow:
