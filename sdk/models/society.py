@@ -179,3 +179,10 @@ class Society:
         else:
 
             return self.active_dooders[dooder_id]
+
+    @property
+    def active_dooder_count(self) -> int:
+        """ 
+        Returns the number of active dooders
+        """
+        return len(self.active_dooders)
