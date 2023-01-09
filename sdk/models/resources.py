@@ -1,8 +1,7 @@
 """ 
 Resources
 ---------
-This module contains the resources allocated in the environment and used by the
-agents. It also contains the functions to access the resources.
+Responsible for creation and management of Energy objects in the simulation.
 """
 
 from typing import TYPE_CHECKING
@@ -17,6 +16,9 @@ if TYPE_CHECKING:
 
 
 class Attributes(BaseModel):
+    """ 
+    Data model for the Resources class attributes.
+    """
     allocated_energy: int = 0
     dissipated_energy: int = 0
     consumed_energy: int = 0
@@ -30,14 +32,27 @@ class Resources:
     Class manages Energy objects in the simulation.
     They are generated and placed based on the selected strategy.
 
-    Args:
-    simulation : Simulation object
-        The simulation object that contains the environment and the agents.
+    The class also keeps track of the total number of allocated, dissipated, and 
+    consumed energy for each cycle. (The Information class will have historical 
+    data for the above stats. The counts are reset after each cycle.)
 
-    Attributes:
-        simulation: see ``Args`` section.
-        available_resources (dict): A dictionary of *current* available resources indexed by their unique id.
-        allocated_energy (int): The total number of allocated resources.
+    Parameters
+    ----------
+    simulation : Simulation object
+        The simulation object that contains the environment, agents, 
+        and other models.
+
+    Attributes
+    ----------
+    simulation: see ``Parameters`` section.
+    available_resources : dict
+       Current available resources indexed by their unique id.
+    allocated_energy : int
+        The total number of allocated energy (for the current cycle).
+    dissipated_energy : int
+        The total number of dissipated energy (for the current cycle).
+    consumed_energy : int
+        The total number of consumed energy (for the current cycle).
     """
 
     available_resources = {}
@@ -50,9 +65,10 @@ class Resources:
     def allocate_resources(self) -> None:
         """ 
         Allocates resources based on the provided strategy.
-
-        Returns:
-            The number of allocated resources.
+        
+        The method will generate a new Energy object and place it in the
+        environment. The Energy object will be added to the available_resources
+        dictionary.
         """
 
         for location in self.EnergyPlacement:
@@ -66,6 +82,18 @@ class Resources:
     def step(self) -> None:
         """ 
         Performs a step in the simulation.
+        
+        Process
+        -------
+        1. Calls the step method on each Energy object
+        2. Compiles the strategy for the current cycle
+        3. Resets the attribute counts from previous cycle
+        4. Allocates resources for the current cycle
+        
+        Notes
+        -----
+        The Information class will have historical data for attributes after
+        each cycle.
         """
 
         for resource in list(self.available_resources.values()):
@@ -79,7 +107,9 @@ class Resources:
         """ 
         Collects the data from the simulation.
 
-        Takes the current total and subtracts the previous total to get the difference. That will be to incremental change since the previous cycle
+        Takes the current total and subtracts the previous total to get 
+        the difference. That will be to incremental change since the 
+        previous cycle
         """
         for attribute in Attributes():
             setattr(self, attribute[0], attribute[1])
@@ -88,8 +118,10 @@ class Resources:
         """ 
         Consumes the given resource.
 
-        Args:
-            resource (Energy): The resource to consume.
+        Parameters
+        ----------
+        resource : Energy object
+            The Energy object to be removed.
         """
         self.available_resources.pop(resource.unique_id)
 
@@ -97,9 +129,15 @@ class Resources:
         """ 
         Logs the given message.
 
-        Args:
-            granularity (str): The granularity of the message.
-            message (str): The message to log.
-            scope (str): The scope of the message.
+        Parameters
+        ----------
+        granularity : int
+            The granularity of the message. Higher granularity messages will
+            be logged less frequently.
+        message : str
+            The message to log.
+        scope : str 
+            The scope of the message.
         """
         self.simulation.log(granularity, message, scope)
+        
