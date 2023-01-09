@@ -1,13 +1,7 @@
 """
-
-#TODO Finishing graph nodes and edges
-#TODO Build in saving of dooder after each step (temporal storage)
-
-Graph:
-    nodes: dooders (id, age, position, object_ref)
-    edges: interactions (cycle number, involved dooders, interaction type) 
-        & overall count per dooder
-        
+Society
+-------
+Responsible for creation and management of Dooder objects in the simulation.   
 """
 
 from typing import TYPE_CHECKING
@@ -31,99 +25,129 @@ class Attributes(BaseModel):
 
 
 class Society:
-    """ 
+    """
+    Class manages Dooder objects in the simulation.
+
+    The class also keeps track of the total number of Dooders created and 
+    terminated for each cycle. (The Information class will have historical 
+    data for the above stats. The counts are reset after each cycle.) 
+
+    Parameters
+    ----------
+    simulation : Simulation object
+        The simulation object that contains the environment, agents, 
+        and other models.
+
+    Attributes
+    ----------
+    dooders_created : int
+        The total number of Dooders created (for the current cycle).
+    dooders_terminated: int
+        The total number of Dooders terminated (for the current cycle).
+    graph : networkx.Graph
+        The graph object that contains the Dooder objects and relationships.
+    active_dooders : dict
+        Current active Dooders indexed by their unique id.
+    graveyard : dict
+        Current terminated Dooders indexed by their unique id.
+    simulation: see ``Parameters`` section.
+    seed : function
+        The function that generates the seed population to start 
+        the simulation.
 
     """
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
-        """ 
-        Args:
-            simulation (BaseSimulation): simulation object
-
-        Attributes:
-            SeedPlacement (list): list of positions to place seed dooders
-            SeedStrategy (dict): strategy to use for seed dooders
-
-        """
         self.graph = nx.Graph()
         self.active_dooders = {}
         self.graveyard = {}
         self.simulation = simulation
         self.seed = compile_strategy(self, SeedStrategy)
-        self.reset()
+        self.reset()  # set attributes
 
     def step(self) -> None:
         """
-        Step the society forward
+        Step the society forward. Currently, this will only reset attributes.
         """
         self.reset()
 
     def reset(self) -> None:
         """
-        reset main attributes
+        Reset main attributes after each cycle.
         """
         for attribute in Attributes():
             setattr(self, attribute[0], attribute[1])
 
     def generate_seed_population(self) -> None:
         """
-        Generate seed population
+        Generate seed population based on the selected strategy.
         """
         for position in self.SeedPlacement:
             self.generate_dooder(position)
 
-    def _generate_dooder(self, position) -> 'Dooder':
+    def _generate_dooder(self, position: tuple) -> 'Dooder':
         """
-        Generate a new dooder
+        Generate a new dooder with a provided position
 
-        Args:
-            position (tuple): position to place dooder
+        Parameters
+        ----------
+        position : tuple 
+            position to place dooder, (x, y)
 
-        Returns:
-            Dooder: dooder object
+        Returns
+        -------
+        Dooder: dooder object
+            Newly generated Dooder object
         """
         dooder = Dooder(self.simulation.generate_id(),
                         position, self.simulation)
         return dooder
 
-    def generate_dooder(self, position) -> None:
+    def generate_dooder(self, position: tuple) -> None:
         """
-        Generate a new dooder and place it
+        Generate a new dooder and place it in the environment
 
-        Args:
-            position (tuple): position to place dooder
+        Parameters
+        ----------
+        position : tuple
+            position to place dooder, (x, y)
         """
         dooder = self._generate_dooder(position)
         self.place_dooder(dooder, position)
-        # ! remove duplicate log call
         dooder.log(granularity=1,
                    message=f"Created {dooder.unique_id}", scope='Dooder')
 
-    def place_dooder(self, dooder: 'Dooder', position) -> None:
+    def place_dooder(self, dooder: 'Dooder', position: tuple) -> None:
         """
         Place dooder in environment
 
-        Args:
-            dooder (Dooder): dooder object
-            position (tuple): position to place dooder
+        The method will also add the dooder to the active_dooders dictionary
+        and add the dooder to the graph for relationship tracking.
+
+        Parameters
+        ----------
+        dooder : Dooder object 
+        position : tuple
+            position to place dooder, (x, y)
         """
         self.simulation.environment.place_object(dooder, position)
         self.simulation.time.add(dooder)
 
         self.active_dooders[dooder.unique_id] = dooder
 
-        # ! add dooder attributes to node
-        #! WIP
+        #! TODO: Add more attributes to graph node
         self.graph.add_node(dooder.unique_id)
         self.dooders_created += 1
 
     def terminate_dooder(self, dooder: 'Dooder') -> None:
         """
-        Terminate dooder based on the ID
-        Removes from active_dooders, environment, and graph
+        Terminate dooder based on the unique id
+        Removes from active_dooders, environment, and time
 
-        Args:
-            dooder_id (str): dooder id
+        Parameters
+        ----------
+        dooder_id : str
+            dooder unique id, generated by the simulation
         """
         self.graveyard[dooder.unique_id] = dooder
         self.active_dooders.pop(dooder.unique_id)
@@ -131,15 +155,20 @@ class Society:
         self.simulation.environment.remove_object(dooder)
         self.dooders_died += 1
 
-    def get_dooder(self, dooder_id=None) -> 'Dooder':
+    def get_dooder(self, dooder_id: str = None) -> 'Dooder':
         """
-        Get dooder based on the ID
+        Get dooder based on the unique id, if no id is provided, a random dooder
+        will be selected from the active dooders. If no active dooders are
+        available, a random dooder will be selected from the graveyard.
 
-        Args:
-            dooder_id (str): dooder id
+        Parameters:
+        ----------
+        dooder_id : str
+            dooder unique id, generated by the simulation
 
-        Returns:
-            Dooder: dooder object
+        Returns
+        -------
+        Dooder: dooder object
         """
 
         if dooder_id is None:
@@ -150,13 +179,3 @@ class Society:
         else:
 
             return self.active_dooders[dooder_id]
-
-    @property
-    def active_dooder_count(self) -> int:
-        """
-        Get the number of active dooders
-
-        Returns:
-            int: number of active dooders
-        """
-        return len(self.active_dooders)
