@@ -1,43 +1,46 @@
 """ 
-
+Time
+----
+Responsible for managing the time of the simulation. 
+Essentially, the order in which agents are stepped through during a cycle.
 """
 
 import random
 from collections import defaultdict
-from typing import Union
 
 from sdk.base.base_agent import BaseAgent
 from sdk.base.base_time import BaseTime
 
-TimeT = Union[float, int]
-
 
 class Time(BaseTime):
     """ 
-
+    Class manages the passage of time in the simulation. 
+    
+    Each cycle all Dooder objects are stepped through.
+    
+    Attributes
+    ----------
+    time : int
+        The current time in the simulation (number of cycles).
+    _objects : dict
+        Dictionary of objects in the scheduler, with agent class names as keys.
+    random : Random
+        The random number generator used by the scheduler.
     """
 
     def __init__(self) -> None:
-        """
-        Create a new, empty BaseScheduler.
-
-        Attributes:
-            steps: Number of steps taken in the simulation
-            time: Current time in the simulation
-            _objects: Dictionary of objects in the scheduler, 
-                with agent class names as keys
-        """
-        # self.steps = 0
         self.random = random
-        self.time: TimeT = 0  # ! What is the difference between time and steps?
+        self.time  = 0
         self._objects = defaultdict(dict)
 
     def add(self, object: 'BaseAgent') -> None:
         """
         Add an object to the schedule.
 
-        Args:
-            object: Object to add to the schedule
+        Parameters
+        ----------
+        object: Object
+            add to the schedule
         """
 
         if object.unique_id in self._objects[object.name]:
@@ -51,18 +54,23 @@ class Time(BaseTime):
         """
         Remove all instances of a given agent from the schedule.
 
-        Args:
-            object: An object being removed.
+        Parameters
+        ----------
+        object: Object
+            Object being removed.
         """
         del self._objects[object.name][object.unique_id]
 
-    def _step(self, object_class, shuffle_objects: bool = True) -> None:
+    def _step(self, object_class: str, shuffle_objects: bool = True) -> None:
         """ 
         Step through the objects of a given class
 
-        Args:
-            object_class: Class of objects to step through
-            shuffle_objects: Whether to shuffle the objects before stepping through them
+        Parameters
+        ----------
+        object_class: str
+            Class of objects to step through
+        shuffle_objects: bool
+            Whether to shuffle the objects before stepping through them
         """
         object_keys = list(self._objects[object_class].keys())
         if shuffle_objects:
@@ -74,51 +82,68 @@ class Time(BaseTime):
         """
         Execute the step of all the agents, one at a time.
 
-        Args:
-            shuffle_types: Whether to shuffle the types of objects before stepping through them
-            shuffle_objects: Whether to shuffle the objects before stepping through them
+        Parameters
+        ----------
+        shuffle_types: bool
+            Whether to shuffle the types of objects before stepping through them
+        shuffle_objects: bool
+            Whether to shuffle the objects before stepping through them
         """
         type_keys = list(self._objects.keys())
         if shuffle_types:
             self.random.shuffle(type_keys)
         for object_class in type_keys:
             self._step(object_class, shuffle_objects=shuffle_objects)
-        # self.steps += 1
+
         self.time += 1
 
     def get_object_count(self, object_type: str) -> int:
         """
-        Returns the current number of objects in the queue.
+        Returns the current number of objects in the queue,
+        based on the object type.
 
-        Args:
-            object_type: Class of objects to count
+        Parameters
+        ----------
+        object_type: str 
+            Class of objects to count
 
-        Returns:
+        Returns
+        -------
+        count: int    
             The current number of objects in the queue.
         """
         return len(self._objects[object_type])
 
-    def get_objects(self, object_class):
+    def get_objects(self, object_class: str) -> list:
         """ 
         Returns a list of all objects of a given class.
 
-        Args:
-            object_class: Class of objects to return
+        Parameters
+        ----------
+        object_class: str
+            Class of objects to return
 
-        Returns:
-            A list of all objects of a given class.
+        Returns
+        -------
+        objects: list
+            All objects of a given class.
         """
         return list(self._objects[object_class].values())
 
-    def get_object(self, object_class, unique_id: int):
+    def get_object(self, object_class: str, unique_id: int) -> 'BaseAgent':
         """ 
         Returns an object of a given class with a given unique_id.
 
-        Args:
-            object_class: Class of object to return
-            unique_id: Unique id of object to return
+        Parameters
+        ----------
+        object_class: str
+            Class of object to return
+        unique_id: str
+            Unique id of object to return
 
-        Returns:
+        Returns
+        -------
+        object: Object 
             An object of a given class with a given unique_id.
         """
         return self._objects[object_class][unique_id]
