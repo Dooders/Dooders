@@ -1,4 +1,6 @@
 """
+Information
+-----------
 Information component used to collect information from the simulation.
 This class provides the prim ary capability to collect information from the
 simulation at the end of each cycle. The information is stored in a dictionary
@@ -27,31 +29,28 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
-#! Add post_collect process to send results to db
-#! Have collectors stored in Collectors class
-#! Have a better way to run functions, scope by scope, with correct args
-
 class Information(BaseInformation):
     """
     Class for collecting data from the simulation.
+
+    Parameters
+    ----------
+    simulation_id: str
+        The unique ID for the simulation.
+
+    Attributes
+    ----------
+    simulation_id: see Parameters
+    logger: Logger
+        Logger that handles all logging for the simulation.
+    granularity: int
+        Higher granularity means more detailed logging.
     """
 
     def __init__(self, simulation: 'Simulation') -> None:
-        """
-        Create a new Information component.
-
-        Args:
-            simulation_id: The unique ID of the experiment.
-            params: The parameters of the experiment.
-
-        Attributes:
-            simulation_id: The unique ID of the experiment.
-            logger: The logger for the experiment.
-            granularity: The granularity of the experiment.
-        """
         super().__init__()
         self.logger = get_logger()
-        self.granularity = 2  # ! Fix this
+        self.granularity = 2
         self.simulation = simulation
         self.simulation_id = simulation.simulation_id
 
@@ -59,16 +58,23 @@ class Information(BaseInformation):
         """
         Collect data from the simulation.
 
-        Args:
-            simulation: The simulation to collect data from.
+        Parameters
+        ----------
+        simulation: Object
+            Data is collected from the simulation object.
         """
         super().collect(simulation)
         self.post_collect()
 
     def post_collect(self) -> None:
+        """ 
+        Process taking place after data collection.
+
+        Like aggregating data and sending to a database.
+        """
         cycle_results = self.get_result_dict(self.simulation)['simulation']
         cycle_results['ID'] = self.simulation.generate_id()
-        
+
         if self.simulation.send_to_db:
             DB.add_record(cycle_results, 'CycleResults')
 
@@ -76,10 +82,14 @@ class Information(BaseInformation):
         """
         Get a dictionary of the results of the experiment.
 
-        Args:
-            simulation: The simulation to collect data from.
+        Parameters
+        ----------
+        simulation: 
+            To extract the results from the simulation.
 
-        Returns:
+        Returns
+        -------
+        result_dict: dict
             A dictionary of the results of the experiment.
         """
         result_dict = dict()
@@ -97,34 +107,42 @@ class Information(BaseInformation):
         """
         Log a message.
 
-        Args:
-            message: The message to log.
-            granularity: The granularity of the message.
+        Parameters
+        ----------
+        message: str
+            The message to log.
+        granularity: int
+            The granularity of the message.
         """
-        if granularity <= self.granularity:  # environment variable???
+        if granularity <= self.granularity:
             message_string = f"'SimulationID':'{self.simulation_id}', {message}"
             self.logger.info(message_string)
 
-    def read_log(self) -> List[str]:
+    def read_log(self) -> str:
         """
         Read the log file.
 
-        Yields:
-            A list of the lines in the log file.
+        Yields
+        ------
+        line: str
+            A line in the log file.
         """
-        with open('logs/log.log', 'r') as f:
+        with open('logs/log.json', 'r') as f:
             for line in f:
                 yield line
 
-    def get_experiment_log(self, simulation_id: 'UniqueID' = 'Current') -> List[str]:
+    def get_experiment_log(self, simulation_id: 'UniqueID' = 'Current') -> str:
         """
         Get the log for a given experiment.
 
-        Args:
-            simulation_id: The id of the experiment.
+        Parameters
+        ----------
+        simulation_id: str
 
-        Yields:
-            A list of the lines in the log file.
+        Yields
+        ------
+        line: str
+            A line in the logs of the current experiment.
         """
 
         if simulation_id == 'Current':
@@ -134,23 +152,30 @@ class Information(BaseInformation):
             if simulation_id in line:
                 yield line
 
-    def get_object_history(self, object_id: str) -> List[str]:
+    def get_object_history(self, object_id: str) -> None:
         """
-        Get the history of an object.
+        Print the history of an object.
 
-        Args:
-            object_id: The id of the object. 
-
-        Returns:
-            A list of the lines in the log file.
+        Parameters
+        ----------
+        object_id: str
+            The id of the object. 
         """
         for line in self.get_experiment_log():
             if object_id in line:
                 print(line)
 
     def get_log(self) -> List[dict]:
+        """ 
+        Get the log for the current experiment.
+
+        Returns
+        -------
+        logs: List[dict]
+            A list of dictionaries containing the log for the current experiment.
+        """
         logs = []
-        with open(f"logs/log.log", "r") as f:
+        with open(f"logs/log.json", "r") as f:
             lines = f.readlines()
             for line in lines:
                 if self.simulation_id in line:
