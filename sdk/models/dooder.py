@@ -1,4 +1,6 @@
 """
+Dooder
+------
 A Dooder is a model object and the main focus of the library.
 Each object will have the ability to move around the environment and
 interact with other objects.
@@ -18,6 +20,7 @@ from sdk.modules.neighborhood import Neighborhood
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
+    from sdk.core.data import Position, UniqueID
 
 
 MotivationList = ['Consume', 'Reproduce']
@@ -38,33 +41,40 @@ class MainStats(BaseModel):
 class Dooder(BaseAgent):
     """ 
     Primary Dooder class
+    
+    Parameters
+    ----------
+    unique_id: str
+        Unique ID for the object. 
+        Created by the simulation object
+    position: tuple
+        Position of the object.
+        The position ties to a location in the Environment object
+    simulation: BaseSimulation
+        Reference to the simulation.
+        
+    Attributes
+    ----------
+    genetics: Genetics
+        The genetics of the dooder. WIP
+    behavior: dict
+        A mutable copy of a dooder's genetics.
+        Behavior serves as an expression of the genetics and the dodder's environment
+    cognition: Cognition
+        The cognition of the dooder. WIP
+    direction: str
+        The direction the dooder recently moved.
+    moore: bool
+        The Moore neighborhood of the dooder.
+    internal_models: InternalModels
+        The internal models of the dooder.
     """
 
     def __init__(self,
-                 unique_id,
-                 position,
+                 unique_id: 'UniqueID',
+                 position: 'Position',
                  simulation: 'BaseSimulation') -> None:
-        """
-        Create a new Dooder object.
 
-        Args:
-            unique_id: Unique ID for the object. Created by the simulation object
-            position: Starting position for the object. 
-                The position ties to a location in the Environment object
-            simulation: Reference to the simulation.
-
-        Attributes:
-            unique_id: see Args
-            position: see Args
-            simulation: see Args
-            hunger: Hunger level of the dooder.
-            direction: The direction the dooder is facing.
-            moore: The Moore neighborhood of the dooder.
-            cognition: The cognition of the dooder.
-            behavior: A mutable copy of a dooder's genetics. 
-                Behavior serves as an expression of the genetics and the dodder's environment
-            age: The number of cycles the dooder has been active.
-        """
         super().__init__(unique_id, position, simulation)
         self.genetics = Genetics.compile_genetics(self)
         self.behavior = self.genetics.copy()
@@ -75,7 +85,15 @@ class Dooder(BaseAgent):
         self.log(granularity=1,
                  message=f"Created", scope='Dooder')
 
-    def act(self, action):
+    def act(self, action: str) -> None:
+        """ 
+        Dooder action flow
+
+        Parameters
+        ----------
+        action: str
+            The action to be taken
+        """
         self.simulation.actions(self, action)
 
     def die(self, reason: str = 'Unknown') -> None:
@@ -83,9 +101,11 @@ class Dooder(BaseAgent):
         Removing a dooder from the simulation, 
         with a given reason
 
-        Args:
-            reason: The reason for the death. 
-                For example: starvation, old age, etc.
+        Parameters
+        ----------
+        reason: str
+            The reason for the death. 
+            For example: starvation, old age, etc.
         """
         self.simulation.society.terminate_dooder(self)
         message = f"Died from {reason}"
@@ -94,7 +114,8 @@ class Dooder(BaseAgent):
 
     def death_check(self) -> None:
         """
-        Checking if the dooder should be dead based on conditions of current state
+        Checking if the dooder should be dead,
+        based on conditions of current state
         """
         result, reason = Condition.check_conditions('death', self)
 
@@ -110,8 +131,13 @@ class Dooder(BaseAgent):
         """
         Step flow for a dooder.
 
-        Current flow:
-        * TBD
+        Process
+        -------
+        1. Increment age
+        2. Check if the dooder should die at the beginning of its step
+        3. If not, move, consume, and reproduce
+        4. Check if the dooder should die at the end of its step
+
         """
 
         self.age += 1
@@ -129,9 +155,14 @@ class Dooder(BaseAgent):
                 self.log(granularity=1,
                          message="Terminated during cycle", scope='Dooder')
 
-    def clone(self):
+    def clone(self) -> 'Dooder':
         """
         Clone the dooder.
+        
+        Returns
+        -------
+        clone: Dooder
+            A copy of the dooder.
         """
         clone = copy.deepcopy(self)
         clone.unique_id = self.simulation.seed.uuid()
@@ -141,6 +172,11 @@ class Dooder(BaseAgent):
     def find_partner(self) -> 'Dooder':
         """
         Find another Dooder from current position.
+        
+        Returns
+        -------
+        partner: Dooder
+            A Dooder object, if found.
         """
         near_dooders = self.simulation.environment.get_cell_list_contents(
             self.position)
@@ -154,13 +190,23 @@ class Dooder(BaseAgent):
     def __str__(self) -> str:
         """
         Return string of class attributes and genetics.
+        
+        Returns
+        -------
+        string: str
+            A string of the dooder's attributes and genetics.
         """
         return f"UniqueID: {self.unique_id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
 
     @property
-    def history(self):
+    def history(self) -> list:
         """ 
         Return the dooder's history.
+        
+        Returns
+        -------
+        logs: list
+            A list of dictionaries of the dooder's history.
         """
         logs = []
         for log in self.simulation.load_log():
@@ -173,8 +219,10 @@ class Dooder(BaseAgent):
         """
         The base stats of the dooder.
         
-        Returns:
-            stats: A dictionary of the dooder's main stats.
+        Returns
+        -------
+        stats: dict 
+            A dictionary of the dooder's main stats.
             for example: {'unique_id': '1234', 'position': (0,0), 'hunger': 0, 'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0, 'move_count': 0, 'energy_consumed': 0}
         """
         stats = {}
@@ -187,41 +235,13 @@ class Dooder(BaseAgent):
     def neighborhood(self) -> list:
         """
         Return a list of the dooder's neighborhood locations.
+        
+        Returns
+        -------
+        neighborhood: list
+            A list of the dooder's nearby neighborhood locations.
         """
         locations = self.simulation.environment.get_neighbor_locations(
             (self.position))
 
         return Neighborhood(locations, self)
-
-
-# Todo: Create an Effects class (can be temporary or permanent)
-
-#! Every end of cycle there will be a check to check fate if the dooder will die
-#! The probability of death will go either up or down depending on multiple factors and effects
-#! So survivability is a function of the effects of genetics, environment, and behavior
-#! Then I can train an agent to maximize days alive and survivability
-#! Maybe even have the ability to change how fate is determined
-
-
-##### Formulas #####
-
-# #! Survivability modifier
-# Every dooder starts with 99.99% probability surviving the cycle
-# The modifier will reduce the probability of survival to be checked at the end of each cycle
-# survival_probability_modifier = (negative_effects + positive_effects) + permanent_effects
-
-# #! Hunger (temporary negative effect)
-# Calculates the hunger slevel of the dooder
-# Added to negative_effects
-# M = Metabolism (between 1 and 2)
-# hunger = M^(number of cycle hungry) more cycle will add more negative probability
-
-# #! Age (permanent negative effect)
-# As a dooder goes through more cycles, it will have a higher chance of dying
-# Needs to have a long time as low probability to die then at some point it will increase by a lot
-# Age deterioration can be a genetic thing too
-
-# !# Mood (temporary positive or negative effect)
-# Based on a lot of different factors
-# Between -100 and 100 or -1 and 1
-# """

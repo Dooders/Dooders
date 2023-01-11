@@ -1,5 +1,9 @@
 """ 
+Energy
+-----
+Represents energy in the environment. 
 
+Energy is consumed by agents to increase its lifespan.
 """
 
 from typing import TYPE_CHECKING
@@ -16,6 +20,30 @@ EnergyStrategy = Strategy.load_strategy('energy')
 
 class Energy:
     """ 
+    Energy object used for an agent to continue in the simulation.
+    Dooders must consume energy to increase their lifespan.
+    
+    Parameters
+    ----------
+    unique_id: UniqueID
+        Unique ID of the object.
+    position: Position
+        Position of the object.
+    resources: Resources
+        Resources object.
+        
+    Attributes
+    ----------
+    unique_id: UniqueID
+        See Parameters.
+    position: Position
+        See Parameters.
+    resources: Resources
+        See Parameters.
+    cycle_count: int
+        Current cycle count. AKA, age.
+    strategies: dict    
+        Defined Energy strategies
 
     """
 
@@ -23,19 +51,6 @@ class Energy:
                  unique_id: 'UniqueID',
                  position: 'Position',
                  resources: 'Resources') -> None:
-        """ 
-        Args:
-            unique_id: Unique ID of the object.
-            position: Position of the object.
-            resources: Resources object.
-
-        Attributes:
-            unique_id: See Args.
-            position: See Args.
-            resources: See Args.
-            cycle_count: Current cycle count. AKA, age.
-            strategies: Defined Energy strategies
-        """
         self.unique_id = unique_id
         self.strategies = compile_strategy(self, EnergyStrategy)
         self.position = position
@@ -57,6 +72,12 @@ class Energy:
     def consume(self, type=None) -> None:
         """
         Consume the energy object and remove it from the environment.
+        
+        Parameters
+        ----------
+        type: str
+            Type of consumption. 
+            If None, it will counted as consumed energy.
         """
 
         self.resources.remove(self)
@@ -70,7 +91,9 @@ class Energy:
     @property
     def name(self) -> str:
         """ 
-        Returns:
+        Returns
+        -------
+        name: str
             Name of the object
         """
         return self.__class__.__name__
