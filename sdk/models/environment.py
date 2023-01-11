@@ -1,5 +1,7 @@
 """ 
-
+Environment
+-----------
+Represents the "physical" environment in which the agents interact.
 """
 
 from random import choices
@@ -17,34 +19,30 @@ GridCell = List[Any]
 
 class Environment(BaseEnvironment):
     """ 
+    Create a new MultiGrid object.
 
+    Parameters
+    ----------
+    params: dict
+        The parameters for the environment.
+        
+    See Also
+    --------
+    BaseEnvironment: The base class for the environment.
     """
 
     grid: List[List[GridCell]]
 
-    def __init__(self, params: dict) -> None:
+    def place_object(self, object: 'BaseAgent', position: tuple) -> None:
         """
-        Create a new MultiGrid object.
+        Place an object at the provided position.
 
-        Args:
-            params: The parameters for the environment.
-
-        Attributes:
-            grid: The grid of the environment.
-            width: The width of the environment.
-            height: The height of the environment.
-            torus: Whether the environment is toroidal.
-            empties: The empty cells in the environment.
-        """
-        super().__init__(params)
-
-    def place_object(self, object: 'BaseAgent', position) -> None:
-        """
-        Place an object at the given location.
-
-        Args:
-            object: The object to place.
-            location: The location to place the object.
+        Parameters
+        ----------
+        object: BaseAgent
+            The object to place.
+        position: tuple
+            The location to place the object, in the form (x, y).
         """
         x, y = position
         location = self.grid[x][y]
@@ -56,8 +54,10 @@ class Environment(BaseEnvironment):
         """
         Remove an object from the grid.
 
-        Args:
-            object: The object to remove.
+        Parameters
+        ----------
+        object: BaseAgent
+            The object to remove.
         """
         location = object.position
         x, y = location
@@ -66,13 +66,16 @@ class Environment(BaseEnvironment):
             self.empties.add(location)
         object.position = None
 
-    def move_object(self, object: 'BaseAgent', location) -> None:
+    def move_object(self, object: 'BaseAgent', location: tuple) -> None:
         """ 
         Move an object to a new location.
 
-        Args:
-            object: The object to move.
-            location: The location to move the object to.
+        Parameters
+        ----------
+        object: BaseAgent
+            The object to move.
+        location: tuple
+            The location to move the object to.
         """
         position = self.torus_adj(location)
         self.remove_object(object)
@@ -84,6 +87,7 @@ class Environment(BaseEnvironment):
         Get all object types in the environment.
 
         Returns:
+        object_types: List[BaseAgent]
             A list of all object types in the environment.
         """
         object_types = []
@@ -98,10 +102,14 @@ class Environment(BaseEnvironment):
         """
         Get all objects of a given type.
 
-        Args:
-            type: The type of object to get.
+        Parameters
+        ----------
+        type: str
+            The type of object to get.
 
-        Returns:
+        Returns
+        -------
+        objects: List[BaseAgent]
             A list of all objects of the given type.
         """
         if object_type == 'BaseAgent':
@@ -119,10 +127,15 @@ class Environment(BaseEnvironment):
         """
         Get an object by its id.
 
-        Args:
-            object_id: The id of the object. Based on a random short uuid assigned to every object at its creation.
+        Parameters
+        ----------
+        object_id: UniqueID
+            The id of the object. Based on a random short uuid assigned to 
+            every object at its creation.
 
-        Returns:
+        Returns
+        -------
+        object: BaseAgent
             The object with the given id.
         """
         for x in range(self.width):
@@ -139,11 +152,16 @@ class Environment(BaseEnvironment):
         """
         Get all objects in the neighborhood of the given object.
 
-        Args:
-            object: The object to get the neighborhood of.
-            object_type: The type of object to get.
+        Parameters
+        ----------
+        object: BaseAgent
+            The object to get the neighborhood of.
+        object_type: str
+            The type of object to get.
 
-        Returns:    
+        Returns
+        -------
+        objects: List[BaseAgent]
             A list of all objects in the neighborhood of the given object.
         """
         if object_type == 'BaseAgent':
@@ -160,15 +178,20 @@ class Environment(BaseEnvironment):
 
         return objects
 
-    def get_random_neighborhoods(self, location, n: int = 1):
+    def get_random_neighborhoods(self, location: tuple, n: int = 1) -> List[GridCell]:
         """
         Get all objects in the neighborhood of the given location.
 
-        Args:
-            location: The location to get the neighborhood of.
-            n: The number of neighborhoods to get.
+        Parameters
+        ----------
+        location: tuple
+            The location to get the neighborhood of.
+        n: int
+            The number of neighborhoods to get.
 
-        Returns:
+        Returns
+        -------
+        random_neighborhoods: List[GridCell]
             A list of all objects in the neighborhood of the given location.
         """
 
@@ -180,4 +203,17 @@ class Environment(BaseEnvironment):
         return random_neighborhoods
 
     def get_object_count(self, object_type: str = 'BaseAgent') -> int:
+        """ 
+        Get the number of objects of a given type.
+        
+        Parameters
+        ----------
+        object_type: str
+            The type of object to count.
+        
+        Returns
+        -------
+        count: int
+            The number of objects of the given type.
+        """
         return len(self.get_objects(object_type))
