@@ -1,30 +1,50 @@
+""" 
+InternalModels
+--------------
+The InternalModels class models a Dooder's learned behaviors.
+"""
+
 from sdk.learning.nets.model import SimpleNeuralNet
 
 class InternalModels(dict):
     """ 
-    Work like a normal dictionary but with a method to easily replace
+    Works like a normal dictionary but with a method to easily replace
     the weights of the internal models.
     
-    The InternalModels class models a Dooder's learned behaviors.
+    Each model is created when the class is instantiated. The models are
+    stored as a dictionary with the model name as the key.
+    
+    Parameters
+    ----------
+    model_list : list
+        A list of model names to use as keys for the dictionary.
     """
     
-    def __init__(self, model_list, *args, **kwargs) -> None:
+    def __init__(self, model_list: list, *args, **kwargs) -> None:
         self.build(model_list)
         super(InternalModels, self).__init__(*args, **kwargs)
     
-    def build(self, model_list):
+    def build(self, model_list: list) -> None:
         """
+        Build the internal models.
         
+        Parameters
+        ----------
+        model_list : list
+            A list of model names to use as keys for the dictionary.
         """
         for model in model_list:
             self[model] = SimpleNeuralNet()
         
     def inherit_weights(self, weights: dict) -> None:
         """ 
-        Take a dictionary of weights and inherit them into the internal models.
+        Take a dictionary of weights and inherit them 
+        into the internal models.
         
-        Args:
-            weights (dict): A dictionary of weights to inherit.
+        Parameters
+        ----------
+        weights : dict
+            A dictionary of weights to inherit.
         """
         for model in self.keys():
             self[model].inherit_weights(weights[model])
@@ -32,10 +52,12 @@ class InternalModels(dict):
     @property
     def weights(self) -> dict:
         """ 
-        Return a dictionary of weights from the internal models.
+        Dictionary of weights from the internal models.
         
-        Returns:
-            dict: A dictionary of weights from the internal models.
+        Returns
+        -------
+        model_weights : dict
+            A dictionary of weights from the internal models.
         """
         model_weights = dict()
         
@@ -47,10 +69,12 @@ class InternalModels(dict):
     @property
     def biases(self) -> dict:
         """ 
-        Return a dictionary of biases from the internal models.
+        Biases from the internal models.
         
-        Returns:
-            dict: A dictionary of biases from the internal models.
+        Returns
+        -------
+        biases : dict
+            A dictionary of biases from the internal models.
         """
         keys = self.keys()
         biases = dict()
