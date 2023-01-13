@@ -1,33 +1,52 @@
 """ 
-Location class
+Location
+--------
 
 A location object will correspond to a grid cell in the environment.
-So, if the grid is 10x10, there will be 100 location objects in the environment.
+So, if the grid is 10x10, there will be 100 location objects 
+in the environment.
 
-The Location class makes it easier to keep track of contents (Energy, Agents, etc.)
+The Location class makes it easier to keep track of 
+contents (Energy, Agents, etc.)
 """
 
 import random
 
+from pydantic import BaseModel
+
+#! need Location based attributes and collectors
+#! every class can (and should) track information about itself
+#! use tqdm to track progress
+
 
 class Location:
+    """ 
+    Location object with a unique id and coordinates
+
+    Parameters
+    ----------
+    x: int
+        The x coordinate of the location
+    y: int
+        The y coordinate of the location
+
+    Attributes
+    ----------
+    unique_id: str
+        A unique id for the location
+    x: int
+        See Parameters
+    y: int
+        See Parameters
+    contents: dict
+        A dictionary of objects in the location
+        The key is the unique id of the object,
+        and the value is the object itself
+    status: str
+        The status of the location (empty, occupied, etc.)
+    """
 
     def __init__(self, x: int, y: int) -> None:
-        """ 
-        Initialize a location object with a unique id and coordinates
-
-        Args:
-            x: The x coordinate of the location
-            y: The y coordinate of the location
-
-        Attributes:
-            unique_id: A unique id for the location
-            x: See Args
-            y: See Args
-            contents: A dictionary of objects in the location
-                The key is the unique id of the object, and the value is the object itself
-            status: The status of the location (empty, occupied, etc.)
-        """
         self.x = x
         self.y = y
         self.coordinates = (x, y)
@@ -39,8 +58,10 @@ class Location:
         Add an object to the location. 
         An object is added to the contents dictionary
 
-        Args:
-            object: The object to add to the location
+        Parameters
+        ----------
+        object: object
+            The object to add to the location (i.e. Dooder, Energy, etc.)
         """
         self.contents[object.unique_id] = object
         self.status = 'occupied'
@@ -49,8 +70,10 @@ class Location:
         """ 
         Remove an object from the location
 
-        Args:
-            object: The object to remove from the location
+        Parameters
+        ----------
+        object: object
+            The object to remove from the location
         """
         self.contents.pop(object.unique_id, None)
 
@@ -59,11 +82,20 @@ class Location:
 
     def has(self, object_type: str, ignore=None) -> bool:
         """ 
-        Return a boolean indicating if the location contains a specific object type
+        Return a boolean indicating if the location contains 
+        a specific object type
 
-        Args:
-            object_type: The type of object to check for
-            ignore: A list of object to ignore (Specifically the involved Dooder)
+        Parameters
+        ----------
+        object_type: str
+            The type of object to check for
+        ignore: object
+            A list of object to ignore (Specifically the involved Dooder)
+
+        Returns
+        -------
+        bool
+            True if the location contains the object type, False otherwise
         """
         for object in self.contents.values():
             if object.__class__.__name__ == object_type:
@@ -76,14 +108,24 @@ class Location:
     @property
     def count(self) -> int:
         """ 
-        Return the number of objects in the location
+        Get the number of objects in the location
+
+        Returns
+        -------
+        int
+            The number of objects in the location
         """
         return len(self.contents)
 
     @property
     def random(self) -> object:
         """ 
-        Return a random object in the location
+        Get a random object in the location
+
+        Returns
+        -------
+        object
+            A random object in the location
         """
         return random.choice(list(self.contents.values()))
 
@@ -91,6 +133,11 @@ class Location:
     def is_empty(self) -> bool:
         """ 
         Return a boolean indicating if the location is empty
+
+        Returns
+        -------
+        bool
+            True if the location is empty, False otherwise
         """
         return self.status == 'empty'
 
@@ -98,5 +145,10 @@ class Location:
     def is_occupied(self) -> bool:
         """ 
         Return a boolean indicating if the location is occupied
+
+        Returns
+        -------
+        bool
+            True if the location is occupied, False otherwise
         """
         return self.status == 'occupied'

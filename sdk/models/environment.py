@@ -25,7 +25,7 @@ class Environment(BaseEnvironment):
     ----------
     params: dict
         The parameters for the environment.
-        
+
     See Also
     --------
     BaseEnvironment: The base class for the environment.
@@ -86,7 +86,8 @@ class Environment(BaseEnvironment):
         """
         Get all object types in the environment.
 
-        Returns:
+        Returns
+        -------
         object_types: List[BaseAgent]
             A list of all object types in the environment.
         """
@@ -205,12 +206,12 @@ class Environment(BaseEnvironment):
     def get_object_count(self, object_type: str = 'BaseAgent') -> int:
         """ 
         Get the number of objects of a given type.
-        
+
         Parameters
         ----------
         object_type: str
             The type of object to count.
-        
+
         Returns
         -------
         count: int
