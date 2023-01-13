@@ -1,8 +1,8 @@
 """ 
-Neighborhood Class
-
-This module contains the Neighborhood class, which is used to represent a
-neighborhood in the simulation. A neighborhood is a list of locations adjacent to a Dooder.
+Neighborhood
+------------
+Neighborhood class representS a neighborhood in the simulation. 
+A neighborhood is a list of locations adjacent to a Dooder.
 """
 
 import random
@@ -16,42 +16,50 @@ class Neighborhood(list):
     """ 
     A neighborhood is a list of locations that are adjacent to a dooder, 
     including the dooder's current location
+
+    Parameters
+    ----------
+    locations: list
+        A list of locations adjacent to the dooder
+    dooder: Dooder
+        The dooder to create the neighborhood around
+
+    Attributes
+    ----------
+    __mapping__: dict
+        A mapping of location indices to directions
     """
 
     __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
                    4: '-', 5: 'E', 6: 'SW', 7: 'S', 8: 'SE'}
 
-    def __init__(self, locations, dooder: object) -> None:
-        """ 
-        Initialize a neighborhood object
-
-        Args:
-            locations: A list of locations adjacent to the dooder
-            dooder: The dooder to create the neighborhood around
-        """
+    def __init__(self, locations: list, dooder: object) -> None:
         self.dooder = dooder
         super().__init__(locations)
 
     def to_direction(self, location: 'Location') -> str:
         """ 
-        Return the direction of a location in the neighborhood
+        Convert the direction of a location in the neighborhood
 
-        Args:
-            location: The location to find the direction of
-
-        Returns:
-            The direction of the location
+        Parameters
+        ----------
+        location: Location
+            The location to find the direction of
         """
         return self.__mapping__[location]
 
-    def contains(self, object_type: str) -> bool:
+    def contains(self, object_type: str) -> List[bool]:
         """ 
-        Return whether the neighborhood contains a given object type
+        Check whether the neighborhood contains a given object type
 
-        Args:
-            object_type: The object type to check for
+        Parameters
+        ----------
+        object_type: str
+            The object type to check for
 
-        Returns:
+        Returns
+        -------
+        result: list[bool]
             True if the neighborhood contains the object type, False otherwise
         """
         result = []
@@ -60,14 +68,18 @@ class Neighborhood(list):
 
         return result
 
-    def fetch(self, object_type: str) -> object:
+    def fetch(self, object_type: str) -> List['object']:
         """ 
-        Return a list of objects of a given type in the neighborhood
+        Fetch a list of objects of a given type in the neighborhood
 
-        Args:
-            object_type: The object type to fetch
+        Parameters
+        ----------
+        object_type: str
+            The object type to fetch
 
-        Returns:
+        Returns
+        -------
+        result: list[object]
             A list of objects of the given type
         """
         result = []
@@ -81,20 +93,35 @@ class Neighborhood(list):
     @property
     def locations(self) -> List['Location']:
         """ 
-        Return the locations in the neighborhood
+        Fetch a List of locations in the neighborhood
+
+        Returns
+        -------
+        locations: list[Location]
+            The locations in the neighborhood
         """
         return self
 
     @property
     def coordinates(self) -> List[Tuple[int, int]]:
         """ 
-        Return the coordinates of the locations in the neighborhood
+        Fetch the coordinates of the locations in the neighborhood
+
+        Returns
+        -------
+        coordinates: list[tuple[int, int]]
+            The coordinates of the locations in the neighborhood
         """
         return [x.coordinates for x in self]
 
     @property
     def random(self) -> 'Location':
         """ 
-        Return a random location in the neighborhood
+        Fetch random location in the neighborhood
+
+        Returns
+        -------
+        location: Location
+            A random location in the neighborhood
         """
         return random.choice(self)
