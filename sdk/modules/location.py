@@ -12,11 +12,13 @@ contents (Energy, Agents, etc.)
 
 import random
 
-from pydantic import BaseModel
-
 #! need Location based attributes and collectors
 #! every class can (and should) track information about itself
 #! use tqdm to track progress
+#! yep need a model abstract class like I have for policies, strategies, etc.
+#! making attributes its own class to for tying attribute definition with collection
+#! or is this just a collector???? dont need attributes class???
+#! make collectors create and manage their own attributes???? what could go wrong
 
 
 class Location:
@@ -104,6 +106,12 @@ class Location:
                 else:
                     return True
         return False
+    
+    def collect(self):
+        # Create method to run through collection process for a location
+        # should I have a model abstract class???
+        # model collects its state and returns it
+        pass
 
     @property
     def count(self) -> int:
