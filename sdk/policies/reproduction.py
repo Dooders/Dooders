@@ -13,22 +13,24 @@ if TYPE_CHECKING:
 class AverageWeights(BasePolicy):
     """
     Taking the model weights from two Dooders and averaging them to use with a new Dooder.
+    
+    Averages the weights of two Dooders to create a new Dooder.
+
+    Parameters
+    ----------
+    dooderA (Dooder): Dooder
+        The first Dooder.
+    dooderB (Dooder): Dooder
+        The second Dooder.
+
+    Returns
+    -------
+    new_weights : (np.ndarray)
+        The new Dooder weights
     """
 
     @classmethod
     def execute(self, dooderA: 'Dooder', dooderB: 'Dooder') -> np.ndarray:
-        """
-        Averages the weights of two Dooders to create a new Dooder.
-
-        Args:
-            dooderA (Dooder): The first Dooder.
-            dooderB (Dooder): The second Dooder.
-
-        Returns:
-            Dooder: The new Dooder weights
-        """
-        # {'move': {'consume': np.ndarray, 'reproduce': np.ndarray}}
-
         new_weights = {}
         weightsA = dooderA.internal_models.weights
         weightsB = dooderB.internal_models.weights
@@ -46,20 +48,24 @@ class RangeWeights(BasePolicy):
     """
     Taking the model weights from two Dooders and randomly selecting weights 
     between the range of the two Dooder to use with a new Dooder.
+    
+    Randomly selects weights between the range of the two Dooders to create a new Dooder.
+
+    Parameters
+    ----------
+    dooderA : Dooder
+        The first Dooder.
+    dooderB : Dooder
+        The second Dooder.
+
+    Returns
+    -------
+    new_weights : (np.ndarray) 
+        The new Dooder weights
     """
 
     @classmethod
     def execute(self, dooderA: 'Dooder', dooderB: 'Dooder') -> np.ndarray:
-        """
-        Randomly selects weights between the range of the two Dooders to create a new Dooder.
-
-        Args:
-            dooderA (Dooder): The first Dooder.
-            dooderB (Dooder): The second Dooder.
-
-        Returns:
-            Dooder: The new Dooder weights
-        """
         new_weights = {}
         weightsA = dooderA.internal_models.weights
         weightsB = dooderB.internal_models.weights
@@ -84,21 +90,25 @@ class SplitWeights(BasePolicy):
     Taking the model weights from two Dooders. The first layer weights of DooderA
     and the second layer weights from DooderB.
     Then use those weights in a new Dooder.
+    
+    Takes the first layer weights from DooderA and the second layer weights from DooderB.
+    Then use those weights in a new Dooder.
+
+    Parameters
+    ----------
+    dooderA : Dooder
+        The first Dooder.
+    dooderB : Dooder
+        The second Dooder.
+
+    Returns
+    -------
+    new_weights : (np.ndarray)
+        The new Dooder weights
     """
 
     @classmethod
     def execute(self, dooderA: 'Dooder', dooderB: 'Dooder') -> np.ndarray:
-        """
-        Takes the first layer weights from DooderA and the second layer weights from DooderB.
-        Then use those weights in a new Dooder.
-
-        Args:
-            dooderA (Dooder): The first Dooder.
-            dooderB (Dooder): The second Dooder.
-
-        Returns:
-            Dooder: The new Dooder weights
-        """
         new_weights = {}
         weightsA = dooderA.internal_models.weights
         weightsB = dooderB.internal_models.weights
