@@ -1,6 +1,6 @@
 """
-Information
------------
+Information Model
+-----------------
 Information component used to collect information from the simulation.
 This class provides the prim ary capability to collect information from the
 simulation at the end of each cycle. The information is stored in a dictionary
@@ -20,8 +20,10 @@ when energy dissipation occurs, failed movements, and failed actions, etc..
 import ast
 from typing import TYPE_CHECKING, List
 
+import pandas as pd
+
 from db.main import DB
-from sdk.base.base_information import BaseInformation
+from sdk.core import Collector
 from sdk.utils.logger import get_logger
 
 if TYPE_CHECKING:
@@ -29,7 +31,7 @@ if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
-class Information(BaseInformation):
+class Information:
     """
     Class for collecting data from the simulation.
 
@@ -48,7 +50,7 @@ class Information(BaseInformation):
     """
 
     def __init__(self, simulation: 'Simulation') -> None:
-        super().__init__()
+        self.collectors = Collector()
         self.logger = get_logger()
         self.granularity = 2
         self.simulation = simulation
@@ -63,7 +65,7 @@ class Information(BaseInformation):
         simulation: Object
             Data is collected from the simulation object.
         """
-        super().collect(simulation)
+        self.collectors.collect(simulation)
         self.post_collect()
 
     def post_collect(self) -> None:
@@ -72,11 +74,11 @@ class Information(BaseInformation):
 
         Like aggregating data and sending to a database.
         """
-        cycle_results = self.get_result_dict(self.simulation)['simulation']
-        cycle_results['ID'] = self.simulation.generate_id()
+        # cycle_results = self.get_result_dict(self.simulation)['simulation']
+        # cycle_results['ID'] = self.simulation.generate_id()
 
-        if self.simulation.send_to_db:
-            DB.add_record(cycle_results, 'CycleResults')
+        # if self.simulation.send_to_db:
+        #     DB.add_record(cycle_results, 'CycleResults')
 
     def get_result_dict(self, simulation: 'Simulation') -> dict:
         """
@@ -102,6 +104,29 @@ class Information(BaseInformation):
                 result_dict[scope][column] = value[-1]  # get the last value
 
         return result_dict
+
+    def get_dataframe(self, scope: str) -> pd.DataFrame:
+        """
+        Get the collected data as a pandas DataFrame.
+
+        Parameters
+        ----------
+        scope: str
+            Scope to get data from.
+
+        Returns:
+        df: pd.DataFrame
+            DataFrame of collected data.
+        """
+        data = self.collectors.data[scope]
+
+        if scope == 'dooder':
+            sub_data = data['Stat']
+            data = [item for sublist in sub_data for item in sublist]
+
+        df = pd.DataFrame.from_dict(data, orient="columns")
+
+        return df
 
     def log(self, message: str, granularity: int) -> None:
         """
@@ -131,6 +156,7 @@ class Information(BaseInformation):
             for line in f:
                 yield line
 
+    #! add log methods to log class
     def get_experiment_log(self, simulation_id: 'UniqueID' = 'Current') -> str:
         """
         Get the log for a given experiment.
@@ -183,3 +209,15 @@ class Information(BaseInformation):
                     logs.append(ast.literal_eval(final))
 
         return logs
+
+    @property
+    def data(self) -> dict:
+        """ 
+        Get the data collected from the simulation.
+
+        Returns
+        -------
+        data: dict
+            A dictionary of the data collected from the simulation.
+        """
+        return self.collectors.data

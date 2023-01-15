@@ -1,4 +1,6 @@
 """ 
+Collector Core
+--------------
 The Collector class is a global registry of collectors. A new collector
 is added through the register_collector() decorator. 
 
@@ -14,14 +16,15 @@ A collector can return any type of information. Every Collector must input
 'simulation' as an argument. The simulation object is used to extract 
 information from the simulation.
 """
+
 from functools import partial
 from typing import TYPE_CHECKING, Callable
 
 from pydantic import BaseModel
+
 from sdk.base.base_core import BaseCore
 
 if TYPE_CHECKING:
-    from sdk.models import Information
     from sdk.simulation import Simulation
 
 
@@ -36,22 +39,38 @@ class Collector(BaseCore):
     The factory class for creating collectors
 
     The CollectorRegistry is a global registry of collectors. A new collector
-    is added through the register_collector() decorator.
+    is added through the register decorator.
+
+    Attributes
+    ----------
+    registry: list
+        List of all the registered collectors. Inside the collectors folder.
+    collectors: dict
+        Dictionary of all the collectors. The key is the collector name.
+    data: dict
+        Dictionary of all the collected data. The key is the collector name.
     """
 
-    # The registry of collectors
-    registry = []
+    registry: list = []
+
+    def __init__(self) -> None:
+        self.collectors: dict = {}
+        self.data: dict = {}
+        self.compile_collectors()
 
     @classmethod
     def register(cls, name: str) -> Callable:
         """ 
         Register a collector in the registry.
 
-        Args:
-            name: Name of the collector.
-            scope: Scope of the collector.
+        Parameters
+        ----------
+        name: str
+            Name of the collector.
 
-        Returns:
+        Returns
+        -------
+        inner_wrapper: Callable
             The decorator function.
         """
 
@@ -63,60 +82,58 @@ class Collector(BaseCore):
 
         return inner_wrapper
 
-    @classmethod
-    def compile_collectors(cls, information: 'Information') -> None:
+    def compile_collectors(self) -> None:
         """ 
         Compile the collectors into a dictionary.
-
-        Args:
-            information: Information object to collect data from.
         """
-        for collector in cls.registry:
+        for collector in self.registry:
             collector = BaseCollector(**collector)
             scope = collector.scope
 
-            if scope not in information.collectors:
-                information.collectors[scope] = {}
-                information.data[scope] = {}
+            if scope not in self.collectors:
+                self.collectors[scope] = {}
+                self.data[scope] = {}
 
             if type(collector.function) is str:
-                func = partial(information._getattr, collector.function)
+                func = partial(self._getattr, collector.function)
             else:
                 func = collector.function
 
-            information.collectors[scope][collector.name] = func
-            information.data[scope][collector.name] = []
+            self.collectors[scope][collector.name] = func
+            self.data[scope][collector.name] = []
 
-    @classmethod
-    def run_collectors(cls, information: 'Information', simulation: 'Simulation') -> None:
+    def collect(self, simulation: 'Simulation') -> None:
         """ 
         Run all the collectors for all the components.
 
-        Args:
-            information: Information object to collect data from.
-            simulation: Simulation object to collect data from.
+        Parameters
+        ----------
+        simulation: Simulation
+        Simulation object to collect data from.
         """
-        for scope in information.collectors:
-            cls._collect(information, scope, simulation)
+        for scope in self.collectors:
+            self._collect(scope, simulation)
 
-    def _collect(information, scope: str, simulation) -> None:
+    def _collect(self, scope: str, simulation: 'Simulation') -> None:
         """
         Run all the collectors for the given component.
 
-        Args:
-            information: Information object to collect data from.
-            component: Component to collect data from.
-            simulation: Simulation object to collect data from.
+        Parameters
+        ----------
+        component: str
+            Component to collect data from.
+        simulation: Simulation
+            Simulation object to collect data from.
         """
-        for name, func in information.collectors[scope].items():
+        for name, func in self.collectors[scope].items():
 
             if callable(func):
-                information.data[scope][name].append(func(simulation))
+                self.data[scope][name].append(func(simulation))
             else:
 
                 if func[1] is None:
-                    information.data[scope][name].append(
+                    self.data[scope][name].append(
                         func[0](simulation))
                 else:
-                    information.data[scope][name].append(
+                    self.data[scope][name].append(
                         func[0](simulation, **func[1]))
