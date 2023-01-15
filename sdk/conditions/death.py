@@ -1,4 +1,7 @@
 """ 
+Death Condition
+---------------
+This condition is responsible for the tests required to trigger a 'death' status
 
 """
 
@@ -18,8 +21,6 @@ def starvation(dooder: 'Dooder') -> bool:
 
     # The higher the dooder's hunger, the more likely they are to starve
     probabilities = [0, 1, 2, 3, 20, 30, 50]
-    
-    
 
     if dooder.hunger >= 1 and dooder.hunger < 5:
         return Fate.ask_fate(probabilities[dooder.hunger])
