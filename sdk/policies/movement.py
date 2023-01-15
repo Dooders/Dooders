@@ -1,10 +1,19 @@
 """ 
-The movement policy is responsible for "deciding" where a Dooder will move during it's step
+Movement Policy
+----------------
+This policy is responsible for "deciding" where a Dooder will move during it's step
+
 Currently there are three policies:
 1. Random: The Dooder will move to a random location
 2. Rule-based: The Dooder will move to a location based on a set of rules
 3. Neural Network: The Dooder will move to a location based on a neural network output
 """
+
+#! !!!! make an intelligent energy source. One that is rule based and not random
+#! what we see as random is actually an outcome of an intentional system
+#! predatorial based system
+#! have writing on "types of systems"
+#! creativley create or modify systems(models)????
 
 from random import choice
 from typing import TYPE_CHECKING
@@ -23,11 +32,15 @@ class RandomMove(BasePolicy):
     """
     Given a Dooder object, returns a random location in the objects neighborhood
     A neighborhood is all surrounding positions, including the current position
+    
+    Parameters
+    ----------
+    dooder: Dooder
+        The Dooder object to move
 
-    Args:
-        dooder: The Dooder object to move
-
-    Returns:
+    Returns
+    -------
+    random_cell: tuple
         A random location in the Dooder's neighborhood
     """
 
@@ -45,10 +58,14 @@ class RuleBased(BasePolicy):
     Given a Dooder object, returns a random location in the objects neighborhood that has energy.
     A neighborhood is all surrounding positions, including the current position
 
-    Args:
-        dooder: The Dooder object to move
+    Parameters
+    ----------
+    dooder: Dooder
+        The Dooder object to move
 
-    Returns:
+    Returns
+    -------
+    random_cell: tuple
         A random location in the Dooder's neighborhood that has energy
     """
     @classmethod
@@ -68,24 +85,28 @@ class RuleBased(BasePolicy):
 
 @Policies.register()
 class NeuralNetwork(BasePolicy):
+    #! Change this name to TargetBased or GoalBased
+    """ 
+    Given a Dooder object, returns a selected location based on neural network output
+    The neural network is trained to predict the location of the nearest target source
+    This function will first determine to goal of the Dooder (Reproduce or Consume)
+    Then a model is trained for each target source (Dooder or Energy)
+
+    Parameters
+    ----------
+    dooder: Dooder
+        The Dooder object to move
+
+    Returns
+    -------
+    predicted_location: tuple
+        A location based on neural network output
+    """
 
     base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}
 
     @classmethod
     def execute(cls, dooder: 'Dooder') -> tuple:
-        """ 
-        Given a Dooder object, returns a selected location based on neural network output
-        The neural network is trained to predict the location of the nearest target source
-        This function will first determine to goal of the Dooder (Reproduce or Consume)
-        Then a model is trained for each target source (Dooder or Energy)
-
-        Args:
-            dooder: The Dooder object to move
-
-        Returns:
-            A location based on neural network output
-        """
-
         neighborhood = dooder.neighborhood
 
         goal = cls.infer_goal(dooder, neighborhood)
@@ -106,7 +127,8 @@ class NeuralNetwork(BasePolicy):
         predicted_location = neighborhood.coordinates[prediction]
 
         # Learn from the reality
-        # Note: Prediction happens before learning. Learning happens after action
+        # Note: Prediction happens before learning. 
+        # Learning happens after action
         correct_choices = [location[0] for location in enumerate(
             neighborhood.contains(target)) if location[1] == True]
 
@@ -123,11 +145,16 @@ class NeuralNetwork(BasePolicy):
         If there are any Dooders nearby, it will reproduce
         The default goal is to consume energy
 
-        Args:
-            dooder: The Dooder object to move
-            neighborhood: The Dooder's neighborhood
+        Parameters
+        ----------
+        dooder: Dooder
+            The Dooder object to move
+        neighborhood: Neighborhood
+            The Dooder's neighborhood
 
-        Returns:
+        Returns
+        -------
+        goal: str
             The goal of the Dooder 'Consume' or 'Reproduce'
         """
         if dooder.hunger > 0:

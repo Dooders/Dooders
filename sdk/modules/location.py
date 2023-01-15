@@ -1,5 +1,5 @@
 """ 
-Location
+Location Module
 --------
 
 A location object will correspond to a grid cell in the environment.
@@ -11,12 +11,6 @@ contents (Energy, Agents, etc.)
 """
 
 import random
-
-from pydantic import BaseModel
-
-#! need Location based attributes and collectors
-#! every class can (and should) track information about itself
-#! use tqdm to track progress
 
 
 class Location:

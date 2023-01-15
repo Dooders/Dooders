@@ -12,6 +12,7 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
                     Tuple, TypeVar, Union, cast, overload)
 
 import numpy as np
+from pydantic import BaseModel
 
 from sdk.base.base_agent import BaseAgent
 from sdk.modules.location import Location
@@ -21,6 +22,21 @@ Position = Coordinate
 GridContent = Union[BaseAgent, None]
 MultiGridContent = List[GridContent]
 F = TypeVar("F", bound=Callable[..., Any])
+
+#! collector class decorator will have one method, 
+#! to setup and create attributes for the objects.
+#! is this gonna be an issue?
+class Attributes(BaseModel):
+    """ 
+    Data model for the Resources class attributes.
+    """
+    allocated_energy: int = 0
+    dissipated_energy: int = 0
+    consumed_energy: int = 0
+    location_history: list = []
+
+# for attribute in Attributes():
+#             setattr(self, attribute[0], attribute[1])
 
 
 def accept_tuple_argument(wrapped_function: F) -> F:
@@ -42,6 +58,7 @@ def is_integer(x: Real) -> bool:
     return isinstance(x, (int, np.integer))
 
 
+#! rename this grid or board? field? arena? surface? prob surface
 class BaseEnvironment(ABC):
     """Base class for a square grid.
     Grid cells are indexed by [x][y], where [0][0] is assumed to be the
@@ -81,6 +98,14 @@ class BaseEnvironment(ABC):
         # Neighborhood Cache
         self._neighborhood_cache: Dict[Any, List[Coordinate]] = dict()
 
+    def build(self) -> None:
+        """Build the environment."""
+        pass
+    
+    def setup(self) -> None:
+        """Setup the environment."""
+        pass
+    
     @staticmethod
     def default_val() -> None:
         """Default value for new cell elements."""
