@@ -12,7 +12,6 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
                     Tuple, TypeVar, Union, cast, overload)
 
 import numpy as np
-from pydantic import BaseModel
 
 from sdk.base.base_agent import BaseAgent
 from sdk.modules.location import Location
