@@ -32,6 +32,7 @@ class BaseCollector(BaseModel):
     name: str
     function: Callable
     scope: str
+    enabled: bool
 
 
 class Collector(BaseCore):
@@ -73,7 +74,10 @@ class Collector(BaseCore):
             func_name = wrapped_class.__name__
             scope = cls.infer_scope(cls, wrapped_class)
             cls.registry.append(
-                {'name': func_name, 'function': wrapped_class, 'scope': scope})
+                {'name': func_name, 
+                 'function': wrapped_class, 
+                 'scope': scope,
+                 'enabled': True})
             return wrapped_class
 
         return inner_wrapper
@@ -85,18 +89,20 @@ class Collector(BaseCore):
         for collector in self.registry:
             collector = BaseCollector(**collector)
             scope = collector.scope
+            
+            if collector.enabled:
 
-            if scope not in self.collectors:
-                self.collectors[scope] = {}
-                self.data[scope] = {}
+                if scope not in self.collectors:
+                    self.collectors[scope] = {}
+                    self.data[scope] = {}
 
-            if type(collector.function) is str:
-                func = partial(self._getattr, collector.function)
-            else:
-                func = collector.function
+                if type(collector.function) is str:
+                    func = partial(self._getattr, collector.function)
+                else:
+                    func = collector.function
 
-            self.collectors[scope][collector.name] = func
-            self.data[scope][collector.name] = []
+                self.collectors[scope][collector.name] = func
+                self.data[scope][collector.name] = []
 
     def collect(self, simulation: 'Simulation') -> None:
         """ 
