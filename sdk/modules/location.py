@@ -146,3 +146,32 @@ class Location:
             True if the location is occupied, False otherwise
         """
         return self.status == 'occupied'
+    
+    @property
+    def contents_pattern(self) -> str:
+        """ 
+        Return a string of the contents of the location
+        
+        The pattern is a list of integers representing each possible content state.
+    
+        The first integer is the number of contents in the location that is a dooder object.
+        The second integer is the number of contents in the location that is an energy object.    
+
+        So a total of 2 dooders and 1 energy would be 21.
+        And, a total of 1 dooder and 2 energy would be 12.
+
+        Returns
+        -------
+        pattern: str
+            A string pattern of the contents of the location
+            See above for more details
+        """
+        first, second = 0, 0
+        for content in self.contents.values():
+            if content.name == 'Dooder':
+                first += 1
+            elif content.name == 'Energy':
+                second += 1
+        pattern = str(first) + str(second)
+        
+        return pattern
