@@ -1,6 +1,6 @@
 """ 
-Environment
------------
+Environment Model
+-----------------
 Represents the "physical" environment in which the agents interact.
 """
 
@@ -8,7 +8,7 @@ from random import choices
 from typing import TYPE_CHECKING, Any, List
 
 from sdk.base.base_agent import BaseAgent
-from sdk.base.base_environment import BaseEnvironment
+from sdk.core.surface import Surface
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
@@ -17,21 +17,10 @@ if TYPE_CHECKING:
 GridCell = List[Any]
 
 
-class Environment(BaseEnvironment):
+class Environment(Surface):
     """ 
-    Create a new MultiGrid object.
-
-    Parameters
-    ----------
-    params: dict
-        The parameters for the environment.
-
-    See Also
-    --------
-    BaseEnvironment: The base class for the environment.
+    Create a new Environment based on the Surface class.
     """
-
-    grid: List[List[GridCell]]
 
     def place_object(self, object: 'BaseAgent', position: tuple) -> None:
         """

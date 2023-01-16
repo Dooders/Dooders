@@ -1,6 +1,6 @@
 """
-Environment base class.
-=================
+Surface Core
+------------
 Heavily based on the space component in the Mesa library
 https://github.com/projectmesa/mesa/blob/main/mesa/space.py
 """
@@ -12,7 +12,6 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, Sequence,
                     Tuple, TypeVar, Union, cast, overload)
 
 import numpy as np
-from pydantic import BaseModel
 
 from sdk.base.base_agent import BaseAgent
 from sdk.modules.location import Location
@@ -23,26 +22,12 @@ GridContent = Union[BaseAgent, None]
 MultiGridContent = List[GridContent]
 F = TypeVar("F", bound=Callable[..., Any])
 
-#! collector class decorator will have one method, 
-#! to setup and create attributes for the objects.
-#! is this gonna be an issue?
-class Attributes(BaseModel):
-    """ 
-    Data model for the Resources class attributes.
-    """
-    allocated_energy: int = 0
-    dissipated_energy: int = 0
-    consumed_energy: int = 0
-    location_history: list = []
-
-# for attribute in Attributes():
-#             setattr(self, attribute[0], attribute[1])
-
-
 def accept_tuple_argument(wrapped_function: F) -> F:
-    """Decorator to allow grid methods that take a list of (x, y) coord tuples
+    """
+    Decorator to allow grid methods that take a list of (x, y) coord tuples
     to also handle a single position, by automatically wrapping tuple in
-    single-item list rather than forcing user to do it."""
+    single-item list rather than forcing user to do it.
+    """
 
     def wrapper(*args: Any) -> Any:
         if isinstance(args[1], tuple) and len(args[1]) == 2:
@@ -58,26 +43,41 @@ def is_integer(x: Real) -> bool:
     return isinstance(x, (int, np.integer))
 
 
-#! rename this grid or board? field? arena? surface? prob surface
-class BaseEnvironment(ABC):
-    """Base class for a square grid.
+class Surface(ABC):
+    """
     Grid cells are indexed by [x][y], where [0][0] is assumed to be the
     bottom-left and [width-1][height-1] is the top-right. If a grid is
     toroidal, the top and bottom, and left and right, edges wrap to each other
-    Properties:
-        width, height: The grid's width and height.
-        torus: Boolean which determines whether to treat the grid as a torus.
-        grid: Internal list-of-lists which holds the grid cells themselves.
-    """
 
+    Parameters
+    ----------
+    width: int
+        The width of the grid.
+    height: int
+        The grid's width and height.
+    torus: bool
+        Boolean which determines whether to treat the grid as a torus.
+    grid: List[List[MultiGridContent]]
+        Internal list-of-lists which holds the grid cells themselves.
+
+    Attributes
+    ----------
+    width: int
+        See Parameters.
+    height: int
+        See Parameters.
+    torus: bool
+        See Parameters.
+    grid: List[List[MultiGridContent]]
+        See Parameters.
+    empties: set
+        A set of tuples of all coordinates that contain no agents.
+    _neighborhood_cache: Dict[Any, List[Coordinate]]
+        A cache of the neighborhoods for each cell.
+    """
     grid: List[List[MultiGridContent]]
 
     def __init__(self, params) -> None:
-        """Create a new grid.
-        Args:
-            width, height: The width and height of the grid
-            torus: Boolean whether the grid wraps or not.
-        """
         self.height = params.Height
         self.width = params.Width
         self.torus = params.Torus
@@ -101,14 +101,20 @@ class BaseEnvironment(ABC):
     def build(self) -> None:
         """Build the environment."""
         pass
-    
+
     def setup(self) -> None:
         """Setup the environment."""
         pass
-    
+
     @staticmethod
     def default_val() -> None:
-        """Default value for new cell elements."""
+        """
+        Default value for new cell elements.
+
+        Returns
+        -------
+        None
+        """
         return None
 
     @overload
@@ -129,7 +135,19 @@ class BaseEnvironment(ABC):
         self,
         index: Union[int, Sequence[Coordinate], Tuple[int, slice, int, slice]],
     ) -> Union[GridContent, List[GridContent]]:
-        """Access contents from the grid."""
+        """
+        Access contents from the grid.
+
+        Parameters
+        ----------
+        index: Union[int, Sequence[Coordinate], Tuple[int, slice, int, slice]]
+            The index of the grid.
+
+        Returns
+        -------
+        Union[GridContent, List[GridContent]]
+            The content of the grid.
+        """
 
         if isinstance(index, int):
             # grid[x]
@@ -173,12 +191,26 @@ class BaseEnvironment(ABC):
         raise IndexError
 
     def __iter__(self) -> Iterator[GridContent]:
-        """Create an iterator that chains the rows of the grid together
-        as if it is one list:"""
+        """
+        Create an iterator that chains the rows of the grid together
+        as if it is one list.
+
+        Returns
+        -------
+        Iterator[GridContent]
+            The iterator of the grid.
+        """
         return itertools.chain(*self.grid)
 
     def coord_iter(self) -> Iterator[Tuple[GridContent, int, int]]:
-        """An iterator that returns coordinates as well as cell contents."""
+        """
+        An iterator that returns coordinates as well as cell contents.
+
+        Returns
+        -------
+        Iterator[Tuple[GridContent, int, int]]
+            The iterator of the grid.
+        """
         for row in range(self.width):
             for col in range(self.height):
                 yield self.grid[row][col], row, col  # agent, x, y
@@ -190,18 +222,25 @@ class BaseEnvironment(ABC):
         include_center: bool = False,
         radius: int = 1,
     ) -> Iterator[Coordinate]:
-        """Return an iterator over cell coordinates that are in the
+        """
+        Return an iterator over cell coordinates that are in the
         neighborhood of a certain point.
-        Args:
-            position: Coordinate tuple for the neighborhood to get.
-            moore: If True, return Moore neighborhood
-                        (including diagonals)
-                   If False, return Von Neumann neighborhood
-                        (exclude diagonals)
-            include_center: If True, return the (x, y) cell as well.
-                            Otherwise, return surrounding cells only.
-            radius: radius, in cells, of neighborhood to get.
-        Returns:
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple for the neighborhood to get.
+        moore: bool
+            If True, return Moore neighborhood (including diagonals)
+            If False, return Von Neumann neighborhood(exclude diagonals)
+        include_center: bool
+            If True, return the (x, y) cell as well.
+            Otherwise, return surrounding cells only.
+        radius: int
+            radius, in cells, of neighborhood to get.
+
+        Returns
+        -------
             A list of coordinate tuples representing the neighborhood. For
             example with radius 1, it will return list with number of elements
             equals at most 9 (8) if Moore, 5 (4) if Von Neumann (if not
@@ -216,18 +255,25 @@ class BaseEnvironment(ABC):
         include_center: bool = True,
         radius: int = 1,
     ) -> List[Location]:
-        """Return a list of locations that are in the neighborhood of a
+        """
+        Return a list of locations that are in the neighborhood of a
         certain point.
-        Args:
-            position: Coordinate tuple for the neighborhood to get.
-            moore: If True, return Moore neighborhood
-                        (including diagonals)
-                   If False, return Von Neumann neighborhood
-                        (exclude diagonals)
-            include_center: If True, return the (x, y) cell as well.
-                            Otherwise, return surrounding cells only.
-            radius: radius, in cells, of neighborhood to get.
-        Returns:
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple for the neighborhood to get.
+        moore: bool
+            If True, return Moore neighborhood (including diagonals)
+            If False, return Von Neumann neighborhood(exclude diagonals)
+        include_center: bool
+            If True, return the (x, y) cell as well.
+            Otherwise, return surrounding cells only.
+        radius: int
+            radius, in cells, of neighborhood to get.
+
+        Returns
+        -------
             A list of locations representing the neighborhood. For
             example with radius 1, it will return list with number of elements
             equals at most 9 (8) if Moore, 5 (4) if Von Neumann (if not
@@ -244,18 +290,25 @@ class BaseEnvironment(ABC):
         include_center: bool = False,
         radius: int = 1,
     ) -> List[Coordinate]:
-        """Return a list of cells that are in the neighborhood of a
+        """
+        Return a list of cells that are in the neighborhood of a
         certain point.
-        Args:
-            position: Coordinate tuple for the neighborhood to get.
-            moore: If True, return Moore neighborhood
-                   (including diagonals)
-                   If False, return Von Neumann neighborhood
-                   (exclude diagonals)
-            include_center: If True, return the (x, y) cell as well.
-                            Otherwise, return surrounding cells only.
-            radius: radius, in cells, of neighborhood to get.
-        Returns:
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple for the neighborhood to get.
+        moore: bool
+            If True, return Moore neighborhood (including diagonals)
+            If False, return Von Neumann neighborhood (exclude diagonals)
+        include_center: bool
+            If True, return the (x, y) cell as well.
+            Otherwise, return surrounding cells only.
+        radius: int
+            radius, in cells, of neighborhood to get.
+
+        Returns
+        -------
             A list of coordinate tuples representing the neighborhood;
             With radius 1, at most 9 if Moore, 5 if Von Neumann (8 and 4
             if not including the center).
@@ -297,18 +350,24 @@ class BaseEnvironment(ABC):
         include_center: bool = False,
         radius: int = 1,
     ) -> Iterator[BaseAgent]:
-        """Return an iterator over neighbors to a certain point.
-        Args:
-            pos: Coordinates for the neighborhood to get.
-            moore: If True, return Moore neighborhood
-                    (including diagonals)
-                   If False, return Von Neumann neighborhood
-                     (exclude diagonals)
-            include_center: If True, return the (x, y) cell as well.
-                            Otherwise,
-                            return surrounding cells only.
-            radius: radius, in cells, of neighborhood to get.
-        Returns:
+        """
+        Return an iterator over neighbors to a certain point.
+
+        Parameters
+        ----------
+        pos: Coordinate
+            Coordinates for the neighborhood to get.
+        moore: bool
+            If True, return Moore neighborhood (including diagonals)
+            If False, return Von Neumann neighborhood (exclude diagonals)
+        include_center: bool
+            If True, return the (x, y) cell as well.
+            Otherwise, return surrounding cells only.
+        radius: int
+            radius, in cells, of neighborhood to get.
+
+        Returns
+        -------
             An iterator of non-None objects in the given neighborhood;
             at most 9 if Moore, 5 if Von-Neumann
             (8 and 4 if not including the center).
@@ -324,18 +383,24 @@ class BaseEnvironment(ABC):
         include_center: bool = False,
         radius: int = 1,
     ) -> List[BaseAgent]:
-        """Return a list of neighbors to a certain point.
-        Args:
-            position: Coordinate tuple for the neighborhood to get.
-            moore: If True, return Moore neighborhood
-                    (including diagonals)
-                   If False, return Von Neumann neighborhood
-                     (exclude diagonals)
-            include_center: If True, return the (x, y) cell as well.
-                            Otherwise,
-                            return surrounding cells only.
-            radius: radius, in cells, of neighborhood to get.
-        Returns:
+        """
+        Return a list of neighbors to a certain point.
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple for the neighborhood to get.
+        moore: bool
+            If True, return Moore neighborhood (including diagonals)
+            If False, return Von Neumann neighborhood (exclude diagonals)
+        include_center: bool
+            If True, return the (x, y) cell as well.
+            Otherwise, return surrounding cells only.
+        radius: int
+            radius, in cells, of neighborhood to get.
+
+        Returns
+        -------
             A list of non-None objects in the given neighborhood;
             at most 9 if Moore, 5 if Von-Neumann
             (8 and 4 if not including the center).
@@ -343,7 +408,18 @@ class BaseEnvironment(ABC):
         return list(self.iter_neighbors(position, moore, include_center, radius))
 
     def torus_adj(self, position: Coordinate) -> Coordinate:
-        """Convert coordinate, handling torus looping."""
+        """
+        Convert coordinate, handling torus looping.
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple to convert.
+
+        Returns
+        -------
+            A coordinate tuple, converted to be on the grid.
+        """
         if not self.out_of_bounds(position):
             return position
         elif not self.torus:
@@ -352,46 +428,92 @@ class BaseEnvironment(ABC):
             return position[0] % self.width, position[1] % self.height
 
     def out_of_bounds(self, position: Coordinate) -> bool:
-        """Determines whether position is off the grid, returns the out of
-        bounds coordinate."""
+        """
+        Determines whether position is off the grid, returns the out of
+        bounds coordinate.
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple to check.
+
+        Returns 
+        -------
+            True if position is off the grid, False otherwise.
+        """
         x, y = position
         return x < 0 or x >= self.width or y < 0 or y >= self.height
 
     @accept_tuple_argument
     def get_cell_list_contents(self, cell_list: Iterable[Coordinate]) -> List[BaseAgent]:
-        """Returns a list of the contents of the cells
+        """
+        Returns a list of the contents of the cells
         identified in cell_list.
         Note: this method returns a list of `Agent`'s; `None` contents are excluded.
-        Args:
-            cell_list: Array-like of (x, y) tuples, or single tuple.
-        Returns:
+
+        Parameters
+        ----------
+        cell_list: Array-like 
+            of (x, y) tuples, or single tuple.
+
+        Returns
+        -------
             A list of the contents of the cells identified in cell_list
         """
         return list(self.iter_cell_list_contents(cell_list))
 
     def is_cell_empty(self, position: Coordinate) -> bool:
-        """Returns a bool of the contents of a cell."""
+        """
+        Returns a bool of the contents of a cell.
+
+        Parameters
+        ----------
+        position: Coordinate
+            Coordinate tuple of the cell to check.
+
+        Returns
+        -------
+            True if cell is empty, False otherwise
+        """
         x, y = position
         return self.grid[x][y].status == 'empty'
 
     def exists_empty_cells(self) -> bool:
-        """Return True if any cells empty else False."""
+        """
+        Return True if any cells empty else False.
+
+        Returns
+        -------
+            True if any cells empty else False.
+        """
         return len(self.empties) > 0
 
     @staticmethod
-    def default_val() -> MultiGridContent:
-        """Default value for new cell elements."""
+    def default_val() -> List[MultiGridContent]:
+        """
+        Default value for new cell elements.
+
+        Returns
+        -------
+            An empty list
+        """
         return []
 
     @accept_tuple_argument
     def iter_cell_list_contents(
         self, cell_list: Iterable[Coordinate]
     ) -> Iterator[MultiGridContent]:
-        """Returns an iterator of the contents of the
+        """
+        Returns an iterator of the contents of the
         cells identified in cell_list.
-        Args:
-            cell_list: Array-like of (x, y) tuples, or single tuple.
-        Returns:
+
+        Parameters
+        ----------
+        cell_list: Array-like 
+            of (x, y) tuples, or single tuple.
+
+        Returns
+        -------
             A iterator of the contents of the cells identified in cell_list
         """
         return itertools.chain.from_iterable(
