@@ -1,7 +1,7 @@
 from sdk.core.collector import Collector
 
 
-@Collector.register('LocationContentsCount')
+@Collector.register()
 def location_contents_count(simulation) -> dict:
     """ 
     The number of contents in each location.
@@ -30,7 +30,7 @@ def location_contents_count(simulation) -> dict:
 
     return location_contents
 
-@Collector.register('StateLocationPattern')
+@Collector.register()
 def state_location_pattern(simulation) -> dict:
     """ 
     Contents pattern for each location.

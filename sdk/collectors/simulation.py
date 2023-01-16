@@ -5,14 +5,14 @@ import pandas as pd
 from sdk.core.collector import Collector
 
 
-@Collector.register('DooderCount')
-def get_dooder_count(simulation) -> int:
+@Collector.register()
+def dooder_count(simulation) -> int:
     """Return the number of dooders in the simulation."""
     return simulation.time.get_object_count('Dooder')
 
 
-@Collector.register('EnergyCount')
-def get_energy_count(simulation) -> int:
+@Collector.register()
+def energy_count(simulation) -> int:
     """Return the number of energy in the simulation."""
     return simulation.environment.get_object_count('Energy')
 
@@ -41,8 +41,8 @@ def get_energy_count(simulation) -> int:
 #     return sum(energy_supply)
 
 
-@Collector.register('AverageEnergyAge')
-def get_average_energy_age(simulation) -> float:
+@Collector.register()
+def average_energy_age(simulation) -> float:
     """Return the average age of energy in the simulation."""
     energy_age = [
         energy.cycle_count for energy in simulation.environment.get_objects('Energy')]
@@ -52,8 +52,8 @@ def get_average_energy_age(simulation) -> float:
 
     return round(mean(energy_age), 2)
 
-@Collector.register('AverageGenetics')
-def get_average_genetics(simulation):
+@Collector.register()
+def average_genetics(simulation):
     dooders = simulation.society.active_dooders
     
     genetic_list = []

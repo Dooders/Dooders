@@ -1,9 +1,7 @@
 from sdk.core.collector import Collector
 
-#! maybe special handling to explode if dict
-
-@Collector.register('Stat')
-def get_stats(simulation) -> dict:
+@Collector.register()
+def dooder_stats(simulation) -> dict:
   
   dooder_stats = []
   

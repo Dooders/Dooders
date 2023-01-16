@@ -221,9 +221,9 @@ class Simulation(BaseSimulation):
         return {'SimulationID': self.simulation_id,
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
                 'CycleCount': self.cycles,
-                'TotalEnergy': sum(self.information.data['resources']['AllocatedEnergy']),
-                'ConsumedEnergy': sum(self.information.data['resources']['ConsumedEnergy']),
-                'StartingDooderCount': self.information.data['society']['CreatedDooderCount'][0],
+                'TotalEnergy': sum(self.information.data['resources']['allocated_energy']),
+                'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
+                'StartingDooderCount': self.information.data['society']['created_dooder_count'][0],
                 'EndingDooderCount': len(self.society.active_dooders),
                 # 'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
                 }

@@ -59,14 +59,9 @@ class Collector(BaseCore):
         self.compile_collectors()
 
     @classmethod
-    def register(cls, name: str) -> Callable:
+    def register(cls) -> Callable:
         """ 
         Register a collector in the registry.
-
-        Parameters
-        ----------
-        name: str
-            Name of the collector.
 
         Returns
         -------
@@ -75,9 +70,10 @@ class Collector(BaseCore):
         """
 
         def inner_wrapper(wrapped_class: Callable) -> Callable:
+            func_name = wrapped_class.__name__
             scope = cls.infer_scope(cls, wrapped_class)
             cls.registry.append(
-                {'name': name, 'function': wrapped_class, 'scope': scope})
+                {'name': func_name, 'function': wrapped_class, 'scope': scope})
             return wrapped_class
 
         return inner_wrapper

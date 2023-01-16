@@ -1,19 +1,19 @@
 from sdk.core.collector import Collector
 
 
-@Collector.register('AvailableEnergy')
-def get_stats(simulation):
+@Collector.register()
+def available_energy(simulation):
 
     return len(simulation.resources.available_resources)
 
 
-@Collector.register('ConsumedEnergy')
-def get_stats(simulation):
+@Collector.register()
+def consumed_energy(simulation):
 
     return simulation.resources.consumed_energy
 
 
-@Collector.register('AllocatedEnergy')
-def get_stats(simulation):
+@Collector.register()
+def allocated_energy(simulation):
 
     return simulation.resources.allocated_energy
