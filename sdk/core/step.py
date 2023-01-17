@@ -24,7 +24,7 @@ class Step:
 
 class StepFlow(ABC):
     """ 
-    Might not need this class after all
+    Abstract Class for every step flow
     """
     
     @abstractmethod
@@ -34,3 +34,8 @@ class StepFlow(ABC):
     @abstractmethod
     def act(self):
         pass
+    
+    @abstractmethod
+    def sleep(self):
+        pass
+    
