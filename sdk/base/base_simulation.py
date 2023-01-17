@@ -12,7 +12,7 @@ from sdk.utils import ShortID
 # Components (Society, Environment) and objects ( Dooders, Energy)
 # Still need to figure out how each component and its objects interact with each other
 
-
+#! maybe call this Reality
 class BaseSimulation(ABC):
     """ 
     """
