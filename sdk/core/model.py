@@ -1,55 +1,41 @@
-# manager for models
-# compile configs
-# build models
-# nice, clean, and modular
+""" 
+Model Core
+----------
+"""
 
 from abc import ABC, abstractmethod
 
-
-# a model can:
-# - step (required)
-# - collect
-# - setup
-# - cleanup
-
-
-
-#! this is more of a base class, 
-#! a model manager class might be a good idea too
-#! each model will inherit this
-#! model manager will register models
 class CoreModel(ABC):
     
-    @abstractmethod
     def step(self):
         """ 
-        Might be the only required method.
-        Encompasses the logic for a single step of the model
-        during a cycle in the simulation
+        Optional method that executes the logic for a 
+        single step of the model during a cycle in the simulation
+        
+        A step is a single iteration of the model's logic that
+        occurs during a cycle in the simulation.
         """
-        raise NotImplementedError
+        pass
     
-    @abstractmethod
-    def collect(self):
-        """ 
-        Might not need this method, but it's here
-        in case we need to collect data from the
-        model at each step
-        """
-        raise NotImplementedError
-    
-    @abstractmethod
     def setup(self):
         """ 
-        Method for any actions that need to occur 
-        at the beginning of the simulation
+        Optional method for any actions that need to occur 
+        at the beginning of the simulation before the first cycle
         """
-        raise NotImplementedError
+        pass
     
-    @abstractmethod
-    def cleanup(self):
+    def teardown(self):
         """ 
-        Method for any actions that need to occur at 
+        Optional method for any actions that need to occur at 
         the end of the simulation
+        
+        Like aggregating model data, saving state, etc.
         """
-        raise NotImplementedError
+        pass
+    
+    
+class Model:
+    """ 
+    Register all models in the models directory
+    """
+    pass
