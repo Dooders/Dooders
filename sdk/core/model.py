@@ -3,9 +3,9 @@ Model Core
 ----------
 """
 
-from abc import ABC, abstractmethod
+from abc import ABC
 
-class CoreModel(ABC):
+class Model(ABC):
     
     def step(self):
         """ 
@@ -32,10 +32,4 @@ class CoreModel(ABC):
         Like aggregating model data, saving state, etc.
         """
         pass
-    
-    
-class Model:
-    """ 
-    Register all models in the models directory
-    """
-    pass
+   
