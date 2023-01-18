@@ -1,7 +1,8 @@
 """ 
 Death Condition
 ---------------
-This condition is responsible for the tests required to trigger a 'death' status
+This condition is responsible for the tests required to 
+trigger a 'death' status
 
 """
 
@@ -17,6 +18,20 @@ if TYPE_CHECKING:
 def starvation(dooder: 'Dooder') -> bool:
     """
     Check if the dooder is starving
+    
+    The higher the dooder's hunger, the more likely they are to starve
+    Each cycle in a hunger state increases the chance of death in a 
+    check of Fate
+    
+    Parameters
+    ----------
+    dooder : Dooder
+        The dooder to check
+        
+    Returns
+    -------
+    bool
+        True if the dooder is starved to death, False otherwise
     """
 
     # The higher the dooder's hunger, the more likely they are to starve
