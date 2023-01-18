@@ -13,10 +13,13 @@ from pydantic import BaseModel
 
 from sdk.base.base_agent import BaseAgent
 from sdk.core import Condition
+from sdk.core.step import Step
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
 from sdk.modules.internal_models import InternalModels
 from sdk.modules.neighborhood import Neighborhood
+
+from sdk import steps
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -69,7 +72,6 @@ class Dooder(BaseAgent):
     internal_models: InternalModels
         The internal models of the dooder.
     """
-
     def __init__(self,
                  unique_id: 'UniqueID',
                  position: 'Position',
@@ -83,9 +85,10 @@ class Dooder(BaseAgent):
         self.moore = True
         self.internal_models = InternalModels(MotivationList)
         self.log(granularity=1,
-                 message=f"Created", scope='Dooder')
+                 message=f"Created", 
+                 scope='Dooder')
 
-    def act(self, action: str) -> None:
+    def do(self, action: str) -> None:
         """ 
         Dooder action flow
 
@@ -135,25 +138,23 @@ class Dooder(BaseAgent):
         -------
         1. Increment age
         2. Check if the dooder should die at the beginning of its step
-        3. If not, move, consume, and reproduce
+        3. Perform the step from the Step class
         4. Check if the dooder should die at the end of its step
 
         """
-
         self.age += 1
 
         if self.death_check():
             self.log(granularity=1,
-                     message="Terminated between cycles", scope='Dooder')
-
+                       message="Terminated between cycles", 
+                       scope='Dooder')
         else:
-            self.act('move')
-            self.act('consume')
-            self.act('reproduce')
-
+            Step.forward('BasicStep', self)
+            
             if self.death_check():
                 self.log(granularity=1,
-                         message="Terminated during cycle", scope='Dooder')
+                           message="Terminated during cycle", 
+                           scope='Dooder')
 
     def clone(self) -> 'Dooder':
         """
@@ -170,6 +171,7 @@ class Dooder(BaseAgent):
         return clone
 
     def find_partner(self) -> 'Dooder':
+        #! Make this an action and model? Yes
         """
         Find another Dooder from current position.
         
