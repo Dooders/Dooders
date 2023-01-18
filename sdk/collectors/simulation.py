@@ -1,3 +1,9 @@
+""" 
+Simulation collectors
+---------------------
+Collectors that are not specific to a single object type.
+"""
+
 from statistics import mean
 
 import pandas as pd
@@ -7,13 +13,37 @@ from sdk.core.collector import Collector
 
 @Collector.register()
 def dooder_count(simulation) -> int:
-    """Return the number of dooders in the simulation."""
+    """
+    The number of dooders in the simulation.
+    
+    Parameters
+    ----------
+    simulation : Simulation
+        The simulation to collect data from.
+        
+    Returns
+    -------
+    int
+        The number of dooders in the simulation.
+    """
     return simulation.time.get_object_count('Dooder')
 
 
 @Collector.register()
 def energy_count(simulation) -> int:
-    """Return the number of energy in the simulation."""
+    """
+    The number of energy in the simulation.
+    
+    Parameters
+    ----------
+    simulation : Simulation
+        The simulation to collect data from.
+        
+    Returns
+    -------
+    int
+        The number of energy in the simulation.
+    """
     return simulation.environment.get_object_count('Energy')
 
 
@@ -43,7 +73,19 @@ def energy_count(simulation) -> int:
 
 @Collector.register()
 def average_energy_age(simulation) -> float:
-    """Return the average age of energy in the simulation."""
+    """
+    Return the average age of energy in the simulation.
+    
+    Parameters
+    ----------
+    simulation : Simulation
+        The simulation to collect data from.
+        
+    Returns
+    -------
+    float
+        The average age of energy in the simulation.
+    """
     energy_age = [
         energy.cycle_count for energy in simulation.environment.get_objects('Energy')]
 
@@ -53,7 +95,20 @@ def average_energy_age(simulation) -> float:
     return round(mean(energy_age), 2)
 
 @Collector.register()
-def average_genetics(simulation):
+def average_genetics(simulation) -> dict:
+    """ 
+    Return the average genetics of all dooders in the simulation.
+    
+    Parameters
+    ----------
+    simulation : Simulation 
+        The simulation to collect data from.
+        
+    Returns
+    -------
+    dict
+        The average genetics of all dooders in the simulation.
+    """
     dooders = simulation.society.active_dooders
     
     genetic_list = []

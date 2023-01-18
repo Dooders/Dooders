@@ -1,3 +1,9 @@
+""" 
+Environment Collectors
+----------------------
+Collectors that collect information about the environment.
+"""
+
 from sdk.core.collector import Collector
 
 
@@ -5,6 +11,11 @@ from sdk.core.collector import Collector
 def location_contents_count(simulation) -> dict:
     """ 
     The number of contents in each location.
+    
+    Parameters
+    ----------
+    simulation : Simulation
+        The simulation to check
     
     Returns
     -------
@@ -42,6 +53,11 @@ def state_location_pattern(simulation) -> dict:
 
     So a total of 2 dooders and 1 energy would be 21.
     And, a total of 1 dooder and 2 energy would be 12.
+    
+    Parameters
+    ----------
+    simulation : Simulation
+        The simulation to check
     
     Returns
     -------
