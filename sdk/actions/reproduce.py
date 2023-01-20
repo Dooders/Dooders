@@ -1,14 +1,22 @@
+""" 
+Reproduce Action
+----------------
+This action is used to reproduce two dooders
+"""
+
 from sdk.core.action import Actions
 
 
 @Actions.register()
-def reproduce(dooderA):
+def reproduce(dooderA) -> None:
     """
     Apply the reproduction policy to two dooders, create the offspring dooder
     and place it in the simulation.
 
-    Args:
-        dooderA (Dooder): The first Dooder.
+    Parameters
+    ----------
+    dooderA: Dooder 
+        The first Dooder.
     """
     reproduction_policy = dooderA.simulation.params.get('Policies').Reproduction
 
