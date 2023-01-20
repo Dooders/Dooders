@@ -139,3 +139,8 @@ sdk/param play.ipynb
 Validation.ipynb
 *.ipynb
 platform/node_modules/
+.VSCodeCounter
+.vscode/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
