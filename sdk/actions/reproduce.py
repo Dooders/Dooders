@@ -10,7 +10,8 @@ from sdk.core.action import Actions
 @Actions.register()
 def reproduce(dooderA) -> None:
     """
-    Apply the reproduction policy to two dooders, create the offspring dooder
+    Apply the reproduction policy to two dooders, 
+    create the offspring dooder
     and place it in the simulation.
 
     Parameters
