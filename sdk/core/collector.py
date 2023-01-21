@@ -1,6 +1,6 @@
 """ 
-Collector Core
---------------
+Core: Collector
+---------------
 The Collector class is a global registry of collectors. A new collector
 is added through the register_collector() decorator. 
 

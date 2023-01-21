@@ -1,7 +1,8 @@
 """ 
-
-#! might need to have ability for and/or condition combinations
-#! check returns true/false and the probability to check, if needed (ask fate)
+Core: Condition
+---------------
+This module contains the Condition class,
+which is used to register and check conditions.
 """
 
 from typing import Callable
@@ -11,7 +12,14 @@ from sdk.base.base_core import BaseCore
 
 class Condition(BaseCore):
     """ 
-    The factory class to be used as a decorator to register a stop condition. 
+    The factory class to be used as a decorator to register a stop condition.
+    
+    Methods
+    -------
+    register
+        Registers a stop condition to the Condition class.
+    check_conditions
+        Checks if any of the registered conditions are met. 
     """
 
     # Internal registry for available conditions.
@@ -22,10 +30,14 @@ class Condition(BaseCore):
         """ 
         Register a stop condition.
 
-        Args:
-            name: The name of the stop condition.
+        Parameters
+        ----------
+        name: str
+            The name of the stop condition.
 
-        Returns:
+        Returns
+        -------
+        inner_wrapper: Callable
             The decorator function.
         """
 
@@ -39,18 +51,20 @@ class Condition(BaseCore):
         return inner_wrapper
 
     @classmethod
-    def check_conditions(cls, scope, *args, **kwargs):
+    def check_conditions(cls, scope: str, *args, **kwargs) -> bool:
         """ 
         Check if any of the registered conditions are met.
 
-        Args:
-            simulation: The simulation to check the conditions for.
+        Parameters
+        ----------
+        simulation: Simulation
+            The simulation to check the conditions for.
 
-        Returns:
+        Returns
+        -------
+        bool
             True if any of the conditions are met.
         """
-        # check in registry in each purpose to see what purpose is the condition from
-
         for condition in cls.registry[scope]:
             func = cls.registry[scope][condition]
             if func(*args, **kwargs):

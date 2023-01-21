@@ -1,6 +1,6 @@
 """ 
-Step Core
----------
+Core: Step
+----------
 Core system for the Step Logic
 """
 

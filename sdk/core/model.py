@@ -1,6 +1,8 @@
 """ 
-Model Core
-----------
+Core: Model
+-----------
+This module contains the Model class, 
+which is used to register and execute models.
 """
 
 from abc import ABC

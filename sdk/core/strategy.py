@@ -1,7 +1,6 @@
 """ 
-Strategies
-----------
-
+Core: Strategy
+--------------
 This module contains the strategies used by the simulation.
 
 A strategy is a technique to provide an output. Usually a value or list of values
