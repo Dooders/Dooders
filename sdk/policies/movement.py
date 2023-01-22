@@ -42,6 +42,11 @@ class RandomMove(BasePolicy):
     -------
     random_cell: tuple
         A random location in the Dooder's neighborhood
+        
+    Methods
+    -------
+    execute(dooder: Dooder) -> tuple
+        Returns a random location in the Dooder's neighborhood
     """
 
     @classmethod
@@ -67,6 +72,11 @@ class RuleBased(BasePolicy):
     -------
     random_cell: tuple
         A random location in the Dooder's neighborhood that has energy
+        
+    Methods
+    -------
+    execute(dooder: Dooder) -> tuple
+        Returns a random location in the Dooder's neighborhood that has energy
     """
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
@@ -101,6 +111,13 @@ class NeuralNetwork(BasePolicy):
     -------
     predicted_location: tuple
         A location based on neural network output
+        
+    Methods
+    -------
+    execute(dooder: Dooder) -> tuple
+        Returns a location based on neural network output
+    infer_goal(dooder, neighborhood) -> str
+        Returns the goal of the Dooder
     """
 
     base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}

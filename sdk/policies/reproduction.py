@@ -1,3 +1,9 @@
+""" 
+Reproduction Policies
+---------------------
+Policies that are used to create new Dooders from two existing Dooders.
+"""
+
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -27,6 +33,11 @@ class AverageWeights(BasePolicy):
     -------
     new_weights : (np.ndarray)
         The new Dooder weights
+        
+    Methods
+    -------
+    execute(dooderA: Dooder, dooderB: Dooder) -> np.ndarray
+        Averages the weights of two Dooders to create a new Dooder.
     """
 
     @classmethod
@@ -62,6 +73,12 @@ class RangeWeights(BasePolicy):
     -------
     new_weights : (np.ndarray) 
         The new Dooder weights
+        
+    Methods
+    -------
+    execute(dooderA: Dooder, dooderB: Dooder) -> np.ndarray
+        Randomly selects weights between the range of the two 
+        Dooders to create a new Dooder.
     """
 
     @classmethod
@@ -105,6 +122,12 @@ class SplitWeights(BasePolicy):
     -------
     new_weights : (np.ndarray)
         The new Dooder weights
+        
+    Methods
+    -------
+    execute(dooderA: Dooder, dooderB: Dooder) -> np.ndarray
+        Takes the first layer weights from DooderA and the 
+        second layer weights from DooderB.
     """
 
     @classmethod
