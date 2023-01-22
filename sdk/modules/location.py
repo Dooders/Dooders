@@ -1,6 +1,6 @@
 """ 
 Location Module
---------
+---------------
 
 A location object will correspond to a grid cell in the environment.
 So, if the grid is 10x10, there will be 100 location objects 
@@ -38,6 +38,29 @@ class Location:
         and the value is the object itself
     status: str
         The status of the location (empty, occupied, etc.)
+        
+    Methods
+    -------
+    add(object: object) -> None
+        Add an object to the location
+    remove(object: object) -> None
+        Remove an object from the location
+    has(object_type: str, ignore=None) -> bool
+        Return a boolean indicating if the location contains
+        a specific object type
+    
+    Properties
+    ----------
+    count: int
+        Get the number of objects in the location
+    random: object
+        Get a random object in the location
+    is_empty: bool
+        Return a boolean indicating if the location is empty
+    is_occupied: bool
+        Return a boolean indicating if the location is occupied
+    contents_pattern: str
+        Return a string indicating the contents of the location
     """
 
     def __init__(self, x: int, y: int) -> None:

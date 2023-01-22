@@ -18,6 +18,20 @@ class InternalModels(dict):
     ----------
     model_list : list
         A list of model names to use as keys for the dictionary.
+        
+    Methods
+    -------
+    build(model_list: list) -> None
+        Build the internal models.
+    inherit_weights(weights: dict) -> None
+        Take a dictionary of weights and inherit them into the internal models.
+
+    Properties
+    ----------
+    weights : dict
+        Dictionary of weights from the internal models.
+    biases : dict
+        Biases from the internal models.
     """
     
     def __init__(self, model_list: list, *args, **kwargs) -> None:

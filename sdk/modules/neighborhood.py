@@ -1,6 +1,6 @@
 """ 
-Neighborhood
-------------
+Neighborhood Module
+-------------------
 Neighborhood class representS a neighborhood in the simulation. 
 A neighborhood is a list of locations adjacent to a Dooder.
 """
@@ -28,6 +28,24 @@ class Neighborhood(list):
     ----------
     __mapping__: dict
         A mapping of location indices to directions
+        
+    Methods
+    -------
+    to_direction(location: Location) -> str
+        Convert the direction of a location in the neighborhood
+    contains(object_type: str) -> list[bool]
+        Check whether the neighborhood contains a given object type
+    fetch(object_type: str) -> list[object]
+        Fetch all objects of a given type in the neighborhood
+        
+    Properties
+    ----------
+    locations: list
+        A list of locations adjacent to the dooder
+    coordinates: list
+        A list of coordinates of the locations in the neighborhood
+    random: Location
+        A random location in the neighborhood
     """
 
     __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
