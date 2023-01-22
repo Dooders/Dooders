@@ -22,7 +22,7 @@ class Energy:
     """ 
     Energy object used for an agent to continue in the simulation.
     Dooders must consume energy to increase their lifespan.
-    
+
     Parameters
     ----------
     unique_id: UniqueID
@@ -31,7 +31,7 @@ class Energy:
         Position of the object.
     resources: Resources
         Resources object.
-        
+
     Attributes
     ----------
     unique_id: UniqueID
@@ -45,6 +45,20 @@ class Energy:
     strategies: dict    
         Defined Energy strategies
 
+    Methods
+    -------
+    step()
+        Step through for the object.
+        If the object gets to its max age, it will be dissipated.
+    consume(type=None)
+        Consume the energy object and remove it from the environment.
+    name()
+        Returns the name of the object.
+
+    Properties
+    ----------
+    name: str
+        Name of the object
     """
 
     def __init__(self,
@@ -72,7 +86,7 @@ class Energy:
     def consume(self, type=None) -> None:
         """
         Consume the energy object and remove it from the environment.
-        
+
         Parameters
         ----------
         type: str

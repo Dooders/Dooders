@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
+from sdk import steps
 from sdk.base.base_agent import BaseAgent
 from sdk.core import Condition
 from sdk.core.step import Step
@@ -18,8 +19,6 @@ from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
 from sdk.modules.internal_models import InternalModels
 from sdk.modules.neighborhood import Neighborhood
-
-from sdk import steps
 
 if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
@@ -44,7 +43,7 @@ class MainStats(BaseModel):
 class Dooder(BaseAgent):
     """ 
     Primary Dooder class
-    
+
     Parameters
     ----------
     unique_id: str
@@ -55,7 +54,7 @@ class Dooder(BaseAgent):
         The position ties to a location in the Environment object
     simulation: BaseSimulation
         Reference to the simulation.
-        
+
     Attributes
     ----------
     genetics: Genetics
@@ -71,7 +70,28 @@ class Dooder(BaseAgent):
         The Moore neighborhood of the dooder.
     internal_models: InternalModels
         The internal models of the dooder.
+
+    Methods
+    -------
+    do(action: str)
+        Dooder action flow
+    die(reason: str = 'Unknown')
+        Removing a dooder from the simulation, with a given reason
+    death_check()
+        Checking if the dooder should be dead, based on conditions of current state
+    step()
+        Step flow for a dooder.
+    find_partner()
+        Find another Dooder from current position.
+
+    Properties
+    ----------
+    main_stats: MainStats
+        The main stats of the dooder.
+    neighborhood: Neighborhood
+        The neighborhood of the dooder.
     """
+
     def __init__(self,
                  unique_id: 'UniqueID',
                  position: 'Position',
@@ -85,7 +105,7 @@ class Dooder(BaseAgent):
         self.moore = True
         self.internal_models = InternalModels(MotivationList)
         self.log(granularity=1,
-                 message=f"Created", 
+                 message=f"Created",
                  scope='Dooder')
 
     def do(self, action: str) -> None:
@@ -146,20 +166,20 @@ class Dooder(BaseAgent):
 
         if self.death_check():
             self.log(granularity=1,
-                       message="Terminated between cycles", 
-                       scope='Dooder')
+                     message="Terminated between cycles",
+                     scope='Dooder')
         else:
             Step.forward('BasicStep', self)
-            
+
             if self.death_check():
                 self.log(granularity=1,
-                           message="Terminated during cycle", 
-                           scope='Dooder')
+                         message="Terminated during cycle",
+                         scope='Dooder')
 
     def clone(self) -> 'Dooder':
         """
         Clone the dooder.
-        
+
         Returns
         -------
         clone: Dooder
@@ -174,7 +194,7 @@ class Dooder(BaseAgent):
         #! Make this an action and model? Yes
         """
         Find another Dooder from current position.
-        
+
         Returns
         -------
         partner: Dooder
@@ -192,7 +212,7 @@ class Dooder(BaseAgent):
     def __str__(self) -> str:
         """
         Return string of class attributes and genetics.
-        
+
         Returns
         -------
         string: str
@@ -204,7 +224,7 @@ class Dooder(BaseAgent):
     def history(self) -> list:
         """ 
         Return the dooder's history.
-        
+
         Returns
         -------
         logs: list
@@ -217,15 +237,18 @@ class Dooder(BaseAgent):
         return logs
 
     @property
-    def stats(self) -> dict:
+    def stats(self) -> 'MainStats':
         """
         The base stats of the dooder.
-        
+
         Returns
         -------
         stats: dict 
             A dictionary of the dooder's main stats.
-            for example: {'unique_id': '1234', 'position': (0,0), 'hunger': 0, 'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0, 'move_count': 0, 'energy_consumed': 0}
+            for example: 
+            {'unique_id': '1234', 'position': (0,0), 'hunger': 0, 
+            'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0, 
+            'move_count': 0, 'energy_consumed': 0}
         """
         stats = {}
         for stat in MainStats.__fields__:
@@ -234,10 +257,10 @@ class Dooder(BaseAgent):
         return MainStats(**stats)
 
     @property
-    def neighborhood(self) -> list:
+    def neighborhood(self) -> 'Neighborhood':
         """
         Return a list of the dooder's neighborhood locations.
-        
+
         Returns
         -------
         neighborhood: list

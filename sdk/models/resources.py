@@ -1,6 +1,6 @@
-""" 
-Resources
----------
+"""  
+Resources Model
+---------------
 Responsible for creation and management of Energy objects in the simulation.
 """
 
@@ -53,6 +53,17 @@ class Resources:
         The total number of dissipated energy (for the current cycle).
     consumed_energy : int
         The total number of consumed energy (for the current cycle).
+        
+    Methods
+    -------
+    allocate_resources()
+        Allocates resources based on the provided strategy.
+    step()
+        Performs a step in the simulation.
+    reset()
+        Collects the data from the simulation.
+    remove(resource: Energy)
+        Consumes the given resource.
     """
 
     available_resources = {}

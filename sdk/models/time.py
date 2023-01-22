@@ -1,6 +1,6 @@
 """ 
-Time
-----
+Time Model
+----------
 Responsible for managing the time of the simulation. 
 Essentially, the order in which agents are stepped through during a cycle.
 """
@@ -26,6 +26,17 @@ class Time(BaseTime):
         Dictionary of objects in the scheduler, with agent class names as keys.
     random : Random
         The random number generator used by the scheduler.
+        
+    Methods
+    -------
+    add(object)
+        Add an object to the schedule.
+    remove(object)
+        Remove all instances of a given agent from the schedule.
+    step()
+        Step through the schedule.
+    _step(object_class, shuffle)
+        Step through the schedule for a given object class.
     """
 
     def __init__(self) -> None:

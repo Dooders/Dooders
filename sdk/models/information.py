@@ -47,6 +47,15 @@ class Information:
         Logger that handles all logging for the simulation.
     granularity: int
         Higher granularity means more detailed logging.
+        
+    Methods
+    -------
+    collect(simulation: 'Simulation')
+        Collect data from the simulation.
+    post_collect()
+        Process taking place after data collection.
+    get_result_dict(simulation: 'Simulation')
+        Get a dictionary of the results of the experiment.
     """
 
     def __init__(self, simulation: 'Simulation') -> None:

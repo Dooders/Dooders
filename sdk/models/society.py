@@ -1,6 +1,6 @@
 """
-Society
--------
+Society Model
+-------------
 Responsible for creation and management of Dooder objects in the simulation.   
 """
 
@@ -55,6 +55,20 @@ class Society:
         The function that generates the seed population to start 
         the simulation.
 
+    Methods
+    -------
+    step()
+        Step the society forward. Currently, this will only reset attributes.
+    reset()
+        Reset main attributes after each cycle.
+    generate_seed_population()
+        Generate seed population based on the selected strategy.
+    generate_dooder()
+        Generate a new dooder and place it in the environment
+    place_dooder()
+        Place a dooder in the environment
+    _generate_dooder()
+        Generate a new dooder with a provided position
     """
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
