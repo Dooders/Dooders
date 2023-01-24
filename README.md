@@ -7,7 +7,9 @@
 
 > Reality works; simulate it.  
 
-Systems are anything composed of interacting and dynamic components. For example, Earth's environment is a complex ecological system. A [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a ever-changing chemical system. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). Systems are everywhere.[^1]  
+Systems are anything composed of interacting and dynamic components. For example, Earth's environment is a complex ecological system. A [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a ever-changing chemical system. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). 
+
+Systems are everywhere.[^1]  
 
 Dooders is a python library for *complex model-based simulations*.  
 
@@ -43,7 +45,7 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 | :-------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Full featured interface                                                                       | Responsive UI with many dashboards showing the simulation results                                                                                            |
 | Dockerize deployment                                                                          | Make it simple to spin up the entire platform                                                                                                                |
-| [Cognition model](https://github.com/csmangum/Dooders/blob/main/docs/plans/CognitionModel.md) | Build out the Dooder capability to take in information and evaluate its value                                                                                |
+| Cognition model | Build out the Dooder capability to take in information and evaluate its value                                                                                |
 | Reproduction model                                                                            | Design a function to combine the Genetic models of two Dooders                                                                                               |
 | Continuous time                                                                               | Switch from step based, to continuous time. Brings on tons of potential issues                                                                               |
 | Performance & Efficiency                                                                      | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point                           |
