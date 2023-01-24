@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from sdk.core import Dooder
 
 
-@Condition.register('starvation')
+@Condition.register('Starvation')
 def starvation(dooder: 'Dooder') -> bool:
     """
     Check if the dooder is starving

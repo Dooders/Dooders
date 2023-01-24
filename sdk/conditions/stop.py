@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from sdk import Simulation
 
 
-@Condition.register('Max cycles')
+@Condition.register('MaxCycles')
 def check_max_cycle(simulation: 'Simulation') -> bool:
     """ 
     Check if the maximum number of cycles has been reached.
@@ -33,7 +33,7 @@ def check_max_cycle(simulation: 'Simulation') -> bool:
         return True
 
 
-@Condition.register('Simulation stopped')
+@Condition.register('SimulationStopped')
 def check_simulation_running(simulation: 'Simulation') -> bool:
     """ 
     Check if the simulation is still running.
@@ -52,7 +52,7 @@ def check_simulation_running(simulation: 'Simulation') -> bool:
         return True
 
 
-@Condition.register('No more Dooders')
+@Condition.register('ZeroDooders')
 def check_dooder_count(simulation: 'Simulation') -> bool:
     """ 
     Check if the number of dooders has reached zero.
