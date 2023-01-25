@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import networkx as nx
 from pydantic import BaseModel
 
-from sdk.core import Strategy, compile_strategy
+from sdk.core import Strategy
 from sdk.models import Dooder
 
 if TYPE_CHECKING:
@@ -76,7 +76,7 @@ class Society:
         self.active_dooders = {}
         self.graveyard = {}
         self.simulation = simulation
-        self.seed = compile_strategy(self, SeedStrategy)
+        self.seed = self.simulation.strategy.compile(self, SeedStrategy)
         self.reset()  # set attributes
 
     def step(self) -> None:

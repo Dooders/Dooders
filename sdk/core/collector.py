@@ -18,24 +18,27 @@ information from the simulation.
 """
 
 from functools import partial
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Dict, Union
 
 from pydantic import BaseModel
 
-from sdk.base.base_core import BaseCore
+from sdk.core.core import Core
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
 class BaseCollector(BaseModel):
-    name: str
-    function: Callable
-    scope: str
+    func: Callable
+    package_name: str
+    func_name: str
     enabled: bool
+    
+CollectorDict = Dict[str, BaseCollector]
+CollectorData = Dict[str, Union[list, dict, str, int, float]]
 
 
-class Collector(BaseCore):
+class Collector(Core):
     """ 
     The factory class for creating collectors
 
@@ -44,65 +47,44 @@ class Collector(BaseCore):
 
     Attributes
     ----------
-    registry: list
-        List of all the registered collectors. Inside the collectors folder.
     collectors: dict
         Dictionary of all the collectors. The key is the collector name.
     data: dict
         Dictionary of all the collected data. The key is the collector name.
     """
 
-    registry: list = []
-
     def __init__(self) -> None:
         self.collectors: dict = {}
         self.data: dict = {}
         self.compile_collectors()
-
-    @classmethod
-    def register(cls) -> Callable:
-        """ 
-        Register a collector in the registry.
-
-        Returns
-        -------
-        inner_wrapper: Callable
-            The decorator function.
-        """
-
-        def inner_wrapper(wrapped_class: Callable) -> Callable:
-            func_name = wrapped_class.__name__
-            scope = cls.infer_scope(cls, wrapped_class)
-            cls.registry.append(
-                {'name': func_name, 
-                 'function': wrapped_class, 
-                 'scope': scope,
-                 'enabled': True})
-            return wrapped_class
-
-        return inner_wrapper
+        #! need to add scope to the component core???
 
     def compile_collectors(self) -> None:
         """ 
         Compile the collectors into a dictionary.
         """
-        for collector in self.registry:
-            collector = BaseCollector(**collector)
-            scope = collector.scope
-            
-            if collector.enabled:
+        for collectors in self.get_components('sdk.collectors'):
+            for collector in collectors.values():
+                base_collector = BaseCollector(func_name=collector.func_name,
+                                          func=collector.func,
+                                          package_name=collector.package_name,
+                                          enabled=collector.enabled)
+                scope = base_collector.package_name
+                print(f"Registering collector: {base_collector} ({scope})")
+                
+                if base_collector.enabled:
 
-                if scope not in self.collectors:
-                    self.collectors[scope] = {}
-                    self.data[scope] = {}
+                    if scope not in self.collectors:
+                        self.collectors[scope] = {}
+                        self.data[scope] = {}
 
-                if type(collector.function) is str:
-                    func = partial(self._getattr, collector.function)
-                else:
-                    func = collector.function
+                    if type(base_collector.func) is str:
+                        func = partial(self._getattr, collector.func)
+                    else:
+                        func = base_collector.func
 
-                self.collectors[scope][collector.name] = func
-                self.data[scope][collector.name] = []
+                    self.collectors[scope][base_collector.func_name] = func
+                    self.data[scope][base_collector.func_name] = []
 
     def collect(self, simulation: 'Simulation') -> None:
         """ 

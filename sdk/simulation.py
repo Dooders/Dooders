@@ -17,6 +17,7 @@ from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
 from sdk.core import Condition, Policies
 from sdk.core.action import Actions
+from sdk.core.strategy import Strategy
 from sdk.models.resources import Resources
 from sdk.models.society import Society
 
@@ -46,6 +47,7 @@ class Simulation(BaseSimulation):
         """
         super().__init__(simulation_id, experiment_id, params)
 
+        self.strategy = Strategy()
         self.resources = Resources(self)
         self.society = Society(self)
         self.policies = Policies()
@@ -221,9 +223,9 @@ class Simulation(BaseSimulation):
         return {'SimulationID': self.simulation_id,
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
                 'CycleCount': self.cycles,
-                'TotalEnergy': sum(self.information.data['resources']['allocated_energy']),
-                'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
-                'StartingDooderCount': self.information.data['society']['created_dooder_count'][0],
+                'TotalEnergy': sum(self.information.data['sdk.collectors']['allocated_energy']),
+                'ConsumedEnergy': sum(self.information.data['sdk.collectors']['consumed_energy']),
+                'StartingDooderCount': self.information.data['sdk.collectors']['created_dooder_count'][0],
                 'EndingDooderCount': len(self.society.active_dooders),
                 # 'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
                 }

@@ -14,7 +14,8 @@ from typing import Any, Callable, Optional
 
 import yaml
 from pydantic import BaseModel
-from sdk.base.base_core import BaseCore
+
+from sdk.core.core import Core
 
 
 class BaseStrategy(BaseModel):
@@ -41,10 +42,7 @@ class BaseStrategy(BaseModel):
     Used: Optional[str] = None
 
 
-class Strategy(BaseCore):
-
-    # update for dynamic strategy type dicts
-    registry = {}
+class Strategy(Core):
     
     def __init__(self):
       from sdk import strategies
@@ -68,25 +66,6 @@ class Strategy(BaseCore):
         return strategy
 
     @classmethod
-    def register(cls) -> Callable:
-        """ 
-        Register a collector in the registry.
-        Args:
-            name: Name of the collector.
-            component: Component of the collector.
-        Returns:
-            The decorator function.
-        """
-        def inner_wrapper(wrapped_class: Callable) -> Callable:
-            scope = cls.infer_scope(cls, wrapped_class)
-            if scope not in cls.registry:
-                cls.registry[scope] = {}
-            cls.registry[scope][wrapped_class.__name__] = wrapped_class
-            return wrapped_class
-
-        return inner_wrapper
-
-    @classmethod
     def get(cls, strategy: str, scope: str) -> Callable:
         """ 
         Get a strategy from the registry.
@@ -99,7 +78,39 @@ class Strategy(BaseCore):
             The strategy class.
         """
 
-        return cls.registry[scope][strategy]
+        return cls.get_component(scope, strategy)
+    
+    @classmethod
+    def compile(cls, model: Any, raw_strategy: Any):
+        """ 
+        Compiles a strategy.
+        
+        Args:
+            model: The model to compile the strategy for.
+            raw_strategy: The raw strategy to compile.
+            
+        Returns:
+            A compiled strategy.
+        """
+        
+        compiled_strategy = {}
+        
+        for strat_name, strat in raw_strategy.items():
+            strategies = cls.get_components_dict('', 'sdk.strategies')
+            func = strategies[strat['Type']][strat['Func']].func
+            args = strat['Args']
+            
+            if strat['Type'] == 'placement':
+                compiled_strategy[strat_name] = func(
+                    model.simulation, compiled_strategy[strat['Dependency']])
+
+            else:
+                compiled_strategy[strat_name] = func(**args)
+
+        for key, value in compiled_strategy.items():
+            setattr(model, key, value)
+
+        return compiled_strategy
 
 def compile_strategy(model: Any, raw_strategy: Any):
     """ 
@@ -116,7 +127,7 @@ def compile_strategy(model: Any, raw_strategy: Any):
     compiled_strategy = {}
     
     for strat_name, strat in raw_strategy.items():
-        func = Strategy.get(strat['Func'], strat['Type'])
+        func = Core.get_func(strat['Func'], strat['Type'])
         args = strat['Args']
         
         if strat['Type'] == 'placement':

@@ -7,7 +7,9 @@ which is used to register and execute policies.
 
 from typing import Callable
 
-class Policies:
+from sdk.core.core import Core
+
+class Policies(Core):
     """ 
     The factory class to be used as a decorator to register a policy.
     
@@ -18,31 +20,11 @@ class Policies:
     __call__
         Executes a policy.
     """
-
-    policies = {}
     
     def __init__(self) -> None:
       from sdk import policies
-
-    @classmethod
-    def register(cls) -> Callable:
-        """ 
-        Registers a policy to the Policies class.
-        
-        Returns
-        -------
-        Callable
-            A decorator that registers a policy to the Policies class.
-        """
-
-        def inner_wrapper(wrapped_class: Callable) -> Callable:
-            cls.policies[wrapped_class.__name__] = wrapped_class
-
-            return wrapped_class
-
-        return inner_wrapper
     
-    def __call__(self, policy: str, *args, **kwargs) -> Callable:
+    def __call__(self, policy_name: str, *args, **kwargs) -> Callable:
         """ 
         Executes a registered policy.
         
@@ -56,7 +38,12 @@ class Policies:
         Callable
             The results of the policy
         """
-        matched_policy = self.policies[policy]
-        policy_results = matched_policy.execute(*args, **kwargs)
-        
-        return policy_results
+        policies = self.get_components_dict('sdk.policies')
+        for policy in policies.values():
+            for p in policy.values():
+                if p.func_name == policy_name:
+                    matched_policy = p
+
+                    policy_results = matched_policy.func.execute(*args, **kwargs)
+                    
+                    return policy_results

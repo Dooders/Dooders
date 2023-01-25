@@ -7,6 +7,13 @@ Core system for the Step Logic
 from abc import ABC, abstractmethod
 from typing import Callable
 
+#! Consistent plugin schema for every component
+#! Base class handles a lot
+#! Add methods to docstrings, and examples
+#! fix the importing strategy so its consistent across components
+#! Add better descriptions to the docstrings
+#! should I rename registry and make it consistent? Would be in baseclass
+
 
 class Step:
     """ 
@@ -18,7 +25,15 @@ class Step:
     registry : dict
         A dictionary of all the registered step flows, 
         by the type of python object
+        
+    Methods
+    -------
+    register(type: str) -> Callable
+        Register a step flow through a decorator
+    forward(name: str, object: str) -> None
+        Execute a step flow
     """
+    #! make this a dataclass above
     registry = {
         'Dooder': {},
         'Environment': {},
@@ -35,6 +50,11 @@ class Step:
         type : str
             The type of python object to register the step flow for
             For example, 'Dooder' or 'Environment'
+            
+        Returns
+        -------
+        Callable
+            The decorator to register the step flow
         """
         
         def inner_wrapper(wrapped_class: Callable) -> Callable:
