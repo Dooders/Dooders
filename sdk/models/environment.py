@@ -23,30 +23,20 @@ class Environment(Surface):
     
     Methods
     -------
-    get_object_types()
-        Get all object types in the environment.
-    get_objects(object_type: str = 'BaseAgent')
-        Get all objects of a given type.
-    get_object(object_id: 'UniqueID')
-        Get an object by its id.
-    get_random_neighbors(object: 'BaseAgent', object_type: BaseAgent = 'BaseAgent')
-        Get all objects in the neighborhood of the given object.
-    get_random_neighborhoods(location: tuple, n: int = 1)
-        Get a random neighborhood of a given size.
-    get_neighborhood(location: tuple, moore: bool = True)
-        Get the neighborhood of a given location.
-    iter_neighbors(location: tuple, moore: bool = True)
-        Iterate over the neighborhood of a given location.
-    torus_adj(location: tuple)
-        Adjust a location to fit the torus.
-    is_cell_empty(location: tuple)
-        Check if a cell is empty.
-    place_object(object: 'BaseAgent', position: tuple)
+    place_object(object: BaseAgent, position: tuple) -> None
         Place an object at the provided position.
-    remove_object(object: 'BaseAgent')
+    remove_object(object: BaseAgent) -> None
         Remove an object from the grid.
-    move_object(object: 'BaseAgent', location: tuple)
+    move_object(object: BaseAgent, location: tuple) -> None
         Move an object to a new location.
+    get_object_types() -> List[BaseAgent]
+        Get all object types in the environment.
+    get_objects(object_type: str = 'BaseAgent') -> List[BaseAgent]
+        Get all objects of a given type.
+    get_object(object_id: UniqueID) -> BaseAgent
+        Get an object by its id.
+    get_random_neighbors(object: BaseAgent, object_type: BaseAgent = 'BaseAgent') -> List[BaseAgent]
+        Get all objects in the neighborhood of the given object.
     """
 
     def place_object(self, object: 'BaseAgent', position: tuple) -> None:

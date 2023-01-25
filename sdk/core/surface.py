@@ -5,6 +5,8 @@ Heavily based on the space component in the Mesa library
 https://github.com/projectmesa/mesa/blob/main/mesa/space.py
 """
 
+#! Change name to Arena
+
 import itertools
 from abc import ABC
 from numbers import Real
@@ -75,6 +77,7 @@ class Surface(ABC):
     _neighborhood_cache: Dict[Any, List[Coordinate]]
         A cache of the neighborhoods for each cell.
     """
+    #! instead of grid, cal it surface
     grid: List[List[MultiGridContent]]
 
     def __init__(self, params) -> None:
