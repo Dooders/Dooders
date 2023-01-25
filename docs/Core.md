@@ -13,11 +13,11 @@ These components are managed by a Core class that handles registration of new fu
 - Easy usage of components in the code
 - Consistent and universal schema
 
-## Steps
+## Actions
 The primary way an object interacts with the simulation. For Example: A Dooder **moves** from one location to another
 The action in this case is [Move](#)
 
-## Actions
+## Steps
 
 
 ## Policies
