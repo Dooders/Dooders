@@ -14,8 +14,8 @@ These components are managed by a Core class that handles registration of new fu
 - Consistent and universal schema
 
 ## Actions
-The primary way an object interacts with the simulation. For Example: A Dooder **moves** from one location to another
-The action in this case is [Move](#)
+The primary way an object interacts with the simulation. 
+***For Example:*** A Dooder **moves** from one location to another. The action in this case is [Move](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py)
 
 ## Steps
 
