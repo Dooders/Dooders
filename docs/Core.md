@@ -27,7 +27,7 @@ Action.execute('move', dooder)
 
 This command will start the process for a Dooder to move (with default settings, this would be a neural network that learns to find energy)
 
-More information can be found [here]()
+More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
 
 ## Steps
 
@@ -44,7 +44,7 @@ Step.forward('BasicStep', dooder)
 
 This command will step a Dooder forward based on the BasicStep logic.
 
-More information can be found [here]()
+More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Steps.md)
 
 ## Policies
 
@@ -59,7 +59,7 @@ Policy.execute('NeuralNetwork', dooder)
 
 The above command will use the movement policy to create a Neural Network for the Dooder to use to find energy (learning by experience).
 
-More information can be found [here]()
+More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Policies.md)
 
 ## Strategies
 
@@ -78,7 +78,7 @@ strategies = Strategy.compile(ResourceStrategy)
 
 The code above loads the resource strategy, and then compiles it to be used in the simulation. The strategy is saved as a file, and then loaded into the simulation.
 
-More information can be found [here]()
+More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Strategies.md)
 
 ## Conditions
 
@@ -95,7 +95,7 @@ result, reason = Condition.check('death', dooder)
 
 This code will return weather the condition was met, and the reason why. In this case it could be based on starvation, or another death condition.
 
-More information can be found [here]()
+More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Conditions.md)
 
 ## Collectors
 
@@ -104,4 +104,4 @@ Collectors are function that run every cycle to collect data from objects and mo
 ***For example:***
 One collects the number of Dooders in the simulation, and another collects the number of energy objects in the simulation.
 
-More information can be found [here]()
+More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
