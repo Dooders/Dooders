@@ -1,10 +1,10 @@
 # Core Components
 
-The core components provide the foundational capabilities of the library. These components are designed to be added to easily and quickly, and follow specific designs to allow for a base to build off of.
+The core components of the library serve as the foundation for its capabilities. They are designed to be easily and quickly integrated, and follow specific guidelines to provide a solid base for further development.
 
 Currently the core components include: [Actions](#Actions), [Steps](#Steps), [Policies](#Policies), [Strategies](#Strategies), [Conditions](#Conditions), and [Collectors](#Collectors).
 
-These components are managed by a Core class that handles registration of new functions inside the existing components
+The Core class manages the registration of new functions within the existing components.
 
 **Component Requirements:**
 
@@ -16,7 +16,7 @@ These components are managed by a Core class that handles registration of new fu
 ## Actions
 The primary way an object interacts with the simulation. 
 
-***For Example:*** A Dooder **moves** from one location to another. The action in this case is [Move](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py)
+***For Example:*** A Dooder **moves** from one location to another. The action in this case is [move](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py)
 
 ## Steps
 
