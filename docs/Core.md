@@ -63,9 +63,45 @@ More information can be found [here]()
 
 ## Strategies
 
+Strategies are a way to get generate fixed or dynamic results, based on the chosen strategy. This can include random numbers, or numbers based on a specific distribution.
+
+The purpose of the strategies is similar to the Policies component but are limited to only being used to support the simulation.
+
+***For example:***  
+Generating the number of energy objects to place in the Environment at the beginning of every cycle. That number could be based on a uniform distribution, a normal distribution, or even a static number.
+
+```python
+ResourceStrategy = Strategy.load('resources')
+
+strategies = Strategy.compile(ResourceStrategy)
+```
+
+The code above loads the resource strategy, and then compiles it to be used in the simulation. The strategy is saved as a file, and then loaded into the simulation.
+
+More information can be found [here]()
 
 ## Conditions
 
+The purpose of the Conditions component is to provide a way to check if a specific condition is met, returning if it is True or False. This can be used to check if a Dooder has enough energy to move, or if a Dooder is still alive.
+
+***For example:***
+A condition checking if a Dooder should be removed from the simulation. One specific death condition is starvation, where the Dooder has not consumed energy for multiple cycles, and the probability increases with each cycle.
+
+If the condition returns True, the Dooder is removed from the simulation.
+
+```python
+result, reason = Condition.check('death', dooder)
+```
+
+This code will return weather the condition was met, and the reason why. In this case it could be based on starvation, or another death condition.
+
+More information can be found [here]()
 
 ## Collectors
 
+Collectors are function that run every cycle to collect data from objects and models in the simulation. This data can be used to create visualizations, or to analyze the simulation results.
+
+***For example:***
+One collects the number of Dooders in the simulation, and another collects the number of energy objects in the simulation.
+
+More information can be found [here]()
