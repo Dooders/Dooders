@@ -13,6 +13,10 @@ class Component(NamedTuple):
     module_doc: str
     enabled: bool
         
+class Components(NamedTuple):
+    Actions: List[Component]
+    Steps: List[Component]
+        
 
 
 # Dictionary with information about all registered plug-ins
