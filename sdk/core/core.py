@@ -12,10 +12,15 @@ class Component(NamedTuple):
     doc: str
     module_doc: str
     enabled: bool
+        
 
 
 # Dictionary with information about all registered plug-ins
+#! will be a dict with key as the component name, value is a dict of components with...
+#! the key as ??? and the values ???
 _COMPONENTS = {}
+
+COMPONENTS: Dict[str, Dict[str, Component]] = {}
 
 class Core:
 
@@ -31,6 +36,7 @@ class Core:
         """
 
         def inner_wrapper(func: Callable) -> Callable:
+            #! which ones can I get rid of
             package_name, _, plugin_name = func.__module__.rpartition(".")
             description, _, doc = (func.__doc__ or "").partition("\n\n")
             func_name = func.__name__
