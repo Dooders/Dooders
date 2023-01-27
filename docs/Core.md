@@ -1,18 +1,8 @@
 # Core Components
 
-The core components of the library serve as the foundation for its capabilities. They are designed to be easily and quickly integrated, and follow specific guidelines to provide a solid base for ongoing development and research.
+The core components serve as the foundation for the library and its capabilities. They are designed to be easily and quickly integrated, and follow specific guidelines to provide a solid base for ongoing development and research.
 
 Currently the core components include: [Actions](#Actions), [Steps](#Steps), [Policies](#Policies), [Strategies](#Strategies), [Conditions](#Conditions), and [Collectors](#Collectors).
-
-## Core
-
-The Core class manages the registration of new functions within the existing components.
-
-**Requirements:**
-
-- Every component needs to be available before a simulation starts
-- Straightforward usage with decorator based registration
-- Consistent and universal schema to store component functions
 
 ## Actions
 
@@ -25,13 +15,13 @@ A Dooder **moves** from one location to another. The action in this case is [mov
 Action.execute('move', dooder)
 ```
 
-This command will start the process for a Dooder to move (with default settings, this would be a neural network that learns to find energy)
+This command will start the process for a Dooder to move (with default settings, the dooder will learn to search for energy via a neural network)
 
-More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
+More information on Actions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
 
 ## Steps
 
-Steps are the logic a model or object executes during its a cycle.
+Steps are the logic a model or object executes during its a cycle. In other words, it's the flow of steps a dooder will do each turn.
 
 The step logic will be executed every cycle in the simulation.
 
@@ -42,24 +32,24 @@ A Dooder looking for energy, moving to a new location, then ending its turn.
 Step.forward('BasicStep', dooder)
 ```
 
-This command will step a Dooder forward based on the BasicStep logic.
+This command will step a Dooder forward based on the BasicStep logic. This logic can vary based on user settings, but currently the default is a neural network.
 
-More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Steps.md)
+More information on Steps can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Steps.md)
 
 ## Policies
 
-Policies are the way that a model or object makes decisions. In other words, taking information from the environment and making a decision based on that information.
+Policies are the way that a model or object "makes" decisions. One policy takes information from the environment and makes a determination based on interpertation and evaluation of that information.
 
 ***For Example:***  
-There is a movement policy with different options, including a neural network, rule based, and random move.
+The movement policy offers different options including: a neural network, rule based, and random move.
 
 ```python
 Policy.execute('NeuralNetwork', dooder)
 ```
 
-The above command will use the movement policy to create a Neural Network for the Dooder to use to find energy (learning by experience).
+The above command will use the movement policy to create a neural network for the Dooder to use to find energy (learning by experience). More details on how a dooder can learn is [here]().
 
-More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Policies.md)
+More information on Policies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Policies.md)
 
 ## Strategies
 
@@ -76,16 +66,16 @@ ResourceStrategy = Strategy.load('resources')
 strategies = Strategy.compile(ResourceStrategy)
 ```
 
-The code above loads the resource strategy, and then compiles it to be used in the simulation. The strategy is saved as a file, and then loaded into the simulation.
+The code above loads the resource strategy, and then compiles it to be used in the simulation. The strategy is saved as a file, and then loaded into the simulation. In this case for example, the result could be the number of new energy objects = 20.
 
-More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Strategies.md)
+More information on Strategies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Strategies.md)
 
 ## Conditions
 
-The purpose of the Conditions component is to provide a way to check if a specific condition is met, returning if it is True or False. This can be used to check if a Dooder has enough energy to move, or if a Dooder is still alive.
+The purpose of the Conditions component is to provide a way to check if a specific condition is met, returning if it is True or False. This can be used to check if a Dooder has enough energy to move, or if a Dooder is still alive, etc..
 
 ***For example:***
-A condition checking if a Dooder should be removed from the simulation. One specific death condition is starvation, where the Dooder has not consumed energy for multiple cycles, and the probability increases with each cycle.
+One specific death condition for a Dooder is starvation. If a Dooder has not consumed energy for multiple cycles, the probability of death increases with each cycle it doesn't consume energy.
 
 If the condition returns True, the Dooder is removed from the simulation.
 
@@ -95,13 +85,13 @@ result, reason = Condition.check('death', dooder)
 
 This code will return weather the condition was met, and the reason why. In this case it could be based on starvation, or another death condition.
 
-More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Conditions.md)
+More information on Conditions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Conditions.md)
 
 ## Collectors
 
-Collectors are function that run every cycle to collect data from objects and models in the simulation. This data can be used to create visualizations, or to analyze the simulation results.
+Collectors are functions that run every cycle to collect data from objects and models in the simulation. This data can be used to create visualizations, or to analyze the simulation results.
 
 ***For example:***
 One collects the number of Dooders in the simulation, and another collects the number of energy objects in the simulation.
 
-More information can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
+More information on Collectors can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
