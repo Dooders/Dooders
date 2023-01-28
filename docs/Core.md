@@ -32,7 +32,7 @@ A Dooder looking for energy, moving to a new location, then ending its turn.
 Step.forward('BasicStep', dooder)
 ```
 
-This command will step a Dooder forward based on the [BasicStep]() logic. This logic can vary based on user settings, but currently the default is a neural network.
+This command will step a Dooder forward based on the [BasicStep](https://github.com/csmangum/Dooders/blob/main/sdk/steps/dooder.py) logic. This logic can vary based on user settings, but currently the default is a neural network.
 
 More information on Steps can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Steps.md)
 
@@ -41,13 +41,13 @@ More information on Steps can be found [here](https://github.com/csmangum/Dooder
 Policies are the way that a model or object "makes" decisions. A policy takes information from the environment and makes a determination based on interpertation and evaluation of that information.
 
 ***For Example:***  
-The [movement]() policy offers different options including: a neural network, rule based, and random move.
+The [movement](https://github.com/csmangum/Dooders/blob/main/sdk/policies/movement.py) policy offers different options including: a neural network, rule based, and random move.
 
 ```python
 Policy.execute('NeuralNetwork', dooder)
 ```
 
-This code will use the movement policy to create a neural network for the Dooder to learn to find energy (learning by experience). More details on how a dooder can learn is [here]().
+This code will use the movement policy to create a neural network for the Dooder to learn to find energy (learning by experience). More details on how a dooder can learn is [here](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md).
 
 More information on Policies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Policies.md)
 
@@ -74,8 +74,8 @@ More information on Strategies can be found [here](https://github.com/csmangum/D
 
 The purpose of the Conditions component is to provide a way to check if a specific condition is met, returning if it is True or False. This can be used to check if a Dooder has enough energy to move, or if a Dooder is still alive, etc..
 
-***For example:***
-[Starvation]() is a death condition for a Dooder. If a Dooder has not consumed energy for multiple cycles, the probability of death increases with each cycle it doesn't consume energy.
+***For example:***  
+[Starvation](https://github.com/csmangum/Dooders/blob/main/sdk/conditions/death.py) is a death condition for a Dooder. If a Dooder has not consumed energy for multiple cycles, the probability of death increases with each cycle it doesn't consume energy.
 
 If the condition returns True, the Dooder is removed from the simulation.
 
@@ -91,7 +91,7 @@ More information on Conditions can be found [here](https://github.com/csmangum/D
 
 Collectors are functions that run every cycle to collect data from objects and models in the simulation. This data can be used to create visualizations, or to analyze the simulation results.
 
-***For example:***
+***For example:***  
 Each model or object has a number of collectors. One example is a collector that keeps track of the number of energy objects in the Environment.
 
 More information on Collectors can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
