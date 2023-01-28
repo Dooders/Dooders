@@ -1,1 +1,1 @@
-from sdk.strategies import generation, placement, genetics
+from sdk.strategies import generation, placement
