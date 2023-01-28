@@ -26,7 +26,7 @@ class Genetics:
         Returns:
             The compiled genetics.
         """
-        genetics = dooder.simulation.strategy.compile(dooder, GeneticStrategy)
+        genetics = Strategy.compile(dooder, GeneticStrategy)
         cls.genetic_profiles.append(genetics)
 
         return genetics
