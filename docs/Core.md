@@ -41,7 +41,7 @@ More information on Steps can be found [here](https://github.com/csmangum/Dooder
 Policies are the way that a model or object "makes" decisions. A policy takes information from the environment and makes a determination based on its interpertation and evaluation of that information.
 
 ***For Example:***  
-The [movement](https://github.com/csmangum/Dooders/blob/main/sdk/policies/movement.py) policy offers different options including a neural network, rule-based, and random move.
+The [movement](https://github.com/csmangum/Dooders/blob/main/sdk/policies/movement.py) policy offers different options including a neural network, rule-based, and random move to identify where to move in the environment.
 
 ```python
 Policy.execute('NeuralNetwork', dooder)
