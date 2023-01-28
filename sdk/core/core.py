@@ -1,30 +1,23 @@
-import sys
-import textwrap
-from typing import Callable, NamedTuple
+""" 
+Core module for the SDK
+"""
 
+from typing import Callable, Dict, NamedTuple
+
+#! need to make sure every component is loaded before simulation starts
 
 class Component(NamedTuple):
-    package_name: str
-    plugin_name: str
-    func_name: str
-    func: Callable
+    folder_name: str
+    file_name: str
+    function_name: str
+    function: Callable
     description: str
-    doc: str
-    module_doc: str
     enabled: bool
-        
-class Components(NamedTuple):
-    Actions: List[Component]
-    Steps: List[Component]
-        
-
 
 # Dictionary with information about all registered plug-ins
-#! will be a dict with key as the component name, value is a dict of components with...
-#! the key as ??? and the values ???
-_COMPONENTS = {}
-
-COMPONENTS: Dict[str, Dict[str, Component]] = {}
+# Example _COMPONENTS dictionary entry
+# {'actions': {'consume': {'consume': Component}}}
+_COMPONENTS: Dict[str, Dict[str, Dict[str, Component]]] = {}
 
 class Core:
 
@@ -40,22 +33,18 @@ class Core:
         """
 
         def inner_wrapper(func: Callable) -> Callable:
-            #! which ones can I get rid of
-            package_name, _, plugin_name = func.__module__.rpartition(".")
-            description, _, doc = (func.__doc__ or "").partition("\n\n")
-            func_name = func.__name__
-            module_doc = sys.modules[func.__module__].__doc__ or ""
+            folder_name, _, file_name = func.__module__.rpartition(".")
+            description, _, _ = (func.__doc__ or "").partition("\n\n")
+            function_name = func.__name__
             
-            pkg_info = _COMPONENTS.setdefault(package_name, {})
-            plugin_info = pkg_info.setdefault(plugin_name, {})
-            plugin_info[func_name] = Component(
-            package_name=package_name,
-            plugin_name=plugin_name,
-            func_name=func_name,
-            func=func,
+            pkg_info = _COMPONENTS.setdefault(folder_name, {})
+            plugin_info = pkg_info.setdefault(file_name, {})
+            plugin_info[function_name] = Component(
+            folder_name=folder_name,
+            file_name=file_name,
+            function_name=function_name,
+            function=func,
             description=description,
-            doc=textwrap.dedent(doc).strip(),
-            module_doc=module_doc,
             enabled=True
             )
                 
@@ -63,20 +52,50 @@ class Core:
 
         return inner_wrapper
 
-    def get_components(self, type: str):
-        return _COMPONENTS[type].values()
+    @classmethod
+    def get_components(self, component: str) -> Dict[str, Dict[str, Component]]:
+        """ 
+        Get all components of a certain type.
+
+        Parameters
+        ----------
+        component: str
+            The type of component to get.
+
+        Returns
+        -------
+        components: Dict[str, Dict[str, Component]]
+            A dictionary of all components of the specified type.
+        """
+        return _COMPONENTS[component]
     
-    def get_component(self, type: str, name: str):
-        return _COMPONENTS[type][name].values()
+    @classmethod
+    def get_component(self, component: str, name: str) -> Dict[str, Component]:
+        """ 
+        Get a component of a certain type.
+
+        Parameters
+        ----------
+        component: str
+            The type of component to get.
+        name: str
+            The name of the component to get.
+
+        Returns
+        -------
+        component: Dict[str, Component]
+            A dictionary of the component of the specified type.
+        """
+        return _COMPONENTS[component][name]
     
-    def get_component_dict(self, type: str, name: str):
-        return _COMPONENTS[type][name]
+    # def get_component_dict(self, type: str, name: str):
+    #     return _COMPONENTS[type][name]
     
-    def get_components_dict(self, type: str):
-        return _COMPONENTS[type]
+    # def get_components_dict(self, type: str):
+    #     return _COMPONENTS[type]
     
-    def get_func(self, type: str, name: str):
-        return _COMPONENTS[type][name].func
+    # def get_func(self, type: str, name: str):
+    #     return _COMPONENTS[type][name].func
     
-    def get_funcs(self, type: str):
-        return [x.func for x in _COMPONENTS[type].values()]
+    # def get_funcs(self, type: str):
+    #     return [x.func for x in _COMPONENTS[type].values()]

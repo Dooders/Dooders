@@ -11,7 +11,7 @@ from sdk.core.core import Core
 class Condition(Core):
     """ 
     The factory class to be used as a decorator to register a stop condition.
-    
+
     Methods
     -------
     register
@@ -21,10 +21,7 @@ class Condition(Core):
     """
 
     @classmethod
-    def check_conditions(cls, scope: str, *args, **kwargs) -> bool:
-        #! need to figure out the design of this
-        #! can't have both an object instance call to components and non instance like this
-        #! most likely has to be singleton class based on Core
+    def check(cls, scope: str, *args, **kwargs) -> bool:
         """ 
         Check if any of the registered conditions are met.
 
@@ -38,10 +35,10 @@ class Condition(Core):
         bool
             True if any of the conditions are met.
         """
-        for condition in cls.get_components('', 'sdk.conditions'):
-            for value in condition.values():
-                if value.plugin_name == scope:
-                    func = value.func
-                    if func(*args, **kwargs):
-                        return True, condition
-                return False, None
+        registered_conditions = Core.get_components('sdk.conditions')
+
+        for condition in registered_conditions[scope].values():
+            function = condition.function
+            if function(*args, **kwargs):
+                return True, condition
+            return False, None

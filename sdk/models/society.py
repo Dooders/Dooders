@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
 
 
-SeedStrategy = Strategy.load_strategy('seed')
+SeedStrategy = Strategy.load('seed')
 
 
 class Attributes(BaseModel):
@@ -76,7 +76,7 @@ class Society:
         self.active_dooders = {}
         self.graveyard = {}
         self.simulation = simulation
-        self.seed = self.simulation.strategy.compile(self, SeedStrategy)
+        self.seed = Strategy.compile(self, SeedStrategy)
         self.reset()  # set attributes
 
     def step(self) -> None:

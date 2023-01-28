@@ -10,7 +10,7 @@ from typing import Callable
 from sdk.core.core import Core
 
 
-class Actions(Core):
+class Action(Core):
     """ 
     An action is a way for an object to interact with the simulation.
     
@@ -25,9 +25,20 @@ class Actions(Core):
     
     def __init__(self):
         from sdk import actions
+        
+    def get_action(self, action_name: str) -> Callable:
+        """ 
+        Returns all registered actions.
+        
+        Parameters
+        ----------
+        action_name : str
+            The name of the action to get.
+        """
+        return self.get_component("sdk.actions", action_name)[action_name]
     
-    #! change to execute?
-    def __call__(self, object: object, action: str) -> Callable:
+    @classmethod
+    def execute(cls, object: object, action_name: str) -> Callable:
         """ 
         Executes a registered action.
         
@@ -43,7 +54,7 @@ class Actions(Core):
         Callable
             The action that was executed.
         """
-        matched_action = self.get_component_dict("sdk.actions", action)[action]
-        action_results = matched_action.func(object)
+        matched_action = cls.get_action(cls, action_name)
+        action_results = matched_action.function(object)
 
         return action_results

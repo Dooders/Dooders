@@ -5,7 +5,7 @@ from sdk.core import Strategy
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
 
-GeneticStrategy = Strategy.load_strategy('genetics')
+GeneticStrategy = Strategy.load('genetics')
 
 
 class Genetics:

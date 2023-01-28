@@ -48,7 +48,7 @@ class Strategy(Core):
       from sdk import strategies
 
     @classmethod
-    def load_strategy(cls, name: str) -> dict:
+    def load(cls, name: str) -> dict:
         """ 
         Loads a strategy from a YAML file.
         
@@ -78,7 +78,7 @@ class Strategy(Core):
             The strategy class.
         """
 
-        return cls.get_component(scope, strategy)
+        return cls.get_component('sdk.strategies',)
     
     @classmethod
     def compile(cls, model: Any, raw_strategy: Any):
@@ -96,8 +96,8 @@ class Strategy(Core):
         compiled_strategy = {}
         
         for strat_name, strat in raw_strategy.items():
-            strategies = cls.get_components_dict('', 'sdk.strategies')
-            func = strategies[strat['Type']][strat['Func']].func
+            strategies = cls.get_component('sdk.strategies', strat['Type'])
+            func = strategies[strat['Func']].function
             args = strat['Args']
             
             if strat['Type'] == 'placement':

@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from sdk import steps
 from sdk.base.base_agent import BaseAgent
 from sdk.core import Condition
+from sdk.core.action import Action
 from sdk.core.step import Step
 from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
@@ -117,7 +118,7 @@ class Dooder(BaseAgent):
         action: str
             The action to be taken
         """
-        self.simulation.actions(self, action)
+        Action.execute(self, action)
 
     def die(self, reason: str = 'Unknown') -> None:
         """
@@ -140,7 +141,7 @@ class Dooder(BaseAgent):
         Checking if the dooder should be dead,
         based on conditions of current state
         """
-        result, reason = Condition.check_conditions('death', self)
+        result, reason = Condition.check('death', self)
 
         if result:
             self.die(reason)

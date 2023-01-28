@@ -21,13 +21,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from sdk.base.base_policy import BasePolicy
-from sdk.core.policies import Policies
+from sdk.core.policy import Policy
 
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
 
 
-@Policies.register()
+@Policy.register()
 class RandomMove(BasePolicy):
     """
     Given a Dooder object, returns a random location in the objects neighborhood
@@ -57,7 +57,7 @@ class RandomMove(BasePolicy):
         return random_cell
 
 
-@Policies.register()
+@Policy.register()
 class RuleBased(BasePolicy):
     """
     Given a Dooder object, returns a random location in the objects neighborhood that has energy.
@@ -93,7 +93,7 @@ class RuleBased(BasePolicy):
         return random_cell
 
 
-@Policies.register()
+@Policy.register()
 class NeuralNetwork(BasePolicy):
     #! Change this name to TargetBased or GoalBased
     """ 

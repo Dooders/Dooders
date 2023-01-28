@@ -24,7 +24,7 @@ class Attributes(BaseModel):
     consumed_energy: int = 0
 
 
-ResourceStrategy = Strategy.load_strategy('resources')
+ResourceStrategy = Strategy.load('resources')
 
 
 class Resources:

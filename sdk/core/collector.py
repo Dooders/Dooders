@@ -29,13 +29,14 @@ if TYPE_CHECKING:
 
 
 class BaseCollector(BaseModel):
-    func: Callable
-    package_name: str
-    func_name: str
+    function: Callable
+    file_name: str
+    function_name: str
     enabled: bool
-    
-CollectorDict = Dict[str, BaseCollector]
-CollectorData = Dict[str, Union[list, dict, str, int, float]]
+
+
+CollectorDict: Dict[str, BaseCollector]
+CollectorData: Dict[str, Union[list, dict, str, int, float]]
 
 
 class Collector(Core):
@@ -57,34 +58,35 @@ class Collector(Core):
         self.collectors: dict = {}
         self.data: dict = {}
         self.compile_collectors()
-        #! need to add scope to the component core???
 
     def compile_collectors(self) -> None:
         """ 
         Compile the collectors into a dictionary.
         """
-        for collectors in self.get_components('sdk.collectors'):
+        #! change to a generator?
+        component = self.get_components('sdk.collectors')
+
+        for collectors in component.values():
             for collector in collectors.values():
-                base_collector = BaseCollector(func_name=collector.func_name,
-                                          func=collector.func,
-                                          package_name=collector.package_name,
-                                          enabled=collector.enabled)
-                scope = base_collector.package_name
-                print(f"Registering collector: {base_collector} ({scope})")
-                
+                base_collector = BaseCollector(function_name=collector.function_name,
+                                               function=collector.function,
+                                               file_name=collector.file_name,
+                                               enabled=collector.enabled)
+                scope = base_collector.file_name
+
                 if base_collector.enabled:
 
                     if scope not in self.collectors:
                         self.collectors[scope] = {}
                         self.data[scope] = {}
 
-                    if type(base_collector.func) is str:
-                        func = partial(self._getattr, collector.func)
+                    if type(base_collector.function) is str:
+                        function = partial(self._getattr, collector.function)
                     else:
-                        func = base_collector.func
+                        function = base_collector.function
 
-                    self.collectors[scope][base_collector.func_name] = func
-                    self.data[scope][base_collector.func_name] = []
+                    self.collectors[scope][base_collector.function_name] = function
+                    self.data[scope][base_collector.function_name] = []
 
     def collect(self, simulation: 'Simulation') -> None:
         """ 
