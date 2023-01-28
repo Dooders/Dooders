@@ -4,10 +4,11 @@ Reproduce Action
 This action is used to reproduce two dooders
 """
 
-from sdk.core.action import Actions
+from sdk.core.action import Action
+from sdk.core import Policy
 
 
-@Actions.register()
+@Action.register()
 def reproduce(dooderA) -> None:
     """
     Apply the reproduction policy to two dooders, 
@@ -26,7 +27,7 @@ def reproduce(dooderA) -> None:
         dooderB = dooderA.find_partner()
 
         if dooderB:
-            genetics = dooderA.simulation.policies(reproduction_policy, dooderA, dooderB) #! make sure this will execute for all internal_models
+            genetics = Policy.execute(reproduction_policy, dooderA, dooderB) #! make sure this will execute for all internal_models
             offspring = dooderA.simulation.society._generate_dooder(
                 dooderA.position)
             offspring.internal_models.inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models

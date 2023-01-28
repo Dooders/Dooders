@@ -24,7 +24,7 @@ class Attributes(BaseModel):
     consumed_energy: int = 0
 
 
-ResourceStrategy = Strategy.load_strategy('resources')
+ResourceStrategy = Strategy.load('resources')
 
 
 class Resources:
@@ -70,7 +70,7 @@ class Resources:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
-        self.strategies = compile_strategy(self, ResourceStrategy)
+        self.strategies = Strategy.compile(self, ResourceStrategy)
         self.reset()
 
     def allocate_resources(self) -> None:
@@ -110,7 +110,7 @@ class Resources:
         for resource in list(self.available_resources.values()):
             resource.step()
 
-        self.strategies = compile_strategy(self, ResourceStrategy)
+        self.strategies = Strategy.compile(self, ResourceStrategy)
         self.reset()
         self.allocate_resources()
 

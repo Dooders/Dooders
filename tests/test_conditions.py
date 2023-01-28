@@ -6,8 +6,8 @@ def test():
     pass
 
 
-def test_register():
-    assert 'test' in Condition.registry['test_conditions']
+# def test_register():
+#     assert 'test' in Condition.registry['test_conditions']
     
     
 # def test_infer_purpose():

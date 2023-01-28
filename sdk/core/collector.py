@@ -18,24 +18,28 @@ information from the simulation.
 """
 
 from functools import partial
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Dict, Union
 
 from pydantic import BaseModel
 
-from sdk.base.base_core import BaseCore
+from sdk.core.core import Core
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
 
 
 class BaseCollector(BaseModel):
-    name: str
     function: Callable
-    scope: str
+    file_name: str
+    function_name: str
     enabled: bool
 
 
-class Collector(BaseCore):
+CollectorDict: Dict[str, BaseCollector]
+CollectorData: Dict[str, Union[list, dict, str, int, float]]
+
+
+class Collector(Core):
     """ 
     The factory class for creating collectors
 
@@ -44,65 +48,45 @@ class Collector(BaseCore):
 
     Attributes
     ----------
-    registry: list
-        List of all the registered collectors. Inside the collectors folder.
     collectors: dict
         Dictionary of all the collectors. The key is the collector name.
     data: dict
         Dictionary of all the collected data. The key is the collector name.
     """
 
-    registry: list = []
-
     def __init__(self) -> None:
         self.collectors: dict = {}
         self.data: dict = {}
         self.compile_collectors()
 
-    @classmethod
-    def register(cls) -> Callable:
-        """ 
-        Register a collector in the registry.
-
-        Returns
-        -------
-        inner_wrapper: Callable
-            The decorator function.
-        """
-
-        def inner_wrapper(wrapped_class: Callable) -> Callable:
-            func_name = wrapped_class.__name__
-            scope = cls.infer_scope(cls, wrapped_class)
-            cls.registry.append(
-                {'name': func_name, 
-                 'function': wrapped_class, 
-                 'scope': scope,
-                 'enabled': True})
-            return wrapped_class
-
-        return inner_wrapper
-
     def compile_collectors(self) -> None:
         """ 
         Compile the collectors into a dictionary.
         """
-        for collector in self.registry:
-            collector = BaseCollector(**collector)
-            scope = collector.scope
-            
-            if collector.enabled:
+        #! change to a generator?
+        component = self.get_components('sdk.collectors')
 
-                if scope not in self.collectors:
-                    self.collectors[scope] = {}
-                    self.data[scope] = {}
+        for collectors in component.values():
+            for collector in collectors.values():
+                base_collector = BaseCollector(function_name=collector.function_name,
+                                               function=collector.function,
+                                               file_name=collector.file_name,
+                                               enabled=collector.enabled)
+                scope = base_collector.file_name
 
-                if type(collector.function) is str:
-                    func = partial(self._getattr, collector.function)
-                else:
-                    func = collector.function
+                if base_collector.enabled:
 
-                self.collectors[scope][collector.name] = func
-                self.data[scope][collector.name] = []
+                    if scope not in self.collectors:
+                        self.collectors[scope] = {}
+                        self.data[scope] = {}
+
+                    if type(base_collector.function) is str:
+                        function = partial(self._getattr, collector.function)
+                    else:
+                        function = base_collector.function
+
+                    self.collectors[scope][base_collector.function_name] = function
+                    self.data[scope][base_collector.function_name] = []
 
     def collect(self, simulation: 'Simulation') -> None:
         """ 

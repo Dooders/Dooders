@@ -8,14 +8,14 @@ Energy is consumed by agents to increase its lifespan.
 
 from typing import TYPE_CHECKING
 
-from sdk.core import Strategy, compile_strategy
+from sdk.core import Strategy
 
 if TYPE_CHECKING:
     from sdk.core.data import Position, UniqueID
     from sdk.models.resources import Resources
 
 
-EnergyStrategy = Strategy.load_strategy('energy')
+EnergyStrategy = Strategy.load('energy')
 
 
 class Energy:
@@ -66,7 +66,7 @@ class Energy:
                  position: 'Position',
                  resources: 'Resources') -> None:
         self.unique_id = unique_id
-        self.strategies = compile_strategy(self, EnergyStrategy)
+        self.strategies = Strategy.compile(self, EnergyStrategy)
         self.position = position
         self.cycle_count = 0
         self.resources = resources

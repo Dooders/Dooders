@@ -7,8 +7,10 @@ which is used to register and execute actions.
 
 from typing import Callable
 
+from sdk.core.core import Core
 
-class Actions:
+
+class Action(Core):
     """ 
     An action is a way for an object to interact with the simulation.
     
@@ -20,31 +22,23 @@ class Actions:
     __call__
         Executes an action.
     """
-
-    actions = {}
-
+    
     def __init__(self):
         from sdk import actions
-
-    @classmethod
-    def register(cls) -> Callable:
-        """ 
-        Registers an action to the Actions class.
         
-        Returns
-        -------
-        Callable
-            A decorator that registers an action to the Actions class.
+    def get_action(self, action_name: str) -> Callable:
+        """ 
+        Returns all registered actions.
+        
+        Parameters
+        ----------
+        action_name : str
+            The name of the action to get.
         """
-
-        def inner_wrapper(wrapped_class: Callable) -> Callable:
-            cls.actions[wrapped_class.__name__] = wrapped_class
-
-            return wrapped_class
-
-        return inner_wrapper
-
-    def __call__(self, object: object, action: str) -> Callable:
+        return self.get_component("sdk.actions", action_name)[action_name]
+    
+    @classmethod
+    def execute(cls, object: object, action_name: str) -> Callable:
         """ 
         Executes a registered action.
         
@@ -60,7 +54,7 @@ class Actions:
         Callable
             The action that was executed.
         """
-        matched_action = self.actions[action]
-        action_results = matched_action(object)
+        matched_action = cls.get_action(cls, action_name)
+        action_results = matched_action.function(object)
 
         return action_results

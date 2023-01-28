@@ -15,8 +15,8 @@ import pandas as pd
 from db.main import DB
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
-from sdk.core import Condition, Policies
-from sdk.core.action import Actions
+from sdk.core import Condition, Policy, Strategy
+from sdk.core.action import Action
 from sdk.models.resources import Resources
 from sdk.models.society import Society
 
@@ -46,10 +46,11 @@ class Simulation(BaseSimulation):
         """
         super().__init__(simulation_id, experiment_id, params)
 
+        self.strategy = Strategy()
         self.resources = Resources(self)
         self.society = Society(self)
-        self.policies = Policies()
-        self.actions = Actions()
+        self.policies = Policy()
+        self.actions = Action()
         self.running = False
         self.send_to_db = send_to_db
         self.details = details
@@ -183,7 +184,7 @@ class Simulation(BaseSimulation):
         Returns:
             True if the simulation should stop, False otherwise.
         """
-        result, reason = Condition.check_conditions('stop', self)
+        result, reason = Condition.check('stop', self)
 
         if result:
             self.stop()
