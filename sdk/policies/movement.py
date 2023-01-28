@@ -9,12 +9,6 @@ Currently there are three policies:
 3. Neural Network: The Dooder will move to a location based on a neural network output
 """
 
-#! !!!! make an intelligent energy source. One that is rule based and not random
-#! what we see as random is actually an outcome of an intentional system
-#! predatorial based system
-#! have writing on "types of systems"
-#! creativley create or modify systems(models)????
-
 from random import choice
 from typing import TYPE_CHECKING
 
