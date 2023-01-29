@@ -19,7 +19,7 @@ Unpacking the terminology a bit:
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
 
-This repo, and the overall project, is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, and a lot more.  
+This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
@@ -56,8 +56,8 @@ This repo, and the overall project, is a space where I can experiment, learn mor
 
 [A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  (A better [answer](https://rememberization.substack.com/p/why-dooders))
 
-## Links
-
+## Learn more
+[Core Components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md)
   
 ### Footnotes
 
