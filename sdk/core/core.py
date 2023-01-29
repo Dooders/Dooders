@@ -87,15 +87,3 @@ class Core:
             A dictionary of the component of the specified type.
         """
         return _COMPONENTS[component][name]
-    
-    # def get_component_dict(self, type: str, name: str):
-    #     return _COMPONENTS[type][name]
-    
-    # def get_components_dict(self, type: str):
-    #     return _COMPONENTS[type]
-    
-    # def get_func(self, type: str, name: str):
-    #     return _COMPONENTS[type][name].func
-    
-    # def get_funcs(self, type: str):
-    #     return [x.func for x in _COMPONENTS[type].values()]
