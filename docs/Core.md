@@ -9,7 +9,7 @@ Currently, the core components include [Actions](#Actions), [Steps](#Steps), [Po
 Actions are the primary way an object interacts with the simulation.
 
 ***For Example:***  
-A Dooder **moves** from one location to another. In this case the action is [move](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py).
+A Dooder **moves** from one location to another. In this case the action is [`move`](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py).
 
 ```python
 Action.execute('move', dooder)
