@@ -8,8 +8,8 @@ Currently, the core components include [Actions](#Actions), [Steps](#Steps), [Po
 
 Actions are the primary way an object interacts with the simulation.
 
-> ***For Example:***  
-> A Dooder **moves** from one location to another. In this case the action is [`move`](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py).
+***For Example:***  
+A Dooder **moves** from one location to another. In this case the action is [`move`](https://github.com/csmangum/Dooders/blob/main/sdk/actions/move.py).
 
 ```python
 Action.execute('move', dooder)
@@ -17,7 +17,7 @@ Action.execute('move', dooder)
 
 This command will start the process for a Dooder to move (with default settings, the Dooder will learn to search for energy via a neural network)
 
-More information on Actions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
+> More information on Actions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
 
 ## Steps
 
@@ -34,7 +34,7 @@ Step.forward('BasicStep', dooder)
 
 This command will step a Dooder forward based on the [BasicStep](https://github.com/csmangum/Dooders/blob/main/sdk/steps/dooder.py) logic. This logic can vary based on user settings, but currently, the default is a neural network.
 
-More information on Steps can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Steps.md)
+> More information on Steps can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Steps.md)
 
 ## Policies
 
@@ -49,7 +49,7 @@ Policy.execute('NeuralNetwork', dooder)
 
 This code will use the movement policy to create a neural network for the Dooder to learn to find energy (learning by experience). More details on how a Dooder can learn are [here](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md).
 
-More information on Policies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Policies.md)
+> More information on Policies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Policies.md)
 
 ## Strategies
 
@@ -68,7 +68,7 @@ strategies = Strategy.compile(ResourceStrategy)
 
 The code above loads the resource strategy, and then compiles it to be used in the simulation. The strategy is saved as a file and then loaded into the simulation. In this case, the result could be the number of new energy objects = 20.
 
-More information on Strategies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Strategies.md)
+> More information on Strategies can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Strategies.md)
 
 ## Conditions
 
@@ -85,7 +85,7 @@ result, reason = Condition.check('death', dooder)
 
 This code will check if the condition for death was met, and return the reason why. In this case, it could be based on starvation or another death condition.
 
-More information on Conditions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Conditions.md)
+> More information on Conditions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Conditions.md)
 
 ## Collectors
 
@@ -94,4 +94,4 @@ Collectors are functions that run every cycle to collect data from objects and m
 ***For example:***  
 Each model or object has several collectors. One example is a collector that keeps track of the number of energy objects in the Environment.
 
-More information on Collectors can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
+> More information on Collectors can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
