@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 @Condition.register('MaxCycles')
-def check_max_cycle(simulation: 'Simulation') -> bool:
+def max_cycle(simulation: 'Simulation') -> bool:
     """ 
     Check if the maximum number of cycles has been reached.
     
@@ -34,7 +34,7 @@ def check_max_cycle(simulation: 'Simulation') -> bool:
 
 
 @Condition.register('SimulationStopped')
-def check_simulation_running(simulation: 'Simulation') -> bool:
+def simulation_running(simulation: 'Simulation') -> bool:
     """ 
     Check if the simulation is still running.
     
@@ -53,7 +53,7 @@ def check_simulation_running(simulation: 'Simulation') -> bool:
 
 
 @Condition.register('ZeroDooders')
-def check_dooder_count(simulation: 'Simulation') -> bool:
+def dooder_count(simulation: 'Simulation') -> bool:
     """ 
     Check if the number of dooders has reached zero.
     
