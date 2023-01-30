@@ -15,7 +15,7 @@ import pandas as pd
 from db.main import DB
 from sdk.base.base_simulation import BaseSimulation
 from sdk.config import ExperimentParameters
-from sdk.core import Condition, Policy, Strategy
+from sdk.core import Condition, Policy, Step, Strategy
 from sdk.core.action import Action
 from sdk.models.resources import Resources
 from sdk.models.society import Society
@@ -51,6 +51,7 @@ class Simulation(BaseSimulation):
         self.society = Society(self)
         self.policies = Policy()
         self.actions = Action()
+        self.steps = Step()
         self.running = False
         self.send_to_db = send_to_db
         self.details = details
