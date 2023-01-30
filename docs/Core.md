@@ -15,7 +15,7 @@ A Dooder **moves** from one location to another. In this case the action is [`mo
 Action.execute('move', dooder)
 ```
 
-This command will start the process for a Dooder to move (with default settings, the Dooder will learn to search for energy via a neural network)
+This command will start the process for a Dooder to move (with default settings, the Dooder will learn to search for energy via a neural network model)
 
 > More information on Actions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
 
@@ -26,7 +26,7 @@ Steps are the logic a model or object executes during its cycle. In other words,
 The step logic will be executed every cycle in the simulation.
 
 ***For Example:***  
-A Dooder looking for energy, moving to a new location, then ending its turn.
+A Dooder looks for energy, moves to a new location, then ends its turn.
 
 ```python
 Step.forward('BasicStep', dooder)
