@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
-from sdk.core import Strategy, compile_strategy
+from sdk.core import Strategy
 from sdk.models.energy import Energy
 
 if TYPE_CHECKING:

@@ -33,7 +33,9 @@ class Step:
     forward(name: str, object: str) -> None
         Execute a step flow
     """
-    #! make this a dataclass above
+    #! need to update this to work with the new core class component list
+    #! make a variables core? to store all the variables in maybe a named tuple?
+    #! also need to add more step examples. Variables can be an easy thing to add on. energy allocation step or policy/strategy/function
     registry = {
         'Dooder': {},
         'Environment': {},

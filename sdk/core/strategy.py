@@ -58,7 +58,7 @@ class Strategy(Core):
         Returns:
             A dictionary of strategies.
         """
-        path = 'sdk/strategies/' + name + '.yml'
+        path = 'sdk/settings/' + name + '.yml'
         
         with open(path) as f:
             strategy = yaml.load(f, Loader=yaml.FullLoader)
@@ -111,40 +111,6 @@ class Strategy(Core):
             setattr(model, key, value)
 
         return compiled_strategy
-
-def compile_strategy(model: Any, raw_strategy: Any):
-    """ 
-    Compiles a strategy.
-    
-    Args:
-        model: The model to compile the strategy for.
-        raw_strategy: The raw strategy to compile.
-        
-    Returns:
-        A compiled strategy.
-    """
-    
-    compiled_strategy = {}
-    
-    for strat_name, strat in raw_strategy.items():
-        func = Core.get_func(strat['Func'], strat['Type'])
-        args = strat['Args']
-        
-        if strat['Type'] == 'placement':
-            compiled_strategy[strat_name] = func(
-                model.simulation, compiled_strategy[strat['Dependency']])
-
-        else:
-            compiled_strategy[strat_name] = func(**args)
-
-    for key, value in compiled_strategy.items():
-        setattr(model, key, value)
-
-    return compiled_strategy
-
-def recalculate_strategy(strategy, variable):
-    #! might need this to recalculate strategies that are dependent on a strategy that changes by user input
-    pass
     
 
 
@@ -161,4 +127,3 @@ def recalculate_strategy(strategy, variable):
 #! dooders can share rules and values that they know aboit. sometimes they are wrong and share bad info
 #! can i programatically and mechanically create inference from dooder experimemtation or learning from others???
 #! the more rule and values I add, the more complexity, and the more imformation a dooder has to adpat to the growing complexity
-
