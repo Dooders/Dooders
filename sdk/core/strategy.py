@@ -96,13 +96,13 @@ class Strategy(Core):
         compiled_strategy = {}
         
         for strat_name, strat in raw_strategy.items():
-            strategies = cls.get_component('sdk.strategies', strat['Type'])
-            func = strategies[strat['Func']].function
-            args = strat['Args']
+            strategies = cls.get_component('sdk.strategies', strat['type'])
+            func = strategies[strat['function']].function
+            args = strat['args']
             
-            if strat['Type'] == 'placement':
+            if strat['type'] == 'placement':
                 compiled_strategy[strat_name] = func(
-                    model.simulation, compiled_strategy[strat['Dependency']])
+                    model.simulation, compiled_strategy[strat['dependency']])
 
             else:
                 compiled_strategy[strat_name] = func(**args)
