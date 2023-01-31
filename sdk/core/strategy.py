@@ -111,6 +111,10 @@ class Strategy(Core):
             setattr(model, key, value)
 
         return compiled_strategy
+    #! maybe pass a long the functions and not the results. on __call__ return the result
+    #! then would need a strategy base class that has a __call__ method?????
+    #! how to handle the args?????? the easiest way. need a better way
+    #! maybe the strategy must be able to have only 1 arg??? and it supplies wht it needs...nah model must be self
     
 
 

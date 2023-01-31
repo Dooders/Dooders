@@ -82,6 +82,8 @@ class Resources:
         dictionary.
         """
 
+        #! add in to do .next() instead of settings resetting every cycle
+        #! use placement strategy w/ dooders too?
         for location in self.EnergyPlacement:
             if len(self.available_resources) < self.MaxTotalEnergy:
                 unique_id = self.simulation.generate_id()
