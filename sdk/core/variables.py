@@ -19,11 +19,22 @@ class Variable(BaseModel):
     type: str
     description: Union[str, None]
     default: Setting
+    dependency: Union[str, None]
+
 
 class Variables:
-    
+
     variables = {}
-    
+      
+    @classmethod  
+    def list(cls, name=None) -> None:
+        """ List all variables """
+        cls.discover()
+        if name:
+            return cls.variables[name]
+        else:
+            return cls.variables
+
     @classmethod
     def discover(cls) -> None:
         """ Discover all setting options """
@@ -31,13 +42,15 @@ class Variables:
         for file in os.listdir('sdk/settings'):
             if file.endswith('.yml'):
                 with open('sdk/settings/' + file) as f:
-                    
+
                     options = yaml.load(f, Loader=yaml.FullLoader)
                     option_list = []
                     for name, option in options.items():
-                        default = Setting(**option)
-                        variable = Variable(name=name, 
-                                            type=option['type'], 
-                                            default=default)
+                        default = Setting(function=option['function'],
+                                          args=option['args'])
+                        variable = Variable(name=name,
+                                            default=default,
+                                            **option)
+
                         option_list.append(variable)
                 cls.variables[file.split('.')[0]] = option_list

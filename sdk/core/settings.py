@@ -9,11 +9,13 @@ from pydantic import BaseModel
 
 
 class Setting(BaseModel):
-    type: str
     function: Union[Callable, str]
     args: Union[Dict, str, None]
-    description: Union[str, None]
-    dependency: Union[str, None]
 
 class Settings(BaseModel):
     pass
+
+    @classmethod
+    def from_dict(cls, settings: Dict) -> 'Settings':
+        """ Create a settings object from a dictionary """
+        pass
