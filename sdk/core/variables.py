@@ -1,33 +1,23 @@
-
-import os
-from typing import Union
-
-import yaml
-from pydantic import BaseModel
-
 """ 
 Variables
 ---------
 This module contains the variables class for the SDK.
 """
 
-from sdk.core.settings import Setting
+import os
+
+import yaml
+
+from sdk.utils.types import Setting, Variable
 
 
-class Variable(BaseModel):
-    name: str
-    type: str
-    description: Union[str, None]
-    default: Setting
-    dependency: Union[str, None]
-
-
+#! design this like I did settings????
 class Variables:
 
     variables = {}
       
     @classmethod  
-    def list(cls, name=None) -> None:
+    def compile(cls, name=None) -> None:
         """ List all variables """
         cls.discover()
         if name:
