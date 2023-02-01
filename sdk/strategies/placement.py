@@ -21,5 +21,7 @@ def random_location(simulation: 'Simulation', number: int) -> list:
     locations = [(loc[1], loc[2])
                  for loc in simulation.environment.coord_iter()]
     random_locations = choices(locations, k=number)
-
+    #! yield instead of return???? test this out
+    #! have the number generated too
+    #! make __call__ method to return when called
     return random_locations

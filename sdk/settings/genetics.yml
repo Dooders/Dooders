@@ -1,0 +1,61 @@
+---
+StartingEnergySupply:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 10, "max": 15 }
+  description: The amount of energy the Dooder will start with
+MaxEnergySupply:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 30, "max": 50 }
+  description: The max amount of energy that a Dooder can hold at one time
+Metabolism:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 2 }
+  description: A value between 1.0 and 2.0 that is used as an exponential value
+SurvivalProbability:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 100 }
+  description:
+ReproductionProbability:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 100 }
+  description:
+ReproductionEnergyCost:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 1, "max": 5 }
+  description:
+ReproductionSuccessProbability:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 100 }
+  description:
+MoveProbability:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 100, 'variation': 10 }
+  description:
+MoveSuccessProbability:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 100 }
+  description:
+MovementEnergyCost:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 1, "max": 3 }
+  description:
+ActionSuccessProbability:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 5, "max": 15 }
+  description: The probability that the chosen action will be successful
+TakeActionProbability:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 5, "max": 15 }
+  description: The probability that the dooder will make an action during its turn

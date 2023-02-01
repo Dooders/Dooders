@@ -1,0 +1,12 @@
+---
+SeedCount:
+  type: generation
+  function: fixed_value
+  args: { "value": 10 }
+  description: ''
+SeedPlacement:
+  type: placement
+  function: random_location
+  args: ~
+  description: ''
+  dependency: SeedCount

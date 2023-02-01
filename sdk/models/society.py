@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from sdk.base.base_simulation import BaseSimulation
 
 
-SeedStrategy = Strategy.load('seed')
+SeedStrategy = Strategy.load('society')
 
 
 class Attributes(BaseModel):

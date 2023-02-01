@@ -1,0 +1,6 @@
+---
+EnergyLifespan:
+  type: "generation"
+  function: "uniform_distribution"
+  description: ''
+  args: { "min": 2, "max": 5 }

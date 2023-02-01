@@ -9,7 +9,7 @@ from sdk.core import Policy
 
 
 @Action.register()
-def reproduce(dooderA) -> None:
+def reproduce(dooderX) -> None:
     """
     Apply the reproduction policy to two dooders, 
     create the offspring dooder
@@ -20,31 +20,32 @@ def reproduce(dooderA) -> None:
     dooderA: Dooder 
         The first Dooder.
     """
-    reproduction_policy = dooderA.simulation.params.get('Policies').Reproduction
+    reproduction_policy = dooderX.simulation.params.get('Policies').Reproduction
 
-    if dooderA.hunger == 0 and dooderA.age > 5:
+    #! make this a condition
+    if dooderX.hunger == 0 and dooderX.age > 5:
 
-        dooderB = dooderA.find_partner()
+        dooderY = dooderX.find_partner()
 
-        if dooderB:
-            genetics = Policy.execute(reproduction_policy, dooderA, dooderB) #! make sure this will execute for all internal_models
-            offspring = dooderA.simulation.society._generate_dooder(
-                dooderA.position)
+        if dooderY:
+            genetics = Policy.execute(reproduction_policy, dooderX, dooderY) #! make sure this will execute for all internal_models
+            offspring = dooderX.simulation.society._generate_dooder(
+                dooderX.position)
             offspring.internal_models.inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models
             offspring.simulation.society.place_dooder(
                 offspring, offspring.position)
             
-            offspring.parents = (dooderA.unique_id, dooderB.unique_id)
+            offspring.parents = (dooderX.unique_id, dooderY.unique_id)
             
-            dooderA.reproduction_count += 1
-            dooderB.reproduction_count += 1
+            dooderX.reproduction_count += 1
+            dooderY.reproduction_count += 1
 
-            dooderA.log(granularity=1,
-                        message=f"Reproduced with {dooderB.unique_id} and created {offspring.unique_id}",
+            dooderX.log(granularity=1,
+                        message=f"Reproduced with {dooderY.unique_id} and created {offspring.unique_id}",
                         scope='Dooder')
 
         else:
-            dooderA.log(granularity=1, message="No partner found",
+            dooderX.log(granularity=1, message="No partner found",
                         scope='Reproduction')
 
     else:

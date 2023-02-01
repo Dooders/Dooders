@@ -1,0 +1,17 @@
+---
+EnergyPerCycle:
+  type: "generation"
+  function: "uniform_distribution"
+  args: { "min": 5, "max": 15 }
+  description: ''
+MaxTotalEnergy:
+  type: "generation"
+  function: "normal_distribution"
+  args: { "min": 1, "max": 100 }
+  description: ''
+EnergyPlacement:
+  type: "placement"
+  function: "random_location"
+  args: None
+  description: ''
+  dependency: "EnergyPerCycle"
