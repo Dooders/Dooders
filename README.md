@@ -19,6 +19,8 @@ Unpacking the terminology a bit:
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
 
+Take a look on how a Dooder will [learn]() or the [core components]() of the library.
+
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
