@@ -4,9 +4,9 @@ from sdk.steps import *
 from sdk.policies import *
 from sdk.core.step import *
 from sdk.core.core import _COMPONENTS
-from sdk.core.variables import Variables
+from sdk.core.settings import Settings
 
-class Configurator:
+class Configure:
     """ 
     
     """

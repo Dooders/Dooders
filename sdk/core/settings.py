@@ -8,9 +8,10 @@ from typing import Dict
 
 from sdk.core import Strategy
 from sdk.core.variables import Variables
+from sdk.core.core import _COMPONENTS
 
-# no need to store instance of this anymore
-# Strategy.compile() # have this return dict of strategies, then get variables, then finalize the settings
+#! no need to store instance of this anymore
+#! Strategy.compile() # have this return dict of strategies, then get variables, then finalize the settings
 
 class Settings:
     #! need to test this class out
@@ -26,14 +27,37 @@ class Settings:
     
     def update(self, settings) -> 'Settings':
         """ Compile a settings object from a dictionary """
+        self.settings['variables'] = self.update_variables(settings)
+        self.settings['components'] = self.update_components(settings)
+        
+        
+    def update_components(self, settings):
+        """ Update component settings """
+        final_components = {}
+        for component, modules in _COMPONENTS.items():
+            for module, functions in modules.items():
+                for function in functions:
+                    if function.name in settings:
+                        final_components[function.name] = settings[function.name]
+                    else:
+                        final_components[function.name] = function.default
+                        
+        return final_components
+    
+    def update_variables(self, settings):
         #! double check this
+        """ Update variable settings """
         variable_dict = Variables.compile()
+        final_variables = {}
         for variables in variable_dict.values():
             for variable in variables:
                 if variable.name in settings:
-                    self.settings[variable.name] = settings[variable.name]
+                    final_variables[variable.name] = settings[variable.name]
                 else:
-                    self.settings[variable.name] = variable.default
+                    final_variables[variable.name] = variable.default
+                    
+        return final_variables
+        
     
     def compile(self, name):
         #! clean up the Strategy class???
