@@ -19,7 +19,7 @@ Unpacking the terminology a bit:
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
 
-Take a look on how a Dooder will [learn]() or the [core components]() of the library.
+Take a look on how a Dooder will [learn](), get an overview of the [core components]() of the library, or read [why]() I started the project.
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
@@ -53,10 +53,6 @@ This project is a space where I can experiment, learn more about complexity theo
 | Performance & Efficiency                                                                      | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point                           |
 | Simulation parameters                                                                         | Make it so simulation strategies and parameters can be changed easily                                                                                        |
 | Senses model                                                                                  | Right now a Dooder has no way to aquire information that isn't directly fed to it. A senses model allows a Dooder to aquire information from the environment |
-
-## Why?
-
-[A thoughtful and informative explanation](https://media.giphy.com/media/ihvwnO5pHKtyTYQWxU/giphy.gif)  (A better [answer](https://rememberization.substack.com/p/why-dooders))
 
 ## Learn more
 [Core Components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md)
