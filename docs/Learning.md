@@ -1,11 +1,11 @@
 # Learning
 
-A majority of research will be spent experimenting with different methods and techniques for a Dooder to learn from the environment.
+One of my primary goals is to experiment how a Dooder can learn from the environment. A majority of research will be spent testing different methods and techniques for a Dooder to take information from the simulation and use it to extend its life.
 
-Basically, the Dooder agent will learn through its experiences and perceptions in the simulation. How that Dooder takes those experiences and perceptions and turns it into decisions, is the piece that willbe open to experimentation.
+Basically, the Dooder agent will learn through its experiences and perceptions in the simulation. How that Dooder takes those experiences and perceptions and turns it into decisions, is the piece that is open to experimentation.
 
 ### Basic Example
-Simple Neural network based movement. Driven by
+Simple Neural network based movement. Goal driven targets.
 
 Logic
 
