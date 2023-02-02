@@ -17,7 +17,7 @@ Unpacking the terminology a bit:
 
 * **Complex**: The library simulates not only a single system, but systems of systems.[^2]  
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
-* **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
+* **Simulation**: An imitation of a system via models; executed to study the behavior.  
 
 Take a look on how a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why](https://github.com/csmangum/Dooders/blob/main/docs/Why.md) I started the project.
 
