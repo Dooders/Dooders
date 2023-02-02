@@ -40,6 +40,9 @@ This project is a space where I can experiment, learn more about complexity theo
 ## How it works
 
    > TBD
+   
+## Current Functionality
+
   
 ## Future Plans
 
