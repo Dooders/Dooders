@@ -19,7 +19,7 @@ Unpacking the terminology a bit:
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system through a model. Executed to study the behavior.  
 
-Take a look on how a Dooder will [learn](), get an overview of the [core components]() of the library, or read [why]() I started the project.
+Take a look on how a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why](https://github.com/csmangum/Dooders/blob/main/docs/Why.md) I started the project.
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
