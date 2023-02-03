@@ -4,7 +4,14 @@ One of my primary goals is to experiment how a Dooder can learn from the environ
 
 Basically, the Dooder agent will learn through its experiences and perceptions in the simulation. How that Dooder takes those experiences and perceptions and turns it into decisions, is the piece that is open to experimentation.
 
-### Basic Example
+## Minds
+
+A mind is a model for the way the Dooder experiences and acts in the simulation. 
+
+### Example
+
+A literal model of a Dooder's mind
+
 Simple Neural network based movement. Goal driven targets.
 
 Logic
