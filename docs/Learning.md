@@ -1,29 +1,27 @@
 # Learning
 
-One of my primary goals is to experiment how a Dooder can learn from the environment. A majority of research will be spent testing different methods and techniques for a Dooder to take information from the simulation and use it to extend its life.
+One of the primary goals of the project is to experiment how a Dooder can learn from the environment. This involves research dedicated to testing different methods and techniques for a Dooder to take information from the simulation and use it to extend its life.
 
-Basically, the Dooder agent will learn through its experiences and perceptions in the simulation. How that Dooder takes those experiences and perceptions and turns it into decisions, is the piece that is open to experimentation.
+Basically, the Dooder agent will learn through its experiences and perceptions in the simulation.
 
-## Minds
+## Mind Models
 
-A mind is a model for the way the Dooder experiences and acts in the simulation. 
+A mind is a model for the way the Dooder experiences and acts in the simulation. How it perceives the environment and how it reacts to it.
 
 ### Example
 
-A literal model of a Dooder's mind
+A literal interpretation of the process of a mind is described below.
+
+
+
+### Neural Networks
 
 Simple Neural network based movement. Goal driven targets.
+The weights and biases of a neural network serves as a form of genetic memory. Memory stored over iterations that is unaccessible to the Dooder. Although, the weights can be adjusted based on the Dooder's experiences and choices.
 
-Logic
+### Future Research
 
-Design
-
-The weights and biases of a neural network serves as a form of genetic memory for the Dooder. Memory stored over iterations that is inexsesible to the agent.
-
-
-### Future Designs
-Research more on:
-- Baysieyan Neural Networks
-- Feed-Forward Neural Networks
-- Reinforcement Learning
-- Graph Neural Networks
+* Bayesian Neural Networks
+* Feed-Forward Neural Networks
+* Reinforcement Learning
+* Graph Neural Networks

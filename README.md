@@ -19,7 +19,7 @@ Unpacking the terminology a bit:
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system via models; executed to study the behavior.  
 
-Take a look on how a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why](https://github.com/csmangum/Dooders/blob/main/docs/Why.md) I started the project.
+Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why I started the project](https://github.com/csmangum/Dooders/blob/main/docs/Why.md).
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
@@ -37,14 +37,19 @@ This project is a space where I can experiment, learn more about complexity theo
 | [**Energy**](docs/Energy.md)           | An object that allows a Dooder to perform “work” (execute movements and actions)       |
 | [**Cycle**](docs/Concepts.md)          | An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps         |
   
-## How it works
+### How it works
 
    > TBD
-   
-## Current Functionality
 
-  
-## Future Plans
+### Current Functionality
+
+| Feature | Description |
+| :------ | :---------- |
+| [Reproduction](docs/Reproduction.md) | Dooders can reproduce with variable genetic blending|
+| [Movement](docs/Movement.md) | Dooders can move around the environment, primarily searching for energy |
+| [Core Components](docs/Core.md) | Underlying infrastructure for the library |
+
+### Future Plans
 
 | Idea                                                                                          | Description                                                                                                                                                  |
 | :-------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -56,9 +61,6 @@ This project is a space where I can experiment, learn more about complexity theo
 | Performance & Efficiency                                                                      | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point                           |
 | Simulation parameters                                                                         | Make it so simulation strategies and parameters can be changed easily                                                                                        |
 | Senses model                                                                                  | Right now a Dooder has no way to aquire information that isn't directly fed to it. A senses model allows a Dooder to aquire information from the environment |
-
-## Learn more
-[Core Components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md)
   
 ### Footnotes
 
