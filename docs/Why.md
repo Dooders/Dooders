@@ -1,21 +1,19 @@
 # Why Dooders
 
-I'm interested in how things work and in how information can be turned into knowledge and actions.
+I'm fascinated by how things function and how information can be transformed into knowledge and action. I have been seeking a personal project that allows me to indulge my curiosity and experiment with different concepts.
 
-I like seeing how ideas and technologies can weave together in novel ways. For quite some time, I've wanted a personal project that allowed me to be curious and play around with different ideas.
+I see myself as a generalist and have a broad range of interests. In recent years, I've emphasized exploring many topics over a deep dive into one specific area, recognizing the benefits and drawbacks of both approaches.
 
-I consider myself more of a generalist and I am curious in just about everything. In recent years I’ve focused more on breadth than depth, both of which have their own advantages and disadvantages.
+This project aligns with my interests and provides an opportunity to explore more. I aim to create a continuously evolving and improving project.
 
-Dooders is a project that combines many of my interests; and areas I want to explore more. I hope to create something that is continually improving and evolving.
+My primary objectives are to:
 
-The primary goals of the project are to:
+1. Develop a simulation sandbox that enables ongoing experimentation.
+2. Improve my understanding of complex dynamical systems.
+3. Investigate and discover methods for creating intelligent agents.
 
-1. Create a simulation sandbox deigned for continual experimentation
-2. Gain a better intuition into the mechanics and behaviors of complex dynamical systems
-3. Explore and discover methods to develop intelligent agents
+I envision a future where bespoke intelligent agents, designed for specific purposes or tasks, will become accessible to everyone. These agents will be capable of learning and functioning within dynamic, persistent digital environments.
 
-In the near future, I believe there will be a new niche in AI development filled with bespoke intelligent agents (created for specific utility, traits, or tasks), available to everyone. Agents that are able to learn and think inside a dynamic and persistent digital environment.
+The development of the project will likely follow an evolutionary path, starting with basic implementations similar to single-celled organisms and gradually increasing the complexity of both the environment and the agents.
 
-The project will likely follow an evolutionary-like development trajectory; starting with simple implementations akin to single-celled bacteria, adding complexity to the environment and agent as far as I am able.
-
-No matter the end result, I know I’m going to enjoy the ride.
+Regardless of the outcome, I'm excited for the journey.
