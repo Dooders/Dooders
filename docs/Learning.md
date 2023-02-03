@@ -18,6 +18,8 @@ Logic
 
 Design
 
+The weights and biases of a neural network serves as a form of genetic memory for the Dooder. Memory stored over iterations that is inexsesible to the agent.
+
 
 ### Future Designs
 Research more on:
