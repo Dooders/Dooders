@@ -1,6 +1,6 @@
 # Dooder
 
-*** This page is a work-in-progress***
+***This page is a work-in-progress***
 
 A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power, in other words, it has the ability to interact with its environment.[^1]
 
