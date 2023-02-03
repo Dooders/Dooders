@@ -7,10 +7,6 @@
 
 > Reality works; simulate it.  
 
-Systems are anything composed of interacting and dynamic components. For example, Earth's environment is a complex ecological system. A [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/) is a ever-changing chemical system. Systems can be digital too, like a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png). 
-
-Systems are everywhere.[^1]  
-
 Dooders is a python library for *complex model-based simulations*.  
 
 Unpacking the terminology a bit:  
@@ -18,6 +14,10 @@ Unpacking the terminology a bit:
 * **Complex**: The library simulates not only a single system, but systems of systems.[^2]  
 * **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
 * **Simulation**: An imitation of a system via models; executed to study the behavior.  
+
+Systems refer to collections of interacting and evolving components. These can range from the complex ecological system of the Earth's environment, the dynamic chemical system of a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/), to even digital systems such as a company's [internal network]((https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png).
+
+Systems are everywhere.[^1]  
 
 Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why I started the project](https://github.com/csmangum/Dooders/blob/main/docs/Why.md).
 
