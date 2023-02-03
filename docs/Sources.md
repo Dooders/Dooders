@@ -1,5 +1,7 @@
 I've included details of the sources that I've found value or inspiration for the project
 
+***This page is a work-in-progress***
+
 ## Books
 
 | Name | Description |

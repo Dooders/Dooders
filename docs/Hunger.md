@@ -1,5 +1,7 @@
 # Hunger
 
+***This page is a work-in-progress***
+
 * Hunger will be set to 0 when the Dooder is created  
 * During a step, if the dooder didn't consume energy, hunger increases by 1  
 * If Dooder comsumes energy, hunger resets to 0  

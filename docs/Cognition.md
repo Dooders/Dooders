@@ -1,3 +1,3 @@
 # Cognition
 
-> Work in progress  
+***This page is a work-in-progress*** 

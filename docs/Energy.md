@@ -1,5 +1,7 @@
 # Energy
 
+***This page is a work-in-progress***
+
 Energy is an measure of the ability to do work. A Dooder uses energy to move or perform actions.
 
 ## Highlights
