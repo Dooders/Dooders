@@ -19,6 +19,8 @@ Systems refer to collections of interacting and evolving components. These can r
 
 Systems are everywhere.[^1]  
 
+A [Dooder](docs/Dooder.md) is an agent object with an amount of causal 'control' in the simulation.
+
 Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why I started the project](https://github.com/csmangum/Dooders/blob/main/docs/Why.md).
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
@@ -29,7 +31,6 @@ This project is a space where I can experiment, learn more about complexity theo
 
 | Concept                                | Explanation                                                                            |
 | :------------------------------------- | -------------------------------------------------------------------------------------- |
-| [**Dooder**](docs/Dooder.md)           | An agent object with an amount of causal 'control' in the simulation                   |
 | [**Model**](docs/Concepts.md#Model)    | Analogous to a system. In reality, just about everything is a system of some kind      |
 | [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment, Society) |
 | [**Experiment**](docs/Experiment.md)   | One or multiple simulations                                                            |
