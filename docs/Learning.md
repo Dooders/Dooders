@@ -1,8 +1,8 @@
 # Learning
 
-One of the primary goals of the project is to experiment how a Dooder can learn from the environment. This involves research dedicated to testing different methods and techniques for a Dooder to take information from the simulation and use it to extend its life.
+A main objective of the project is to explore the learning capabilities of Dooders within the environment. This requires systematic experimentation to evaluate various strategies and approaches for the Dooder to gather information from the simulation and apply it towards increasing its longevity.
 
-Basically, the Dooder agent will learn through its experiences and perceptions in the simulation.
+In essence, the Dooder agent will exhibit learning through its exposure and interpretation of the simulated environment.
 
 ## Mind Models
 
