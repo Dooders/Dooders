@@ -1,5 +1,6 @@
 ---
 EnergyLifespan:
+# change type to strategy
   type: "generation"
   function: "uniform_distribution"
   description: ''
