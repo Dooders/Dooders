@@ -5,33 +5,30 @@ This module contains the variables class for the SDK.
 """
 
 import os
+from typing import Dict
 
 import yaml
 
 from sdk.utils.types import Setting, Variable
 
 
-#! design this like I did settings????
 class Variables:
+    """ 
+    Discover all variables for the applicable models
+    """
 
     variables = {}
-      
-    @classmethod  
-    def compile(cls, name=None) -> None:
-        """ List all variables """
-        cls.discover()
-        if name:
-            return cls.variables[name]
-        else:
-            return cls.variables
 
     @classmethod
-    def discover(cls) -> None:
-        """ Discover all setting options """
+    def discover(cls) -> Dict[str, list]:
+        """ 
+        Discover all setting options 
 
-        for file in os.listdir('sdk/settings'):
+        """
+
+        for file in os.listdir('sdk/variables'):
             if file.endswith('.yml'):
-                with open('sdk/settings/' + file) as f:
+                with open('sdk/variables/' + file) as f:
 
                     options = yaml.load(f, Loader=yaml.FullLoader)
                     option_list = []
@@ -44,3 +41,5 @@ class Variables:
 
                         option_list.append(variable)
                 cls.variables[file.split('.')[0]] = option_list
+
+        return cls.variables

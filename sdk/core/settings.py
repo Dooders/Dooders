@@ -15,12 +15,13 @@ EXAMPLE_SETTINGS = {}
 
 
 class Settings:
+    
     settings = {}
     
     def __init__(self, settings: dict = {}):
         self.update(settings)
     
-    def update(self, settings) -> 'Settings':
+    def update(self, settings):
         """ Compile a settings object from a dictionary """
         self.settings['variables'] = self.update_variables(settings)
         self.settings['components'] = self.update_components(settings)
@@ -41,7 +42,7 @@ class Settings:
     def update_variables(self, settings):
         """ Update variable settings """
         #! missing the model as a key like in components
-        variable_dict = Variables.compile()
+        variable_dict = Variables.discover()
         final_variables = {}
         for variables in variable_dict.values():
             for variable in variables:
