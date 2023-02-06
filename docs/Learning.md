@@ -40,3 +40,6 @@ The weights that fit closest to the simulation dynamics will persist through gen
 * Feed-Forward Neural Networks
 * Reinforcement Learning
 * Graph Neural Networks
+* Hierarchical Learning
+
+
