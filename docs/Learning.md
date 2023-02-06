@@ -8,6 +8,8 @@ In essence, the Dooder agent will exhibit learning through its exposure and inte
 
 A mind is a model for the way the Dooder experiences and acts in the simulation, how it perceives the environment, and how it reacts to it. A Dooder's mind model is a representation of its cognitive process in the simulation.
 
+The model is activated each step for every Dooder in the Environment.
+
 ### Example
 
 Here is one example of a mind model that takes a literal interpretation of the process during a Dooder's step.
@@ -28,7 +30,9 @@ Research is currently focused on using neural networks as a key component of the
 
 ### Neural Networks
 
-A cognitive and intuitive design approach, utilizing a straightforward neural network with back-propagation, is being utilized to direct the movements of a Dooder towards a target, such as Energy or another Dooder. The weights and biases in the neural network serve as a genetic memory, recording information over successive iterations that are directly inaccessible to the Dooder. However, the weights can be modified based on the experiences and decisions made by the Dooder (model training).
+The default design uses a straightforward neural network with back-propagation. The weights and biases in the neural network serve as a genetic memory, recording information over successive iterations that are directly inaccessible to the Dooder. However, the weights can be modified based on the experiences and decisions made by the Dooder (model training).
+
+The weights that fit closest to the simulation dynamics will persist through generations of Dooders.
 
 ### Future Research
 
