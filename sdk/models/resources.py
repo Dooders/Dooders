@@ -101,7 +101,6 @@ class Resources:
         The Information class will have historical data for attributes after
         each cycle.
         """
-
         for resource in list(self.available_resources.values()):
             resource.step()
 
