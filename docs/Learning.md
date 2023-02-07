@@ -30,9 +30,11 @@ Research is currently focused on using neural networks as a key component of the
 
 ### Neural Networks
 
-The default design uses a straightforward neural network with back-propagation. The weights and biases in the neural network serve as a genetic memory, recording information over successive iterations that are directly inaccessible to the Dooder. However, the weights can be modified based on the experiences and decisions made by the Dooder (model training).
+The default design uses a straightforward [neural network](https://github.com/csmangum/Dooders/blob/main/sdk/learning/nets/model.py) with back-propagation. The weights and biases in the neural network serve as a genetic memory, recording information over successive iterations that are directly inaccessible to the Dooder. However, the weights can be modified based on the experiences and decisions made by the Dooder (model training).
 
 The weights that fit closest to the simulation dynamics will persist through generations of Dooders.
+
+Example implementation: [movement policy](https://github.com/csmangum/Dooders/blob/main/sdk/policies/movement.py)
 
 ### Future Research
 
