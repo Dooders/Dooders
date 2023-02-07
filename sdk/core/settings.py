@@ -2,31 +2,65 @@
 Settings
 --------
 This module contains the settings class for the SDK.
+
+Settings are used to configure the simulation and models. The settings
+class is used to compile the settings dictionary from a user-provided
+dictionary. The settings dictionary is then used to configure the
+simulation and models.
 """
 
-from typing import Dict
-
-from sdk.core import Strategy
-from sdk.core.variables import Variables
 from sdk.core.core import _COMPONENTS
-
-
-EXAMPLE_SETTINGS = {}
+from sdk.core.variables import Variables
 
 
 class Settings:
+    """ 
+    Settings class to update defaults, if provided by the user.
     
-    settings = {}
-    
-    def __init__(self, settings: dict = {}):
+    On initialization, the settings dictionary is updated with the
+    user-provided settings. The settings dictionary is then used to
+    configure the simulation and models.
+
+    Parameters
+    ----------
+    settings : dict
+        The settings dictionary to update, provided by the user.
+
+    Attributes
+    ----------
+    settings : dict
+        The settings dictionary used to assemble the simulation.
+
+    Methods
+    -------
+    update(settings: dict)
+        Update the settings dictionary.
+    update_components(settings: dict)
+        Update the component settings.
+    update_variables(settings: dict)
+        Update the variable settings.
+    get(setting: str)
+        Get a setting from the settings dictionary.
+    """
+
+    settings: dict = {}
+
+    def __init__(self, settings: dict = {}) -> None:
         self.update(settings)
-    
-    def update(self, settings):
-        """ Compile a settings object from a dictionary """
+
+    def update(self, settings: dict) -> None:
+        """ 
+        Compile a settings object from a dictionary 
+
+        Parameters
+        ----------
+        settings : dict
+            The settings dictionary to update, provided by the user.
+        """
         self.settings['variables'] = self.update_variables(settings)
         self.settings['components'] = self.update_components(settings)
-        
-    def update_components(self, settings):
+
+    def update_components(self, settings: dict) -> dict:
         """ Update component settings """
         final_components = {}
         for component, modules in _COMPONENTS.items():
@@ -36,28 +70,55 @@ class Settings:
                         final_components[function] = settings[function]
                     else:
                         final_components[function] = function
-                        
+
         return final_components
-    
-    def update_variables(self, settings):
-        """ Update variable settings """
-        #! missing the model as a key like in components
+
+    def update_variables(self, settings: dict) -> dict:
+        """
+        Update variable settings based on user input.
+
+        If a setting is not provided, the default option will be used.
+
+        Parameters
+        ----------
+        settings : dict
+            The settings dictionary to update, provided by the user.
+
+        Returns
+        -------
+        final_settings : dict
+            The updated settings dictionary for all model variables.
+        """
         variable_dict = Variables.discover()
-        final_variables = {}
-        for variables in variable_dict.values():
+        final_settings = {}
+        for model, variables in variable_dict.items():
+            model_settings = {}
             for variable in variables:
-                if variable.name in settings:
-                    final_variables[variable.name] = settings[variable.name]
-                else:
-                    final_variables[variable.name] = variable.default
-                    
-        return final_variables
-    
-    def compile(self, name):
-        #! clean up the Strategy class
-        strategies = Strategy.dict()
-        pass
-    
-    def get(self, model: str) -> 'Settings':
-        """ Get a setting """
-        return self.settings[model]
+                model_settings[variable.name] = settings.get(
+                    variable.name, variable.default)
+            final_settings[model] = model_settings
+
+        return final_settings
+
+    def get(self, type: str, model: str = None) -> dict:
+        """
+        Get settings for a given model.
+
+        Parameters
+        ----------
+        type : str
+            The type of settings to return. Options are 'variables' or
+            'components'.
+        model : str, optional
+            The model to return settings for. If no model is provided, the
+            settings for all models will be returned.
+
+        Returns
+        -------
+        settings : dict
+            The settings for the given model.
+        """
+        if model is None:
+            return self.settings[type]
+        else:
+            return self.settings[type][model]

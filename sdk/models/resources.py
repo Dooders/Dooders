@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
-from sdk.core import Strategy
 from sdk.models.energy import Energy
 
 if TYPE_CHECKING:
@@ -22,10 +21,6 @@ class Attributes(BaseModel):
     allocated_energy: int = 0
     dissipated_energy: int = 0
     consumed_energy: int = 0
-
-
-ResourceStrategy = Strategy.load('resources')
-
 
 class Resources:
     """ 
@@ -70,7 +65,6 @@ class Resources:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
-        self.strategies = Strategy.compile(self, ResourceStrategy)
         self.reset()
 
     def allocate_resources(self) -> None:
@@ -81,12 +75,11 @@ class Resources:
         environment. The Energy object will be added to the available_resources
         dictionary.
         """
-
-        #! add in to do .next() instead of settings resetting every cycle
         #! use placement strategy w/ dooders too?
-        for location in self.EnergyPlacement:
-            if len(self.available_resources) < self.MaxTotalEnergy:
+        for location in self.EnergyPlacement():
+            if len(self.available_resources) < self.MaxTotalEnergy():
                 unique_id = self.simulation.generate_id()
+                #! energy.from_settings
                 energy = Energy(unique_id, location, self)
                 self.simulation.environment.place_object(energy, location)
                 self.available_resources[unique_id] = energy
@@ -112,7 +105,6 @@ class Resources:
         for resource in list(self.available_resources.values()):
             resource.step()
 
-        self.strategies = Strategy.compile(self, ResourceStrategy)
         self.reset()
         self.allocate_resources()
 

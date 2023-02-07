@@ -10,9 +10,9 @@ A model defines a strategy through a yaml file.
 Add a new strategy with the register decorator
 """
 
+from functools import partial
 from typing import Any, Callable, Optional
 
-import yaml
 from pydantic import BaseModel
 
 from sdk.core.core import Core
@@ -43,91 +43,62 @@ class BaseStrategy(BaseModel):
 
 
 class Strategy(Core):
-    
+
     def __init__(self):
-      from sdk import strategies
+        from sdk import strategies
 
     @classmethod
-    def load(cls, name: str) -> dict:
+    def search(cls, function_name: str) -> Any:
         """ 
-        Loads a strategy from a YAML file.
-        
-        Args:
-            path: The path to the YAML file.
-            
-        Returns:
-            A dictionary of strategies.
-        """
-        path = 'sdk/settings/' + name + '.yml'
-        
-        with open(path) as f:
-            strategy = yaml.load(f, Loader=yaml.FullLoader)
+        Search for a strategy by function name.
 
-        return strategy
+        Parameters
+        ----------
+        function_name : str
+            The name of the function to search for.
+        """
+        components = cls.get_components('sdk.strategies')
+
+        for k, v in components.items():
+            if isinstance(v, dict):
+                for k2, v2 in v.items():
+                    if k2 == function_name:
+                        return v2
+        return None
 
     @classmethod
-    def get(cls, strategy: str, scope: str) -> Callable:
+    def compile(cls, model: Callable, settings: dict) -> dict:
         """ 
-        Get a strategy from the registry.
-        
-        Args:
-            strategy: The name of the strategy.
-            type: The type of the strategy.
+        Compiles a strategy. Method will also add the functions as attributes
+        to the model. When the attribute is called, the function will be executed.
 
-        Returns:    
-            The strategy class.
+        Parameters
+        ----------
+        model : Callable
+            The model to compile the strategy for.
+        settings : dict
+            The settings for the strategy.
+            
+        Returns
+        -------
+        dict
+            A dictionary of compiled strategies.
         """
+        compiled_strategies = {}
 
-        return cls.get_component('sdk.strategies',)
-    
-    @classmethod
-    def compile(cls, model: Any, raw_strategy: Any):
-        """ 
-        Compiles a strategy.
-        
-        Args:
-            model: The model to compile the strategy for.
-            raw_strategy: The raw strategy to compile.
-            
-        Returns:
-            A compiled strategy.
-        """
-        
-        compiled_strategy = {}
-        
-        for strat_name, strat in raw_strategy.items():
-            strategies = cls.get_component('sdk.strategies', strat['type'])
-            func = strategies[strat['function']].function
-            args = strat['args']
-            
-            if strat['type'] == 'placement':
-                compiled_strategy[strat_name] = func(
-                    model.simulation, compiled_strategy[strat['dependency']])
+        for name, setting in settings.items():
+            component = cls.search(setting.function)
+            function = component.function
+            args = setting.args
+
+            if component.file_name == 'placement':
+                compiled_strategies[name] = partial(
+                    function, model.simulation, args)
 
             else:
-                compiled_strategy[strat_name] = func(**args)
+                compiled_strategies[name] = partial(function, args)
 
-        for key, value in compiled_strategy.items():
+        for key, value in compiled_strategies.items():
             setattr(model, key, value)
 
-        return compiled_strategy
-    #! maybe pass a long the functions and not the results. on __call__ return the result
-    #! then would need a strategy base class that has a __call__ method?????
-    #! how to handle the args?????? the easiest way. need a better way
-    #! maybe the strategy must be able to have only 1 arg??? and it supplies wht it needs...nah model must be self
-    
-
-
-#! add a linear increase based on past value and slope to determine delay in increasing probability or score
-#! add many different diff equations and distributions
-
-#! how about dooders carry their own nn weights that gets plugged into a gloabal model that the dooders doesnt habe access to???
-#! this would essentially serve as the agents model/mapping of reality
-#! there could be a societal model too
-#! more awareness gives more visibility to rules and facts
-#! weights can now be constant for all generations, access to data is variable, which makes value of predictions dependent on awareness
-#! awarness can slowly grow as more of society has knowledge of rules and values. This way "ideas" can spread (spatially)
-#! each dooder will have the internal model pipeline
-#! dooders can share rules and values that they know aboit. sometimes they are wrong and share bad info
-#! can i programatically and mechanically create inference from dooder experimemtation or learning from others???
-#! the more rule and values I add, the more complexity, and the more imformation a dooder has to adpat to the growing complexity
+        return compiled_strategies

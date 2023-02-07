@@ -1,11 +1,7 @@
 from typing import TYPE_CHECKING
 
-from sdk.core import Strategy
-
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
-
-GeneticStrategy = Strategy.load('genetics')
 
 
 class Genetics:
@@ -26,7 +22,7 @@ class Genetics:
         Returns:
             The compiled genetics.
         """
-        genetics = Strategy.compile(dooder, GeneticStrategy)
+        # genetics = Strategy.compile(dooder, GeneticStrategy)
         cls.genetic_profiles.append(genetics)
 
         return genetics
