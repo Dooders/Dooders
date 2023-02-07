@@ -11,38 +11,26 @@ Add a new strategy with the register decorator
 """
 
 from functools import partial
-from typing import Any, Callable, Optional
-
-from pydantic import BaseModel
+from typing import Any, Callable
 
 from sdk.core.core import Core
 
 
-class BaseStrategy(BaseModel):
-    # What kind of value needs to be generated
-    # Currently Generation or Placement
-    Type: str
-
-    # The function generator to be executed
-    # Functions are registered from the register decorator
-    Func: str
-
-    # Arguments to pass to the StrategyFunc
-    Args: Optional[dict] = None
-
-    # The strategy is dependent on the result of another strategy
-    # If true, the strategy will be compiled later
-    Dependency: Optional[str] = None
-
-    # Used for documentation
-    Description: Optional[str] = None
-
-    # This is meant to specify where the strategy is used
-    # No functional use. For documentation only
-    Used: Optional[str] = None
-
-
 class Strategy(Core):
+    """ 
+    Strategy class. This class is used to compile strategies for 
+    the supplied model.
+    
+    Methods
+    -------
+    search(function_name: str) -> Any
+        Search for a strategy by function name.
+    compile(model: Callable, settings: dict) -> dict
+        Compiles a strategy. Method will also add the functions as attributes
+        to the model. When the attribute is called, the function will be executed.
+    """
+    
+    STRATEGY_MODULE = 'sdk.strategies'
 
     def __init__(self):
         from sdk import strategies
@@ -57,7 +45,7 @@ class Strategy(Core):
         function_name : str
             The name of the function to search for.
         """
-        components = cls.get_components('sdk.strategies')
+        components = cls.get_components(cls.STRATEGY_MODULE)
 
         for k, v in components.items():
             if isinstance(v, dict):
