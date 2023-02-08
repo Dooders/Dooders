@@ -12,7 +12,7 @@ from pydantic import BaseModel
 from sdk.models import Dooder
 
 if TYPE_CHECKING:
-    from sdk.base.base_simulation import BaseSimulation
+    from sdk.base.reality import BaseSimulation
 
 
 class Attributes(BaseModel):

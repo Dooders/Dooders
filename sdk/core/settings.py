@@ -44,11 +44,9 @@ class Settings:
     """
 
     settings: dict = {}
-
-    def __init__(self, settings: dict = {}) -> None:
-        self.update(settings)
-
-    def update(self, settings: dict) -> None:
+        
+    @classmethod
+    def compile(cls, settings: dict = {}) -> dict:
         """ 
         Compile a settings object from a dictionary 
 
@@ -57,10 +55,13 @@ class Settings:
         settings : dict
             The settings dictionary to update, provided by the user.
         """
-        self.settings['variables'] = self.update_variables(settings)
-        self.settings['components'] = self.update_components(settings)
+        cls.settings['variables'] = cls.update_variables(settings)
+        cls.settings['components'] = cls.update_components(settings)
+        
+        return cls.settings
 
-    def update_components(self, settings: dict) -> dict:
+    @classmethod
+    def update_components(cls, settings: dict) -> dict:
         """ Update component settings """
         final_components = {}
         for component, modules in _COMPONENTS.items():
@@ -73,7 +74,8 @@ class Settings:
 
         return final_components
 
-    def update_variables(self, settings: dict) -> dict:
+    @classmethod
+    def update_variables(cls, settings: dict) -> dict:
         """
         Update variable settings based on user input.
 
@@ -100,7 +102,8 @@ class Settings:
 
         return final_settings
 
-    def get(self, type: str, model: str = None) -> dict:
+    @classmethod
+    def get(cls, type: str, model: str = None) -> dict:
         """
         Get settings for a given model.
 
@@ -119,6 +122,6 @@ class Settings:
             The settings for the given model.
         """
         if model is None:
-            return self.settings[type]
+            return cls.settings[type]
         else:
-            return self.settings[type][model]
+            return cls.settings[type][model]

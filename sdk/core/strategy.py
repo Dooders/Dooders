@@ -15,7 +15,6 @@ from typing import Any, Callable
 
 from sdk.core.core import Core
 
-
 class Strategy(Core):
     """ 
     Strategy class. This class is used to compile strategies for 

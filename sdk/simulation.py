@@ -13,7 +13,7 @@ from statistics import mean
 import pandas as pd
 
 from db.main import DB
-from sdk.base.base_simulation import BaseSimulation
+from sdk.base.reality import Reality
 from sdk.config import ExperimentParameters
 from sdk.core import Condition, Policy, Step, Strategy
 from sdk.core.action import Action
@@ -21,7 +21,7 @@ from sdk.models.resources import Resources
 from sdk.models.society import Society
 
 
-class Simulation(BaseSimulation):
+class Simulation(Reality):
     """
 
     """
@@ -31,8 +31,7 @@ class Simulation(BaseSimulation):
             simulation_id: str,
             experiment_id: str,
             params: ExperimentParameters,
-            send_to_db=False,
-            details=None) -> None:
+            send_to_db=False) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
         many different models
@@ -54,7 +53,6 @@ class Simulation(BaseSimulation):
         self.steps = Step()
         self.running = False
         self.send_to_db = send_to_db
-        self.details = details
         self.cycles: int = 0
 
     def setup(self) -> None:

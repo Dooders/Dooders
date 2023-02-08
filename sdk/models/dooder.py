@@ -22,7 +22,7 @@ from sdk.modules.internal_models import InternalModels
 from sdk.modules.neighborhood import Neighborhood
 
 if TYPE_CHECKING:
-    from sdk.base.base_simulation import BaseSimulation
+    from sdk.base.reality import BaseSimulation
     from sdk.core.data import Position, UniqueID
 
 
