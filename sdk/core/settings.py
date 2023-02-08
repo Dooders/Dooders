@@ -1,6 +1,6 @@
 """ 
-Settings
---------
+Core: Settings
+--------------
 This module contains the settings class for the SDK.
 
 Settings are used to configure the simulation and models. The settings
@@ -16,15 +16,10 @@ from sdk.core.variables import Variables
 class Settings:
     """ 
     Settings class to update defaults, if provided by the user.
-    
+
     On initialization, the settings dictionary is updated with the
     user-provided settings. The settings dictionary is then used to
     configure the simulation and models.
-
-    Parameters
-    ----------
-    settings : dict
-        The settings dictionary to update, provided by the user.
 
     Attributes
     ----------
@@ -33,18 +28,18 @@ class Settings:
 
     Methods
     -------
-    update(settings: dict)
-        Update the settings dictionary.
-    update_components(settings: dict)
-        Update the component settings.
-    update_variables(settings: dict)
-        Update the variable settings.
-    get(setting: str)
-        Get a setting from the settings dictionary.
+    compile(settings: dict = {}) -> dict
+        Compile a settings object from a dictionary.
+    update_components(settings: dict) -> dict
+        Update component settings.
+    update_variables(settings: dict) -> dict
+        Update variable settings based on user input.
+    get(type: str, model: str, variable: str) -> Any
+        Get a variable from the settings dictionary.
     """
 
     settings: dict = {}
-        
+
     @classmethod
     def compile(cls, settings: dict = {}) -> dict:
         """ 
@@ -54,15 +49,32 @@ class Settings:
         ----------
         settings : dict
             The settings dictionary to update, provided by the user.
+
+        Returns
+        -------
+        cls.settings : dict
+            The updated settings dictionary.
         """
         cls.settings['variables'] = cls.update_variables(settings)
         cls.settings['components'] = cls.update_components(settings)
-        
+
         return cls.settings
 
     @classmethod
     def update_components(cls, settings: dict) -> dict:
-        """ Update component settings """
+        """ 
+        Update component settings
+
+        Parameters
+        ----------
+        settings : dict
+            The settings dictionary to update, provided by the user.
+
+        Returns
+        -------
+        final_components : dict
+            The updated settings dictionary for all components.
+        """
         final_components = {}
         for component, modules in _COMPONENTS.items():
             for module, functions in modules.items():

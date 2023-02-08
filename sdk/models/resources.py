@@ -75,11 +75,9 @@ class Resources:
         environment. The Energy object will be added to the available_resources
         dictionary.
         """
-        #! use placement strategy w/ dooders too?
         for location in self.EnergyPlacement():
             if len(self.available_resources) < self.MaxTotalEnergy():
                 unique_id = self.simulation.generate_id()
-                #! energy.from_settings
                 energy = Energy(unique_id, location, self)
                 self.simulation.environment.place_object(energy, location)
                 self.available_resources[unique_id] = energy

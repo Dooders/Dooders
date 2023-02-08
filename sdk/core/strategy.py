@@ -7,6 +7,8 @@ A strategy is a technique to provide an output. Usually a value or list of value
 
 For example: One strategy will provide a value from a uniform distribution,
 based on the min and max values provided.
+
+To add a new strategy:
 """
 
 from functools import partial
@@ -40,7 +42,7 @@ class Strategy(Core):
         ----------
         function_name : str
             The name of the function to search for.
-            
+
         Returns
         -------
         Any
@@ -80,12 +82,7 @@ class Strategy(Core):
             function = component.function
             args = setting.args
 
-            if component.file_name == 'placement':
-                compiled_strategies[name] = partial(
-                    function, model.simulation, args)
-
-            else:
-                compiled_strategies[name] = partial(function, args)
+            compiled_strategies[name] = partial(function, model, args)
 
         for key, value in compiled_strategies.items():
             setattr(model, key, value)
