@@ -26,12 +26,7 @@ class Simulation(Reality):
 
     """
 
-    def __init__(
-            self,
-            simulation_id: str,
-            experiment_id: str,
-            params: ExperimentParameters,
-            send_to_db=False) -> None:
+    def __init__(self, settings: dict) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
         many different models
@@ -43,16 +38,15 @@ class Simulation(Reality):
         Attributes:
             cycles: The number of cycles that have passed.
         """
-        super().__init__(simulation_id, experiment_id, params)
+        super().__init__(settings)
 
-        self.strategy = Strategy()
-        self.resources = Resources(self)
-        self.society = Society(self)
-        self.policies = Policy()
-        self.actions = Action()
-        self.steps = Step()
+        # self.strategy = Strategy()
+        # self.resources = Resources(self)
+        # self.society = Society(self)
+        # self.policies = Policy()
+        # self.actions = Action()
+        # self.steps = Step()
         self.running = False
-        self.send_to_db = send_to_db
         self.cycles: int = 0
 
     def setup(self) -> None:
@@ -79,7 +73,7 @@ class Simulation(Reality):
 
         # collect data at the end of the cycle
         self.information.collect(self)
-        
+
         # place new energy
         self.resources.step()
 

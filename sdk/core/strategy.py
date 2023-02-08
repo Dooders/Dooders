@@ -31,8 +31,8 @@ class Strategy(Core):
     
     STRATEGY_MODULE = 'sdk.strategies'
 
-    def __init__(self):
-        from sdk import strategies
+    # def __init__(self):
+    #     from sdk import strategies
 
     @classmethod
     def search(cls, function_name: str) -> Any:
@@ -88,4 +88,4 @@ class Strategy(Core):
         for key, value in compiled_strategies.items():
             setattr(model, key, value)
 
-        return compiled_strategies
+        model.settings = compiled_strategies

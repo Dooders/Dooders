@@ -16,7 +16,7 @@ class Reality(ABC):
     """ 
     """
 
-    def __init__(self, simulation_id: str, settings: dict = {}):
+    def __init__(self, settings: dict = {}):
         """ 
         Args:
             experiment_id: Unique ID for the experiment
@@ -30,7 +30,8 @@ class Reality(ABC):
             information: Information object for the simulation
             components: Dictionary of components for the simulation
         """
-        self.simulation_id = simulation_id
+        self.seed = ShortID()
+        self.simulation_id = self.seed.uuid()
         self.settings = settings
         # self.config = self.load_config(params)
         self.random = random
@@ -40,7 +41,7 @@ class Reality(ABC):
         # self.environment = Environment(self.params.Environment)
         # self.information = Information(self)
         # self.time = Time()
-        self.seed = ShortID()
+        
 
     def load_config(self, params):
         with open('sdk/config.yml') as f:
