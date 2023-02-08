@@ -40,6 +40,11 @@ class Strategy(Core):
         ----------
         function_name : str
             The name of the function to search for.
+            
+        Returns
+        -------
+        Any
+            The strategy function.
         """
         components = cls.get_components(cls.STRATEGY_MODULE)
 
