@@ -2,7 +2,7 @@
 
 A main objective of the project is to explore the learning capabilities of Dooders within the environment. This requires systematic experimentation to evaluate various strategies and approaches for the Dooder to gather information from the simulation and apply it towards increasing its longevity.
 
-In essence, the Dooder agent will exhibit learning through its exposure and interpretation of the simulated environment.
+In essence, the Dooder agent will exhibit learning through its exposure and interpretation of the simulated environment. It will learn through its own unique experience.
 
 ## Mind Models
 
