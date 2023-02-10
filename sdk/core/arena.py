@@ -5,8 +5,6 @@ Heavily based on the space component in the Mesa library
 https://github.com/projectmesa/mesa/blob/main/mesa/space.py
 """
 
-#! Change name to Arena
-
 import itertools
 from abc import ABC
 from numbers import Real
@@ -26,7 +24,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 def accept_tuple_argument(wrapped_function: F) -> F:
     """
-    Decorator to allow grid methods that take a list of (x, y) coord tuples
+    Decorator to allow surface methods that take a list of (x, y) coord tuples
     to also handle a single position, by automatically wrapping tuple in
     single-item list rather than forcing user to do it.
     """
@@ -45,22 +43,22 @@ def is_integer(x: Real) -> bool:
     return isinstance(x, (int, np.integer))
 
 
-class Surface(ABC):
+class Arena(ABC):
     """
     Grid cells are indexed by [x][y], where [0][0] is assumed to be the
-    bottom-left and [width-1][height-1] is the top-right. If a grid is
+    bottom-left and [width-1][height-1] is the top-right. If a surface is
     toroidal, the top and bottom, and left and right, edges wrap to each other
 
     Parameters
     ----------
     width: int
-        The width of the grid.
+        The width of the surface.
     height: int
-        The grid's width and height.
+        The surface's width and height.
     torus: bool
-        Boolean which determines whether to treat the grid as a torus.
-    grid: List[List[MultiGridContent]]
-        Internal list-of-lists which holds the grid cells themselves.
+        Boolean which determines whether to treat the surface as a torus.
+    surface: List[List[MultiGridContent]]
+        Internal list-of-lists which holds the surface cells themselves.
 
     Attributes
     ----------
@@ -70,29 +68,25 @@ class Surface(ABC):
         See Parameters.
     torus: bool
         See Parameters.
-    grid: List[List[MultiGridContent]]
+    surface: List[List[MultiGridContent]]
         See Parameters.
     empties: set
         A set of tuples of all coordinates that contain no agents.
     _neighborhood_cache: Dict[Any, List[Coordinate]]
         A cache of the neighborhoods for each cell.
     """
-    #! instead of grid, cal it surface
-    grid: List[List[MultiGridContent]]
+    surface: List[List[MultiGridContent]]
 
-    def __init__(self, params) -> None:
-        self.height = params.Height
-        self.width = params.Width
-        self.torus = params.Torus
+    def __init__(self, settings) -> None:
 
-        self.grid = []
+        self.surface = []
 
         for x in range(self.width):
             col = []
             for y in range(self.height):
                 location = Location(x, y)
                 col.append(location)
-            self.grid.append(col)
+            self.surface.append(col)
 
         # Add all cells to the empties list.
         self.empties = set(itertools.product(
@@ -139,54 +133,54 @@ class Surface(ABC):
         index: Union[int, Sequence[Coordinate], Tuple[int, slice, int, slice]],
     ) -> Union[GridContent, List[GridContent]]:
         """
-        Access contents from the grid.
+        Access contents from the surface.
 
         Parameters
         ----------
         index: Union[int, Sequence[Coordinate], Tuple[int, slice, int, slice]]
-            The index of the grid.
+            The index of the surface.
 
         Returns
         -------
         Union[GridContent, List[GridContent]]
-            The content of the grid.
+            The content of the surface.
         """
 
         if isinstance(index, int):
-            # grid[x]
-            return self.grid[index]
+            # surface[x]
+            return self.surface[index]
         elif isinstance(index[0], tuple):
-            # grid[(x1, y1), (x2, y2)]
+            # surface[(x1, y1), (x2, y2)]
             index = cast(Sequence[Coordinate], index)
 
             cells = []
             for pos in index:
                 x1, y1 = self.torus_adj(pos)
-                cells.append(self.grid[x1][y1])
+                cells.append(self.surface[x1][y1])
             return cells
 
         x, y = index
 
         if is_integer(x) and is_integer(y):
-            # grid[x, y]
+            # surface[x, y]
             index = cast(Coordinate, index)
             x, y = self.torus_adj(index)
-            return self.grid[x][y]
+            return self.surface[x][y]
 
         if is_integer(x):
-            # grid[x, :]
+            # surface[x, :]
             x, _ = self.torus_adj((x, 0))
             x = slice(x, x + 1)
 
         if is_integer(y):
-            # grid[:, y]
+            # surface[:, y]
             _, y = self.torus_adj((0, y))
             y = slice(y, y + 1)
 
-        # grid[:, :]
+        # surface[:, :]
         x, y = (cast(slice, x), cast(slice, y))
         cells = []
-        for rows in self.grid[x]:
+        for rows in self.surface[x]:
             for cell in rows[y]:
                 cells.append(cell)
         return cells
@@ -195,15 +189,15 @@ class Surface(ABC):
 
     def __iter__(self) -> Iterator[GridContent]:
         """
-        Create an iterator that chains the rows of the grid together
+        Create an iterator that chains the rows of the surface together
         as if it is one list.
 
         Returns
         -------
         Iterator[GridContent]
-            The iterator of the grid.
+            The iterator of the surface.
         """
-        return itertools.chain(*self.grid)
+        return itertools.chain(*self.surface)
 
     def coord_iter(self) -> Iterator[Tuple[GridContent, int, int]]:
         """
@@ -212,11 +206,11 @@ class Surface(ABC):
         Returns
         -------
         Iterator[Tuple[GridContent, int, int]]
-            The iterator of the grid.
+            The iterator of the surface.
         """
         for row in range(self.width):
             for col in range(self.height):
-                yield self.grid[row][col], row, col  # agent, x, y
+                yield self.surface[row][col], row, col  # agent, x, y
 
     def iter_neighborhood(
         self,
@@ -284,7 +278,7 @@ class Surface(ABC):
         """
         neighborhood = self.get_neighborhood(
             position, moore, include_center, radius)
-        return [self.grid[pos[0]][pos[1]] for pos in neighborhood]
+        return [self.surface[pos[0]][pos[1]] for pos in neighborhood]
 
     def get_neighborhood(
         self,
@@ -421,7 +415,7 @@ class Surface(ABC):
 
         Returns
         -------
-            A coordinate tuple, converted to be on the grid.
+            A coordinate tuple, converted to be on the surface.
         """
         if not self.out_of_bounds(position):
             return position
@@ -432,7 +426,7 @@ class Surface(ABC):
 
     def out_of_bounds(self, position: Coordinate) -> bool:
         """
-        Determines whether position is off the grid, returns the out of
+        Determines whether position is off the surface, returns the out of
         bounds coordinate.
 
         Parameters
@@ -442,7 +436,7 @@ class Surface(ABC):
 
         Returns 
         -------
-            True if position is off the grid, False otherwise.
+            True if position is off the surface, False otherwise.
         """
         x, y = position
         return x < 0 or x >= self.width or y < 0 or y >= self.height
@@ -479,7 +473,7 @@ class Surface(ABC):
             True if cell is empty, False otherwise
         """
         x, y = position
-        return self.grid[x][y].status == 'empty'
+        return self.surface[x][y].status == 'empty'
 
     def exists_empty_cells(self) -> bool:
         """

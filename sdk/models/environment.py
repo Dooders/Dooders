@@ -8,7 +8,7 @@ from random import choices
 from typing import TYPE_CHECKING, Any, List
 
 from sdk.base.base_agent import BaseAgent
-from sdk.core.surface import Surface
+from sdk.core.arena import Arena
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 GridCell = List[Any]
 
 
-class Environment(Surface):
+class Environment(Arena):
     """ 
     Create a new Environment based on the Surface class.
     
