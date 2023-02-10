@@ -8,16 +8,53 @@ import numpy as np
 
 # ReLU activation
 class Activation_ReLU:
+    """ 
+    ReLU activation
+    
+    Methods
+    -------
+    forward(inputs, training)
+        Forward pass
+    backward(dvalues)
+        Backward pass
+    predictions(outputs)
+        Calculate predictions for outputs
 
-    # Forward pass
-    def forward(self, inputs, training):
+    Attributes
+    ----------
+    inputs : array
+        Input values
+    output : array
+        Output values
+    dinputs : array
+        Input gradients
+    """
+
+    def forward(self, inputs: np.ndarray, training: bool) -> None:
+        """ 
+        Forward pass
+        
+        Parameters
+        ----------
+        inputs : array
+            Input values
+        training : bool
+            True if training, False if testing
+        """
         # Remember input values
         self.inputs = inputs
         # Calculate output values from inputs
         self.output = np.maximum(0, inputs)
 
-    # Backward pass
-    def backward(self, dvalues):
+    def backward(self, dvalues: np.ndarray) -> None:
+        """ 
+        Backward pass
+        
+        Parameters
+        ----------
+        dvalues : array
+            Gradient of loss function
+        """
         # Since we need to modify original variable,
         # let's make a copy of values first
         self.dinputs = dvalues.copy()
@@ -25,16 +62,57 @@ class Activation_ReLU:
         # Zero gradient where input values were negative
         self.dinputs[self.inputs <= 0] = 0
 
-    # Calculate predictions for outputs
-    def predictions(self, outputs):
+    def predictions(self, outputs: np.ndarray) -> np.ndarray:
+        """ 
+        Calculate predictions for outputs
+        
+        Parameters
+        ----------
+        outputs : array
+            Output values
+        
+        Returns
+        -------
+        array
+            Predictions
+        """
         return outputs
 
 
-# Softmax activation
 class Activation_Softmax:
+    """ 
+    Softmax activation
+    
+    Methods
+    -------
+    forward(inputs, training)
+        Forward pass
+    backward(dvalues)
+        Backward pass
+    predictions(outputs)
+        Calculate predictions for outputs
+        
+    Attributes
+    ----------
+    inputs : array
+        Input values
+    output : array
+        Output values
+    dinputs : array
+        Input gradients
+    """
 
-    # Forward pass
-    def forward(self, inputs, training):
+    def forward(self, inputs: np.ndarray, training: bool) -> None:
+        """ 
+        Forward pass
+        
+        Parameters
+        ----------
+        inputs : array
+            Input values
+        training : bool
+            True if training, False if testing
+        """
         # Remember input values
         self.inputs = inputs
 
@@ -48,8 +126,15 @@ class Activation_Softmax:
 
         self.output = probabilities
 
-    # Backward pass
-    def backward(self, dvalues):
+    def backward(self, dvalues: np.ndarray) -> None:
+        """ 
+        Backward pass
+        
+        Parameters
+        ----------
+        dvalues : array
+            Gradient of loss function
+        """
 
         # Create uninitialized array
         self.dinputs = np.empty_like(dvalues)
@@ -67,45 +152,152 @@ class Activation_Softmax:
             self.dinputs[index] = np.dot(jacobian_matrix,
                                          single_dvalues)
 
-    # Calculate predictions for outputs
-    def predictions(self, outputs):
+    def predictions(self, outputs: np.ndarray) -> np.ndarray:
+        """ 
+        Calculate predictions for outputs
+        
+        Parameters
+        ----------
+        outputs : array
+            Output values
+            
+        Returns
+        -------
+        array
+            Predictions
+        """
         return np.argmax(outputs, axis=1)
 
 
-# Sigmoid activation
 class Activation_Sigmoid:
+    """ 
+    Sigmoid activation
+    
+    Methods
+    -------
+    forward(inputs, training)
+        Forward pass
+    backward(dvalues)
+        Backward pass
+    predictions(outputs)
+        Calculate predictions for outputs
 
-    # Forward pass
-    def forward(self, inputs, training):
+    Attributes
+    ----------
+    inputs : array
+        Input values
+    output : array
+        Output values
+    dinputs : array
+        Input gradients
+    """
+
+    def forward(self, inputs: np.ndarray, training: bool) -> None:
+        """ 
+        Forward pass
+        
+        Parameters
+        ----------
+        inputs : array
+            Input values
+        training : bool
+            True if training, False if testing
+        """
         # Save input and calculate/save output
         # of the sigmoid function
         self.inputs = inputs
         self.output = 1 / (1 + np.exp(-inputs))
 
-    # Backward pass
-    def backward(self, dvalues):
+    def backward(self, dvalues: np.ndarray) -> None:
+        """ 
+        Backward pass
+
+        Parameters
+        ----------
+        dvalues : array
+            Gradient of loss function
+        """
         # Derivative - calculates from output of the sigmoid function
         self.dinputs = dvalues * (1 - self.output) * self.output
 
-    # Calculate predictions for outputs
-    def predictions(self, outputs):
+    def predictions(self, outputs: np.ndarray) -> np.ndarray:
+        """ 
+        Calculate predictions for outputs
+
+        Parameters
+        ----------
+        outputs : array
+            Output values
+            
+        Returns
+        -------
+        array
+            Predictions
+        """
         return (outputs > 0.5) * 1
 
-
-# Linear activation
 class Activation_Linear:
+    """ 
+    Linear activation
+    
+    Methods
+    -------
+    forward(inputs, training)
+        Forward pass
+    backward(dvalues)
+        Backward pass
+    predictions(outputs)
+        Calculate predictions for outputs
 
-    # Forward pass
-    def forward(self, inputs, training):
+    Attributes
+    ----------
+    inputs : array
+        Input values
+    output : array
+        Output values
+    dinputs : array
+        Input gradients
+    """
+
+    def forward(self, inputs: np.ndarray, training: bool) -> None:
+        """ 
+        Forward pass
+
+        Parameters
+        ----------
+        inputs : array
+            Input values
+        training : bool
+            True if training, False if testing
+        """
         # Just remember values
         self.inputs = inputs
         self.output = inputs
 
-    # Backward pass
-    def backward(self, dvalues):
+    def backward(self, dvalues: np.ndarray) -> None:
+        """ 
+        Backward pass
+        
+        Parameters
+        ----------
+        dvalues : array
+            Gradient of loss function
+        """
         # derivative is 1, 1 * dvalues = dvalues - the chain rule
         self.dinputs = dvalues.copy()
 
-    # Calculate predictions for outputs
-    def predictions(self, outputs):
+    def predictions(self, outputs: np.ndarray) -> np.ndarray:
+        """ 
+        Calculate predictions for outputs
+        
+        Parameters
+        ----------
+        outputs : array
+            Output values
+            
+        Returns
+        -------
+        array
+            Predictions
+        """
         return outputs
