@@ -1,7 +1,9 @@
 """ 
-Code taken from "Neural Networks from Scratch" 
+Modified code originally taken from "Neural Networks from Scratch" 
 https://nnfs.io/
 """
+
+from typing import List
 
 from sdk.learning.nets.activation import *
 from sdk.learning.nets.eval import *
@@ -11,25 +13,80 @@ from sdk.learning.nets.optimizer import *
 
 
 class Model:
+    """ 
+    Model class for neural networks
 
-    def __init__(self):
+    Attributes
+    ----------
+    layers : list
+        List of network objects
+    softmax_classifier_output : object
+        Softmax classifier's output object
+    loss : object
+        Loss object
+    optimizer : object
+        Optimizer object
+    accuracy : object
+        Accuracy object
+    input_layer : object
+        Input layer object
+    output_layer_activation : object
+        Output layer activation object
+    trainable_layers : list
+        List of trainable layers
+
+    Methods
+    -------
+    add(layer)
+        Add objects to the model
+    set(loss, optimizer, accuracy)
+        Set loss, optimizer and accuracy
+    finalize()
+        Finalize the model
+    train(X, y, epochs=1, print_every=1, validation_data=None)
+        Train the model
+    forward(X, training)
+        Forward pass
+    backward(output, y)
+        Backward pass
+    evaluate(X, y)
+        Evaluate the model
+    get_parameters()
+        Get model parameters
+    set_parameters(parameters)
+        Set model parameters
+    """
+
+    def __init__(self) -> None:
         # Create a list of network objects
         self.layers = []
         # Softmax classifier's output object
         self.softmax_classifier_output = None
 
-    # Add objects to the model
-    def add(self, layer):
+    def add(self, layer: object) -> None:
+        """ 
+        Add objects to the model
+
+        Parameters
+        ----------
+        layer : object
+            Object to add to the model
+        """
         self.layers.append(layer)
 
-    # Set loss, optimizer and accuracy
-    def set(self, *, loss, optimizer, accuracy):
+    def set(self, *, loss: object, optimizer: object, accuracy: object) -> None:
+        """ 
+        Set loss, optimizer and accuracy
+
+        """
         self.loss = loss
         self.optimizer = optimizer
         self.accuracy = accuracy
 
-    # Finalize the model
-    def finalize(self):
+    def finalize(self) -> None:
+        """ 
+        Finalize the model
+        """
 
         # Create and set the input layer
         self.input_layer = Layer_Input()
@@ -87,9 +144,29 @@ class Model:
             self.softmax_classifier_output = \
                 Activation_Softmax_Loss_CategoricalCrossentropy()
 
-    # Train the model
-    def train(self, X, y, *, epochs=1, print_every=1,
-              validation_data=None):
+    def train(self,
+              X: np.ndarray,
+              y: np.ndarray,
+              *,
+              epochs: int = 1,
+              print_every: int = 1,
+              validation_data: tuple = None) -> None:
+        """ 
+        Train the model
+
+        Parameters
+        ----------
+        X : array
+            Input data
+        y : array
+            Target data
+        epochs : int
+            Number of epochs
+        print_every : int
+            Print every
+        validation_data : tuple
+            Validation data
+        """
 
         # Initialize accuracy object
         self.accuracy.init(y)
@@ -151,8 +228,22 @@ class Model:
                   f'acc: {accuracy:.3f}, ' +
                   f'loss: {loss:.3f}')
 
-    # Performs forward pass
-    def forward(self, X, training):
+    def forward(self, X: np.ndarray, training: bool) -> np.ndarray:
+        """ 
+        Performs forward pass
+
+        Parameters
+        ----------
+        X : array
+            Input data
+        training : bool
+            Whether in training mode or not
+
+        Returns
+        -------
+        array
+            Output data
+        """
 
         # Call forward method on the input layer
         # this will set the output property that
@@ -168,8 +259,17 @@ class Model:
         # return its output
         return layer.output
 
-    # Performs backward pass
-    def backward(self, output, y):
+    def backward(self, output: np.ndarray, y: np.ndarray) -> None:
+        """ 
+        Performs backward pass
+
+        Parameters
+        ----------
+        output : array
+            Output of the forward pass
+        y : array
+            Target data
+        """
 
         # If softmax classifier
         if self.softmax_classifier_output is not None:
@@ -207,9 +307,19 @@ class Model:
 class SimpleNeuralNet:
     """ 
     A simple neural network with 2 hidden layers
+
+    Attributes
+    ----------
+    model : Model
+        The model
+
+    Methods
+    -------
+    predict(input_array: np.ndarray) -> int
+        Predict the class of the input data
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """ 
         Initialize the model
         """
@@ -229,11 +339,15 @@ class SimpleNeuralNet:
         """ 
         Predict the class of the input data
 
-        Args:
-            input_array (np.ndarray): The input data
+        Parameters
+        ----------
+        input_array : array
+            The input data
 
-        Returns:
-            int: The predicted class
+        Returns
+        -------
+        int
+            The class of the input data
         """
         self.input = input_array
         self.output = self.model.forward(input_array, training=True)
@@ -246,8 +360,10 @@ class SimpleNeuralNet:
         """ 
         Learn from the reality
 
-        Args:
-            reality (list): The reality of the simulation
+        Parameters
+        ----------
+        reality : list
+            The reality (truth)
         """
         self.reality = reality
         reality_array = np.array(self.reality, dtype='uint8')
@@ -259,13 +375,15 @@ class SimpleNeuralNet:
             self.model.optimizer.update_params(layer)
         self.model.optimizer.post_update_params()
 
-    def inherit_weights(self, genetics) -> None:
+    def inherit_weights(self, genetics: List[np.ndarray]) -> None:
         """ 
         Update the weights based on provided derived genetics
         from parent Dooders
 
-        Args:
-            genetics list[ndarray]: The derived genetics from parent Dooders
+        Parameters
+        ----------
+        genetics : List[np.ndarray]
+            The weights of the neural network
         """
         self.model.layers[0].weights = genetics[0]
         self.model.layers[2].weights = genetics[1]
@@ -275,8 +393,10 @@ class SimpleNeuralNet:
         """ 
         Get the weights of the neural network from every dense layer
 
-        Returns:
-            np.ndarray: The weights of the neural network
+        Returns
+        -------
+        np.ndarray
+            The weights of the neural network
         """
         weights = []
         for layer in self.model.layers:
