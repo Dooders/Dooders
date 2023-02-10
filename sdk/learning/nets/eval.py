@@ -7,10 +7,31 @@ import numpy as np
 
 
 class Accuracy:
+    """ 
+    Base class for accuracy calculation
 
-    # Calculates an accuracy
-    # given predictions and ground truth values
-    def calculate(self, predictions, y):
+    Methods
+    -------
+    calculate(predictions, y)
+        Calculates an accuracy
+    """
+
+    def calculate(self, predictions: np.ndarray, y: np.ndarray) -> float:
+        """ 
+        Calculates an accuracy
+
+        Parameters
+        ----------
+        predictions : np.ndarray
+            Predictions from the model
+        y : np.ndarray
+            Ground truth values
+
+        Returns
+        -------
+        float
+            Accuracy
+        """
 
         # Get comparison results
         comparisons = self.compare(predictions, y)
@@ -22,19 +43,38 @@ class Accuracy:
         return accuracy
 
 
-# Accuracy calculation for classification model
 class Accuracy_Categorical(Accuracy):
+    """ 
+    Accuracy calculation for classification model
 
-    def __init__(self, *, binary=False):
+    Parameters
+    ----------
+    binary : bool, optional
+    """
+
+    def __init__(self, *, binary=False) -> None:
         # Binary mode?
         self.binary = binary
 
-    # No initialization is needed
     def init(self, y):
         pass
 
-    # Compares predictions to the ground truth values
-    def compare(self, predictions, y):
+    def compare(self, predictions: np.ndarray, y: np.ndarray) -> np.ndarray:
+        """ 
+        Compares predictions to the ground truth values
+
+        Parameters
+        ----------
+        predictions : np.ndarray
+            Predictions from the model
+        y : np.ndarray
+            Ground truth values
+
+        Returns
+        -------
+        np.ndarray
+            Comparison results
+        """
         if not self.binary and len(y.shape) == 2:
             y = np.argmax(y, axis=1)
         return predictions == y
@@ -42,18 +82,42 @@ class Accuracy_Categorical(Accuracy):
 
 # Accuracy calculation for regression model
 class Accuracy_Regression(Accuracy):
+    """ 
+    Accuracy calculation for regression model
+    """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Create precision property
         self.precision = None
 
-    # Calculates precision value
-    # based on passed-in ground truth values
-    def init(self, y, reinit=False):
+    def init(self, y: np.ndarray, reinit=False) -> None:
+        """ 
+        Initializes the precision property
+
+        Parameters
+        ----------
+        y : np.ndarray
+            Ground truth values
+        reinit : bool, optional
+            Reinitialize the precision property
+        """
         if self.precision is None or reinit:
             self.precision = np.std(y) / 250
 
-    # Compares predictions to the ground truth values
+    def compare(self, predictions: np.ndarray, y: np.ndarray) -> np.ndarray:
+        """ 
+        Compares predictions to the ground truth values
 
-    def compare(self, predictions, y):
+        Parameters
+        ----------
+        predictions : np.ndarray
+            Predictions from the model
+        y : np.ndarray
+            Ground truth values
+
+        Returns
+        -------
+        np.ndarray
+            Comparison results
+        """
         return np.absolute(predictions - y) < self.precision
