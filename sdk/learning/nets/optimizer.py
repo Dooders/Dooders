@@ -5,28 +5,79 @@ https://nnfs.io/
 
 import numpy as np
 
-# SGD optimizer
+from sdk.learning.nets import layer
 
 
 class Optimizer_SGD:
+    """ 
+    Stochastic Gradient Descent optimizer
 
-    # Initialize optimizer - set settings,
-    # learning rate of 1. is default for this optimizer
-    def __init__(self, learning_rate=1., decay=0., momentum=0.):
+    Parameters
+    ----------
+    learning_rate : float, optional
+        Learning rate, by default 1.
+    decay : float, optional
+        Decay rate, by default 0.
+    momentum : float, optional
+        Momentum, by default 0.
+
+    Methods
+    -------
+    pre_update_params()
+        Call once before any parameter updates
+    update_params(layer)
+        Update parameters
+    post_update_params()
+        Call once after any parameter updates
+
+    Attributes
+    ----------
+    learning_rate : float
+        Learning rate
+    current_learning_rate : float
+        Current learning rate
+    decay : float
+        Decay rate
+    iterations : int
+        Iterations
+    momentum : float
+        Momentum
+    """
+
+    def __init__(self,
+                 learning_rate: float = 1.,
+                 decay: float = 0.,
+                 momentum: float = 0.) -> None:
+        """ 
+        Initialize optimizer - set settings,
+        learning rate of 1. is default for this optimizer
+        """
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay
         self.iterations = 0
         self.momentum = momentum
 
-    # Call once before any parameter updates
-    def pre_update_params(self):
+    def pre_update_params(self) -> None:
+        """ 
+        Call once before any parameter updates
+
+        If decay is set,
+        update the current learning rate
+        """
         if self.decay:
             self.current_learning_rate = self.learning_rate * \
                 (1. / (1. + self.decay * self.iterations))
 
-    # Update parameters
-    def update_params(self, layer):
+    def update_params(self, layer: layer) -> None:
+        """ 
+        Update parameters
+
+        Parameters
+        ----------
+        layer : Layer
+            Layer to update
+        """
 
         # If we use momentum
         if self.momentum:
@@ -64,31 +115,76 @@ class Optimizer_SGD:
         layer.weights += weight_updates
         layer.biases += bias_updates
 
-    # Call once after any parameter updates
-    def post_update_params(self):
+    def post_update_params(self) -> None:
+        """ 
+        Call once after any parameter updates
+        """
         self.iterations += 1
 
 
-# Adagrad optimizer
 class Optimizer_Adagrad:
+    """ 
+    Adam grad optimizer
 
-    # Initialize optimizer - set settings
-    def __init__(self, learning_rate=1., decay=0., epsilon=1e-7):
+    Parameters
+    ----------
+    learning_rate : float, optional
+        Learning rate, by default 1.
+    decay : float, optional
+        Decay rate, by default 0.
+    epsilon : float, optional
+        Small value to avoid division by zero, by default 1e-7
+
+    Methods
+    -------
+    pre_update_params()
+        Call once before any parameter updates
+    update_params(layer)
+        Update parameters
+    post_update_params()
+        Call once after any parameter updates
+
+    Attributes
+    ----------
+    learning_rate : float
+        Learning rate
+    current_learning_rate : float
+        Current learning rate
+    decay : float
+        Decay rate
+    iterations : int
+        Iterations
+    epsilon : float
+        Small value to avoid division by zero
+    """
+
+    def __init__(self,
+                 learning_rate: float = 1.,
+                 decay: float = 0.,
+                 epsilon: float = 1e-7) -> None:
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay
         self.iterations = 0
         self.epsilon = epsilon
 
-    # Call once before any parameter updates
-    def pre_update_params(self):
+    def pre_update_params(self) -> None:
+        """ 
+        Call once before any parameter updates
+        """
         if self.decay:
             self.current_learning_rate = self.learning_rate * \
                 (1. / (1. + self.decay * self.iterations))
 
-    # Update parameters
-    def update_params(self, layer):
+    def update_params(self, layer: layer) -> None:
+        """ 
+        Update parameters
 
+        Parameters
+        ----------
+        layer : Layer
+            Layer to update
+        """
         # If layer does not contain cache arrays,
         # create them filled with zeros
         if not hasattr(layer, 'weight_cache'):
@@ -108,17 +204,59 @@ class Optimizer_Adagrad:
             layer.dbiases / \
             (np.sqrt(layer.bias_cache) + self.epsilon)
 
-    # Call once after any parameter updates
-    def post_update_params(self):
+    def post_update_params(self) -> None:
+        """ 
+        Call once after any parameter updates
+        """
         self.iterations += 1
 
 
-# RMSprop optimizer
 class Optimizer_RMSprop:
+    """ 
+    RMSprop optimizer
 
-    # Initialize optimizer - set settings
-    def __init__(self, learning_rate=0.001, decay=0., epsilon=1e-7,
-                 rho=0.9):
+    Parameters
+    ----------
+    learning_rate : float, optional
+        Learning rate, by default 0.001
+    decay : float, optional
+        Decay rate, by default 0.
+    epsilon : float, optional
+        Small value to avoid division by zero, by default 1e-7
+    rho : float, optional
+        Decay rate, by default 0.9
+
+    Methods
+    -------
+    pre_update_params()
+        Call once before any parameter updates
+    update_params(layer)
+        Update parameters
+    post_update_params()
+        Call once after any parameter updates
+
+    Attributes
+    ----------
+    learning_rate : float
+        Learning rate
+    current_learning_rate : float
+        Current learning rate
+    decay : float
+        Decay rate
+    iterations : int
+        Iterations
+    epsilon : float
+        Small value to avoid division by zero
+    rho : float
+        Decay rate
+    """
+
+    def __init__(self,
+                 learning_rate: float = 0.001,
+                 decay: float = 0.,
+                 epsilon: float = 1e-7,
+                 rho: float = 0.9) -> None:
+
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay
@@ -126,14 +264,23 @@ class Optimizer_RMSprop:
         self.epsilon = epsilon
         self.rho = rho
 
-    # Call once before any parameter updates
-    def pre_update_params(self):
+    def pre_update_params(self) -> None:
+        """ 
+        Call once before any parameter updates
+        """
         if self.decay:
             self.current_learning_rate = self.learning_rate * \
                 (1. / (1. + self.decay * self.iterations))
 
-    # Update parameters
-    def update_params(self, layer):
+    def update_params(self, layer: layer) -> None:
+        """ 
+        Update parameters
+
+        Parameters
+        ----------
+        layer : Layer
+            Layer to update
+        """
 
         # If layer does not contain cache arrays,
         # create them filled with zeros
@@ -156,17 +303,64 @@ class Optimizer_RMSprop:
             layer.dbiases / \
             (np.sqrt(layer.bias_cache) + self.epsilon)
 
-    # Call once after any parameter updates
-    def post_update_params(self):
+    def post_update_params(self) -> None:
+        """ 
+        Call once after any parameter updates
+        """
         self.iterations += 1
 
 
-# Adam optimizer
 class Optimizer_Adam:
+    """ 
+    Adam optimizer
 
-    # Initialize optimizer - set settings
-    def __init__(self, learning_rate=0.001, decay=0., epsilon=1e-7,
-                 beta_1=0.9, beta_2=0.999):
+    Parameters
+    ----------
+    learning_rate : float, optional
+        Learning rate, by default 0.001
+    decay : float, optional
+        Decay rate, by default 0.
+    epsilon : float, optional
+        Small value to avoid division by zero, by default 1e-7
+    beta_1 : float, optional
+        Decay rate, by default 0.9
+    beta_2 : float, optional
+        Decay rate, by default 0.999
+
+    Methods
+    -------
+    pre_update_params()
+        Call once before any parameter updates
+    update_params(layer)
+        Update parameters
+    post_update_params()
+        Call once after any parameter updates
+
+    Attributes
+    ----------
+    learning_rate : float
+        Learning rate
+    current_learning_rate : float
+        Current learning rate
+    decay : float
+        Decay rate
+    iterations : int
+        Iterations
+    epsilon : float
+        Small value to avoid division by zero
+    beta_1 : float
+        Decay rate
+    beta_2 : float
+        Decay rate
+    """
+
+    def __init__(self,
+                 learning_rate: float = 0.001,
+                 decay: float = 0.,
+                 epsilon: float = 1e-7,
+                 beta_1: float = 0.9,
+                 beta_2: float = 0.999):
+
         self.learning_rate = learning_rate
         self.current_learning_rate = learning_rate
         self.decay = decay
@@ -175,15 +369,23 @@ class Optimizer_Adam:
         self.beta_1 = beta_1
         self.beta_2 = beta_2
 
-    # Call once before any parameter updates
-    def pre_update_params(self):
+    def pre_update_params(self) -> None:
+        """ 
+        Call once before any parameter updates
+        """
         if self.decay:
             self.current_learning_rate = self.learning_rate * \
                 (1. / (1. + self.decay * self.iterations))
 
-    # Update parameters
-    def update_params(self, layer):
+    def update_params(self, layer: layer) -> None:
+        """ 
+        Update parameters
 
+        Parameters
+        ----------
+        layer : Layer
+            Layer to update
+        """
         # If layer does not contain cache arrays,
         # create them filled with zeros
         if not hasattr(layer, 'weight_cache'):
@@ -228,7 +430,8 @@ class Optimizer_Adam:
             (np.sqrt(bias_cache_corrected) +
              self.epsilon)
 
-    # Call once after any parameter updates
-
-    def post_update_params(self):
+    def post_update_params(self) -> None:
+        """ 
+        Call once after any parameter updates
+        """
         self.iterations += 1
