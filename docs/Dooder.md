@@ -8,7 +8,7 @@ Another way of thinking about it is an agent can take in information and use tha
 
 Below is a breakdown of the main laws for a Dooder. A law is an aspect of the simulation the Dooder cannot control.
 
-Dooder Laws:
+### Dooder Laws
 
 - A Dooder executes a step function every cycle
 - A Dooder will progress step after step until it reaches a terminal state (starvation, death, etc.)
@@ -20,8 +20,6 @@ Dooder Laws:
 - The React phase is restricted to simple and quick actions, while the Act phase allows for more complex actions
 - A Dooder needs Energy to survive
 - Each cycle without consuming Energy will add to it's "hunger" state, increasing the chance of starvation
-
-## A Dooder executes a step function every cycle
 
 ## Environment and Energy
 
@@ -41,9 +39,6 @@ For example, the starting energy value is determined at Dooder creation as the `
 
 A Dooder's behavior is an expression of both its genetics and environment. Some attributes can change over time, like the energy supply, while others can be immutable, like the metabolism. 
 
-## Modules
-
-How the dooder takes in information; how it processes that information; and what it does with that information.
 
 ## Death and Reproduction
 
@@ -51,23 +46,6 @@ A Dooder agent will continue as long as it meets defined conditions (or states).
 
 Dooder reproduction is still in the works after the base functionality is in the library.  
 
-## Concepts, Strategies and Conditions
-
-Concepts like hunger, starvation, suffering, happiness  
-
-Conditions (States)  
-
-Strategies (Algorithms)  
-
-## Information and Collectors
-
-purpose of class  
-collectors  
-
-## Fate
-
-purpose of class  
-probabilities  
 
 ### Footnotes
 
