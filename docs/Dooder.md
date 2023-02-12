@@ -6,22 +6,25 @@ A Dooder is the primary agent object in the [simulation](Simulation.md). An agen
 
 Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.[^2]  
 
-Below is a breakdown of the main laws for a Dooder. A law is an aspect of the simulation the Dooder cannot control.
+### Laws
 
-### Dooder Laws
+A law is an aspect of the simulation the Dooder cannot control.
 
 - A Dooder executes a step function every cycle
-- A Dooder will progress step after step until it reaches a terminal state (starvation, death, etc.)
+- A Dooder will progress step after step until it reaches a terminal state (death)
 - A step has a specific phases of execution (React, Move, Act)
+- Each cycle without consuming Energy will add to it's hunger state, increasing the chance of starvation
+
+## Step Phases
+
 - During the React phase, a Dooder will resolve any debts to the simulation
   - A debt is a situation that affects a Dooder while outside the Dooder's turn
 - During the Move phase, a Dooder can relocate to a new location
 - During the Act phase, a Dooder can execute more intentional actions
 - The React phase is restricted to simple and quick actions, while the Act phase allows for more complex actions
 - A Dooder needs Energy to survive
-- Each cycle without consuming Energy will add to it's "hunger" state, increasing the chance of starvation
 
-## Environment and Energy
+## Energy
 
 The [Environment](Environment.md) model is responsible for managing any object that has a spatial component like a Dooder or Energy object. These objects move to different locations within a grid and interact with each other.  
 
