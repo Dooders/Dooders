@@ -2,9 +2,9 @@
 
 ***This page is a work-in-progress***
 
-A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power, in other words, it has the ability to interact with its environment.[^1]
+A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power, in other words, it has the ability to interact with its environment.
 
-Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.[^2]  
+Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
 
 ### Laws
 
@@ -48,9 +48,3 @@ A Dooder's behavior is an expression of both its genetics and environment. Some 
 A Dooder agent will continue as long as it meets defined conditions (or states). For example, hunger is represented by a function that will keep track of the number of cycles with `energy_supply = 0`.  
 
 Dooder reproduction is still in the works after the base functionality is in the library.  
-
-
-### Footnotes
-
-[^1]: Put in reference  
-[^2]: Put in reference  
