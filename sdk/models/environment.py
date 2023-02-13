@@ -8,7 +8,7 @@ from random import choices
 from typing import TYPE_CHECKING, Any, List
 
 from sdk.base.base_agent import BaseAgent
-from sdk.core.arena import Arena
+from sdk.core.surface import Surface
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
@@ -16,17 +16,19 @@ if TYPE_CHECKING:
 
 GridCell = List[Any]
 
+#! maybe this inherits arena, and arena has the base methods?
 
-class Environment(Arena):
+
+class Environment:
     """ 
     Create a new Environment based on the Surface class.
-    
+
     Methods
     -------
     place_object(object: BaseAgent, position: tuple) -> None
         Place an object at the provided position.
     remove_object(object: BaseAgent) -> None
-        Remove an object from the grid.
+        Remove an object from the surface.
     move_object(object: BaseAgent, location: tuple) -> None
         Move an object to a new location.
     get_object_types() -> List[BaseAgent]
@@ -39,6 +41,19 @@ class Environment(Arena):
         Get all objects in the neighborhood of the given object.
     """
 
+    def __init__(self, settings) -> None:
+        """
+        Parameters
+        ----------
+        width: int
+            The width of the environment.
+        height: int
+            The height of the environment.
+        torus: bool
+            Whether the environment is a torus or not.
+        """
+        self.surface = Surface.build(settings)
+
     def place_object(self, object: 'BaseAgent', position: tuple) -> None:
         """
         Place an object at the provided position.
@@ -50,15 +65,14 @@ class Environment(Arena):
         position: tuple
             The location to place the object, in the form (x, y).
         """
-        x, y = position
-        location = self.grid[x][y]
+        location = self.surface[position]
         location.add(object)
         object.position = position
         self.empties.discard(position)
 
     def remove_object(self, object: 'BaseAgent') -> None:
         """
-        Remove an object from the grid.
+        Remove an object from the surface object.
 
         Parameters
         ----------
@@ -66,10 +80,9 @@ class Environment(Arena):
             The object to remove.
         """
         location = object.position
-        x, y = location
-        self.grid[x][y].remove(object)
-        if self.is_cell_empty(location):
-            self.empties.add(location)
+        self.surface[location].remove(object)
+        if self.surface.is_cell_empty(location):
+            self.surface.empties.add(location)
         object.position = None
 
     def move_object(self, object: 'BaseAgent', location: tuple) -> None:
@@ -83,7 +96,7 @@ class Environment(Arena):
         location: tuple
             The location to move the object to.
         """
-        position = self.torus_adj(location)
+        position = self.surface.torus_adj(location)
         self.remove_object(object)
         self.place_object(object, position)
         object.position = position
@@ -97,10 +110,11 @@ class Environment(Arena):
         object_types: List[BaseAgent]
             A list of all object types in the environment.
         """
+        #! redo this to use the iterator instead
         object_types = []
-        for x in range(self.width):
-            for y in range(self.height):
-                for obj in self.grid[x][y].contents.values():
+        for x in range(self.surface.width):
+            for y in range(self.surface.height):
+                for obj in self.surface[x, y].contents.values():
                     if obj.name not in object_types:
                         object_types.append(obj.__class__.__name__)
         return object_types
@@ -119,13 +133,14 @@ class Environment(Arena):
         objects: List[BaseAgent]
             A list of all objects of the given type.
         """
+        #! do I need this with the method above there?
         if object_type == 'BaseAgent':
             object_type = self.get_object_types()
 
         objects = []
-        for x in range(self.width):
-            for y in range(self.height):
-                for obj in self.grid[x][y].contents.values():
+        for x in range(self.surface.width):
+            for y in range(self.surface.height):
+                for obj in self.surface[x, y].contents.values():
                     if obj.name in object_type:
                         objects.append(obj)
         return objects
@@ -145,9 +160,9 @@ class Environment(Arena):
         object: BaseAgent
             The object with the given id.
         """
-        for x in range(self.width):
-            for y in range(self.height):
-                for obj in self.grid[x][y].contents.values():
+        for x in range(self.surface.width):
+            for y in range(self.surface.height):
+                for obj in self.surface[x, y].contents.values():
                     if obj.unique_id == object_id:
                         return obj
 
@@ -171,13 +186,14 @@ class Environment(Arena):
         objects: List[BaseAgent]
             A list of all objects in the neighborhood of the given object.
         """
+        #! is this duplicative too?
         if object_type == 'BaseAgent':
             object_type_list = self.get_object_types()
         else:
             object_type_list = [object_type]
 
         objects = []
-        for iter in self.iter_neighbors(object[0].position):
+        for iter in self.surface.iter_neighbors(object[0].position):
             if iter.name in object_type_list:
                 objects.append(iter)
         if len(objects) == 0:
@@ -202,7 +218,7 @@ class Environment(Arena):
             A list of all objects in the neighborhood of the given location.
         """
 
-        neighborhoods = self.get_neighborhood(location)
+        neighborhoods = self.surface.get_neighborhood(location)
 
         k = min(n, len(neighborhoods))
         random_neighborhoods = choices(neighborhoods, k=k)
