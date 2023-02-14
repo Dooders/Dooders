@@ -2,9 +2,12 @@
 
 ***This page is a work-in-progress***
 
-A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power, in other words, it has the ability to interact with its environment.
+A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is defined as an entity that has causal power and the ability to interact with its environment.
 
-Another way of thinking about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
+You can also think about it is an agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
+
+Learn more about how a Dooder:
+- Will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
 
 ### Laws
 
@@ -15,7 +18,7 @@ A law is an aspect of the simulation the Dooder cannot control.
 - A step has a specific phases of execution (React, Move, Act)
 - Each cycle without consuming Energy will add to it's hunger state, increasing the chance of starvation
 
-## Step Phases
+## Movement
 
 - During the React phase, a Dooder will resolve any debts to the simulation
   - A debt is a situation that affects a Dooder while outside the Dooder's turn
