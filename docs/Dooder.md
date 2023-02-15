@@ -6,8 +6,8 @@ A Dooder is the primary agent object in the [simulation](Simulation.md). An agen
 
 An agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
 
-Learn more about how a Dooder:
-- Will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
+
+- How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
 
 ### Laws
 
