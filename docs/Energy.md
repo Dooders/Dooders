@@ -4,9 +4,16 @@
 
 Energy is an measure of the ability to do work. A Dooder uses energy to move or perform actions.
 
-- Basic Energy: "free" energy that can be consumed by all higher level energies.
-- Agent Energy: energy that serves as an intermediary level where it consumes Basic Energy, but also can be consumed. This will give it predator-prey relationship with the Dooder agent.
-- Stored Energy: Energy that is locally bound in the environment that can be large but not infinite.
+## Types of Energy
+
+### Basic Energy: 
+"free" energy that can be consumed by all higher level energies.
+
+### Agent Energy: 
+energy that serves as an intermediary level where it consumes Basic Energy, but also can be consumed. This will give it predator-prey relationship with the Dooder agent.
+
+### Stored Energy: 
+Energy that is locally bound in the environment that can be large but not infinite.
 
 ## Highlights
 
