@@ -2,7 +2,7 @@
 
 ***This page is a work-in-progress***
 
-Energy is an measure of the ability to do work. A Dooder uses energy to move or perform actions.
+Energy is an measure of the ability to do work. A Dooder uses energy to move or perform actions. In the simulation, Dooders use energy to escape the equivalent of thermal equilibrium, terminal state. Thermal equilibrium as in a Dooder being removed from the simulation due to a terminal state (death). Following the second law of thermodynamics, a system will naturally tend toward equilibrium without energy (internally or externally sourced) (death or endness like a hurricane losing power until it dissipates)
 
 ## Types of Energy
 
