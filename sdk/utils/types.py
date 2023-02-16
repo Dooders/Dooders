@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Callable, Dict, Union
 
 
+UniqueID = str
 
 class Setting(BaseModel):
     function: Union[Callable, str]
