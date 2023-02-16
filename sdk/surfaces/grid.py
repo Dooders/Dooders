@@ -45,10 +45,9 @@ class Grid:
         self.torus = settings.get('torus', True)
         self.width = settings.get('width', 10)
         self.height = settings.get('height', 10)
+        
         self._grid = []
         self._object_index = {}
-
-        # Neighborhood Cache
         self._nearby_cache = {}
 
         self._build()
