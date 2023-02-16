@@ -193,7 +193,7 @@ class Environment:
             object_type_list = [object_type]
 
         objects = []
-        for iter in self.surface.iter_neighbors(object[0].position):
+        for iter in self.surface.nearby_contents(object[0].position):
             if iter.name in object_type_list:
                 objects.append(iter)
         if len(objects) == 0:
@@ -217,8 +217,8 @@ class Environment:
         random_neighborhoods: List[GridCell]
             A list of all objects in the neighborhood of the given location.
         """
-
-        neighborhoods = self.surface.get_neighborhood(location)
+        #! this takes the coordinates of the location???
+        neighborhoods = self.surface.nearby_coordinates(location)
 
         k = min(n, len(neighborhoods))
         random_neighborhoods = choices(neighborhoods, k=k)

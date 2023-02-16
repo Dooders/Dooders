@@ -201,7 +201,7 @@ class Dooder(BaseAgent):
         partner: Dooder
             A Dooder object, if found.
         """
-        near_dooders = self.simulation.environment.get_cell_list_contents(
+        near_dooders = self.simulation.environment.contents(
             self.position)
 
         for object in near_dooders:
@@ -267,7 +267,7 @@ class Dooder(BaseAgent):
         neighborhood: list
             A list of the dooder's nearby neighborhood locations.
         """
-        locations = self.simulation.environment.get_neighbor_locations(
+        locations = self.simulation.environment.nearby_locations(
             (self.position))
 
         return Neighborhood(locations, self)

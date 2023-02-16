@@ -1,2 +1,2 @@
 from sdk.utils.short_id import ShortUUID as ShortID
-import sdk.utils.postgres as Postgres
+# import sdk.utils.postgres as Postgres

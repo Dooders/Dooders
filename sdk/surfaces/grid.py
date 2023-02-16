@@ -1,147 +1,311 @@
 import itertools
 from functools import singledispatchmethod
-from numbers import Real
-from typing import Any, Iterable, Iterator, List, Sequence, Tuple, cast
+from typing import Any, Dict, Iterator, List, Sequence, Tuple, Union, cast
 
-import numpy as np
+from sdk.modules.space import Space
+from sdk.utils.types import UniqueID
 
-from sdk.modules.location import Location
-
-GridRow = List[Location]
-Coordinate = Tuple[int, int]
+GridRow = List[Space]
+X = int
+Y = int
+Coordinate = Tuple[X, Y]
 
 #! this will inherit surface???
+#! change unique_id attribute to just id
+#! make id creator class
 
-def accept_tuple_argument(wrapped_function) -> Any:
-    """
-    Decorator to allow surface methods that take a list of (x, y) coord tuples
-    to also handle a single position, by automatically wrapping tuple in
-    single-item list rather than forcing user to do it.
-    """
-
-    def wrapper(*args: Any) -> Any:
-        if isinstance(args[1], tuple) and len(args[1]) == 2:
-            return wrapped_function(args[0], [args[1]])
-        else:
-            return wrapped_function(*args)
-
-    return wrapper
-
-def is_integer(x: Real) -> bool:
-    # Check if x is either a CPython integer or Numpy integer.
-    return isinstance(x, (int, np.integer))
 
 class Grid:
     """
+    A rectangular grid of Spaces.
+
+    Parameters
+    ----------
+    settings: dict
+        A dictionary of settings for the grid.
+        The following settings are available:
+        torus: bool
+            A boolean indicating if the grid is a torus.
+            Default: True
+        width: int
+            The width of the grid.
+            Default: 10
+        height: int
+            The height of the grid.
+            Default: 10
+
+    Methods
+    -------
+
     """
-
-    _empties: List[Coordinate]
     _grid: List[List[GridRow]]
+    _object_index: Dict[UniqueID, Coordinate]
 
-    def __init__(self, settings) -> None:
-
+    def __init__(self, settings: dict) -> None:
+        self.torus = settings.get('torus', True)
+        self.width = settings.get('width', 10)
+        self.height = settings.get('height', 10)
         self._grid = []
-
-        self.width = settings['width']
-        self.height = settings['height']
-
-        for x in range(settings['width']):
-            col = []
-            for y in range(settings['height']):
-                location = Location(x, y)
-                col.append(location)
-            self._grid.append(col)
-
-        # Creates all coordinates in a set, in order
-        self._empties = set(itertools.product(
-            *(range(settings['width']), range(settings['height']))))
+        self._object_index = {}
 
         # Neighborhood Cache
-        self._neighborhood_cache = {}
+        self._nearby_cache = {}
+
+        self._build()
+
+    def _build(self) -> None:
+        """
+        Builds the grid.
+        """
+        for x in range(self.width):
+            col = []
+            for y in range(self.height):
+                space = Space(x, y)
+                col.append(space)
+            self._grid.append(col)
+
+    def add(self, object: object, coordinate: Coordinate) -> None:
+        """
+        Add an object to a space on the grid.
+
+        Parameters
+        ----------
+        object: object
+            The object to add to the grid (Dooder, Energy, etc.).
+        coordinate: Coordinate
+            Where to place the object. 
+        """
+        x, y = coordinate
+        space = self._grid[x][y]
+        space.add(object)
+        self._object_index[object.id] = coordinate
+        object.position = coordinate
 
     @singledispatchmethod
-    def __getitem__(self, value):
-        raise NotImplementedError(f'Type {type(value)} is unsupported')
-
-    @__getitem__.register
-    def _(self, value: int):
-        return self._grid[value]
-
-    @__getitem__.register
-    def _(self, value: list):
-        index = cast(Sequence[Coordinate], value)
-
-        cells = []
-        for pos in index:
-            x1, y1 = self.torus_adj(pos)
-            cells.append(self._grid[x1][y1])
-        return cells
-
-    @__getitem__.register
-    def _(self, value: tuple):
-        index = cast(Coordinate, value)
-        x, y = self.torus_adj(index)
-        return self._grid[x][y]
-
-    def __iter__(self) -> Iterator[GridRow]:
+    def remove(self, type: Union[object, UniqueID]) -> None:
         """
-        Create an iterator that chains the rows of the surface together
-        as if it is one list.
+        Remove content from a Space on the grid.
+
+        Must be an object or an objects UniqueID
+
+        Parameters
+        ----------
+        type: Union[object, UniqueID]
+            The object or id of the object to remove. 
+            It will also be removed from the object index.
+        """
+        raise NotImplementedError(
+            "You must pass either an object or an object id to remove.")
+
+    @remove.register
+    def _(self, object: object) -> None:
+        """
+        Remove content from a Space on the grid based on the provided object.
+
+        Parameters
+        ----------
+        object: object
+            The object to remove. 
+            It will also be removed from the object index.
+        """
+        position = object.position
+        self._grid[position].remove(object)
+        self._object_index.pop(object.id)
+
+    @remove.register
+    def _(self, object_id: UniqueID) -> None:
+        """
+        Remove content from a Space on the grid based on the object id.
+
+        Parameters
+        ----------
+        object_id: UniqueID
+            The id of the object to remove. 
+            It will also be removed from the object index.
+        """
+        position = self._object_index[object_id]
+        self._grid[position].remove(object_id)
+        self._object_index.pop(object_id)
+
+    def coordinates(self) -> Iterator[Coordinate]:
+        """
+        Return an iterator over all coordinates in the grid.
 
         Returns
         -------
-        Iterator[GridContent]
-            The iterator of the surface.
+        Iterator[Coordinate]
+            An iterator over all coordinates in the grid.
+            Example: [(0, 0), (0, 1), (0, 2), (0, 3)]
         """
-        return itertools.chain(*self._grid)
+        for row in self._grid:
+            for space in row:
+                yield space.coordinates
 
-    def coord_iter(self) -> Iterator[Tuple[Location, int, int]]:
+    def spaces(self) -> Iterator[Space]:
         """
-        An iterator that returns Location and its coordinates.
+        Return an iterator over all Spaces in the grid.
 
         Returns
         -------
-        Iterator[Tuple[GridContent, int, int]]
-            The iterator of the surface.
+        Iterator[Location]
+            An iterator over all Spaces in the grid.
+            Example: [<Space>, <Space>, <Space>, <Space>]
         """
-        for row in range(self.width):
-            for col in range(self.height):
-                yield self._grid[row][col], row, col
+        for row in self._grid:
+            for space in row:
+                yield space
 
-    def get_neighborhood(
+    @singledispatchmethod
+    def contents(self, type: Any = None) -> Any:
+        """
+        Return an iterator over all contents in the grid.
+
+        With no arguments, it will return all contents.
+        Include an object type to return only that type of object.
+
+        Parameters
+        ----------
+        type: Any
+            The type of contents to return. Defaults to all.
+            object types include 'Dooder', 'Energy', etc.
+
+        Returns
+        -------
+        Iterator[Any]
+            An iterator over all contents in the grid.
+            Example: [<Dooder>, <Energy>, <Dooder>, <Energy>]
+        """
+        for row in self._grid:
+            for space in row:
+                for object in space.contents.values():
+                    yield object
+
+    @contents.register
+    def _(self, object_type: str) -> Iterator[Any]:
+        """
+        Return an iterator over all contents in the grid.
+
+        With no arguments, it will return all contents.
+        Include an object type to return only that type of object.
+
+        Parameters
+        ----------
+        type: Any
+            The type of contents to return. Defaults to all.
+            object types include 'Dooder', 'Energy', etc.
+
+        Returns
+        -------
+        Iterator[Any]
+            An iterator over all contents in the grid. 
+            Example: [<Dooder>, <Energy>, <Dooder>, <Energy>]
+        """
+        for row in self._grid:
+            for space in row:
+                for object in space.contents.values():
+                    if object.__class__.__name__ == object_type:
+                        yield object
+
+    def nearby_spaces(
         self,
         position: Coordinate,
         moore: bool = True,
         include_center: bool = False,
-        radius: int = 1,
-    ) -> List[Coordinate]:
+        radius: int = 1
+    ) -> Iterator[Space]:
         """
-        Return a list of cells that are in the neighborhood of a
-        certain point.
+        Return an iterator of Spaces nearby a given position.
 
         Parameters
         ----------
         position: Coordinate
-            Coordinate tuple for the neighborhood to get.
+            The position to get the nearby spaces from.
         moore: bool
-            If True, return Moore neighborhood (including diagonals)
-            If False, return Von Neumann neighborhood (exclude diagonals)
+            A boolean indicating if the neighborhood should be Moore or Von Neumann.
+            Default: True
         include_center: bool
-            If True, return the (x, y) cell as well.
-            Otherwise, return surrounding cells only.
+            A boolean indicating if the center position should be included in the neighborhood.
+            Default: False
         radius: int
-            radius, in cells, of neighborhood to get.
+            The radius of the neighborhood. Default: 1
 
         Returns
         -------
-            A list of coordinate tuples representing the neighborhood;
-            With radius 1, at most 9 if Moore, 5 if Von Neumann (8 and 4
-            if not including the center).
+        Iterator[Space]
+            An iterator of Spaces nearby a given position.
+            Example: [<Space>, <Space>, <Space>, <Space>]
+        """
+        nearby = self.nearby_coordinates(
+            position, moore, include_center, radius)
+        return [self._grid[pos[0]][pos[1]] for pos in nearby]
+
+    def nearby_contents(
+        self,
+        position: Coordinate,
+        moore: bool = True,
+        include_center: bool = False,
+        radius: int = 1
+    ) -> Iterator[Any]:
+        """
+        Return an iterator of contents nearby a given position.
+
+        Parameters
+        ----------
+        position: Coordinate
+            The position to get the nearby contents from.
+        moore: bool
+            A boolean indicating if the neighborhood should be Moore or Von Neumann.
+            Default: True
+        include_center: bool
+            A boolean indicating if the center position should be included in the neighborhood.
+            Default: False
+        radius: int
+            The radius of the neighborhood. Default: 1
+
+        Returns
+        -------
+        Iterator[Any]
+            An iterator of contents nearby a given position.
+            Example: [<Dooder>, <Energy>, <Dooder>, <Dooder>]
+        """
+        nearby_contents = self.nearby_coordinates(
+            position, moore, include_center, radius)
+        return [self._grid[pos[0]][pos[1]].contents for pos in nearby_contents]
+
+    def nearby_coordinates(
+        self,
+        position: Coordinate,
+        moore: bool = True,
+        include_center: bool = False,
+        radius: int = 1
+    ) -> Iterator[Coordinate]:
+        """
+        Return an iterator of coordinates nearby a given position.
+
+        Parameters
+        ----------
+        position: Coordinate
+            The position to get the nearby coordinates from.
+            Example: (0, 0)
+        moore: bool
+            A boolean indicating if the neighborhood should be Moore or Von Neumann.
+            Default: True
+        include_center: bool
+            A boolean indicating if the center position should be included in the neighborhood.
+            Default: False
+        radius: int
+            The radius of the neighborhood. Default: 1
+
+        Returns
+        -------
+        Iterator[Coordinate]
+            An iterator of coordinates nearby a given position.
+            Example: [(0, 0), (0, 1), (0, 2), (0, 3)]
         """
         cache_key = (position, moore, include_center, radius)
-        neighborhood = self._neighborhood_cache.get(cache_key, None)
+        nearby_coordinates = self._nearby_cache.get(cache_key, None)
 
-        if neighborhood is None:
+        if nearby_coordinates is None:
             coordinates = []
 
             x, y = position
@@ -159,187 +323,16 @@ class Grid:
                         # Skip if not a torus and new coords out of bounds.
                         if not self.torus:
                             continue
-                        coord = self.torus_adj(coord)
+                        coord = self.torus_adjustment(coord)
 
                     coordinates.append(coord)
 
-            neighborhood = coordinates
-            self._neighborhood_cache[cache_key] = neighborhood
+            nearby_coordinates = coordinates
+            self._nearby_cache[cache_key] = nearby_coordinates
 
-        return neighborhood
+        return nearby_coordinates
 
-    def iter_neighborhood(
-        self,
-        position: Coordinate,
-        moore: bool = True,
-        include_center: bool = False,
-        radius: int = 1,
-    ) -> Iterator[Coordinate]:
-        """
-        Return an iterator over cell coordinates that are in the
-        neighborhood of a certain point.
-
-        Parameters
-        ----------
-        position: Coordinate
-            Coordinate tuple for the neighborhood to get.
-        moore: bool
-            If True, return Moore neighborhood (including diagonals)
-            If False, return Von Neumann neighborhood(exclude diagonals)
-        include_center: bool
-            If True, return the (x, y) cell as well.
-            Otherwise, return surrounding cells only.
-        radius: int
-            radius, in cells, of neighborhood to get.
-
-        Returns
-        -------
-            A list of coordinate tuples representing the neighborhood. For
-            example with radius 1, it will return list with number of elements
-            equals at most 9 (8) if Moore, 5 (4) if Von Neumann (if not
-            including the center).
-        """
-        yield from self.get_neighborhood(position, moore, include_center, radius)
-
-    def get_neighbor_locations(
-        self,
-        position: Coordinate,
-        moore: bool = True,
-        include_center: bool = True,
-        radius: int = 1,
-    ) -> List[Location]:
-        """
-        Return a list of locations that are in the neighborhood of a
-        certain point.
-
-        Parameters
-        ----------
-        position: Coordinate
-            Coordinate tuple for the neighborhood to get.
-        moore: bool
-            If True, return Moore neighborhood (including diagonals)
-            If False, return Von Neumann neighborhood(exclude diagonals)
-        include_center: bool
-            If True, return the (x, y) cell as well.
-            Otherwise, return surrounding cells only.
-        radius: int
-            radius, in cells, of neighborhood to get.
-
-        Returns
-        -------
-            A list of locations representing the neighborhood. For
-            example with radius 1, it will return list with number of elements
-            equals at most 9 (8) if Moore, 5 (4) if Von Neumann (if not
-            including the center).
-        """
-        neighborhood = self.get_neighborhood(
-            position, moore, include_center, radius)
-        return [self.surface[pos[0]][pos[1]] for pos in neighborhood]
-
-    def iter_neighbors(
-        self,
-        position: Coordinate,
-        moore: bool = True,
-        include_center: bool = False,
-        radius: int = 1,
-    ) -> Iterator[object]:
-        """
-        Return an iterator over neighbors to a certain point.
-
-        Parameters
-        ----------
-        pos: Coordinate
-            Coordinates for the neighborhood to get.
-        moore: bool
-            If True, return Moore neighborhood (including diagonals)
-            If False, return Von Neumann neighborhood (exclude diagonals)
-        include_center: bool
-            If True, return the (x, y) cell as well.
-            Otherwise, return surrounding cells only.
-        radius: int
-            radius, in cells, of neighborhood to get.
-
-        Returns
-        -------
-            An iterator of non-None objects in the given neighborhood;
-            at most 9 if Moore, 5 if Von-Neumann
-            (8 and 4 if not including the center).
-        """
-        neighborhood = self.get_neighborhood(
-            position, moore, include_center, radius)
-        return self.iter_cell_list_contents(neighborhood)
-
-    def get_neighbors(
-        self,
-        position: Coordinate,
-        moore: bool = True,
-        include_center: bool = False,
-        radius: int = 1,
-    ) -> List[object]:
-        """
-        Return a list of neighbors to a certain point.
-
-        Parameters
-        ----------
-        position: Coordinate
-            Coordinate tuple for the neighborhood to get.
-        moore: bool
-            If True, return Moore neighborhood (including diagonals)
-            If False, return Von Neumann neighborhood (exclude diagonals)
-        include_center: bool
-            If True, return the (x, y) cell as well.
-            Otherwise, return surrounding cells only.
-        radius: int
-            radius, in cells, of neighborhood to get.
-
-        Returns
-        -------
-            A list of non-None objects in the given neighborhood;
-            at most 9 if Moore, 5 if Von-Neumann
-            (8 and 4 if not including the center).
-        """
-        return list(self.iter_neighbors(position, moore, include_center, radius))
-
-    @accept_tuple_argument
-    def iter_cell_list_contents(
-        self, cell_list: Iterable[Coordinate]
-    ) -> Iterator[object]:
-        """
-        Returns an iterator of the contents of the
-        cells identified in cell_list.
-
-        Parameters
-        ----------
-        cell_list: Array-like 
-            of (x, y) tuples, or single tuple.
-
-        Returns
-        -------
-            A iterator of the contents of the cells identified in cell_list
-        """
-        return itertools.chain.from_iterable(
-            self[x][y].contents.values() for x, y in cell_list if not self.is_cell_empty((x, y))
-        )
-
-    @accept_tuple_argument
-    def get_cell_list_contents(self, cell_list: Iterable[Coordinate]) -> List[object]:
-        """
-        Returns a list of the contents of the cells
-        identified in cell_list.
-        Note: this method returns a list of `Agent`'s; `None` contents are excluded.
-
-        Parameters
-        ----------
-        cell_list: Array-like 
-            of (x, y) tuples, or single tuple.
-
-        Returns
-        -------
-            A list of the contents of the cells identified in cell_list
-        """
-        return list(self.iter_cell_list_contents(cell_list))
-
-    def torus_adj(self, position: Coordinate) -> Coordinate:
+    def torus_adjustment(self, position: Coordinate) -> Coordinate:
         """
         Convert coordinate, handling torus looping.
 
@@ -347,10 +340,12 @@ class Grid:
         ----------
         position: Coordinate
             Coordinate tuple to convert.
+            Example: (0, 0)
 
         Returns
         -------
-            A coordinate tuple, converted to be on the surface.
+        Coordinate
+            Coordinate tuple adjusted for torus looping.
         """
         if not self.out_of_bounds(position):
             return position
@@ -371,11 +366,12 @@ class Grid:
 
         Returns 
         -------
+        bool
             True if position is off the surface, False otherwise.
         """
         x, y = position
         return x < 0 or x >= self.width or y < 0 or y >= self.height
-    
+
     def is_cell_empty(self, position: Coordinate) -> bool:
         """
         Returns a bool of the contents of a cell.
@@ -387,18 +383,67 @@ class Grid:
 
         Returns
         -------
-            True if cell is empty, False otherwise
+        bool
+            True if the cell is empty, False otherwise.
         """
         x, y = position
-        return self.surface[x][y].status == 'empty'
+        return self._grid[x][y].status == 'empty'
 
-    def exists_empty_cells(self) -> bool:
+    def __iter__(self) -> Iterator[GridRow]:
         """
-        Return True if any cells empty else False.
+        Create an iterator that chains the rows of the surface together
+        as if it is one list.
 
         Returns
         -------
-            True if any cells empty else False.
+        Iterator[GridRow]
+            The iterator of the surface.
         """
-        return len(self.empties) > 0
-    
+        return itertools.chain(*self._grid)
+
+    @singledispatchmethod
+    def __getitem__(self, value) -> Any:
+        raise NotImplementedError(f'Type {type(value)} is unsupported')
+
+    @__getitem__.register
+    def _(self, value: int) -> GridRow:
+        """ 
+        Return the row at the given index.
+        """
+        return self._grid[value]
+
+    @__getitem__.register
+    def _(self, value: list) -> List[Space]:
+        """ 
+        Return the Spaces at the given coordinates.
+        """
+        index = cast(Sequence[Coordinate], value)
+
+        cells = []
+        for pos in index:
+            x1, y1 = self.torus_adjustment(pos)
+            cells.append(self._grid[x1][y1])
+        return cells
+
+    @__getitem__.register
+    def _(self, value: tuple) -> Space:
+        """ 
+        Return the Space at the given coordinate.
+        """
+        index = cast(Coordinate, value)
+        x, y = self.torus_adjustment(index)
+        return self._grid[x][y]
+
+    @__getitem__.register
+    def _(self, value: str) -> Union[GridRow, List[Space], Space]:
+        """ 
+        Return the row at the given index or the Space at the given coordinate.
+        """
+        index = cast(str, value)
+        if index == 'all':
+            return self._grid
+        else:
+            #! add in using unique id here as a search option
+            #! that means unique id needs to have code prefixes to make it
+            #! easier to determine what youre looking for when you pass the id
+            raise NotImplementedError(f'Index {index} is unsupported')

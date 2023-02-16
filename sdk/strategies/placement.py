@@ -22,8 +22,8 @@ def random_location(model: Callable, args: dict) -> list:
     list
         A list of random locations based on the SeedCount.
     """
-    locations = [(loc[1], loc[2])
-                 for loc in model.simulation.environment.coord_iter()]
+    #! this takes a list of coordinates, the coordinates are tuples
+    locations = [loc for loc in model.simulation.environment.coordinates()]
     random_locations = choices(locations, k=model.SeedCount())
 
     return random_locations
