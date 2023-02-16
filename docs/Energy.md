@@ -12,6 +12,10 @@ Energy is an measure of the ability to do work. A Dooder uses energy to move or 
 ### Agent Energy: 
 energy that serves as an intermediary level where it consumes Basic Energy, but also can be consumed. This will give it predator-prey relationship with the Dooder agent.
 
+Will be able to observe the evolution of this agent as well.
+How it adapts to the Dooder dynamic.
+I will also need to give this the ability to continue long into the simulation
+
 ### Stored Energy: 
 Energy that is locally bound in the environment that can be large but not infinite.
 
