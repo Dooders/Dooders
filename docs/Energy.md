@@ -27,9 +27,6 @@ Energy that is locally bound in the environment that can be large but not infini
 * After n cycles with no movement, 1 energy unit is taken from a dooder
 * Energy dissipates at random intervals between min and max (laws)
 
-## Future
+## Future Ideas
 
 * Energy creation cycles or periods. Like periods of plenty and scarcity
-* Different types of energy with advantages and disadvantages
-* Maybe go into starvation state and behaves differently
-* Emergency supply that is used when starving. Make this a gene
