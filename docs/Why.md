@@ -6,7 +6,7 @@ I see myself as a generalist with a broad range of interests. In recent years, I
 
 This project aligns with my interests and provides an opportunity to explore more. I expect to create a continuously evolving and improving project.
 
-I aim to explore and integrate various disciplines and fields into the project including: artificial intelligence, data science, philosophy, cognitive science, biology, etc., while attempting to create an elegent and clean codebase. Code can be as much an art as it is a science; communicating complex ideas better than traditional methods.
+I aim to explore and integrate various disciplines and fields into the project including: artificial intelligence, data science, philosophy, cognitive science, information theory, biology, etc., while attempting to create an elegent and clean codebase. Code can be as much an art as it is a science; communicating complex ideas better than traditional methods.
 
 My primary objectives are to:
 
