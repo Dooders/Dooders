@@ -54,12 +54,12 @@ class Time(BaseTime):
             add to the schedule
         """
 
-        if object.unique_id in self._objects[object.name]:
+        if object.id in self._objects[object.name]:
             raise Exception(
-                f"Object with unique id {repr(object.unique_id)} already added to scheduler"
+                f"Object with unique id {repr(object.id)} already added to scheduler"
             )
 
-        self._objects[object.name][object.unique_id] = object
+        self._objects[object.name][object.id] = object
 
     def remove(self, object: 'BaseAgent') -> None:
         """
@@ -70,7 +70,7 @@ class Time(BaseTime):
         object: Object
             Object being removed.
         """
-        del self._objects[object.name][object.unique_id]
+        del self._objects[object.name][object.id]
 
     def _step(self, object_class: str, shuffle_objects: bool = True) -> None:
         """ 
@@ -141,20 +141,20 @@ class Time(BaseTime):
         """
         return list(self._objects[object_class].values())
 
-    def get_object(self, object_class: str, unique_id: int) -> 'BaseAgent':
+    def get_object(self, object_class: str, id: int) -> 'BaseAgent':
         """ 
-        Returns an object of a given class with a given unique_id.
+        Returns an object of a given class with a given id.
 
         Parameters
         ----------
         object_class: str
             Class of object to return
-        unique_id: str
+        id: str
             Unique id of object to return
 
         Returns
         -------
         object: Object 
-            An object of a given class with a given unique_id.
+            An object of a given class with a given id.
         """
-        return self._objects[object_class][unique_id]
+        return self._objects[object_class][id]

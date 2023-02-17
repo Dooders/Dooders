@@ -35,13 +35,13 @@ def reproduce(dooderX) -> None:
             offspring.simulation.society.place_dooder(
                 offspring, offspring.position)
             
-            offspring.parents = (dooderX.unique_id, dooderY.unique_id)
+            offspring.parents = (dooderX.id, dooderY.id)
             
             dooderX.reproduction_count += 1
             dooderY.reproduction_count += 1
 
             dooderX.log(granularity=1,
-                        message=f"Reproduced with {dooderY.unique_id} and created {offspring.unique_id}",
+                        message=f"Reproduced with {dooderY.id} and created {offspring.id}",
                         scope='Dooder')
 
         else:

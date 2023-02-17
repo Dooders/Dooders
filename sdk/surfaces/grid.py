@@ -10,8 +10,6 @@ X = int
 Y = int
 Coordinate = Tuple[X, Y]
 
-#! this will inherit surface???
-#! change unique_id attribute to just id
 #! make id creator class
 
 

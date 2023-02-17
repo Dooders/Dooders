@@ -28,6 +28,6 @@ def consume(dooder) -> None:
         dooder.hunger = 0
         dooder.energy_consumed += 1
         dooder.log(
-            granularity=2, message=f"Consumed energy: {energy.unique_id}", scope='Dooder')
+            granularity=2, message=f"Consumed energy: {energy.id}", scope='Dooder')
     else:
         dooder.hunger += 1

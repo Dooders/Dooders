@@ -17,7 +17,7 @@ class TestObject:
     
     def __init__(self, id):
         self.id = id
-        self.unique_id = 'test_id'
+        self.id = 'test_id'
 
 def test_init():
     grid = Grid(settings)

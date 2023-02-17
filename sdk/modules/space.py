@@ -27,8 +27,6 @@ class Space:
 
     Attributes
     ----------
-    unique_id: str
-        A unique id for the Space
     x: int
         See Parameters
     y: int

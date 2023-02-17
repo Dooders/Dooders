@@ -38,7 +38,7 @@ def get_logger():
 
  #           if granularity <= self.params.granularity:
  #               cycle_number = self.simulation.time.time
-  #              unique_id = self.unique_id
+  #              id = self.id
    #             experiment_id = self.experiment_id
 #                logger_obj = get_logger()
 #                prefix = f'{experiment_id} - {function.__name__} - {scope} - {cycle_number} - '

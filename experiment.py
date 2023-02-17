@@ -166,7 +166,7 @@ class Experiment:
             random_object = self.get_random_objects('Dooder')
 
             if random_object:
-                object_id = random_object[0].unique_id
+                object_id = random_object[0].id
             else:
                 return 'No active Dooders'
 

@@ -35,4 +35,4 @@ def test_remove(simulation):
     simulation.resources.step()
     energy = list(simulation.resources.available_resources.values())[0]
     simulation.resources.remove(energy)
-    assert energy.unique_id not in simulation.resources.available_resources
+    assert energy.id not in simulation.resources.available_resources

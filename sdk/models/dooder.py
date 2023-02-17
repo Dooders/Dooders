@@ -30,7 +30,7 @@ MotivationList = ['Consume', 'Reproduce']
 
 
 class MainStats(BaseModel):
-    unique_id: str
+    id: str
     position: tuple
     hunger: int
     age: int
@@ -47,7 +47,7 @@ class Dooder(BaseAgent):
 
     Parameters
     ----------
-    unique_id: str
+    id: str
         Unique ID for the object. 
         Created by the simulation object
     position: tuple
@@ -94,11 +94,11 @@ class Dooder(BaseAgent):
     """
 
     def __init__(self,
-                 unique_id: 'UniqueID',
+                 id: 'UniqueID',
                  position: 'Position',
                  simulation: 'BaseSimulation') -> None:
 
-        super().__init__(unique_id, position, simulation)
+        super().__init__(id, position, simulation)
         self.genetics = Genetics.compile_genetics(self)
         self.behavior = self.genetics.copy()
         self.cognition = Cognition()
@@ -177,20 +177,6 @@ class Dooder(BaseAgent):
                          message="Terminated during cycle",
                          scope='Dooder')
 
-    def clone(self) -> 'Dooder':
-        """
-        Clone the dooder.
-
-        Returns
-        -------
-        clone: Dooder
-            A copy of the dooder.
-        """
-        clone = copy.deepcopy(self)
-        clone.unique_id = self.simulation.seed.uuid()
-
-        return clone
-
     def find_partner(self) -> 'Dooder':
         #! Make this an action and model? Yes
         """
@@ -219,7 +205,7 @@ class Dooder(BaseAgent):
         string: str
             A string of the dooder's attributes and genetics.
         """
-        return f"UniqueID: {self.unique_id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
+        return f"UniqueID: {self.id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
 
     @property
     def history(self) -> list:
@@ -233,7 +219,7 @@ class Dooder(BaseAgent):
         """
         logs = []
         for log in self.simulation.load_log():
-            if log.get('UniqueID') == self.unique_id:
+            if log.get('UniqueID') == self.id:
                 logs.append(log)
         return logs
 
@@ -247,7 +233,7 @@ class Dooder(BaseAgent):
         stats: dict 
             A dictionary of the dooder's main stats.
             for example: 
-            {'unique_id': '1234', 'position': (0,0), 'hunger': 0, 
+            {'id': '1234', 'position': (0,0), 'hunger': 0, 
             'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0, 
             'move_count': 0, 'energy_consumed': 0}
         """

@@ -18,7 +18,7 @@
 
 # def test_energy_init(energy):
 #     object, _ = energy
-#     assert object.unique_id == '3'
+#     assert object.id == '3'
 #     assert object.position == (3, 3)
 #     assert object.cycle_count == 0
 
