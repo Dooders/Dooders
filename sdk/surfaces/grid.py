@@ -36,7 +36,28 @@ class Grid:
 
     Methods
     -------
-
+    add(object: object, coordinate: Coordinate) -> None
+        Add an object to a space on the grid.
+    remove(object: object) -> None
+        Remove an object from the grid.
+    remove(object_id: UniqueID) -> None
+        Remove an object from the grid based on its id.
+    coordinates() -> Iterator[Coordinate]
+        Return an iterator over all coordinates in the grid.
+    spaces() -> Iterator[Space]
+        Return an iterator over all spaces in the grid.
+    contents() -> Iterator[object]
+        Return an iterator over all objects in the grid.
+    nearby_spaces(coordinate: Coordinate, radius: int) -> Iterator[Space]
+        Return an iterator over all spaces within a radius of a coordinate.
+    nearby_contents(coordinate: Coordinate, radius: int) -> Iterator[object]
+        Return an iterator over all objects within a radius of a coordinate.
+    nearby_coordinates(coordinate: Coordinate, radius: int) -> Iterator[Coordinate]
+        Return an iterator over all coordinates within a radius of a coordinate.
+    
+    See Also
+    --------
+    sdk.modules.space.Space
     """
     _grid: List[List[GridRow]]
     _object_index: Dict[UniqueID, Coordinate]
@@ -45,7 +66,7 @@ class Grid:
         self.torus = settings.get('torus', True)
         self.width = settings.get('width', 10)
         self.height = settings.get('height', 10)
-        
+
         self._grid = []
         self._object_index = {}
         self._nearby_cache = {}
@@ -54,7 +75,7 @@ class Grid:
 
     def _build(self) -> None:
         """
-        Builds the grid.
+        Builds the grid based on the provided settings.
         """
         for x in range(self.width):
             col = []
@@ -81,7 +102,7 @@ class Grid:
         object.position = coordinate
 
     @singledispatchmethod
-    def remove(self, type: Union[object, UniqueID]) -> None:
+    def remove(self, type: Union[object, str]) -> None:
         """
         Remove content from a Space on the grid.
 
@@ -107,12 +128,12 @@ class Grid:
             The object to remove. 
             It will also be removed from the object index.
         """
-        position = object.position
-        self._grid[position].remove(object)
+        x, y = object.position
+        self._grid[x][y].remove(object)
         self._object_index.pop(object.id)
 
     @remove.register
-    def _(self, object_id: UniqueID) -> None:
+    def _(self, object_id: str) -> None:
         """
         Remove content from a Space on the grid based on the object id.
 
@@ -122,8 +143,8 @@ class Grid:
             The id of the object to remove. 
             It will also be removed from the object index.
         """
-        position = self._object_index[object_id]
-        self._grid[position].remove(object_id)
+        x, y = self._object_index[object_id]
+        self._grid[x][y].remove(object_id)
         self._object_index.pop(object_id)
 
     def coordinates(self) -> Iterator[Coordinate]:
@@ -154,33 +175,7 @@ class Grid:
             for space in row:
                 yield space
 
-    @singledispatchmethod
-    def contents(self, type: Any = None) -> Any:
-        """
-        Return an iterator over all contents in the grid.
-
-        With no arguments, it will return all contents.
-        Include an object type to return only that type of object.
-
-        Parameters
-        ----------
-        type: Any
-            The type of contents to return. Defaults to all.
-            object types include 'Dooder', 'Energy', etc.
-
-        Returns
-        -------
-        Iterator[Any]
-            An iterator over all contents in the grid.
-            Example: [<Dooder>, <Energy>, <Dooder>, <Energy>]
-        """
-        for row in self._grid:
-            for space in row:
-                for object in space.contents.values():
-                    yield object
-
-    @contents.register
-    def _(self, object_type: str) -> Iterator[Any]:
+    def contents(self, object_type: str = None) -> Iterator[Any]:
         """
         Return an iterator over all contents in the grid.
 
@@ -202,6 +197,8 @@ class Grid:
         for row in self._grid:
             for space in row:
                 for object in space.contents.values():
+                    if object_type is None:
+                        yield object
                     if object.__class__.__name__ == object_type:
                         yield object
 
@@ -370,23 +367,6 @@ class Grid:
         """
         x, y = position
         return x < 0 or x >= self.width or y < 0 or y >= self.height
-
-    def is_cell_empty(self, position: Coordinate) -> bool:
-        """
-        Returns a bool of the contents of a cell.
-
-        Parameters
-        ----------
-        position: Coordinate
-            Coordinate tuple of the cell to check.
-
-        Returns
-        -------
-        bool
-            True if the cell is empty, False otherwise.
-        """
-        x, y = position
-        return self._grid[x][y].status == 'empty'
 
     def __iter__(self) -> Iterator[GridRow]:
         """

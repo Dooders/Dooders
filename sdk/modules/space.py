@@ -11,6 +11,7 @@ contents (Energy, Agents, etc.)
 """
 
 import random
+from typing import Union
 
 
 class Space:
@@ -80,10 +81,10 @@ class Space:
         object: object
             The object to add to the Space (i.e. Dooder, Energy, etc.)
         """
-        self.contents[object.unique_id] = object
+        self.contents[object.id] = object
         self.status = 'occupied'
 
-    def remove(self, object: object) -> None:
+    def remove(self, object: Union[object,str]) -> None:
         """ 
         Remove an object from the Space
 
@@ -92,7 +93,11 @@ class Space:
         object: object
             The object to remove from the Space
         """
-        self.contents.pop(object.unique_id, None)
+        
+        if type(object) == str:
+            self.contents.pop(object, None)
+        else:
+            self.contents.pop(object.id, None)
 
         if len(self.contents) == 0:
             self.status = 'empty'
@@ -116,7 +121,7 @@ class Space:
         """
         for object in self.contents.values():
             if object.__class__.__name__ == object_type:
-                if ignore.unique_id == object.unique_id:
+                if ignore.id == object.id:
                     pass
                 else:
                     return True
