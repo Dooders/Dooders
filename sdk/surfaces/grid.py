@@ -54,7 +54,7 @@ class Grid:
         Return an iterator over all objects within a radius of a coordinate.
     nearby_coordinates(coordinate: Coordinate, radius: int) -> Iterator[Coordinate]
         Return an iterator over all coordinates within a radius of a coordinate.
-    
+
     See Also
     --------
     sdk.modules.space.Space
@@ -422,7 +422,6 @@ class Grid:
         if index == 'all':
             return self._grid
         else:
-            #! add in using unique id here as a search option
-            #! that means unique id needs to have code prefixes to make it
-            #! easier to determine what youre looking for when you pass the id
-            raise NotImplementedError(f'Index {index} is unsupported')
+            for space in self.spaces():
+                for objects in space.contents:
+                    return space.contents.get(index, 'No object found')
