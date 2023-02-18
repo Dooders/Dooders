@@ -8,6 +8,7 @@ An agent can take in information and use that to increase its survivability. Nat
 
 #### For more explanations:
 - How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
+- How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
 
 ### Laws
 
