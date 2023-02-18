@@ -29,10 +29,10 @@ def reproduce(dooderX) -> None:
 
         if dooderY:
             genetics = Policy.execute(reproduction_policy, dooderX, dooderY) #! make sure this will execute for all internal_models
-            offspring = dooderX.simulation.society._generate_dooder(
+            offspring = dooderX.simulation.arena._generate_dooder(
                 dooderX.position)
             offspring.internal_models.inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models
-            offspring.simulation.society.place_dooder(
+            offspring.simulation.arena.place_dooder(
                 offspring, offspring.position)
             
             offspring.parents = (dooderX.id, dooderY.id)

@@ -15,10 +15,7 @@ import pandas as pd
 from db.main import DB
 from sdk.base.reality import Reality
 from sdk.config import ExperimentParameters
-from sdk.core import Condition, Policy, Step, Strategy
-from sdk.core.action import Action
-from sdk.models.resources import Resources
-from sdk.models.society import Society
+from sdk.core import Condition
 
 
 class Simulation(Reality):
@@ -39,13 +36,6 @@ class Simulation(Reality):
             cycles: The number of cycles that have passed.
         """
         super().__init__(settings)
-
-        # self.strategy = Strategy()
-        # self.resources = Resources(self)
-        # self.society = Society(self)
-        # self.policies = Policy()
-        # self.actions = Action()
-        # self.steps = Step()
         self.running = False
         self.cycles: int = 0
 
@@ -58,7 +48,7 @@ class Simulation(Reality):
         4. Collect initial state
         """
         self.resources.allocate_resources()
-        self.society.generate_seed_population()
+        self.arena.generate_seed_population()
 
         self.running = True
 
@@ -78,7 +68,7 @@ class Simulation(Reality):
         self.resources.step()
 
         # collect stats
-        self.society.step()
+        self.arena.step()
 
         self.cycles += 1
 
@@ -167,7 +157,7 @@ class Simulation(Reality):
         Returns:
             A random dooder.
         """
-        return self.society.get_dooder()
+        return self.arena.get_dooder()
 
     def stop_conditions(self) -> bool:
         #! maybe make a decorator to implement this nicely
@@ -217,9 +207,9 @@ class Simulation(Reality):
                 'CycleCount': self.cycles,
                 'TotalEnergy': sum(self.information.data['resources']['allocated_energy']),
                 'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
-                'StartingDooderCount': self.information.data['society']['created_dooder_count'][0],
-                'EndingDooderCount': len(self.society.active_dooders),
-                # 'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
+                'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
+                'EndingDooderCount': len(self.arena.active_dooders),
+                # 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
 
     @property

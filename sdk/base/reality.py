@@ -9,7 +9,7 @@ import ast
 from sdk.utils import ShortID
 
 # maybe have a dict that contains each simulation component (Environment, etc.)
-# Components (Society, Environment) and objects ( Dooders, Energy)
+# Components (Arena, Environment) and objects ( Dooders, Energy)
 # Still need to figure out how each component and its objects interact with each other
 
 class Reality(ABC):

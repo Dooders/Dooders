@@ -13,4 +13,4 @@ class Variable(BaseModel):
     type: str
     description: Union[str, None]
     default: Setting
-    dependency: Union[str, None]
+    # dependency: Union[str, None]

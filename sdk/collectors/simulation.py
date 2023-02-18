@@ -109,7 +109,7 @@ def average_genetics(simulation) -> dict:
     dict
         The average genetics of all dooders in the simulation.
     """
-    dooders = simulation.society.active_dooders
+    dooders = simulation.arena.active_dooders
     
     genetic_list = []
 

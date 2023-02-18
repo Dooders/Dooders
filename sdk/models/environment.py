@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, List, Union
 
 from sdk.base.base_agent import BaseAgent
 from sdk.core.surface import Surface
+from sdk.core.strategy import Strategy
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
@@ -49,7 +50,12 @@ class Environment:
         torus: bool
             Whether the environment is a torus or not.
         """
-        self.surface = Surface.build(settings)
+        
+    def _setup(self) -> None:
+        """ 
+        Setup the environment.
+        """
+        self.surface = Surface.build(self.SurfaceType())
 
     def place_object(self, object: 'BaseAgent', position: tuple) -> None:
         """

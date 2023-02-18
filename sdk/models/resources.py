@@ -65,6 +65,13 @@ class Resources:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
+        
+    def _setup(self) -> None:
+        """ 
+        Sets up the Resources class.
+        
+        The method will allocate resources based on the strategy.
+        """
         self.reset()
 
     def allocate_resources(self) -> None:

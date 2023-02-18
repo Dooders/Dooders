@@ -23,7 +23,7 @@ from sdk.utils.types import Setting, Variable
 class Variables:
     """ 
     Discover all variables for the applicable models
-    
+
     Methods
     -------
     discover()
@@ -48,12 +48,14 @@ class Variables:
                 with open(os.path.join(directory, file)) as f:
                     options = yaml.load(f, Loader=yaml.FullLoader)
                     option_list = []
+
                     for name, option in options.items():
                         default = Setting(function=option['function'],
-                                          args=option['args'])
+                                            args=option['args'])
                         variable = Variable(name=name,
-                                            default=default,
-                                            **option)
+                                        default=default,
+                                        **option)
+                        
                         option_list.append(variable)
                 cls.variables[file.split('.')[0]] = option_list
 

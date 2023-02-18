@@ -81,7 +81,6 @@ class Strategy(Core):
             component = cls.search(setting.function)
             function = component.function
             args = setting.args
-
             compiled_strategies[name] = partial(function, model, args)
 
         for key, value in compiled_strategies.items():

@@ -1,5 +1,5 @@
 """
-Society Model
+Arena Model
 -------------
 Responsible for creation and management of Dooder objects in the simulation.   
 """
@@ -20,7 +20,7 @@ class Attributes(BaseModel):
     dooders_died: int = 0
 
 
-class Society:
+class Arena:
     """
     Class manages Dooder objects in the simulation.
 
@@ -54,7 +54,7 @@ class Society:
     Methods
     -------
     step()
-        Step the society forward. Currently, this will only reset attributes.
+        Step the Arena forward. Currently, this will only reset attributes.
     reset()
         Reset main attributes after each cycle.
     generate_seed_population()
@@ -72,11 +72,13 @@ class Society:
         self.active_dooders = {}
         self.graveyard = {}
         self.simulation = simulation
+
+    def _setup(self) -> None:
         self.reset()  # set attributes
 
     def step(self) -> None:
         """
-        Step the society forward. Currently, this will only reset attributes.
+        Step the Arena forward. Currently, this will only reset attributes.
         """
         self.reset()
 

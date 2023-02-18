@@ -131,7 +131,7 @@ class Dooder(BaseAgent):
             The reason for the death. 
             For example: starvation, old age, etc.
         """
-        self.simulation.society.terminate_dooder(self)
+        self.simulation.arena.terminate_dooder(self)
         message = f"Died from {reason}"
 
         self.log(granularity=1, message=message, scope='Dooder')
