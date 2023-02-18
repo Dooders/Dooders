@@ -2,9 +2,15 @@
 
 ***This page is a work-in-progress***
 
-Energy is an measure of the ability to do work. The more energy a Dooder can extract from the environment, the more it can do and the longer it can persist in the simulation.
+Energy is a fundamental concept that measures the ability to perform work. 
 
-A Dooder uses energy to move or perform actions. In the simulation, Dooders use energy to escape the equivalent of thermal equilibrium, terminal state. Thermal equilibrium as in a Dooder being removed from the simulation due to a terminal state (death). Following the second law of thermodynamics, a system will naturally tend toward equilibrium without energy (internally or externally sourced) (death or endness like a hurricane losing power until it dissipates)
+In the context of this project, a Dooder's capacity to extract energy from the environment determines how much it can achieve and how long it can survive. Essentially, a Dooder requires energy to engage in movement and other actions.
+
+This approach is in line with thermodynamics and how life on Earth is able to continue. In the simulation, Dooders must utilize energy to evade thermal equilibrium, which is akin to a terminal state or death. 
+
+The second law of thermodynamics dictates that systems tend to gravitate toward equilibrium without an external source of energy, leading to their eventual demise. This is analogous to a hurricane gradually losing power until it dissipates entirely.
+
+So, if a Dooder does not extract and consume energy from the environment, eventually it will be removed from the simulation.
 
 ## Types of Energy
 
