@@ -22,7 +22,7 @@ from typing import TYPE_CHECKING, Callable, Dict, Union
 
 from pydantic import BaseModel
 
-from sdk.core import CoreComponent
+from sdk.core.core import Core
 
 if TYPE_CHECKING:
     from sdk.simulation import Simulation
@@ -39,7 +39,7 @@ CollectorDict: Dict[str, BaseCollector]
 CollectorData: Dict[str, Union[list, dict, str, int, float]]
 
 
-class Collector(CoreComponent):
+class Collector(Core):
     """ 
     The factory class for creating collectors
 

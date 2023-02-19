@@ -27,8 +27,6 @@ class Model(ABC):
             setattr(cls, variable, partial_func)
             
         return cls(simulation)
-            
-        
     
     def step(self):
         """ 

@@ -7,9 +7,9 @@ which is used to register and execute policies.
 
 from typing import Callable
 
-from sdk.core import CoreComponent
+from sdk.core.core import Core
 
-class Policy(CoreComponent):
+class Policy(Core):
     """ 
     The factory class to be used as a decorator to register a policy.
     

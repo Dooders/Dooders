@@ -5,10 +5,10 @@ This module contains the Condition class,
 which is used to register and check conditions.
 """
 
-from sdk.core import CoreComponent
+from sdk.core.core import Core
 
 
-class Condition(CoreComponent):
+class Condition(Core):
     """ 
     The factory class to be used as a decorator to register a stop condition.
 
