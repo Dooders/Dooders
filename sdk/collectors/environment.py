@@ -8,19 +8,19 @@ from sdk.core.collector import Collector
 
 
 @Collector.register()
-def location_contents_count(simulation) -> dict:
+def space_contents_count(simulation) -> dict:
     """ 
-    The number of contents in each location.
-    
+    The number of contents in each Space.
+
     Parameters
     ----------
     simulation : Simulation
         The simulation to check
-    
+
     Returns
     -------
-    location_contents: dict
-        A dictionary with the number of contents in each location.
+    Space: dict
+        A dictionary with the number of contents in each Space.
 
     Sample Output
     ------------
@@ -33,37 +33,37 @@ def location_contents_count(simulation) -> dict:
     }
     """
 
-    location_contents = {}
+    space_contents = {}
 
-    for row in simulation.environment.grid:
-        for location in row:
-            location_contents[location.coordinates] = len(location.contents)
+    for space in simulation.environment.spaces():
+        space_contents[space.coordinates] = len(space.contents)
 
-    return location_contents
+    return space_contents
+
 
 @Collector.register()
-def state_location_pattern(simulation) -> dict:
+def state_space_pattern(simulation) -> dict:
     """ 
-    Contents pattern for each location.
-    
+    Contents pattern for each Space.
+
     The pattern is a list of integers representing each possible content state.
-    
-    The first integer is the number of contents in the location that is a dooder object.
-    The second integer is the number of contents in the location that is an energy object.    
+
+    The first integer is the number of contents in the Space that is a dooder object.
+    The second integer is the number of contents in the Space that is an energy object.    
 
     So a total of 2 dooders and 1 energy would be 21.
     And, a total of 1 dooder and 2 energy would be 12.
-    
+
     Parameters
     ----------
     simulation : Simulation
         The simulation to check
-    
+
     Returns
     -------
-    location_contents: dict
-        A dictionary with the contents pattern for each location.
-    
+    Space: dict
+        A dictionary with the contents pattern for each Space.
+
     Sample Output
     ------------
     Coordinate: Contents Pattern 
@@ -73,12 +73,11 @@ def state_location_pattern(simulation) -> dict:
         (0, 2): 11,
         (0, 3): 43 
     }
-    """     
-    location_contents = {}
+    """
+    space_contents = {}
 
-    for row in simulation.environment.grid:
-        for location in row:
-            pattern = location.contents_pattern
-            location_contents[location.coordinates] = pattern
+    for space in simulation.environment.spaces():
+        pattern = space.contents_pattern
+        space_contents[space.coordinates] = pattern
 
-    return location_contents
+    return space_contents

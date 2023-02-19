@@ -10,8 +10,8 @@ def mock_simulation():
 
 def mock_dooder():
     sim = mock_simulation()
-    sim.society.generate_seed_population()
-    dooder = sim.society.active_dooders.values().__iter__().__next__()
+    sim.arena.generate_seed_population()
+    dooder = sim.arena.active_dooders.values().__iter__().__next__()
     
     return dooder
 

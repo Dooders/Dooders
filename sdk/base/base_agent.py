@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class BaseStats(BaseModel):
-    unique_id: str = None
+    id: str = None
     age: int = 0
     birth: int = 0
     position: tuple = None
@@ -21,17 +21,17 @@ class BaseAgent(ABC):
 
     """
 
-    def __init__(self, unique_id: int, position, simulation) -> None:
+    def __init__(self, id: int, position, simulation) -> None:
         """
         Object Meta-Class
 
         Args:
-            unique_id: Unique ID for the object
+            id: Unique ID for the object
             position: Position of the object
             simulation: Simulation object for the object
 
         Attributes:
-            unique_id: Unique ID for the object
+            id: Unique ID for the object
             position: Position of the object
             simulation: Simulation object for the object
             information: Information object for the object
@@ -39,7 +39,7 @@ class BaseAgent(ABC):
         """
         self.simulation = simulation
         
-        for attribute in BaseStats(unique_id=unique_id, position=position, birth=simulation.cycles):
+        for attribute in BaseStats(id=id, position=position, birth=simulation.cycles):
             setattr(self, attribute[0], attribute[1])
 
     def log(self, granularity: int, message: str, scope: str) -> None:
@@ -55,7 +55,7 @@ class BaseAgent(ABC):
 
         log_dict = {
             'Scope': scope,
-            'UniqueID': self.unique_id,
+            'UniqueID': self.id,
             'CycleNumber': cycle_number,
             'Granularity': granularity,
             'Message': message

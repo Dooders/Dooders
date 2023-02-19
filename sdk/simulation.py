@@ -13,26 +13,17 @@ from statistics import mean
 import pandas as pd
 
 from db.main import DB
-from sdk.base.base_simulation import BaseSimulation
+from sdk.base.reality import Reality
 from sdk.config import ExperimentParameters
-from sdk.core import Condition, Policy, Step, Strategy
-from sdk.core.action import Action
-from sdk.models.resources import Resources
-from sdk.models.society import Society
+from sdk.core import Condition
 
 
-class Simulation(BaseSimulation):
+class Simulation(Reality):
     """
 
     """
 
-    def __init__(
-            self,
-            simulation_id: str,
-            experiment_id: str,
-            params: ExperimentParameters,
-            send_to_db=False,
-            details=None) -> None:
+    def __init__(self, settings: dict) -> None:
         """
         Primary class to handle the simulation. A simulation will have access to 
         many different models
@@ -44,17 +35,8 @@ class Simulation(BaseSimulation):
         Attributes:
             cycles: The number of cycles that have passed.
         """
-        super().__init__(simulation_id, experiment_id, params)
-
-        self.strategy = Strategy()
-        self.resources = Resources(self)
-        self.society = Society(self)
-        self.policies = Policy()
-        self.actions = Action()
-        self.steps = Step()
+        super().__init__(settings)
         self.running = False
-        self.send_to_db = send_to_db
-        self.details = details
         self.cycles: int = 0
 
     def setup(self) -> None:
@@ -66,7 +48,7 @@ class Simulation(BaseSimulation):
         4. Collect initial state
         """
         self.resources.allocate_resources()
-        self.society.generate_seed_population()
+        self.arena.generate_seed_population()
 
         self.running = True
 
@@ -81,12 +63,12 @@ class Simulation(BaseSimulation):
 
         # collect data at the end of the cycle
         self.information.collect(self)
-        
+
         # place new energy
         self.resources.step()
 
         # collect stats
-        self.society.step()
+        self.arena.step()
 
         self.cycles += 1
 
@@ -104,10 +86,6 @@ class Simulation(BaseSimulation):
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
-
-        finally:
-            if self.send_to_db:
-                self.post_simulation()
 
     def post_simulation(self) -> None:
         """
@@ -175,7 +153,7 @@ class Simulation(BaseSimulation):
         Returns:
             A random dooder.
         """
-        return self.society.get_dooder()
+        return self.arena.get_dooder()
 
     def stop_conditions(self) -> bool:
         #! maybe make a decorator to implement this nicely
@@ -225,9 +203,9 @@ class Simulation(BaseSimulation):
                 'CycleCount': self.cycles,
                 'TotalEnergy': sum(self.information.data['resources']['allocated_energy']),
                 'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
-                'StartingDooderCount': self.information.data['society']['created_dooder_count'][0],
-                'EndingDooderCount': len(self.society.active_dooders),
-                # 'AverageAge': int(mean([d.age for d in self.society.graveyard.values()])),
+                'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
+                'EndingDooderCount': len(self.arena.active_dooders),
+                # 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
 
     @property

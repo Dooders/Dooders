@@ -1,27 +1,28 @@
 from random import choices
-from typing import TYPE_CHECKING
+from typing import Callable
 
 from sdk.core import Strategy
 
-if TYPE_CHECKING:
-    from sdk.simulation import Simulation
 
 @Strategy.register()
-def random_location(simulation: 'Simulation', number: int) -> list:
+def random_location(model: Callable, *value) -> list:
     """ 
-    Generates a list of locations for the given number of resources and based on the provided strategy.
+    Generates a list of locations for the given number of resources 
+    and based on the provided strategy.
 
-    Args:
-        simulation (Simulation): The simulation object.
-        number (int): The number of locations to generate.
+    Parameters
+    ----------
+    model : Callable
+        The model object that contains the environment, agents, and other models.
+    args : dict
+        The arguments for the strategy.
 
-    Returns:
-        A list of locations.
+    Returns
+    -------
+    list
+        A list of random locations based on the SeedCount.
     """
-    locations = [(loc[1], loc[2])
-                 for loc in simulation.environment.coord_iter()]
-    random_locations = choices(locations, k=number)
-    #! yield instead of return???? test this out
-    #! have the number generated too
-    #! make __call__ method to return when called
+    locations = [loc for loc in model.simulation.environment.coordinates()]
+    random_locations = choices(locations, k=value[1])
+
     return random_locations

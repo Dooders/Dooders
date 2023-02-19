@@ -1,4 +1,6 @@
 ---
+#! make it so the value itself will be returned, if dict, it goes through the compile process
+#! might not need dependecny anymore (need to verify this with the seedplacement method, test in notebook)
 Simulation:
   MaxCycles: 100
   EnergyPerCycle: 10

@@ -34,10 +34,9 @@ class Experiment:
         self.seed = ShortID()
         self.parameters = parameters
         self.experiment_id = self.seed.uuid()
-        self.send_to_db = False
         self.details = details
         self.create_simulation()
-        
+
     def create_simulation(self, simulation_id: str = None) -> None:
         """
         Create a simulation.
@@ -48,7 +47,7 @@ class Experiment:
         if simulation_id is None:
             simulation_id = self.seed.uuid()
         self.simulation = Simulation(
-            simulation_id, self.experiment_id, self.parameters, self.send_to_db, self.details)
+            simulation_id, self.experiment_id)
 
     def simulate(self, n: int = 1) -> None:
         """ 
@@ -166,7 +165,7 @@ class Experiment:
             random_object = self.get_random_objects('Dooder')
 
             if random_object:
-                object_id = random_object[0].unique_id
+                object_id = random_object[0].id
             else:
                 return 'No active Dooders'
 

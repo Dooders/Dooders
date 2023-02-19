@@ -29,7 +29,7 @@ def max_cycle(simulation: 'Simulation') -> bool:
     bool
         True if the maximum number of cycles has been reached, False otherwise
     """
-    if simulation.cycles >= simulation.params.Simulation.MaxCycles:
+    if simulation.cycles >= simulation.MaxCycles():
         return True
 
 

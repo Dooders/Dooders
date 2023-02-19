@@ -1,0 +1,6 @@
+---
+SurfaceType:
+  type: "generation"
+  function: "fixed_value"
+  args: { "value": "grid" }
+  description: ''

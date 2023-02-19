@@ -3,9 +3,7 @@ Environment Model
 -----------------
 Represents the "physical" environment in which the agents interact.
 """
-
-from random import choices
-from typing import TYPE_CHECKING, Any, List
+from typing import TYPE_CHECKING, Any, List, Union
 
 from sdk.base.base_agent import BaseAgent
 from sdk.core.surface import Surface
@@ -17,16 +15,16 @@ if TYPE_CHECKING:
 GridCell = List[Any]
 
 
-class Environment(Surface):
+class Environment:
     """ 
     Create a new Environment based on the Surface class.
-    
+
     Methods
     -------
     place_object(object: BaseAgent, position: tuple) -> None
         Place an object at the provided position.
     remove_object(object: BaseAgent) -> None
-        Remove an object from the grid.
+        Remove an object from the surface.
     move_object(object: BaseAgent, location: tuple) -> None
         Move an object to a new location.
     get_object_types() -> List[BaseAgent]
@@ -39,6 +37,24 @@ class Environment(Surface):
         Get all objects in the neighborhood of the given object.
     """
 
+    def __init__(self, settings) -> None:
+        """
+        Parameters
+        ----------
+        width: int
+            The width of the environment.
+        height: int
+            The height of the environment.
+        torus: bool
+            Whether the environment is a torus or not.
+        """
+
+    def _setup(self) -> None:
+        """ 
+        Setup the environment.
+        """
+        self.surface = Surface.build(self.SurfaceType())
+
     def place_object(self, object: 'BaseAgent', position: tuple) -> None:
         """
         Place an object at the provided position.
@@ -50,27 +66,19 @@ class Environment(Surface):
         position: tuple
             The location to place the object, in the form (x, y).
         """
-        x, y = position
-        location = self.grid[x][y]
-        location.add(object)
-        object.position = position
-        self.empties.discard(position)
+        self.surface.add(object, position)
 
-    def remove_object(self, object: 'BaseAgent') -> None:
+    def remove_object(self, object: Union['BaseAgent', str]) -> None:
         """
-        Remove an object from the grid.
+        Remove an object from the surface object.
 
         Parameters
         ----------
-        object: BaseAgent
-            The object to remove.
+        object: Union[BaseAgent, str]
+            The object to remove. 
+            Either the object itself or the object's id.
         """
-        location = object.position
-        x, y = location
-        self.grid[x][y].remove(object)
-        if self.is_cell_empty(location):
-            self.empties.add(location)
-        object.position = None
+        self.surface.remove(object)
 
     def move_object(self, object: 'BaseAgent', location: tuple) -> None:
         """ 
@@ -83,29 +91,28 @@ class Environment(Surface):
         location: tuple
             The location to move the object to.
         """
-        position = self.torus_adj(location)
         self.remove_object(object)
-        self.place_object(object, position)
-        object.position = position
+        self.place_object(object, location)
 
-    def get_object_types(self) -> List[BaseAgent]:
-        """
-        Get all object types in the environment.
+    # def get_object_types(self) -> List[BaseAgent]:
+    #     """
+    #     Get all object types in the environment.
 
-        Returns
-        -------
-        object_types: List[BaseAgent]
-            A list of all object types in the environment.
-        """
-        object_types = []
-        for x in range(self.width):
-            for y in range(self.height):
-                for obj in self.grid[x][y].contents.values():
-                    if obj.name not in object_types:
-                        object_types.append(obj.__class__.__name__)
-        return object_types
+    #     Returns
+    #     -------
+    #     object_types: List[BaseAgent]
+    #         A list of all object types in the environment.
+    #     """
+    #     #! redo this to use the iterator instead
+    #     object_types = []
+    #     for x in range(self.surface.width):
+    #         for y in range(self.surface.height):
+    #             for obj in self.surface[x, y].contents.values():
+    #                 if obj.name not in object_types:
+    #                     object_types.append(obj.__class__.__name__)
+    #     return object_types
 
-    def get_objects(self, object_type: str = 'BaseAgent') -> List[BaseAgent]:
+    def get_objects(self, object_type: str = None) -> List[BaseAgent]:
         """
         Get all objects of a given type.
 
@@ -119,16 +126,8 @@ class Environment(Surface):
         objects: List[BaseAgent]
             A list of all objects of the given type.
         """
-        if object_type == 'BaseAgent':
-            object_type = self.get_object_types()
 
-        objects = []
-        for x in range(self.width):
-            for y in range(self.height):
-                for obj in self.grid[x][y].contents.values():
-                    if obj.name in object_type:
-                        objects.append(obj)
-        return objects
+        yield from self.surface.contents(object_type)
 
     def get_object(self, object_id: 'UniqueID') -> BaseAgent:
         """
@@ -145,69 +144,64 @@ class Environment(Surface):
         object: BaseAgent
             The object with the given id.
         """
-        for x in range(self.width):
-            for y in range(self.height):
-                for obj in self.grid[x][y].contents.values():
-                    if obj.unique_id == object_id:
-                        return obj
+        return self.surface[object_id]
 
-        return 'No object found'
+    # def get_random_neighbors(self,
+    #                          object: 'BaseAgent',
+    #                          object_type: BaseAgent = 'BaseAgent') -> List[BaseAgent]:
+    #     """
+    #     Get all objects in the neighborhood of the given object.
 
-    def get_random_neighbors(self,
-                             object: 'BaseAgent',
-                             object_type: BaseAgent = 'BaseAgent') -> List[BaseAgent]:
-        """
-        Get all objects in the neighborhood of the given object.
+    #     Parameters
+    #     ----------
+    #     object: BaseAgent
+    #         The object to get the neighborhood of.
+    #     object_type: str
+    #         The type of object to get.
 
-        Parameters
-        ----------
-        object: BaseAgent
-            The object to get the neighborhood of.
-        object_type: str
-            The type of object to get.
+    #     Returns
+    #     -------
+    #     objects: List[BaseAgent]
+    #         A list of all objects in the neighborhood of the given object.
+    #     """
+    #     #! is this duplicative too?
+    #     if object_type == 'BaseAgent':
+    #         object_type_list = self.get_object_types()
+    #     else:
+    #         object_type_list = [object_type]
 
-        Returns
-        -------
-        objects: List[BaseAgent]
-            A list of all objects in the neighborhood of the given object.
-        """
-        if object_type == 'BaseAgent':
-            object_type_list = self.get_object_types()
-        else:
-            object_type_list = [object_type]
+    #     objects = []
+    #     for iter in self.surface.nearby_contents(object[0].position):
+    #         if iter.name in object_type_list:
+    #             objects.append(iter)
+    #     if len(objects) == 0:
+    #         return 'No objects found'
 
-        objects = []
-        for iter in self.iter_neighbors(object[0].position):
-            if iter.name in object_type_list:
-                objects.append(iter)
-        if len(objects) == 0:
-            return 'No objects found'
+    #     return objects
 
-        return objects
+    # def get_random_neighborhoods(self, location: tuple, n: int = 1) -> List[GridCell]:
+    #     """
+    #     Get all objects in the neighborhood of the given location.
 
-    def get_random_neighborhoods(self, location: tuple, n: int = 1) -> List[GridCell]:
-        """
-        Get all objects in the neighborhood of the given location.
+    #     Parameters
+    #     ----------
+    #     location: tuple
+    #         The location to get the neighborhood of.
+    #     n: int
+    #         The number of neighborhoods to get.
 
-        Parameters
-        ----------
-        location: tuple
-            The location to get the neighborhood of.
-        n: int
-            The number of neighborhoods to get.
+    #     Returns
+    #     -------
+    #     random_neighborhoods: List[GridCell]
+    #         A list of all objects in the neighborhood of the given location.
+    #     """
+    #     #! this takes the coordinates of the location???
+    #     neighborhoods = self.surface.nearby_coordinates(location)
 
-        Returns
-        -------
-        random_neighborhoods: List[GridCell]
-            A list of all objects in the neighborhood of the given location.
-        """
+    #     k = min(n, len(neighborhoods))
+    #     random_neighborhoods = choices(neighborhoods, k=k)
 
-        neighborhoods = self.get_neighborhood(location)
-
-        k = min(n, len(neighborhoods))
-        random_neighborhoods = choices(neighborhoods, k=k)
-
-        return random_neighborhoods
+    #     return random_neighborhoods
 
     def get_object_count(self, object_type: str = 'BaseAgent') -> int:
         """ 
@@ -223,4 +217,16 @@ class Environment(Surface):
         count: int
             The number of objects of the given type.
         """
-        return len(self.get_objects(object_type))
+        return len(list(self.get_objects(object_type)))
+
+    def coordinates(self):
+        return self.surface.coordinates()
+
+    def spaces(self):
+        return self.surface.spaces()
+    
+    def nearby_spaces(self, location: tuple):
+        return self.surface.nearby_spaces(location)
+    
+    def contents(self, location: tuple):
+        return self.surface.contents(location)

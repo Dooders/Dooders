@@ -38,8 +38,8 @@ def test_move_object(simulation):
     
     
 def test_get_object(simulation):
-    assert simulation.environment.get_object(DooderTestObject.unique_id) == DooderTestObject
-    assert simulation.environment.get_object(EnergyTestObject.unique_id) == EnergyTestObject
+    assert simulation.environment.get_object(DooderTestObject.id) == DooderTestObject
+    assert simulation.environment.get_object(EnergyTestObject.id) == EnergyTestObject
     assert simulation.environment.get_object('aaaa') == 'No object found'
 
 

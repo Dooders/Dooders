@@ -19,15 +19,14 @@ def consume(dooder) -> None:
     dooder : Dooder
         The dooder that is consuming energy
     """
-    cell_contents = dooder.simulation.environment.get_cell_list_contents(
-        dooder.position)
-    energy = next(
-        (obj for obj in cell_contents if isinstance(obj, Energy)), None)
+    cell_contents = dooder.simulation.environment.contents(dooder.position)
+    energy = next((obj for obj in cell_contents if isinstance(obj, Energy)), None)
+    
     if energy:
         energy.consume()
         dooder.hunger = 0
         dooder.energy_consumed += 1
         dooder.log(
-            granularity=2, message=f"Consumed energy: {energy.unique_id}", scope='Dooder')
+            granularity=2, message=f"Consumed energy: {energy.id}", scope='Dooder')
     else:
         dooder.hunger += 1

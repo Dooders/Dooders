@@ -150,9 +150,8 @@ class Information:
         """
         if granularity <= self.granularity:
             message_string = f"'SimulationID':'{self.simulation_id}', {message}"
-            
-            # disabled for now:
-            # self.logger.info(message_string) 
+
+            self.logger.info(message_string) 
 
     def read_log(self) -> str:
         """

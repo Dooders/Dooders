@@ -19,7 +19,7 @@ def test_dooder_init():
     unique_id = simulation.generate_id()
     dooder = Dooder(unique_id, (1,1), simulation)
     assert dooder.position == (1,1)
-    assert dooder.unique_id == unique_id
+    assert dooder.id == unique_id
 
 
 def test_dooder_move(dooder):

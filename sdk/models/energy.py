@@ -8,14 +8,9 @@ Energy is consumed by agents to increase its lifespan.
 
 from typing import TYPE_CHECKING
 
-from sdk.core import Strategy
-
 if TYPE_CHECKING:
     from sdk.core.data import Position, UniqueID
     from sdk.models.resources import Resources
-
-
-EnergyStrategy = Strategy.load('energy')
 
 
 class Energy:
@@ -25,7 +20,7 @@ class Energy:
 
     Parameters
     ----------
-    unique_id: UniqueID
+    id: UniqueID
         Unique ID of the object.
     position: Position
         Position of the object.
@@ -34,7 +29,7 @@ class Energy:
 
     Attributes
     ----------
-    unique_id: UniqueID
+    id: UniqueID
         See Parameters.
     position: Position
         See Parameters.
@@ -62,11 +57,10 @@ class Energy:
     """
 
     def __init__(self,
-                 unique_id: 'UniqueID',
+                 id: 'UniqueID',
                  position: 'Position',
                  resources: 'Resources') -> None:
-        self.unique_id = unique_id
-        self.strategies = Strategy.compile(self, EnergyStrategy)
+        self.id = id
         self.position = position
         self.cycle_count = 0
         self.resources = resources
@@ -77,11 +71,11 @@ class Energy:
         If the object gets to its max age, it will be dissipated.
         """
         self.cycle_count += 1
-        if self.cycle_count >= self.EnergyLifespan:
+        if self.cycle_count >= self.EnergyLifespan():
             self.consume('dissipate')
             self.resources.dissipated_energy += 1
             self.resources.log(
-                granularity=3, message=f"Energy {self.unique_id} dissipated", scope='Energy')
+                granularity=3, message=f"Energy {self.id} dissipated", scope='Energy')
 
     def consume(self, type=None) -> None:
         """
@@ -100,7 +94,7 @@ class Energy:
             self.resources.consumed_energy += 1
 
         self.resources.log(
-            granularity=3, message=f"Energy {self.unique_id} consumed", scope='Energy')
+            granularity=3, message=f"Energy {self.id} consumed", scope='Energy')
 
     @property
     def name(self) -> str:

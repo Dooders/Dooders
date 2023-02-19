@@ -1,7 +1,7 @@
 """ 
-Social Collectors
+Arena Collectors
 -----------------
-Collectors that are specific to the society.
+Collectors that are specific to the Arena.
 """
 
 from sdk.core.collector import Collector
@@ -22,7 +22,7 @@ def active_dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    return simulation.society.active_dooder_count
+    return simulation.arena.active_dooder_count
 
 @Collector.register()
 def terminated_dooder_count(simulation) -> int:
@@ -39,7 +39,7 @@ def terminated_dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    return simulation.society.dooders_died
+    return simulation.arena.dooders_died
 
 @Collector.register()
 def created_dooder_count(simulation) -> int:
@@ -56,4 +56,4 @@ def created_dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    return simulation.society.dooders_created
+    return simulation.arena.dooders_created

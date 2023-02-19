@@ -7,8 +7,9 @@ Responsible for creation and management of Energy objects in the simulation.
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
+from sdk.core.settings import Settings
+from sdk.core.strategy import Strategy
 
-from sdk.core import Strategy
 from sdk.models.energy import Energy
 
 if TYPE_CHECKING:
@@ -22,10 +23,6 @@ class Attributes(BaseModel):
     allocated_energy: int = 0
     dissipated_energy: int = 0
     consumed_energy: int = 0
-
-
-ResourceStrategy = Strategy.load('resources')
-
 
 class Resources:
     """ 
@@ -70,7 +67,13 @@ class Resources:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
-        self.strategies = Strategy.compile(self, ResourceStrategy)
+        
+    def _setup(self) -> None:
+        """ 
+        Sets up the Resources class.
+        
+        The method will allocate resources based on the strategy.
+        """
         self.reset()
 
     def allocate_resources(self) -> None:
@@ -81,16 +84,20 @@ class Resources:
         environment. The Energy object will be added to the available_resources
         dictionary.
         """
-
-        #! add in to do .next() instead of settings resetting every cycle
-        #! use placement strategy w/ dooders too?
-        for location in self.EnergyPlacement:
-            if len(self.available_resources) < self.MaxTotalEnergy:
-                unique_id = self.simulation.generate_id()
-                energy = Energy(unique_id, location, self)
+        for location in self.EnergyPlacement(self.EnergyPerCycle()):
+            if len(self.available_resources) < self.MaxTotalEnergy():
+                energy = self.create_energy(location)
                 self.simulation.environment.place_object(energy, location)
-                self.available_resources[unique_id] = energy
+                self.available_resources[energy.id] = energy
                 self.allocated_energy += 1
+                
+    def create_energy(self, location):
+        unique_id = self.simulation.generate_id()
+        settings = Settings.get('variables')['energy']
+        energy = Energy(unique_id, location, self)
+        Strategy.compile(energy, settings)
+        
+        return energy
 
     def step(self) -> None:
         """ 
@@ -108,11 +115,9 @@ class Resources:
         The Information class will have historical data for attributes after
         each cycle.
         """
-
         for resource in list(self.available_resources.values()):
             resource.step()
 
-        self.strategies = Strategy.compile(self, ResourceStrategy)
         self.reset()
         self.allocate_resources()
 
@@ -136,7 +141,7 @@ class Resources:
         resource : Energy object
             The Energy object to be removed.
         """
-        self.available_resources.pop(resource.unique_id)
+        self.available_resources.pop(resource.id)
 
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 

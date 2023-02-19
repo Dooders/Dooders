@@ -6,6 +6,7 @@ This action is used to reproduce two dooders
 
 from sdk.core.action import Action
 from sdk.core import Policy
+from sdk.core.settings import Settings
 
 
 @Action.register()
@@ -20,7 +21,7 @@ def reproduce(dooderX) -> None:
     dooderA: Dooder 
         The first Dooder.
     """
-    reproduction_policy = dooderX.simulation.params.get('Policies').Reproduction
+    reproduction_policy = Settings.get('variables')['policies']['Reproduction'].args['value'] #! make this a lot simpler and cleaner
 
     #! make this a condition
     if dooderX.hunger == 0 and dooderX.age > 5:
@@ -29,19 +30,19 @@ def reproduce(dooderX) -> None:
 
         if dooderY:
             genetics = Policy.execute(reproduction_policy, dooderX, dooderY) #! make sure this will execute for all internal_models
-            offspring = dooderX.simulation.society._generate_dooder(
+            offspring = dooderX.simulation.arena._generate_dooder(
                 dooderX.position)
             offspring.internal_models.inherit_weights(genetics) #! need a consistent way to inherit all the weights in the internal models
-            offspring.simulation.society.place_dooder(
+            offspring.simulation.arena.place_dooder(
                 offspring, offspring.position)
             
-            offspring.parents = (dooderX.unique_id, dooderY.unique_id)
+            offspring.parents = (dooderX.id, dooderY.id)
             
             dooderX.reproduction_count += 1
             dooderY.reproduction_count += 1
 
             dooderX.log(granularity=1,
-                        message=f"Reproduced with {dooderY.unique_id} and created {offspring.unique_id}",
+                        message=f"Reproduced with {dooderY.id} and created {offspring.id}",
                         scope='Dooder')
 
         else:

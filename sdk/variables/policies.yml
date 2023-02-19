@@ -1,0 +1,11 @@
+---
+Movement:
+  type: "generation"
+  function: "fixed_value"
+  args: { "value": 'NeuralNetwork' }
+  description: ''
+Reproduction:
+  type: "generation"
+  function: "fixed_value"
+  args: { "value": 'AverageWeights' }
+  description: ''

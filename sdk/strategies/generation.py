@@ -1,52 +1,81 @@
+""" 
+Strategy: Generation
+--------------------
+This module contains the strategies for generating the number of resources.
+"""
+
+from typing import Callable
 
 from scipy.stats import norm, randint
+
 from sdk.core.strategy import Strategy
 
 
 @Strategy.register()
-def uniform_distribution(min: int, max: int) -> int:
+def uniform_distribution(model: Callable, args: dict) -> int:
     """ 
     Generates a random value between the given low and high values. 
     Followings a uniform distribution.
 
-    Args:
-        low (int): The lower bound of the distribution.
-        high (int): The upper bound of the distribution.
+    Parameters
+    ----------
+    model : Callable
+        The model object that contains the environment, agents, and other models.
+    args : dict
+        The arguments for the strategy.
 
-    Returns:
-        The generated value.
+    Returns
+    -------
+    int
+        The generated value based on a uniform distribution.
     """
-    return randint.rvs(low=min, high=max)
+    return randint.rvs(low=args['min'], high=args['max'])
 
 
 @Strategy.register()
-def normal_distribution(min: int, max: int, variation: float = None) -> float:
+def normal_distribution(model: Callable, args: dict) -> float:
     """ 
     Generates a random value based on the given mean and standard deviation.
     Followings a normal distribution.
 
-    Args:
-        mean (int): The mean of the distribution.
-        std (int): The standard deviation of the distribution.
+    Parameters
+    ----------
+    model : Callable
+        The model object that contains the environment, agents, and other models.
+    args : dict
+        The arguments for the strategy.
 
-    Returns:
-        The generated value.
+    Returns
+    -------
+    float
+        The generated value based on a normal distribution.
     """
 
-    mean = (max + min) / 2
+    mean = (args['max'] + args['min']) / 2
 
-    if variation is None:
-        variation = (max - min) / 8
+    if args.get('variation') is None:
+        variation = (args['max'] - args['min']) / 8
+    else:
+        variation = args['variation']
 
     return norm.rvs(loc=mean, scale=variation)
 
 
 @Strategy.register()
-def fixed_value(value: int) -> int:
+def fixed_value(model: Callable, args: dict) -> int:
     """ 
     Returns a fixed value.
 
-    Args:
-        value (int): The value to return.
+    Parameters
+    ----------
+    model : Callable
+        The model object that contains the environment, agents, and other models.
+    args : dict
+        The arguments for the strategy.
+
+    Returns
+    -------
+    int
+        The fixed value.
     """
-    return value
+    return args['value']
