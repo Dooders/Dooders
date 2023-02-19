@@ -21,7 +21,7 @@ class Component(NamedTuple):
 # {'actions': {'consume': {'consume': Component}}}
 _COMPONENTS: Dict[str, Dict[str, Dict[str, Component]]] = {}
 
-class Core(ABC):
+class CoreComponent(ABC):
     """ 
     Core class for the SDK.
     

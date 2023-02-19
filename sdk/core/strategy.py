@@ -14,10 +14,10 @@ To add a new strategy:
 from functools import partial
 from typing import Any, Callable
 
-from sdk.core.core import Core
+from sdk.core import CoreComponent
 
 
-class Strategy(Core):
+class Strategy(CoreComponent):
     """ 
     This class is used to compile strategies for 
     the supplied model.

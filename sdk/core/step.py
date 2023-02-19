@@ -6,10 +6,10 @@ Core system for the Step Logic
 
 from abc import ABC, abstractmethod
 
-from sdk.core.core import Core
+from sdk.core import CoreComponent
 
 
-class Step(Core):
+class Step(CoreComponent):
     """ 
     A step is a point in the simulation to execute logic 
     for a specific object or model during its turn.

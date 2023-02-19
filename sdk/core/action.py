@@ -7,10 +7,10 @@ which is used to register and execute actions.
 
 from typing import Callable
 
-from sdk.core.core import Core
+from sdk.core import CoreComponent
 
 
-class Action(Core):
+class Action(CoreComponent):
     """ 
     An action is a way for an object to interact with the simulation.
     
