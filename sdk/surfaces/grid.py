@@ -1,9 +1,14 @@
+""" 
+Space: Grid
+-----------
+Rectangular grid of Spaces.
+"""
+
 import itertools
 from functools import singledispatchmethod
 from typing import Any, Dict, Iterator, List, Sequence, Tuple, Union, cast
 
 from sdk.modules.space import Space
-from sdk.utils.types import UniqueID
 
 GridRow = List[Space]
 X = int
@@ -19,26 +24,25 @@ class Grid:
 
     Parameters
     ----------
-    settings: dict
+    settings: dict, {torus: bool, width: int, height: int}
         A dictionary of settings for the grid.
         The following settings are available:
-        torus: bool
+        torus: bool, default: True
             A boolean indicating if the grid is a torus.
-            Default: True
-        width: int
+            Torus grids wrap around the edges.
+        width: int, default: 10
             The width of the grid.
-            Default: 10
-        height: int
+        height: int, default: 10
             The height of the grid.
-            Default: 10
 
     Methods
     -------
     add(object: object, coordinate: Coordinate) -> None
-        Add an object to a space on the grid.
+        Add an object to a space on the grid based 
+        on the provided coordinate.
     remove(object: object) -> None
         Remove an object from the grid.
-    remove(object_id: UniqueID) -> None
+    remove(object_id: str) -> None
         Remove an object from the grid based on its id.
     coordinates() -> Iterator[Coordinate]
         Return an iterator over all coordinates in the grid.
@@ -46,6 +50,10 @@ class Grid:
         Return an iterator over all spaces in the grid.
     contents() -> Iterator[object]
         Return an iterator over all objects in the grid.
+    contents(object_type: str) -> Iterator[object]
+        Return an iterator over all objects of a specific type in the grid.
+    contents(coordinate: Coordinate) -> Iterator[object]
+        Return an iterator over all objects in a specific space on the grid.
     nearby_spaces(coordinate: Coordinate, radius: int) -> Iterator[Space]
         Return an iterator over all spaces within a radius of a coordinate.
     nearby_contents(coordinate: Coordinate, radius: int) -> Iterator[object]
@@ -55,10 +63,11 @@ class Grid:
 
     See Also
     --------
-    sdk.modules.space.Space
+    sdk.core.Space: A space on the grid.
     """
     _grid: List[List[GridRow]]
-    _object_index: Dict[UniqueID, Coordinate]
+    _object_index: Dict[str, Coordinate]
+    _nearby_cache: Dict[Coordinate, Dict[int, List[Coordinate]]]
 
     def __init__(self, settings: dict) -> None:
         self.torus = settings.get('torus', True)
@@ -88,15 +97,24 @@ class Grid:
 
         Parameters
         ----------
-        object: object
-            The object to add to the grid (Dooder, Energy, etc.).
-        coordinate: Coordinate
+        object: object, Dooder, Energy, etc.
+            The object to add to the grid.
+        coordinate: Coordinate, (int, int)
             Where to place the object. 
+
+        Example
+        -------
+        grid.add(dooder, (0, 0))
         """
         x, y = coordinate
         space = self._grid[x][y]
+
+        # Add the object to the space
         space.add(object)
+
+        # Add the object to the object index for quick lookup
         self._object_index[object.id] = coordinate
+
         object.position = coordinate
 
     @singledispatchmethod
@@ -104,13 +122,18 @@ class Grid:
         """
         Remove content from a Space on the grid.
 
-        Must be an object or an objects UniqueID
+        Must pass an object or an object's id
 
         Parameters
         ----------
-        type: Union[object, UniqueID]
+        type: Union[object, str]
             The object or id of the object to remove. 
             It will also be removed from the object index.
+
+        Example
+        -------
+        grid.remove(dooder)
+        grid.remove(dooder.id)
         """
         raise NotImplementedError(
             "You must pass either an object or an object id to remove.")
@@ -122,11 +145,18 @@ class Grid:
 
         Parameters
         ----------
-        object: object
+        object: object, Dooder, Energy, etc.
             The object to remove. 
             It will also be removed from the object index.
+
+        Example
+        -------
+        grid.remove(dooder)
         """
         x, y = object.position
+
+        # Remove the object from the space
+        # and the object index
         self._grid[x][y].remove(object)
         self._object_index.pop(object.id)
 
@@ -137,9 +167,13 @@ class Grid:
 
         Parameters
         ----------
-        object_id: UniqueID
+        object_id: str
             The id of the object to remove. 
             It will also be removed from the object index.
+
+        Example
+        -------
+        grid.remove(dooder.id)
         """
         x, y = self._object_index[object_id]
         self._grid[x][y].remove(object_id)
@@ -154,6 +188,14 @@ class Grid:
         Iterator[Coordinate]
             An iterator over all coordinates in the grid.
             Example: [(0, 0), (0, 1), (0, 2), (0, 3)]
+
+        Example
+        -------
+        for coordinate in grid.coordinates():
+            print(coordinate)
+        >>> (0, 0)
+        >>> (0, 1)
+        >>> (0, 2)
         """
         for row in self._grid:
             for space in row:
@@ -168,11 +210,19 @@ class Grid:
         Iterator[Location]
             An iterator over all Spaces in the grid.
             Example: [<Space>, <Space>, <Space>, <Space>]
+
+        Example
+        -------
+        for space in grid.spaces():
+            print(space)
+        >>> <Space>
+        >>> <Space>
+        >>> <Space>
         """
         for row in self._grid:
             for space in row:
                 yield space
-        
+
     @singledispatchmethod
     def contents(self, object_type: str = None) -> Iterator[Any]:
         """
@@ -183,15 +233,22 @@ class Grid:
 
         Parameters
         ----------
-        type: Any
+        type: Any, optional
             The type of contents to return. Defaults to all.
             object types include 'Dooder', 'Energy', etc.
 
         Returns
         -------
-        Iterator[Any]
+        Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Energy>]
             An iterator over all contents in the grid. 
-            Example: [<Dooder>, <Energy>, <Dooder>, <Energy>]
+
+        Example
+        -------
+        for object in grid.contents():
+            print(object)
+        >>> <Dooder>
+        >>> <Energy>
+        >>> <Dooder>
         """
         for row in self._grid:
             for space in row:
@@ -200,7 +257,7 @@ class Grid:
                         yield object
                     if object.__class__.__name__ == object_type:
                         yield object
-                        
+
     @contents.register
     def _(self, position: tuple):
         """
@@ -208,14 +265,21 @@ class Grid:
 
         Parameters
         ----------
-        position: Coordinate
+        position: Coordinate, (int, int)
             The position to get the contents from.
 
         Returns
         -------
-        Iterator[Any]
+        Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Energy>]
             An iterator over all contents in a Space on the grid.
-            Example: [<Dooder>, <Energy>, <Dooder>, <Energy>]
+
+        Example
+        -------
+        for object in grid.contents((0, 0)):
+            print(object)
+        >>> <Dooder>
+        >>> <Energy>
+        >>> <Dooder>
         """
         x, y = position
         space = self._grid[x][y]
@@ -234,22 +298,29 @@ class Grid:
 
         Parameters
         ----------
-        position: Coordinate
+        position: Coordinate, (int, int)
             The position to get the nearby spaces from.
-        moore: bool
-            A boolean indicating if the neighborhood should be Moore or Von Neumann.
-            Default: True
-        include_center: bool
-            A boolean indicating if the center position should be included in the neighborhood.
-            Default: False
-        radius: int
-            The radius of the neighborhood. Default: 1
+        moore: bool, optional, default = True
+            A boolean indicating if the neighborhood 
+            should be Moore or Von Neumann.
+        include_center: bool, optional, default = True
+            A boolean indicating if the center position 
+            should be included in the neighborhood.
+        radius: int, default = 1
+            The radius of the neighborhood
 
         Returns
         -------
-        Iterator[Space]
+        Iterator[Space], [<Space>, <Space>, <Space>, <Space>]
             An iterator of Spaces nearby a given position.
-            Example: [<Space>, <Space>, <Space>, <Space>]
+
+        Example
+        -------
+        for space in grid.nearby_spaces((0, 0)):
+            print(space)
+        >>> <Space>
+        >>> <Space>
+        >>> <Space>
         """
         nearby = self.nearby_coordinates(
             position, moore, include_center, radius)
@@ -267,22 +338,28 @@ class Grid:
 
         Parameters
         ----------
-        position: Coordinate
+        position: Coordinate, (int, int)
             The position to get the nearby contents from.
-        moore: bool
-            A boolean indicating if the neighborhood should be Moore or Von Neumann.
-            Default: True
-        include_center: bool
-            A boolean indicating if the center position should be included in the neighborhood.
-            Default: False
-        radius: int
-            The radius of the neighborhood. Default: 1
+        moore: bool, optional, default = True
+            A boolean indicating if the neighborhood 
+            should be Moore or Von Neumann.
+        include_center: bool, optional, default = False
+            A boolean indicating if the center position 
+            should be included in the neighborhood.
+        radius: int, optional, default = 1
+            The radius of the neighborhood.
 
         Returns
         -------
-        Iterator[Any]
+        Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Dooder>]
             An iterator of contents nearby a given position.
-            Example: [<Dooder>, <Energy>, <Dooder>, <Dooder>]
+
+        Example
+        -------
+        for object in grid.nearby_contents((0, 0)):
+            print(object)
+        >>> <Dooder>
+        >>> <Energy>
         """
         nearby_contents = self.nearby_coordinates(
             position, moore, include_center, radius)
@@ -300,23 +377,29 @@ class Grid:
 
         Parameters
         ----------
-        position: Coordinate
+        position: Coordinate, (int, int)
             The position to get the nearby coordinates from.
-            Example: (0, 0)
-        moore: bool
-            A boolean indicating if the neighborhood should be Moore or Von Neumann.
-            Default: True
-        include_center: bool
-            A boolean indicating if the center position should be included in the neighborhood.
-            Default: False
-        radius: int
-            The radius of the neighborhood. Default: 1
+        moore: bool, optional, default = True
+            A boolean indicating if the neighborhood 
+            should be Moore or Von Neumann.
+        include_center: bool, optional, default = False
+            A boolean indicating if the center position 
+            should be included in the neighborhood.
+        radius: int, optional, default = 1
+            The radius of the neighborhood.
 
         Returns
         -------
-        Iterator[Coordinate]
+        Iterator[Coordinate], [(0, 0), (0, 1), (0, 2), (0, 3)]
             An iterator of coordinates nearby a given position.
-            Example: [(0, 0), (0, 1), (0, 2), (0, 3)]
+
+        Example
+        -------
+        for coord in grid.nearby_coordinates((0, 0)):
+            print(coord)
+        >>> (0, 0)
+        >>> (0, 1)
+        >>> (0, 2)
         """
         cache_key = (position, moore, include_center, radius)
         nearby_coordinates = self._nearby_cache.get(cache_key, None)
@@ -354,13 +437,12 @@ class Grid:
 
         Parameters
         ----------
-        position: Coordinate
+        position: Coordinate, (int, int)
             Coordinate tuple to convert.
-            Example: (0, 0)
 
         Returns
         -------
-        Coordinate
+        Coordinate, (int, int)
             Coordinate tuple adjusted for torus looping.
         """
         if not self.out_of_bounds(position):
@@ -377,7 +459,7 @@ class Grid:
 
         Parameters
         ----------
-        position: Coordinate
+        position: Coordinate, (int, int)
             Coordinate tuple to check.
 
         Returns 
@@ -395,7 +477,7 @@ class Grid:
 
         Returns
         -------
-        Iterator[GridRow]
+        Iterator[GridRow], [<GridRow>, <GridRow>, <GridRow>, <GridRow>]
             The iterator of the surface.
         """
         return itertools.chain(*self._grid)
@@ -408,6 +490,11 @@ class Grid:
     def _(self, value: int) -> GridRow:
         """ 
         Return the row at the given index.
+
+        Example
+        -------
+        grid[0]
+        >>> <GridRow>
         """
         return self._grid[value]
 
@@ -415,6 +502,11 @@ class Grid:
     def _(self, value: list) -> List[Space]:
         """ 
         Return the Spaces at the given coordinates.
+
+        Example
+        -------
+        grid[[(0, 0), (0, 1)]]
+        >>> [<Space>, <Space>]
         """
         index = cast(Sequence[Coordinate], value)
 
@@ -428,6 +520,11 @@ class Grid:
     def _(self, value: tuple) -> Space:
         """ 
         Return the Space at the given coordinate.
+
+        Example
+        -------
+        grid[(0, 0)]
+        >>> <Space>
         """
         index = cast(Coordinate, value)
         x, y = self.torus_adjustment(index)
@@ -437,6 +534,11 @@ class Grid:
     def _(self, value: str) -> Union[GridRow, List[Space], Space]:
         """ 
         Return the row at the given index or the Space at the given coordinate.
+
+        Example
+        -------
+        grid['all']
+        >>> [<GridRow>, <GridRow>, <GridRow>, <GridRow>]
         """
         index = cast(str, value)
         if index == 'all':
