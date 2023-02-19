@@ -172,7 +172,8 @@ class Grid:
         for row in self._grid:
             for space in row:
                 yield space
-
+        
+    @singledispatchmethod
     def contents(self, object_type: str = None) -> Iterator[Any]:
         """
         Return an iterator over all contents in the grid.
@@ -199,6 +200,27 @@ class Grid:
                         yield object
                     if object.__class__.__name__ == object_type:
                         yield object
+                        
+    @contents.register
+    def _(self, position: tuple):
+        """
+        Return an iterator over all contents in a Space on the grid.
+
+        Parameters
+        ----------
+        position: Coordinate
+            The position to get the contents from.
+
+        Returns
+        -------
+        Iterator[Any]
+            An iterator over all contents in a Space on the grid.
+            Example: [<Dooder>, <Energy>, <Dooder>, <Energy>]
+        """
+        x, y = position
+        space = self._grid[x][y]
+        for object in space.contents.values():
+            yield object
 
     def nearby_spaces(
         self,
