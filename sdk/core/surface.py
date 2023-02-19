@@ -2,14 +2,17 @@
 Core: Surface
 -------------
 This module contains the Surface class.
+
+A surface holds the objects in the environment 
+based on the space type, like a gird
 """
 
+import importlib
 from abc import abstractmethod
+
 from sdk.core.core import Core
 from sdk.core.settings import Settings
-import importlib
 
-#! create surface type class
 
 class Surface(Core):
     """ 

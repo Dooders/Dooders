@@ -37,9 +37,18 @@ class Variables:
         """ 
         Discover all variables 
 
-        Returns:
-            Dict[str, list]: A dictionary where the key is the file name 
-            and the value is a list of Variable objects.
+        Returns
+        -------
+        variables : dict
+            A dictionary of variables, where the key is the model name
+            and the value is a list of variables.
+        
+        Examples
+        --------
+        >>> from sdk.core.variables import Variables
+        >>> variables = Variables.discover()
+        >>> variables
+        {'model': [<sdk.utils.types.Variable object at 0x7f8b8c0b0a90>]}
         """
 
         directory = 'sdk/variables'

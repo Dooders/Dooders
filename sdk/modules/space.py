@@ -35,8 +35,9 @@ class Space:
         A dictionary of objects in the Space
         The key is the unique id of the object,
         and the value is the object itself
-    status: str
-        The status of the Space (empty, occupied, etc.)
+        Example: {'dooder_1': <sdk.objects.Dooder object at 0x000001E0F1B0F0A0>}
+    status: str, (empty, occupied, etc.)
+        The status of the Space
 
     Methods
     -------
@@ -60,6 +61,10 @@ class Space:
         Return a boolean indicating if the Space is occupied
     contents_pattern: str
         Return a string indicating the contents of the Space
+        
+    See Also
+    --------
+    sdk.spaces.Grid: The Grid class is a collection of Space objects
     """
 
     def __init__(self, x: int, y: int) -> None:
@@ -76,8 +81,15 @@ class Space:
 
         Parameters
         ----------
-        object: object
-            The object to add to the Space (i.e. Dooder, Energy, etc.)
+        object: object, (Dooder, Energy, etc.)
+            The object to add to the Space
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.contents
+        {'dooder_0': <sdk.objects.Dooder object at 0x000001E0F1B0F0A0>}
         """
         self.contents[object.id] = object
         self.status = 'occupied'
@@ -88,8 +100,18 @@ class Space:
 
         Parameters
         ----------
-        object: object
+        object: object, (Dooder, Energy, etc.)
             The object to remove from the Space
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.contents
+        {'dooder_0': <sdk.objects.Dooder object at 0x000001E0F1B0F0A0>}
+        >>> space.remove('dooder_0')
+        >>> space.contents
+        {}
         """
         
         if type(object) == str:
@@ -100,14 +122,14 @@ class Space:
         if len(self.contents) == 0:
             self.status = 'empty'
 
-    def has(self, object_type: str, ignore=None) -> bool:
+    def has(self, object_type: str, ignore: object = None) -> bool:
         """ 
         Return a boolean indicating if the Space contains 
         a specific object type
 
         Parameters
         ----------
-        object_type: str
+        object_type: str, ('Dooder', 'Energy', etc.)
             The type of object to check for
         ignore: object
             A list of object to ignore (Specifically the involved Dooder)
@@ -116,6 +138,13 @@ class Space:
         -------
         bool
             True if the Space contains the object type, False otherwise
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.has('Dooder')
+        True
         """
         for object in self.contents.values():
             if object.__class__.__name__ == object_type:
@@ -134,6 +163,13 @@ class Space:
         -------
         int
             The number of objects in the Space
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.count
+        1
         """
         return len(self.contents)
 
@@ -146,6 +182,13 @@ class Space:
         -------
         object
             A random object in the Space
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.random
+        <sdk.objects.Dooder object at 0x000001E0F1B0F0A0>
         """
         return random.choice(list(self.contents.values()))
 
@@ -158,6 +201,12 @@ class Space:
         -------
         bool
             True if the Space is empty, False otherwise
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.is_empty
+        True
         """
         return self.status == 'empty'
 
@@ -170,6 +219,13 @@ class Space:
         -------
         bool
             True if the Space is occupied, False otherwise
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.is_occupied
+        True
         """
         return self.status == 'occupied'
 
@@ -188,9 +244,17 @@ class Space:
 
         Returns
         -------
-        pattern: str
+        pattern: str, (00, 01, 10, 11, etc.)
             A string pattern of the contents of the Space
             See above for more details
+            
+        Example
+        -------
+        >>> space = Space(0, 0)
+        >>> space.add(Dooder(0, 0))
+        >>> space.add(Energy(0, 0))
+        >>> space.contents_pattern
+        '11'
         """
         first, second = 0, 0
         for content in self.contents.values():

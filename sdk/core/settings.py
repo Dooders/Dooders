@@ -54,6 +54,12 @@ class Settings:
         -------
         cls.settings : dict
             The updated settings dictionary.
+            
+        Examples
+        --------
+        >>> from sdk.core.settings import Settings
+        >>>
+        >>> Settings.compile({'max_steps': 100})
         """
         cls.settings['variables'] = cls.update_variables(settings)
         cls.settings['components'] = cls.update_components(settings)
@@ -74,6 +80,12 @@ class Settings:
         -------
         final_components : dict
             The updated settings dictionary for all components.
+            
+        Examples
+        --------
+        >>> from sdk.core.settings import Settings
+        >>>
+        >>> Settings.update_components({'simulation': 'sdk.simulations'})
         """
         final_components = {}
         for component, modules in _COMPONENTS.items():
@@ -102,6 +114,12 @@ class Settings:
         -------
         final_settings : dict
             The updated settings dictionary for all model variables.
+            
+        Examples
+        --------
+        >>> from sdk.core.settings import Settings
+        >>>
+        >>> Settings.update_variables({'max_steps': 100})
         """
         variable_dict = Variables.discover()
         final_settings = {}
@@ -132,6 +150,12 @@ class Settings:
         -------
         settings : dict
             The settings for the given model.
+            
+        Examples
+        --------
+        >>> from sdk.core.settings import Settings
+        >>>
+        >>> Settings.get('variables', 'simulation')
         """
         if model is None:
             return cls.settings[type]

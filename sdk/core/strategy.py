@@ -21,6 +21,11 @@ class Strategy(Core):
     """ 
     This class is used to compile strategies for 
     the supplied model.
+    
+    Attributes
+    ----------
+    STRATEGY_MODULE : str
+        The module to search for strategies in.
 
     Methods
     -------

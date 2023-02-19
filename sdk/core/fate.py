@@ -1,5 +1,8 @@
-from random import randint
+""" 
+Fate module used to decide the "fate" of an action.
+"""
 
+from random import randint
 
 class Fate:
     """ 

@@ -16,15 +16,11 @@ class Action(Core):
     
     Methods
     -------
-    register
-        Registers an action to the Actions class.
-    
-    __call__
-        Executes an action.
+    get_action(action_name: str) -> Callable
+        Returns all registered actions from the actions directory
+    execute(object: object, action_name: str) -> Callable
+        Executes a registered action.
     """
-    
-    def __init__(self):
-        from sdk import actions
         
     def get_action(self, action_name: str) -> Callable:
         """ 
@@ -34,6 +30,18 @@ class Action(Core):
         ----------
         action_name : str
             The name of the action to get.
+            
+        Returns
+        -------
+        Callable
+            The action that was requested.
+            
+        Examples
+        --------
+        >>> from sdk.core.action import Action
+        >>>
+        >>> Action.get_action('move')
+        <function move at 0x000001E0F1B0F0A0>
         """
         return self.get_component("sdk.actions", action_name)[action_name]
     
@@ -44,15 +52,23 @@ class Action(Core):
         
         Parameters
         ----------
-        object : Object
+        object : Object, (Dooder, Energy, etc.)
             The object that is executing the action.
-        action : str
+        action : str, (move, consume, etc.)
             The name of the action to execute.
             
         Returns
         -------
         Callable
             The action that was executed.
+            
+        Examples
+        --------
+        >>> from sdk.core.action import Action
+        >>> from sdk.objects.dooder import Dooder
+        >>>
+        >>> Action.execute(Dooder(0, 0), 'move')
+        <function move at 0x000001E0F1B0F0A0>
         """
         matched_action = cls.get_action(cls, action_name)
         action_results = matched_action.function(object)

@@ -15,8 +15,6 @@ X = int
 Y = int
 Coordinate = Tuple[X, Y]
 
-#! make id creator class
-
 
 class Grid:
     """
@@ -259,7 +257,7 @@ class Grid:
                         yield object
 
     @contents.register
-    def _(self, position: tuple):
+    def _(self, position: tuple) -> Iterator[Any]:
         """
         Return an iterator over all contents in a Space on the grid.
 

@@ -9,35 +9,37 @@ from typing import Callable
 
 from sdk.core.core import Core
 
+
 class Policy(Core):
     """ 
     The factory class to be used as a decorator to register a policy.
-    
+
     Methods
     -------
-    register
-        Registers a policy to the Policies class.
-    __call__
-        Executes a policy.
+    execute(policy_name: str, *args, **kwargs) -> Callable
+        Executes a registered policy.
     """
-    
-    def __init__(self) -> None:
-      from sdk import policies
-    
+
     @classmethod
     def execute(self, policy_name: str, *args, **kwargs) -> Callable:
         """ 
         Executes a registered policy.
-        
+
         Parameters
         ----------
-        policy : str
+        policy_name : str, (move, consume, etc.)
             The name of the policy to execute.
-        
+
         Returns
         -------
         Callable
-            The results of the policy
+            The policy that was requested.
+
+        Examples
+        --------
+        >>> from sdk.core.policy import Policy
+        >>>
+        >>> Policy.execute('move', agent, environment)
         """
         policies = self.get_components('sdk.policies')
 
@@ -45,5 +47,6 @@ class Policy(Core):
             for p in policy.values():
                 if p.function_name == policy_name:
                     matched_policy = p
-                    policy_results = matched_policy.function.execute(*args, **kwargs)
+                    policy_results = matched_policy.function.execute(
+                        *args, **kwargs)
                     return policy_results

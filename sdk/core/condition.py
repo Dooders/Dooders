@@ -14,9 +14,7 @@ class Condition(Core):
 
     Methods
     -------
-    register
-        Registers a stop condition to the Condition class.
-    check_conditions
+    check(scope: str, *args, **kwargs) -> bool
         Checks if any of the registered conditions are met. 
     """
 
@@ -27,13 +25,20 @@ class Condition(Core):
 
         Parameters
         ----------
-        simulation: Simulation
-            The simulation to check the conditions for.
+        scope : str, (simulation, dooder, etc.)
+            The scope of the condition
 
         Returns
         -------
         bool
             True if any of the conditions are met.
+            
+        Examples
+        --------
+        >>> from sdk.core.condition import Condition
+        >>>
+        >>> Condition.check('simulation')
+        False
         """
         registered_conditions = Core.get_components('sdk.conditions')
 

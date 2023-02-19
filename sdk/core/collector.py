@@ -52,6 +52,15 @@ class Collector(Core):
         Dictionary of all the collectors. The key is the collector name.
     data: dict
         Dictionary of all the collected data. The key is the collector name.
+        
+    Methods
+    -------
+    compile_collectors()
+        Compile the collectors into a dictionary.
+    get_collector(collector_name: str) -> Callable
+        Returns the collector that was requested.
+    collect(simulation: Simulation) -> None
+        Collects the data from the collectors.
     """
 
     def __init__(self) -> None:
@@ -62,8 +71,13 @@ class Collector(Core):
     def compile_collectors(self) -> None:
         """ 
         Compile the collectors into a dictionary.
+        
+        Examples
+        --------
+        >>> from sdk.core.collector import Collector
+        >>>
+        >>> Collector.compile_collectors()
         """
-        #! change to a generator?
         component = self.get_components('sdk.collectors')
 
         for collectors in component.values():
@@ -96,6 +110,14 @@ class Collector(Core):
         ----------
         simulation: Simulation
         Simulation object to collect data from.
+        
+        Examples
+        --------
+        >>> from sdk.core.collector import Collector
+        >>> from sdk.simulation import Simulation
+        >>>
+        >>> simulation = Simulation()
+        >>> Collector.collect(simulation)
         """
         for scope in self.collectors:
             self._collect(scope, simulation)
@@ -106,10 +128,18 @@ class Collector(Core):
 
         Parameters
         ----------
-        component: str
-            Component to collect data from.
+        scope: str, (sdk.components, sdk.collectors, etc.)
+            The name of the component to collect data from.
         simulation: Simulation
             Simulation object to collect data from.
+            
+        Examples
+        --------
+        >>> from sdk.core.collector import Collector
+        >>> from sdk.simulation import Simulation
+        >>>
+        >>> simulation = Simulation()
+        >>> Collector._collect('sdk.components', simulation)
         """
         for name, func in self.collectors[scope].items():
 
