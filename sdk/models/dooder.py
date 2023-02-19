@@ -99,8 +99,8 @@ class Dooder(BaseAgent):
                  simulation: 'BaseSimulation') -> None:
 
         super().__init__(id, position, simulation)
-        self.genetics = Genetics.compile_genetics(self)
-        self.behavior = self.genetics.copy()
+        # self.genetics = Genetics.compile_genetics(self)
+        # self.behavior = self.genetics.copy()
         self.cognition = Cognition()
         self.direction = 'Origin'
         self.moore = True
@@ -196,16 +196,16 @@ class Dooder(BaseAgent):
 
         return None
 
-    def __str__(self) -> str:
-        """
-        Return string of class attributes and genetics.
+    # def __str__(self) -> str:
+    #     """
+    #     Return string of class attributes and genetics.
 
-        Returns
-        -------
-        string: str
-            A string of the dooder's attributes and genetics.
-        """
-        return f"UniqueID: {self.id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
+    #     Returns
+    #     -------
+    #     string: str
+    #         A string of the dooder's attributes and genetics.
+    #     """
+    #     return f"UniqueID: {self.id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
 
     @property
     def history(self) -> list:
@@ -253,7 +253,6 @@ class Dooder(BaseAgent):
         neighborhood: list
             A list of the dooder's nearby neighborhood locations.
         """
-        locations = self.simulation.environment.nearby_locations(
-            (self.position))
+        locations = self.simulation.environment.nearby_spaces((self.position))
 
         return Neighborhood(locations, self)

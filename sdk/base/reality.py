@@ -5,7 +5,7 @@ import yaml
 import ast
 
 # from sdk.config import ExperimentParameters
-# from sdk.models import Environment, Information, Time
+from sdk.models import Information, Time
 from sdk.utils import ShortID
 
 # maybe have a dict that contains each simulation component (Environment, etc.)
@@ -38,9 +38,8 @@ class Reality(ABC):
         # self.params = ExperimentParameters.parse_obj(self.config)
 
         # Initialize the simulation components
-        # self.environment = Environment(self.params.Environment)
-        # self.information = Information(self)
-        # self.time = Time()
+        self.information = Information(self)
+        self.time = Time()
         
 
     def load_config(self, params):

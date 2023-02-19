@@ -5,7 +5,7 @@ from sdk.core import Strategy
 
 
 @Strategy.register()
-def random_location(model: Callable, args: dict) -> list:
+def random_location(model: Callable, *value) -> list:
     """ 
     Generates a list of locations for the given number of resources 
     and based on the provided strategy.
@@ -22,8 +22,7 @@ def random_location(model: Callable, args: dict) -> list:
     list
         A list of random locations based on the SeedCount.
     """
-    #! this takes a list of coordinates, the coordinates are tuples
     locations = [loc for loc in model.simulation.environment.coordinates()]
-    random_locations = choices(locations, k=model.SeedCount())
+    random_locations = choices(locations, k=value[1])
 
     return random_locations

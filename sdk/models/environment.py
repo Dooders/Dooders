@@ -3,19 +3,17 @@ Environment Model
 -----------------
 Represents the "physical" environment in which the agents interact.
 """
-
-from random import choices
 from typing import TYPE_CHECKING, Any, List, Union
 
 from sdk.base.base_agent import BaseAgent
 from sdk.core.surface import Surface
-from sdk.core.strategy import Strategy
 
 if TYPE_CHECKING:
     from sdk.core.data import UniqueID
 
 
 GridCell = List[Any]
+
 
 class Environment:
     """ 
@@ -50,7 +48,7 @@ class Environment:
         torus: bool
             Whether the environment is a torus or not.
         """
-        
+
     def _setup(self) -> None:
         """ 
         Setup the environment.
@@ -219,4 +217,16 @@ class Environment:
         count: int
             The number of objects of the given type.
         """
-        return len(self.get_objects(object_type))
+        return len(list(self.get_objects(object_type)))
+
+    def coordinates(self):
+        return self.surface.coordinates()
+
+    def spaces(self):
+        return self.surface.spaces()
+    
+    def nearby_spaces(self, location: tuple):
+        return self.surface.nearby_spaces(location)
+    
+    def contents(self, location: tuple):
+        return self.surface.contents(location)

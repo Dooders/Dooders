@@ -40,11 +40,10 @@ class Policy(Core):
             The results of the policy
         """
         policies = self.get_components('sdk.policies')
+
         for policy in policies.values():
             for p in policy.values():
                 if p.function_name == policy_name:
                     matched_policy = p
-
                     policy_results = matched_policy.function.execute(*args, **kwargs)
-                    
                     return policy_results

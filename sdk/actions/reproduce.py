@@ -6,6 +6,7 @@ This action is used to reproduce two dooders
 
 from sdk.core.action import Action
 from sdk.core import Policy
+from sdk.core.settings import Settings
 
 
 @Action.register()
@@ -20,7 +21,7 @@ def reproduce(dooderX) -> None:
     dooderA: Dooder 
         The first Dooder.
     """
-    reproduction_policy = dooderX.simulation.params.get('Policies').Reproduction
+    reproduction_policy = Settings.get('variables')['policies']['Reproduction'].args['value'] #! make this a lot simpler and cleaner
 
     #! make this a condition
     if dooderX.hunger == 0 and dooderX.age > 5:

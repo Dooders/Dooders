@@ -87,10 +87,6 @@ class Simulation(Reality):
             print(traceback.format_exc())
             print('Simulation failed')
 
-        finally:
-            if self.send_to_db:
-                self.post_simulation()
-
     def post_simulation(self) -> None:
         """
         Post cycle processes. Like sending data to a postgres db

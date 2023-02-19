@@ -204,7 +204,7 @@ class Grid:
         self,
         position: Coordinate,
         moore: bool = True,
-        include_center: bool = False,
+        include_center: bool = True,
         radius: int = 1
     ) -> Iterator[Space]:
         """

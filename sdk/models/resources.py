@@ -7,6 +7,8 @@ Responsible for creation and management of Energy objects in the simulation.
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
+from sdk.core.settings import Settings
+from sdk.core.strategy import Strategy
 
 from sdk.models.energy import Energy
 
@@ -82,13 +84,20 @@ class Resources:
         environment. The Energy object will be added to the available_resources
         dictionary.
         """
-        for location in self.EnergyPlacement():
+        for location in self.EnergyPlacement(self.EnergyPerCycle()):
             if len(self.available_resources) < self.MaxTotalEnergy():
-                unique_id = self.simulation.generate_id()
-                energy = Energy(unique_id, location, self)
+                energy = self.create_energy(location)
                 self.simulation.environment.place_object(energy, location)
-                self.available_resources[unique_id] = energy
+                self.available_resources[energy.id] = energy
                 self.allocated_energy += 1
+                
+    def create_energy(self, location):
+        unique_id = self.simulation.generate_id()
+        settings = Settings.get('variables')['energy']
+        energy = Energy(unique_id, location, self)
+        Strategy.compile(energy, settings)
+        
+        return energy
 
     def step(self) -> None:
         """ 

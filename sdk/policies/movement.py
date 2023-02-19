@@ -113,6 +113,7 @@ class NeuralNetwork(BasePolicy):
     infer_goal(dooder, neighborhood) -> str
         Returns the goal of the Dooder
     """
+    #! change neighborhood to perception
 
     base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}
 
@@ -124,7 +125,7 @@ class NeuralNetwork(BasePolicy):
         target = cls.base_goals[goal]
 
         # Check if the target is inside the Dooder's neighborhood
-        has_target = np.array([neighborhood.contains(target)], dtype='uint8')
+        target_array = np.array([neighborhood.contains(target)], dtype='uint8')
 
         # Get model if it exists, else return an error  
         model = dooder.internal_models.get(goal, None)
@@ -134,7 +135,7 @@ class NeuralNetwork(BasePolicy):
             pass
         
         # Predict where to move
-        prediction = model.predict(has_target)
+        prediction = model.predict(target_array)
         predicted_location = neighborhood.coordinates[prediction]
 
         # Learn from the reality

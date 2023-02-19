@@ -6,8 +6,6 @@ Collectors that are not specific to a single object type.
 
 from statistics import mean
 
-import pandas as pd
-
 from sdk.core.collector import Collector
 
 
@@ -15,12 +13,12 @@ from sdk.core.collector import Collector
 def dooder_count(simulation) -> int:
     """
     The number of dooders in the simulation.
-    
+
     Parameters
     ----------
     simulation : Simulation
         The simulation to collect data from.
-        
+
     Returns
     -------
     int
@@ -33,12 +31,12 @@ def dooder_count(simulation) -> int:
 def energy_count(simulation) -> int:
     """
     The number of energy in the simulation.
-    
+
     Parameters
     ----------
     simulation : Simulation
         The simulation to collect data from.
-        
+
     Returns
     -------
     int
@@ -75,12 +73,12 @@ def energy_count(simulation) -> int:
 def average_energy_age(simulation) -> float:
     """
     Return the average age of energy in the simulation.
-    
+
     Parameters
     ----------
     simulation : Simulation
         The simulation to collect data from.
-        
+
     Returns
     -------
     float
@@ -94,31 +92,31 @@ def average_energy_age(simulation) -> float:
 
     return round(mean(energy_age), 2)
 
-@Collector.register()
-def average_genetics(simulation) -> dict:
-    """ 
-    Return the average genetics of all dooders in the simulation.
-    
-    Parameters
-    ----------
-    simulation : Simulation 
-        The simulation to collect data from.
-        
-    Returns
-    -------
-    dict
-        The average genetics of all dooders in the simulation.
-    """
-    dooders = simulation.arena.active_dooders
-    
-    genetic_list = []
+# @Collector.register()
+# def average_genetics(simulation) -> dict:
+#     """
+#     Return the average genetics of all dooders in the simulation.
 
-    for dooder in dooders.values():
-        genetic_list.append(dooder.genetics)
-        
-    df = pd.DataFrame.from_dict(genetic_list)
-    
-    return dict(df.mean())
+#     Parameters
+#     ----------
+#     simulation : Simulation
+#         The simulation to collect data from.
+
+#     Returns
+#     -------
+#     dict
+#         The average genetics of all dooders in the simulation.
+#     """
+#     dooders = simulation.arena.active_dooders
+
+#     genetic_list = []
+
+#     for dooder in dooders.values():
+#         genetic_list.append(dooder.genetics)
+
+#     df = pd.DataFrame.from_dict(genetic_list)
+
+#     return dict(df.mean())
 
 
 # @Collector.register('AverageDooderAge')

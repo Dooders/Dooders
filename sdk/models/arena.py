@@ -93,7 +93,7 @@ class Arena:
         """
         Generate seed population based on the selected strategy.
         """
-        for position in self.SeedPlacement():
+        for position in self.SeedPlacement(self.SeedCount()):
             self.generate_dooder(position)
 
     def _generate_dooder(self, position: tuple) -> 'Dooder':
