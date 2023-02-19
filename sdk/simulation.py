@@ -12,7 +12,6 @@ from statistics import mean
 
 import pandas as pd
 
-from db.main import DB
 from sdk.base.reality import Reality
 from sdk.config import ExperimentParameters
 from sdk.core import Condition

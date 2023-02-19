@@ -22,7 +22,6 @@ from typing import TYPE_CHECKING, List
 
 import pandas as pd
 
-from db.main import DB
 from sdk.core import Collector
 from sdk.utils.logger import get_logger
 
