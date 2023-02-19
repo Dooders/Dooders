@@ -1,10 +1,12 @@
 """ 
 Core module for the SDK
+
+This module contains the Core class, which is used to register plug-ins.
 """
 
+from abc import ABC
 from typing import Callable, Dict, NamedTuple
 
-#! need to make sure every component is loaded before simulation starts
 
 class Component(NamedTuple):
     folder_name: str
@@ -19,7 +21,35 @@ class Component(NamedTuple):
 # {'actions': {'consume': {'consume': Component}}}
 _COMPONENTS: Dict[str, Dict[str, Dict[str, Component]]] = {}
 
-class Core:
+class Core(ABC):
+    """ 
+    Core class for the SDK.
+    
+    This class is used to register plug-ins.
+    
+    Attributes
+    ----------
+    _COMPONENTS: Dict[str, Dict[str, Dict[str, Component]]]
+        A dictionary with information about all registered plug-ins.
+    
+    Methods
+    -------
+    register(*args, **kwargs) -> Callable
+        Register a collector in the registry.
+    get_components(component: str) -> Dict[str, Dict[str, Component]]
+        Get all components of a certain type.
+    get_component(component: str, name: str) -> Dict[str, Component]
+        Get a component of a certain type.
+        
+    Examples
+    --------
+    * Register a function as a plug-in
+    >>> from sdk.core.core import Core
+    >>>
+    >>> @Core.register()
+    >>> def my_function():
+    >>>     pass
+    """
 
     @classmethod
     def register(cls, *args, **kwargs) -> Callable:
@@ -61,11 +91,19 @@ class Core:
         ----------
         component: str
             The type of component to get.
+            Example: 'actions', 'collectors', etc.
 
         Returns
         -------
         components: Dict[str, Dict[str, Component]]
             A dictionary of all components of the specified type.
+            
+        Examples
+        --------
+        >>> from sdk.core.core import Core
+        >>>
+        >>> Core.get_components('actions')
+        {'actions': {'consume': {'consume': <Component>}}}
         """
         return _COMPONENTS[component]
     
@@ -78,12 +116,21 @@ class Core:
         ----------
         component: str
             The type of component to get.
+            Example: 'actions', 'collectors', etc.
         name: str
             The name of the component to get.
+            Example: 'consume', 'move', etc.
 
         Returns
         -------
         component: Dict[str, Component]
             A dictionary of the component of the specified type.
+            
+        Examples
+        --------
+        >>> from sdk.core.core import Core
+        >>>
+        >>> Core.get_component('actions', 'consume')
+        {'consume': <Component>}
         """
         return _COMPONENTS[component][name]
