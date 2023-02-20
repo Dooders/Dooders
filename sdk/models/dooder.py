@@ -16,14 +16,12 @@ from sdk.base.base_agent import BaseAgent
 from sdk.core import Condition
 from sdk.core.action import Action
 from sdk.core.step import Step
-from sdk.models.genetics import Genetics
 from sdk.modules.cognition import Cognition
 from sdk.modules.internal_models import InternalModels
 from sdk.modules.neighborhood import Neighborhood
 
 if TYPE_CHECKING:
     from sdk.base.reality import BaseSimulation
-    from sdk.core.data import Position, UniqueID
 
 
 MotivationList = ['Consume', 'Reproduce']

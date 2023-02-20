@@ -54,7 +54,7 @@ class Settings:
         -------
         cls.settings : dict
             The updated settings dictionary.
-            
+
         Examples
         --------
         >>> from sdk.core.settings import Settings
@@ -80,7 +80,7 @@ class Settings:
         -------
         final_components : dict
             The updated settings dictionary for all components.
-            
+
         Examples
         --------
         >>> from sdk.core.settings import Settings
@@ -114,7 +114,7 @@ class Settings:
         -------
         final_settings : dict
             The updated settings dictionary for all model variables.
-            
+
         Examples
         --------
         >>> from sdk.core.settings import Settings
@@ -150,7 +150,7 @@ class Settings:
         -------
         settings : dict
             The settings for the given model.
-            
+
         Examples
         --------
         >>> from sdk.core.settings import Settings
@@ -161,3 +161,29 @@ class Settings:
             return cls.settings[type]
         else:
             return cls.settings[type][model]
+
+    @classmethod
+    def search(cls, setting_name: str) -> str:
+        """
+        Search for a specific setting.
+
+        Parameters
+        ----------
+        setting_name : str
+            The name of the policy to search for.
+
+        Returns
+        -------
+        setting : str
+            The name of the policy that matches the search term.
+
+        Examples
+        --------
+        >>> from sdk.core.settings import Settings
+        >>>
+        >>> Settings.search('Movement')
+        "NeuralNetwork"
+        """
+        for setting in cls.settings['variables'].values():
+            if setting_name in setting.keys():
+                return setting[setting_name].args['value']

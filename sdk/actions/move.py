@@ -5,8 +5,8 @@ This module contains the actions that allow dooders
 to move around the environment.
 """
 
-from sdk.core.action import Action
 from sdk.core import Policy
+from sdk.core.action import Action
 from sdk.core.settings import Settings
 from sdk.utils.get_direction import get_direction
 
@@ -15,15 +15,24 @@ from sdk.utils.get_direction import get_direction
 def move(dooder) -> None:
     """ 
     Move the dooder to a new cell in the environment
+    
+    Function will look for a policy in the settings that will determine
+    where the dooder will move to. If the dooder is not able to move to
+    the cell, the dooder's move count will not increase.
 
     Parameters
     ----------
     dooder : Dooder
         The dooder that is moving
+        
+    Examples
+    --------
+    >>> dooder = Dooder((0, 0))
+    >>> Action.execute(dooder, 'move')
+    >>> dooder.position
+    (0, 1)
     """
-    #! make it so Dooder object is assigned its own polices that can be referenced from the object
-    #! it originally was getting the chosen movement policy from the simulation object
-    chosen_policy = Settings.get('variables')['policies']['Movement'].args['value'] #! make this a lot simpler and cleaner
+    chosen_policy = Settings.search('Movement')
     destination = Policy.execute(chosen_policy, dooder)
 
     if destination == dooder.position:
