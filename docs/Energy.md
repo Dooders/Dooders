@@ -17,9 +17,9 @@ So, if a Dooder does not extract and consume energy from the environment, eventu
 ### Simple Energy: 
 Energy that is refreshed each cycle around the environment and can be consumed by all higher level energies.
 
-* Worth 1 energy unit when consumed
-* Allocation is determined by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle.
-* Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml) than will remove itself
+* Worth 1 energy unit when consumed.
+* Allocation is determined by its [placement strategy].(https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle.
+* Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
 
 ### Local Energy: 
 Energy that is locally bound in the environment that can be large but finite.
@@ -36,14 +36,6 @@ How it adapts to the Dooder dynamic.
 I will also need to give this the ability to continue long into the simulation
 
 > Still in development
-
-## Highlights
-
-* Used by dooders to move or perform actions
-* Energy is added randomly at the start of each cycle
-* Each Dooder has an energy supply
-* After n cycles with no movement, 1 energy unit is taken from a dooder
-* Energy dissipates at random intervals between min and max (laws)
 
 ## Future Ideas
 
