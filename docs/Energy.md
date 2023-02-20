@@ -18,7 +18,7 @@ So, if a Dooder does not extract and consume energy from the environment, eventu
 Energy that is refreshed each cycle around the environment and can be consumed by all higher level energies.
 
 * Worth 1 energy unit when consumed.
-* Allocation is determined by its [placement strategy].(https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle.
+* Allocation is determined by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle.
 * Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
 
 ### Local Energy: 
