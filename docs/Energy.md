@@ -10,8 +10,6 @@ This approach is in line with thermodynamics and how life on Earth is able to co
 
 In the simulation, Dooders must utilize energy to evade thermal equilibrium, which is akin to a terminal state or death. 
 
-So, if a Dooder does not extract and consume energy from the environment, eventually it will be removed from the simulation.
-
 ## Types of Energy
 
 ### Simple Energy: 
