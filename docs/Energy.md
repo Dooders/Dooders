@@ -4,9 +4,9 @@
 
 Energy is a fundamental object that allows an agent to stay in the simulation. 
 
-In the context of this project, a Dooder's capacity to extract energy from the environment determines how much it can achieve and how long it can survive. Essentially, a Dooder requires energy to engage in movement and other actions.
+In the context of this project, a Dooder's capacity to extract energy from the environment determines how long it can survive. Essentially, a Dooder requires energy to engage in movement and other actions.
 
-This approach is in line with thermodynamics and how life on Earth is able to continue. The second law of thermodynamics dictates that systems tend to gravitate toward equilibrium without an external source of energy, leading to their eventual demise. Similar to a hurricane gradually losing power until it dissipates entirely.
+This approach is in line with thermodynamics and how life on Earth started and evolved. The second law of thermodynamics dictates that systems tend to gravitate toward equilibrium (also called entropy[^1]) without an external source of energy, leading to their eventual demise. Similar to a hurricane gradually losing power until it dissipates entirely.
 
 In the simulation, Dooders must utilize energy to evade thermal equilibrium, which is akin to a terminal state or death. 
 
@@ -40,3 +40,7 @@ I will also need to give this the ability to continue long into the simulation
 ## Future Ideas
 
 * Energy creation cycles or periods. Like periods of plenty and scarcity
+
+
+#### Footnotes
+[^1]: https://en.m.wikipedia.org/wiki/Entropy
