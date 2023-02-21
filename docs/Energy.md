@@ -2,13 +2,11 @@
 
 ***This page is a work-in-progress***
 
-Energy is a fundamental object that allows an agent to stay in the simulation. 
+In this project, energy is a crucial component that enables an agent to persist within the simulation. The Dooder's ability to extract energy from its environment directly impacts its survival. Energy is essential to perform various functions, including movement.
 
-In the context of this project, a Dooder's capacity to extract energy from the environment determines how long it can survive. Essentially, a Dooder requires energy to engage in movement and other actions.
+This approach is consistent with the principles of thermodynamics, which have played a significant role in the development of life on Earth. According to the second law of thermodynamics, systems tend to move towards a state of equilibrium (also known as entropy[^1]) in the absence of an external source of energy, ultimately leading to their demise. This process is similar to how a hurricane gradually loses strength until it dissolves entirely.
 
-This approach is in line with thermodynamics and how life on Earth started and evolved. The second law of thermodynamics dictates that systems tend to gravitate toward equilibrium (also called entropy[^1]) without an external source of energy, leading to their eventual demise. Similar to a hurricane gradually losing power until it dissipates entirely.
-
-In the simulation, Dooders must utilize energy to evade thermal equilibrium, which is akin to a terminal state or death. 
+A Dooder must utilize energy to avoid thermal equilibrium, which is a terminal state (i.e., death).
 
 ## Types of Energy
 
