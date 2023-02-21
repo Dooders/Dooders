@@ -14,9 +14,8 @@ A Dooder must utilize energy to avoid thermal equilibrium, which is a terminal s
 Energy that is refreshed each cycle around the environment and can be consumed by all higher level energies.
 
 * Consumed by Dooders and Complex Energy agents
-* Allocation is managed by the [Resources](https://github.com/csmangum/Dooders/blob/main/sdk/models/resources.py) class and executes by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle (random, fixed, etc.).
+* Allocation is managed by the [Resources](https://github.com/csmangum/Dooders/blob/main/sdk/models/resources.py) class and executed by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle (random, fixed, etc.).
 * Worth 1 energy unit when consumed.
-* 
 * Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
 
 ### Local Energy: 
