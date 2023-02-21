@@ -16,7 +16,7 @@ Energy that is refreshed each cycle around the environment and can be consumed b
 * Consumed by Dooders and Complex Energy agents
 * Allocation is managed by the [Resources](https://github.com/csmangum/Dooders/blob/main/sdk/models/resources.py) class.
 * Worth 1 energy unit when consumed.
-* Allocation is determined by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle.
+* Allocation is determined by its [placement strategy] (https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle (random, etc.).
 * Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
 
 ### Local Energy: 
