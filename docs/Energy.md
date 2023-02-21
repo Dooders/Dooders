@@ -2,13 +2,13 @@
 
 ***This page is a work-in-progress***
 
-Energy is a fundamental concept that measures the ability to perform work. 
+Energy is a fundamental object that allows an agent to stay in the simulation. 
 
 In the context of this project, a Dooder's capacity to extract energy from the environment determines how much it can achieve and how long it can survive. Essentially, a Dooder requires energy to engage in movement and other actions.
 
-This approach is in line with thermodynamics and how life on Earth is able to continue. In the simulation, Dooders must utilize energy to evade thermal equilibrium, which is akin to a terminal state or death. 
+This approach is in line with thermodynamics and how life on Earth is able to continue. The second law of thermodynamics dictates that systems tend to gravitate toward equilibrium without an external source of energy, leading to their eventual demise. Similar to a hurricane gradually losing power until it dissipates entirely.
 
-The second law of thermodynamics dictates that systems tend to gravitate toward equilibrium without an external source of energy, leading to their eventual demise. Similar to a hurricane gradually losing power until it dissipates entirely.
+In the simulation, Dooders must utilize energy to evade thermal equilibrium, which is akin to a terminal state or death. 
 
 So, if a Dooder does not extract and consume energy from the environment, eventually it will be removed from the simulation.
 
@@ -17,6 +17,8 @@ So, if a Dooder does not extract and consume energy from the environment, eventu
 ### Simple Energy: 
 Energy that is refreshed each cycle around the environment and can be consumed by all higher level energies.
 
+* Consumed by Dooders and Complex Energy agents
+* Allocation is managed by the [Resources}(https://github.com/csmangum/Dooders/blob/main/sdk/models/resources.py) class.
 * Worth 1 energy unit when consumed.
 * Allocation is determined by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle.
 * Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
