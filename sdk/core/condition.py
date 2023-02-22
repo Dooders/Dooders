@@ -21,6 +21,11 @@ class Condition(Core):
     _registered_conditions = None
     _condition_cache = {}
     
+    
+    @classmethod
+    def _build(cls):
+        pass
+    
     @classmethod
     def _get_registered_conditions(cls):
         if cls._registered_conditions is None:
