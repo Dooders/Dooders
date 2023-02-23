@@ -6,7 +6,7 @@ In this project, energy is a crucial component that enables an agent to persist 
 
 This approach is consistent with the principles of thermodynamics, which have played a significant role in the development of life on Earth[^1]. According to the second law of thermodynamics, systems tend to move towards a state of equilibrium (also known as entropy[^2]) in the absence of an external source of energy, ultimately leading to their demise. This process is similar to how a hurricane gradually loses strength until it dissolves entirely.
 
-A Dooder must utilize energy to avoid thermal equilibrium, which is a terminal state (i.e., death).
+A Dooder must utilize energy to avoid equilibrium, which is a terminal state (i.e., death).
 
 ## Types of Energy
 
@@ -19,7 +19,7 @@ Energy that is refreshed each cycle around the environment and can be consumed b
 * Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
 
 ### Local Energy: 
-Energy that is locally bound in the environment that can be large but finite.
+Energy that is bound in the environment to a specific [Space](), in large but finite quantities.
 
 Also more difficult to extract this type of energy, but allows for large extractions over time
 
