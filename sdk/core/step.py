@@ -45,7 +45,7 @@ class Step(Core):
         >>> Step.forward('move', agent)
         """
         steps = Core.get_component(
-            'sdk.steps', object.__class__.__name__.lower())
+            'step', object.__class__.__name__.lower())
         step_flow = steps[name].function
         step_flow.step(object)
 

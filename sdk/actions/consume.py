@@ -5,11 +5,11 @@ This module contains the actions that allow dooders
 to consume energy from the environment.
 """
 
-from sdk.core.action import Action
+from sdk.core.core import Core
 from sdk.models.energy import Energy
 
 
-@Action.register()
+@Core.register('action')
 def consume(dooder) -> None:
     """ 
     Consume energy from the environment

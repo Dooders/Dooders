@@ -9,13 +9,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from sdk.base.base_policy import BasePolicy
-from sdk.core.policy import Policy
+from sdk.core.core import Core
 
 if TYPE_CHECKING:
     from sdk.models.dooder import Dooder
 
 
-@Policy.register()
+@Core.register('policy')
 class AverageWeights(BasePolicy):
     """
     Taking the model weights from two Dooders and averaging them to use with a new Dooder.
@@ -54,7 +54,7 @@ class AverageWeights(BasePolicy):
         return new_weights
 
 
-@Policy.register()
+@Core.register('policy')
 class RangeWeights(BasePolicy):
     """
     Taking the model weights from two Dooders and randomly selecting weights 
@@ -101,7 +101,7 @@ class RangeWeights(BasePolicy):
         return new_weights
 
 
-@Policy.register()
+@Core.register('policy')
 class SplitWeights(BasePolicy):
     """
     Taking the model weights from two Dooders. The first layer weights of DooderA

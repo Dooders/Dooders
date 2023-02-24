@@ -78,7 +78,7 @@ class Collector(Core):
         >>>
         >>> Collector.compile_collectors()
         """
-        component = self.get_components('sdk.collectors')
+        component = self.get_components('collector')
 
         for collectors in component.values():
             for collector in collectors.values():

@@ -4,9 +4,9 @@ Dooder Collector
 This collector is responsible for collecting the stats of all active dooders
 """
 
-from sdk.core.collector import Collector
+from sdk.core.core import Core
 
-@Collector.register()
+@Core.register('collector')
 def dooder_stats(simulation) -> dict:
   """ 
   Collect the stats of all active dooders
