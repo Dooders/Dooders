@@ -10,30 +10,58 @@ import traceback
 from datetime import datetime
 from statistics import mean
 
-import pandas as pd
-
 from sdk.base.reality import Reality
-from sdk.config import ExperimentParameters
 from sdk.core import Condition
 
 
 class Simulation(Reality):
     """
+    The simulation class is the main class of the simulation. It is responsible for
+    initializing the simulation, running the simulation, and displaying the results.
 
+    Parameters
+    ----------
+    settings: dict
+        The settings for the simulation.
+
+    Attributes
+    ----------
+    running: bool
+        Whether the simulation is running or not.
+    cycles: int
+        The number of cycles that have passed.
+
+    Methods
+    -------
+    setup()
+        Setup the simulation.
+    step()
+        Advance the simulation by one cycle.
+    cycle()
+        Advance the simulation by one cycle.
+    run_simulation()
+        Run the simulation for a specified number of steps.
+    post_simulation()
+        Post cycle processes. Like sending data to a postgres db
+    reset()
+        Reset the simulation object, using the current parameters.
+    stop()
+        Stop the simulation.
+    get_results()
+        Get the step results of the simulation.
+    generate_id()
+        Generate a new id for an object.
+    random_dooder()
+        Get a random dooder from the simulation.
+    stop_conditions()
+        Check if the simulation should stop.
+    log(granularity, message, scope)
+        Log a message to the logger.
+    simulation_summary()
+        Get a summary of the simulation.
     """
 
     def __init__(self, settings: dict) -> None:
-        """
-        Primary class to handle the simulation. A simulation will have access to 
-        many different models
-
-        Args:
-            experiment_id: The id of the experiment this simulation is a part of.
-            params: Experiment parameters.
-
-        Attributes:
-            cycles: The number of cycles that have passed.
-        """
         super().__init__(settings)
         self.running = False
         self.cycles: int = 0
@@ -55,7 +83,13 @@ class Simulation(Reality):
 
     def step(self) -> None:
         """
-        Advance the simulation by one cycle.        
+        Advance the simulation by one cycle.
+
+        1. Advance every agent by a step
+        2. Collect data at the end of the cycle
+        3. Place new energy
+        4. Collect stats
+        5. Increment cycle counter   
         """
         # advance every agent by a step
         self.time.step()
@@ -72,11 +106,20 @@ class Simulation(Reality):
         self.cycles += 1
 
     def cycle(self) -> None:
+        """ 
+        Advance the simulation by one cycle.
+        """
         if self.stop_conditions():
             self.step()
 
     def run_simulation(self) -> None:
-        """Run the simulation for a specified number of steps."""
+        """
+        Run the simulation for a specified number of steps.
+
+        1. Setup the simulation
+        2. Run the simulation until the stop conditions are met
+        3. Collect the results
+        """
         self.starting_time = datetime.now()
         try:
             self.setup()
@@ -86,27 +129,8 @@ class Simulation(Reality):
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
-            
+
         self.ending_time = datetime.now()
-
-    def post_simulation(self) -> None:
-        """
-        Post cycle processes. Like sending data to a postgres db
-
-        #! better way to send data to db
-        """
-        df = self.information.get_dataframe('dooder')
-        df['SimulationID'] = self.simulation_id
-        DB.df_to_db(df, 'DooderResults')
-        # df = self.information.get_dataframe('simulation')
-        # Postgres.df_to_db(df, 'SimulationResults')
-        logs = self.information.get_log()
-        df = pd.DataFrame(logs)
-        DB.df_to_db(df, 'SimulationLogs')
-        summary = self.simulation_summary()
-        summary['Details'] = self.details
-        summary['ExperimentID'] = self.experiment_id
-        DB.add_record(summary, 'SimulationSummary')
 
     def reset(self) -> None:
         """
@@ -117,25 +141,19 @@ class Simulation(Reality):
         self.__init__(self.simulation_id, self.params)
 
     def stop(self) -> None:
-        """Stop the simulation."""
+        """
+        Stop the simulation.
+        """
         self.running = False
-
-    def set_parameters(self, params: ExperimentParameters) -> None:
-        """
-        Manually set the parameters of the simulation and reset the simulation.
-
-        Args:
-            params: The new parameters to use.
-        """
-        self.params = params
-        self.reset()
 
     def get_results(self) -> dict:
         """
         Get the step results of the simulation.
 
-        Returns:
-            A dictionary of the results.
+        Returns
+        -------
+        dict
+            A dictionary of the results of the simulation.
         """
         return self.information.get_result_dict(self)
 
@@ -143,8 +161,10 @@ class Simulation(Reality):
         """
         Generate a new id for an object.
 
-        Returns:
-            A uuid4 short id.
+        Returns
+        -------
+        int
+            A new id for an object.
         """
         return self.seed.uuid()
 
@@ -152,18 +172,21 @@ class Simulation(Reality):
         """
         Get a random dooder from the simulation.
 
-        Returns:
-            A random dooder.
+        Returns
+        -------
+        Dooder
+            A random dooder from the simulation.
         """
         return self.arena.get_dooder()
 
     def stop_conditions(self) -> bool:
-        #! maybe make a decorator to implement this nicely
         """
         Check if the simulation should stop.
 
-        Returns:
-            True if the simulation should stop, False otherwise.
+        Returns
+        -------
+        bool
+            Whether the simulation should stop or not.
         """
         result, reason = Condition.check('stop', self)
 
@@ -181,10 +204,14 @@ class Simulation(Reality):
         """ 
         Log a message to the logger.
 
-        Args:
-            granularity: The granularity of the message. 1 is the least granular.
-            message: The message to log.
-            scope: The scope of the message. Like 'Simulation' or 'Dooder'
+        Parameters
+        ----------
+        granularity: int
+            The granularity of the message.
+        message: str
+            The message to log.
+        scope: str
+            The scope of the message.
         """
         cycle_number = self.time.time
 
@@ -199,7 +226,15 @@ class Simulation(Reality):
 
         self.information.log(final_message, granularity)
 
-    def simulation_summary(self):
+    def simulation_summary(self) -> dict:
+        """ 
+        Get a summary of the simulation.
+
+        Returns
+        -------
+        dict
+            A dictionary of the summary of the simulation.
+        """
         return {'SimulationID': self.simulation_id,
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
                 'CycleCount': self.cycles,
@@ -207,7 +242,7 @@ class Simulation(Reality):
                 'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
                 'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
                 'EndingDooderCount': len(self.arena.active_dooders),
-                'Elapsed': (self.ending_time - self.starting_time).total_seconds(),
+                'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds()),
                 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
 
@@ -216,7 +251,9 @@ class Simulation(Reality):
         """ 
         Get the current cycle number.
 
-        Returns:
+        Returns
+        -------
+        int
             The current cycle number.
         """
         return self.cycles
