@@ -5,51 +5,76 @@ from typing import Dict, List
 from fastapi import WebSocket
 
 from sdk.base.base_agent import BaseAgent
-from sdk.config import ExperimentParameters
-from sdk.simulation import Simulation
+from sdk.core import Assemble
 from sdk.utils import ShortID
+
+from sdk import strategies
+from sdk.surfaces import *
+from sdk.actions import *
+from sdk.policies import *
 
 
 class Experiment:
     """
     Class to manage the overall experiment and each simulation.
+    
+    Parameters
+    ----------
+    settings: dict
+        The settings of the experiment.
 
+    Attributes
+    ----------
+    experiment_id: str
+        The id of the experiment.
+    seed: ShortID
+        A `ShortID` object to generate random ids.
+    settings: dict
+        The settings of the experiment.
+        
+    Methods
+    -------
+    create_simulation()
+        Create a simulation.
+    simulate()
+        Simulate a single cycle.
+    batch_simulate(n: int = 1)
+        Simulate n cycles.  
+    get_log()
+        Fetch the log for the current experiment, append each line to logs list and return a list of dictionaries.
+    print_log(n: int = 20)
+        Print the past n log entries.
+    get_object(object_id: str)
+        Fetch an object by its id.
+    get_objects(object_type: str = 'BaseAgent')
+        Fetch all objects of a given type.   
     """
 
     results = {}
 
-    def __init__(self, parameters: ExperimentParameters, send_to_db=True, details=None) -> None:
-        """
-        Initializes an experiment.
-
-        Args:
-            parameters: Experiment parameters.
-
-        Attributes:
-            experiment_id: The id of the experiment.
-            simulation: The simulation object.
-            parameters: The experiment parameters.
-            seed: The seed of the experiment. Used in experiment_id generation.
-        """
+    def __init__(self, settings: dict = {}) -> None:
         self.seed = ShortID()
-        self.parameters = parameters
         self.experiment_id = self.seed.uuid()
-        self.details = details
-        self.create_simulation()
+        self.settings = settings
 
-    def create_simulation(self, simulation_id: str = None) -> None:
+    def create_simulation(self) -> None:
         """
         Create a simulation.
 
         Args:
             simulation_id: The id of the simulation. If None, a random id will be assigned.
         """
-        if simulation_id is None:
-            simulation_id = self.seed.uuid()
-        self.simulation = Simulation(
-            simulation_id, self.experiment_id)
+        return Assemble.execute(self.settings)
+    
+    def simulate(self) -> None:
+        """ 
+        Simulate a single cycle.
+        """
+        self.simulation = self.create_simulation()
+        self.simulation.run_simulation()
+        self.results = self.simulation.simulation_summary()
 
-    def simulate(self, n: int = 1) -> None:
+    def batch_simulate(self, n: int = 1) -> None:
         """ 
         Simulate n cycles.
 
@@ -57,24 +82,10 @@ class Experiment:
             n: The number of cycles to simulate.
         """
         for i in range(n):
-            simulation_id = self.seed.uuid()
-            self.simulation = Simulation(
-                simulation_id, self.experiment_id, self.parameters, self.send_to_db, self.details)
+            self.simulation = self.create_simulation(self.settings)
             self.simulation.run_simulation()
             self.results[i] = self.simulation.simulation_summary()
-            # del self.simulation
-
-    # def setup_experiment(self) -> None:
-    #     """
-    #     Setup the experiment.
-    #     """
-    #     self.simulation.setup()
-
-    # def execute_cycle(self) -> None:
-    #     """
-    #     Execute a cycle.
-    #     """
-    #     self.simulation.cycle()
+            del self.simulation
 
     def get_log(self) -> List[str]:
         """ 

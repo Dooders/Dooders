@@ -5,7 +5,6 @@ from sdk.core.policy import Policy as Policy
 from sdk.core.fate import Fate as Fate
 from sdk.core.step import Step as Step
 from sdk.core.surface import Surface as Surface
-
-# import sdk.collectors
-# import sdk.conditions
-# import sdk.strategies
+from sdk.core.action import Action as Action
+from sdk.core.settings import Settings as Settings
+from sdk.core.assemble import Assemble as Assemble
