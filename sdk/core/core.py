@@ -9,6 +9,7 @@ from typing import Callable, Dict, NamedTuple
 
 
 class Component(NamedTuple):
+    component_name: str
     folder_name: str
     file_name: str
     function_name: str
@@ -65,14 +66,14 @@ class Core(ABC):
     """
 
     @classmethod
-    def register(cls, *args, **kwargs) -> Callable:
+    def register(cls, component_name: str, *args, **kwargs) -> Callable:
         """ 
         Register a collector in the registry.
-
-        Returns
-        -------
-        inner_wrapper: Callable
-            The decorator function.
+        
+        Parameters
+        ----------
+        component_name: str
+            The name of the component to register.
 
         Example
         -------
@@ -88,9 +89,10 @@ class Core(ABC):
             description, _, _ = (func.__doc__ or "").partition("\n\n")
             function_name = func.__name__
 
-            pkg_info = _COMPONENTS.setdefault(folder_name, {})
+            pkg_info = _COMPONENTS.setdefault(component_name, {})
             plugin_info = pkg_info.setdefault(file_name, {})
             plugin_info[function_name] = Component(
+                component_name=component_name,
                 folder_name=folder_name,
                 file_name=file_name,
                 function_name=function_name,
@@ -104,13 +106,13 @@ class Core(ABC):
         return inner_wrapper
 
     @classmethod
-    def get_components(self, component: str) -> Dict[str, Dict[str, Component]]:
+    def get_components(cls, component_name: str) -> Dict[str, Dict[str, Component]]:
         """ 
         Get all components of a certain type.
 
         Parameters
         ----------
-        component: str
+        component_name: str
             The type of component to get.
             Example: 'actions', 'collectors', etc.
 
@@ -126,19 +128,19 @@ class Core(ABC):
         >>> Core.get_components('actions')
         {'actions': {'consume': {'consume': <Component>}}}
         """
-        return _COMPONENTS[component]
+        return _COMPONENTS[component_name]
 
     @classmethod
-    def get_component(self, component: str, name: str) -> Dict[str, Component]:
+    def get_component(csl, component_name: str, function_name: str) -> Dict[str, Component]:
         """ 
         Get a component of a certain type.
 
         Parameters
         ----------
-        component: str
+        component_name: str
             The type of component to get.
             Example: 'actions', 'collectors', etc.
-        name: str
+        function_name: str
             The name of the component to get.
             Example: 'consume', 'move', etc.
 
@@ -154,4 +156,4 @@ class Core(ABC):
         >>> Core.get_component('actions', 'consume')
         {'consume': <Component>}
         """
-        return _COMPONENTS[component][name]
+        return _COMPONENTS[component_name][function_name]

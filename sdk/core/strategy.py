@@ -36,7 +36,7 @@ class Strategy(Core):
         to the model. When the attribute is called, the function will be executed.
     """
 
-    STRATEGY_MODULE = 'sdk.strategies'
+    STRATEGY_MODULE = 'strategy'
 
     @classmethod
     def search(cls, function_name: str) -> Any:

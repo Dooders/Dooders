@@ -9,7 +9,6 @@ from typing import Callable
 
 from sdk.core.core import Core
 
-
 class Action(Core):
     """ 
     An action is a way for an object to interact with the simulation.
@@ -43,7 +42,7 @@ class Action(Core):
         >>> Action.get_action('move')
         <function move at 0x000001E0F1B0F0A0>
         """
-        return self.get_component("sdk.actions", action_name)[action_name]
+        return self.get_component("action", action_name)[action_name]
     
     @classmethod
     def execute(cls, object: object, action_name: str) -> Callable:

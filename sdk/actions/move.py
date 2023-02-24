@@ -6,12 +6,12 @@ to move around the environment.
 """
 
 from sdk.core import Policy
-from sdk.core.action import Action
+from sdk.core.core import Core
 from sdk.core.settings import Settings
 from sdk.utils.get_direction import get_direction
 
 
-@Action.register()
+@Core.register('action')
 def move(dooder) -> None:
     """ 
     Move the dooder to a new cell in the environment

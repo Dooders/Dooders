@@ -19,8 +19,6 @@ class Condition(Core):
     """
     
     _registered_conditions = None
-    _condition_cache = {}
-    
     
     @classmethod
     def _build(cls):
@@ -29,33 +27,11 @@ class Condition(Core):
     @classmethod
     def _get_registered_conditions(cls):
         if cls._registered_conditions is None:
-            cls._registered_conditions = Core.get_components('sdk.conditions')
+            cls._registered_conditions = Core.get_components('condition')
         return cls._registered_conditions
     
     @classmethod
-    def _check(self, conditions, *args, **kwargs) -> bool:
-        """ 
-        Check if the condition is met.
-
-        Parameters
-        ----------
-        *args, **kwargs
-            The arguments to be passed to the function.
-
-        Returns
-        -------
-        bool
-            True if the condition is met, False otherwise.
-        """
-        for condition_dict in conditions.values():
-            for condition in condition_dict.values():
-                function = condition.function
-                if function(*args, **kwargs):
-                    return True, condition
-                return False, None
-
-    @classmethod
-    def check_new(cls, scope: str, *args, **kwargs) -> bool:
+    def check(cls, scope: str, *args, **kwargs) -> bool:
         """ 
         Check if any of the registered conditions are met.
 
@@ -84,44 +60,44 @@ class Condition(Core):
         for condition in registered_conditions[scope].values():
             if not callable(condition.function):
                 raise TypeError("Condition function is not callable")
-            if condition.function(*args, **kwargs):
-                return True, condition.function_name
+            result, reason = cls.execute_methods(condition.function, *args, **kwargs)
+            return result, reason
 
         return False, None
-
-        # if scope in cls._condition_cache.keys():
-        #     conditions = cls._condition_cache.get(scope)
         
-        # elif scope not in cls._condition_cache:
-        #     conditions = Core.get_components('sdk.conditions')
-        #     cls._condition_cache[scope] = conditions[scope]
-        
-        # return cls._check(conditions, *args, **kwargs)
-    
     @classmethod
-    def check(cls, scope: str, *args, **kwargs) -> bool:
-        """ 
-        Check if any of the registered conditions are met.
-        Parameters
-        ----------
-        scope : str, (simulation, dooder, etc.)
-            The scope of the condition
-        Returns
-        -------
-        bool
-            True if any of the conditions are met.
-            
-        Examples
-        --------
-        >>> from sdk.core.condition import Condition
-        >>>
-        >>> Condition.check('simulation')
-        False
+    def execute_methods(cls, condition, model):
         """
-        registered_conditions = Core.get_components('sdk.conditions')
+        Execute all public methods of an object that do not start with an underscore.
 
-        for condition in registered_conditions[scope].values():
-            function = condition.function
-            if function(*args, **kwargs):
-                return True, condition
-            return False, None
+        Args:
+            obj: An instance of a class.
+            model: The model to pass as an argument to the methods.
+
+        Returns:
+            A tuple containing a boolean indicating whether all/any methods returned True, 
+            and a list of method names that failed (if any).
+        """
+        results = []
+        failed_methods = []
+        operator = condition.__dict__.get('_OPERATOR', 'all') # default to 'all' if _OPERATOR attribute is not found
+        for name in dir(condition):
+            if not name.startswith('_'):
+                attr = getattr(condition, name)
+                if callable(attr):
+                    results.append(attr(model))
+                    if not attr(model):
+                        failed_methods.append(name)
+
+        if operator == 'all':
+            if all(results):
+                return True, None
+            else:
+                return False, failed_methods[0]
+                    
+        if operator == 'any':
+            if any(results):
+                return True, None
+            else:
+                return False, None
+            

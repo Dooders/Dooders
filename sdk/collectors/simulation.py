@@ -6,10 +6,10 @@ Collectors that are not specific to a single object type.
 
 from statistics import mean
 
-from sdk.core.collector import Collector
+from sdk.core.core import Core
 
 
-@Collector.register()
+@Core.register('collector')
 def dooder_count(simulation) -> int:
     """
     The number of dooders in the simulation.
@@ -27,7 +27,7 @@ def dooder_count(simulation) -> int:
     return simulation.time.get_object_count('Dooder')
 
 
-@Collector.register()
+@Core.register('collector')
 def energy_count(simulation) -> int:
     """
     The number of energy in the simulation.
@@ -69,7 +69,7 @@ def energy_count(simulation) -> int:
 #     return sum(energy_supply)
 
 
-@Collector.register()
+@Core.register('collector')
 def average_energy_age(simulation) -> float:
     """
     Return the average age of energy in the simulation.

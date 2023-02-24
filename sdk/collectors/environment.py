@@ -4,10 +4,10 @@ Environment Collectors
 Collectors that collect information about the environment.
 """
 
-from sdk.core.collector import Collector
+from sdk.core.core import Core
 
 
-@Collector.register()
+@Core.register('collector')
 def space_contents_count(simulation) -> dict:
     """ 
     The number of contents in each Space.
@@ -41,7 +41,7 @@ def space_contents_count(simulation) -> dict:
     return space_contents
 
 
-@Collector.register()
+@Core.register('collector')
 def state_space_pattern(simulation) -> dict:
     """ 
     Contents pattern for each Space.

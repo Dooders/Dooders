@@ -8,10 +8,10 @@ from typing import Callable
 
 from scipy.stats import norm, randint
 
-from sdk.core.strategy import Strategy
+from sdk.core.core import Core
 
 
-@Strategy.register()
+@Core.register('strategy')
 def uniform_distribution(model: Callable, args: dict) -> int:
     """ 
     Generates a random value between the given low and high values. 
@@ -32,7 +32,7 @@ def uniform_distribution(model: Callable, args: dict) -> int:
     return randint.rvs(low=args['min'], high=args['max'])
 
 
-@Strategy.register()
+@Core.register('strategy')
 def normal_distribution(model: Callable, args: dict) -> float:
     """ 
     Generates a random value based on the given mean and standard deviation.
@@ -61,7 +61,7 @@ def normal_distribution(model: Callable, args: dict) -> float:
     return norm.rvs(loc=mean, scale=variation)
 
 
-@Strategy.register()
+@Core.register('strategy')
 def fixed_value(model: Callable, args: dict) -> int:
     """ 
     Returns a fixed value.

@@ -4,10 +4,10 @@ Arena Collectors
 Collectors that are specific to the Arena.
 """
 
-from sdk.core.collector import Collector
+from sdk.core.core import Core
 
 
-@Collector.register()
+@Core.register('collector')
 def active_dooder_count(simulation) -> int:
     """
     Return the number of dooders in the simulation.
@@ -24,7 +24,7 @@ def active_dooder_count(simulation) -> int:
     """
     return simulation.arena.active_dooder_count
 
-@Collector.register()
+@Core.register('collector')
 def terminated_dooder_count(simulation) -> int:
     """
     Return the number of dooders in the simulation.
@@ -41,7 +41,7 @@ def terminated_dooder_count(simulation) -> int:
     """
     return simulation.arena.dooders_died
 
-@Collector.register()
+@Core.register('collector')
 def created_dooder_count(simulation) -> int:
     """
     Return the number of dooders in the simulation.

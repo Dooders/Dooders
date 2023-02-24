@@ -4,13 +4,13 @@ Reproduce Action
 This action is used to reproduce two dooders
 """
 
-from sdk.core.action import Action
 from sdk.core import Policy
+from sdk.core.condition import Condition
+from sdk.core.core import Core
 from sdk.core.settings import Settings
-from sdk.core import Condition
 
 
-@Action.register()
+@Core.register('action')
 def reproduce(dooderX) -> None:
     """
     Apply the reproduction policy to two dooders, create the offspring dooder
@@ -38,10 +38,9 @@ def reproduce(dooderX) -> None:
     """
     reproduction_policy = Settings.search('Reproduction')
 
-    if dooderX.hunger <= 1 and dooderX.age > 5:
-    # if Condition.check_new('reproduction', dooderX):
-    #     pass
-    # else:
+    result, reason = Condition.check('reproduction', dooderX)
+   
+    if result:
         
         dooderY = dooderX.find_partner()
 
@@ -67,4 +66,5 @@ def reproduce(dooderX) -> None:
                         scope='Reproduction')
 
     else:
-        pass
+        message_reason = f"Reproduction failed: {reason}"
+        dooderX.log(granularity=2, message=message_reason, scope='Reproduction')

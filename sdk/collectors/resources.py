@@ -4,10 +4,10 @@ Resources collectors
 Collectors for resources.
 """
 
-from sdk.core.collector import Collector
+from sdk.core.core import Core
 
 
-@Collector.register()
+@Core.register('collector')
 def available_energy(simulation) -> int:
     """ 
     The amount of available energy.
@@ -26,7 +26,7 @@ def available_energy(simulation) -> int:
     return len(simulation.resources.available_resources)
 
 
-@Collector.register()
+@Core.register('collector')
 def consumed_energy(simulation) -> int:
     """ 
     The amount of consumed energy.
@@ -45,7 +45,7 @@ def consumed_energy(simulation) -> int:
     return simulation.resources.consumed_energy
 
 
-@Collector.register()
+@Core.register('collector')
 def allocated_energy(simulation) -> int:
     """ 
     The amount of allocated energy.

@@ -4,9 +4,10 @@ Dooder Step Flows
 Collection of step flows for dooders
 """
 
-from sdk.core.step import Step, StepLogic
+from sdk.core.core import Core
+from sdk.core.step import StepLogic
 
-@Step.register('Dooder')
+@Core.register('step')
 class BasicStep(StepLogic):
     """ 
     Step flow for a dooder.

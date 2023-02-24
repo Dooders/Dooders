@@ -69,5 +69,5 @@ class StopConditions:
         bool
             True if the number of dooders has reached zero, False otherwise
         """
-        if len(simulation.environment.get_objects("Dooder")) == 0:
+        if len(list(simulation.environment.get_objects("Dooder"))) == 0:
             return True

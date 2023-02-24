@@ -1,10 +1,10 @@
 from random import choices
 from typing import Callable
 
-from sdk.core import Strategy
+from sdk.core.core import Core
 
 
-@Strategy.register()
+@Core.register('strategy')
 def random_location(model: Callable, *value) -> list:
     """ 
     Generates a list of locations for the given number of resources 

@@ -41,7 +41,7 @@ class Policy(Core):
         >>>
         >>> Policy.execute('move', agent, environment)
         """
-        policies = self.get_components('sdk.policies')
+        policies = self.get_components('policy')
 
         for policy in policies.values():
             for p in policy.values():

@@ -37,6 +37,8 @@ class ReproductionConditions:
         """
         if dooder.age >= 5:
             return True
+        else:
+            return False
 
     @classmethod
     def minimum_energy(cls, dooder: 'Dooder') -> bool:
@@ -56,3 +58,5 @@ class ReproductionConditions:
         """
         if dooder.hunger <= 1:
             return True
+        else:
+            return False
