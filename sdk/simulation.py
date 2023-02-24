@@ -77,6 +77,7 @@ class Simulation(Reality):
 
     def run_simulation(self) -> None:
         """Run the simulation for a specified number of steps."""
+        self.starting_time = datetime.now()
         try:
             self.setup()
 
@@ -85,6 +86,8 @@ class Simulation(Reality):
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
+            
+        self.ending_time = datetime.now()
 
     def post_simulation(self) -> None:
         """
@@ -204,7 +207,8 @@ class Simulation(Reality):
                 'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
                 'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
                 'EndingDooderCount': len(self.arena.active_dooders),
-                # 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
+                'Elapsed': (self.ending_time - self.starting_time).total_seconds(),
+                'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
 
     @property
