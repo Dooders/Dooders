@@ -254,3 +254,7 @@ class Dooder(BaseAgent):
         locations = self.simulation.environment.nearby_spaces((self.position))
 
         return Neighborhood(locations, self)
+    
+    @property
+    def state(self):
+        pass
