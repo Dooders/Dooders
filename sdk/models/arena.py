@@ -197,3 +197,14 @@ class Arena:
         Returns the number of active dooders
         """
         return len(self.active_dooders)
+    
+    @property
+    def state(self) -> dict:
+        """
+        Returns the state of the Arena
+        """
+        return {
+            'active_dooders': {k:v.state for k,v in self.active_dooders.items()},
+            # 'graveyard': {k:v.state for k,v in self.graveyard.items()},
+            'settings': self.settings
+        }
