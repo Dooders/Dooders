@@ -257,3 +257,21 @@ class Simulation(Reality):
             The current cycle number.
         """
         return self.cycles
+
+    @property
+    def state(self) -> dict:
+        """ 
+        Get the current state of the simulation.
+
+        Returns
+        -------
+        dict
+            The current state of the simulation.
+        """
+        return {
+            'simulation_id': self.simulation_id,
+            'settings': self.settings,
+            'running': self.running,
+            'starting_time': str(self.starting_time),
+            'ending_time': str(self.ending_time),
+        }
