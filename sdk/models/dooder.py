@@ -257,8 +257,4 @@ class Dooder(BaseAgent):
     
     @property
     def state(self):
-        return {
-            'position': self.position,
-            'stats': self.stats,
-            # 'internal_models': self.internal_models, #! need a way to serialize this
-        }
+        return self.stats.dict()

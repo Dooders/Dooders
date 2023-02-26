@@ -3,13 +3,10 @@ Environment Model
 -----------------
 Represents the "physical" environment in which the agents interact.
 """
-from typing import TYPE_CHECKING, Any, List, Union
+from typing import Any, List, Union
 
 from sdk.base.base_agent import BaseAgent
 from sdk.core.surface import Surface
-
-if TYPE_CHECKING:
-    from sdk.core.data import UniqueID
 
 
 GridCell = List[Any]
@@ -31,7 +28,7 @@ class Environment:
         Get all object types in the environment.
     get_objects(object_type: str = 'BaseAgent') -> List[BaseAgent]
         Get all objects of a given type.
-    get_object(object_id: UniqueID) -> BaseAgent
+    get_object(object_id: str) -> BaseAgent
         Get an object by its id.
     get_random_neighbors(object: BaseAgent, object_type: BaseAgent = 'BaseAgent') -> List[BaseAgent]
         Get all objects in the neighborhood of the given object.
@@ -129,13 +126,13 @@ class Environment:
 
         yield from self.surface.contents(object_type)
 
-    def get_object(self, object_id: 'UniqueID') -> BaseAgent:
+    def get_object(self, object_id: str) -> BaseAgent:
         """
         Get an object by its id.
 
         Parameters
         ----------
-        object_id: UniqueID
+        object_id: str
             The id of the object. Based on a random short uuid assigned to 
             every object at its creation.
 
@@ -230,3 +227,7 @@ class Environment:
     
     def contents(self, location: tuple):
         return self.surface.contents(location)
+    
+    @property
+    def state(self):
+        return self.surface.state

@@ -61,7 +61,7 @@ class Space:
         Return a boolean indicating if the Space is occupied
     contents_pattern: str
         Return a string indicating the contents of the Space
-        
+
     See Also
     --------
     sdk.spaces.Grid: The Grid class is a collection of Space objects
@@ -83,7 +83,7 @@ class Space:
         ----------
         object: object, (Dooder, Energy, etc.)
             The object to add to the Space
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -94,7 +94,7 @@ class Space:
         self.contents[object.id] = object
         self.status = 'occupied'
 
-    def remove(self, object: Union[object,str]) -> None:
+    def remove(self, object: Union[object, str]) -> None:
         """ 
         Remove an object from the Space
 
@@ -102,7 +102,7 @@ class Space:
         ----------
         object: object, (Dooder, Energy, etc.)
             The object to remove from the Space
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -113,7 +113,7 @@ class Space:
         >>> space.contents
         {}
         """
-        
+
         if type(object) == str:
             self.contents.pop(object, None)
         else:
@@ -138,7 +138,7 @@ class Space:
         -------
         bool
             True if the Space contains the object type, False otherwise
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -163,7 +163,7 @@ class Space:
         -------
         int
             The number of objects in the Space
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -182,7 +182,7 @@ class Space:
         -------
         object
             A random object in the Space
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -201,7 +201,7 @@ class Space:
         -------
         bool
             True if the Space is empty, False otherwise
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -219,7 +219,7 @@ class Space:
         -------
         bool
             True if the Space is occupied, False otherwise
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -247,7 +247,7 @@ class Space:
         pattern: str, (00, 01, 10, 11, etc.)
             A string pattern of the contents of the Space
             See above for more details
-            
+
         Example
         -------
         >>> space = Space(0, 0)
@@ -265,3 +265,12 @@ class Space:
         pattern = str(first) + str(second)
 
         return pattern
+
+    @property
+    def state(self) -> str:
+        return {
+            'status': self.status,
+            'contents_pattern': self.contents_pattern,
+            'object_count': self.count,
+            'contents': [content.id for content in self.contents.values()]
+        }

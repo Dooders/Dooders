@@ -545,3 +545,20 @@ class Grid:
             for space in self.spaces():
                 for objects in space.contents:
                     return space.contents.get(index, 'No object found')
+
+    @property
+    def state(self) -> Dict:
+        """
+        Return the state of the grid.
+
+        Returns
+        -------
+        Dict, {'width': 10, 'height': 10, 'torus': False}
+            The state of the grid.
+        """
+        return {
+            'width': self.width,
+            'height': self.height,
+            'torus': self.torus,
+            'spaces': {f'{space.x}-{space.y}': space.state for space in self.spaces()}
+        }
