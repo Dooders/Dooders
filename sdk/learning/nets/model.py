@@ -3,6 +3,8 @@ Modified code originally taken from "Neural Networks from Scratch"
 https://nnfs.io/
 """
 
+import copy
+import pickle
 from typing import List
 
 from sdk.learning.nets.activation import *
@@ -302,6 +304,31 @@ class Model:
         # in reversed order passing dinputs as a parameter
         for layer in reversed(self.layers):
             layer.backward(layer.next.dinputs)
+            
+    # Saves the model
+    def save(self, path):
+
+        # Make a deep copy of current model instance
+        model = copy.deepcopy(self)
+
+        # Reset accumulated values in loss and accuracy objects
+        model.loss.new_pass()
+        model.accuracy.new_pass()
+
+        # Remove data from the input layer
+        # and gradients from the loss object
+        model.input_layer.__dict__.pop('output', None)
+        model.loss.__dict__.pop('dinputs', None)
+
+        # For each layer remove inputs, output and dinputs properties
+        for layer in model.layers:
+            for property in ['inputs', 'output', 'dinputs',
+                             'dweights', 'dbiases']:
+                layer.__dict__.pop(property, None)
+
+        # Open a file in the binary-write mode and save the model
+        with open(path, 'wb') as f:
+            pickle.dump(model, f)
 
 
 class SimpleNeuralNet:
@@ -387,6 +414,17 @@ class SimpleNeuralNet:
         """
         self.model.layers[0].weights = genetics[0]
         self.model.layers[2].weights = genetics[1]
+        
+    def save(self, path: str) -> None:
+        """ 
+        Save the model
+
+        Parameters
+        ----------
+        path : str
+            The path to save the model
+        """
+        self.model.save(path)
 
     @property
     def weights(self) -> np.ndarray:

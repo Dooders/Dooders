@@ -63,6 +63,7 @@ class Simulation(Reality):
 
     def __init__(self, settings: dict) -> None:
         super().__init__(settings)
+        self.simulation_settings = settings
         self.running = False
         self.cycles: int = 0
 
@@ -270,10 +271,11 @@ class Simulation(Reality):
         """
         return {
             'simulation_id': self.simulation_id,
-            'settings': self.settings,
+            # 'settings': self.simulation_settings['variables'],
             'running': self.running,
             'starting_time': str(self.starting_time),
             'ending_time': str(self.ending_time),
             'arena': self.arena.state,
             'environment': self.environment.state,
+            'information': self.information.collectors.data
         }
