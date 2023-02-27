@@ -1,17 +1,17 @@
 import ast
+import json
 from random import choices
 from typing import Dict, List
 
 from fastapi import WebSocket
 
+from sdk import strategies
+from sdk.actions import *
 from sdk.base.base_agent import BaseAgent
 from sdk.core import Assemble
-from sdk.utils import ShortID
-
-from sdk import strategies
-from sdk.surfaces import *
-from sdk.actions import *
 from sdk.policies import *
+from sdk.surfaces import *
+from sdk.utils import ShortID
 
 
 class Experiment:
@@ -61,8 +61,10 @@ class Experiment:
         """
         Create a simulation.
 
-        Args:
-            simulation_id: The id of the simulation. If None, a random id will be assigned.
+        Returns
+        -------
+        Simulation
+            A simulation object. Through the Assembly class.
         """
         return Assemble.execute(self.settings)
     
@@ -72,14 +74,23 @@ class Experiment:
         """
         self.simulation = self.create_simulation()
         self.simulation.run_simulation()
-        self.results = self.simulation.simulation_summary()
+        self._save_state()
+        
+    def _save_state(self) -> None:
+        """ 
+        Save the state of the simulation into a json file.
+        """
+        with open("recent/state.json", "w") as f:
+            json.dump(self.simulation.state, f)
 
     def batch_simulate(self, n: int = 1) -> None:
         """ 
         Simulate n cycles.
 
-        Args:
-            n: The number of cycles to simulate.
+        Parameters
+        ----------
+        n: int
+            The number of simulations to run.
         """
         for i in range(n):
             self.simulation = self.create_simulation(self.settings)
@@ -89,7 +100,13 @@ class Experiment:
 
     def get_log(self) -> List[str]:
         """ 
-        Fetch the log for the current experiment, append each line to logs list and return a list of dictionaries.
+        Fetch the log for the current experiment, append each 
+        line to logs list and return a list of dictionaries.
+        
+        Returns
+        -------
+        List[str]
+            A list of dictionaries containing the log entries.
         """
         logs = []
         with open(f"logs/log.log", "r") as f:
@@ -102,6 +119,16 @@ class Experiment:
     def print_log(self, n: int = 20) -> List[str]:
         """ 
         Print the past n log entries.
+        
+        Parameters
+        ----------
+        n: int
+            The number of log entries to print.
+            
+        Returns
+        -------
+        List[str]
+            A list of dictionaries containing the log entries.
         """
         with open(f"logs/log.log", "r") as f:
             lines = f.readlines()[-n:]
@@ -113,11 +140,14 @@ class Experiment:
         """ 
         Fetch an object by its id.
 
-        Args:
-            object_id: The id of the object. 
-                Based on a random short uuid assigned to every object at its creation.
-
-        Returns:
+        Parameters
+        ----------
+        object_id: str
+            The id of the object.
+            
+        Returns
+        -------
+        BaseAgent
             The object with the given id.
         """
         return self.simulation.environment.get_object(object_id)
@@ -127,24 +157,35 @@ class Experiment:
         Get all objects of a given type.
         Returns all objects if no type is given.
 
-        Args:
-            type: The type of object to get.
-
-        Returns:
+        Parameters
+        ----------
+        object_type: str
+            The type of object to get.
+            
+        Returns
+        -------
+        List[BaseAgent]
             A list of objects of the given type.
         """
         return self.simulation.environment.get_objects(object_type)
 
-    def get_random_objects(self, object_type: str = 'BaseAgent', n: int = 1) -> List[BaseAgent]:
+    def get_random_objects(self, 
+                           object_type: str = 'BaseAgent', 
+                           n: int = 1) -> List[BaseAgent]:
         """ 
         Get n random objects of a given type.
         Returns all objects if no type is given.
 
-        Args:
-            type: The type of object to get.
-            n: The number of objects to get.
-
-        Returns:
+        Parameters
+        ----------
+        object_type: str
+            The type of object to get.
+        n: int
+            The number of objects to get.
+        
+        Returns
+        -------
+        List[BaseAgent]
             A list of n random objects of the given type.
         """
         object_list = self.get_objects(object_type)
@@ -155,7 +196,11 @@ class Experiment:
 
     def get_cycle_results(self) -> Dict:
         """         
-        Returns:
+        Get the results of the current cycle.
+        
+        Returns
+        -------
+        Dict
             A dictionary of the results of the current cycle.
         """
         return self.simulation.get_results()
@@ -165,11 +210,14 @@ class Experiment:
         Get the history of a dooder.
         Returns a random dooder history if no id is given.
 
-        Args:
-            object_id: The id of the dooder. If 'Random', 
-                a random dooder will be selected. 
-
-        Returns:
+        Parameters
+        ----------
+        object_id: str
+            The id of the dooder.
+        
+        Returns
+        -------
+        Dict
             A dictionary of the history of the dooder.
         """
         if object_id == 'Random':
@@ -182,24 +230,33 @@ class Experiment:
 
         return self.simulation.information.get_object_history(object_id)
 
-    def experiment_summary(self):
+    def experiment_summary(self) -> Dict:
         """
         Returns a summary of the experiment.
+        
+        Returns
+        -------
+        Dict
+            A dictionary of the experiment summary.
         """
         return self.simulation.simulation_summary()
 
     @property
     def is_running(self) -> bool:
         """
-        Returns:
-            True if the experiment is running.
+        Returns
+        -------
+        bool
+            True if the simulation is running, False otherwise.
         """
         return self.simulation.running
 
     @property
     def cycle_number(self) -> int:
         """ 
-        Returns:
+        Returns
+        -------
+        int:
             The current cycle number. 
         """
         return self.simulation.time.time

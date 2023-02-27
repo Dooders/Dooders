@@ -271,7 +271,7 @@ class Simulation(Reality):
         """
         return {
             'simulation_id': self.simulation_id,
-            # 'settings': self.simulation_settings['variables'],
+            # 'settings': self.simulation_settings['variables'], #! resolve partial funcs
             'running': self.running,
             'starting_time': str(self.starting_time),
             'ending_time': str(self.ending_time),

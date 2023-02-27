@@ -45,7 +45,6 @@ class Assemble:
 
         """
         settings = Settings.compile(settings)
-        print(f'Assembling simulation with settings: {settings}')
         simulation = Simulation(settings)
         simulation_variables = settings['variables']['simulation']
         Strategy.compile(simulation, simulation_variables)

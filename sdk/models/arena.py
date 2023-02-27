@@ -188,7 +188,6 @@ class Arena:
             else:
                 return self.simulation.random.choice(list(self.active_dooders.values()))
         else:
-
             return self.active_dooders[dooder_id]
 
     @property
@@ -206,5 +205,5 @@ class Arena:
         return {
             'active_dooders': {k:v.state for k,v in self.active_dooders.items()},
             # 'graveyard': {k:v.state for k,v in self.graveyard.items()},
-            'settings': self.settings
+            # 'settings': self.settings #! work this out to do something will partials
         }
