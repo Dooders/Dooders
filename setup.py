@@ -28,5 +28,5 @@ setuptools.setup(
         'Programming Language :: Python :: 3.9',
     ],
     
-    download_url="https://github.com/csmangum/Dooders/archive/refs/tags/v0.3.0.tar.gz",
+    download_url="https://github.com/csmangum/Dooders/archive/refs/tags/v0.3.0.tar.gz"
 )
