@@ -16,7 +16,7 @@ A law is an aspect of the simulation the Dooder cannot control.
 
 - A Dooder executes a step function every cycle
 - A Dooder will progress step after step until it reaches a terminal state (death)
-- A step has a specific phases of execution (React, Move, Act)
+- A step has specific phases of execution (React, Move, Act)
 - Each cycle without consuming Energy will add to it's hunger state, increasing the chance of starvation
 
 ## Movement
