@@ -10,12 +10,13 @@ An agent can take in information and use that to increase its survivability. Nat
 - How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
 - How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
 
-### Laws
+### Rules
 
-A law is an aspect of the simulation the Dooder cannot control.
+A rule is an aspect of the simulation the Dooder cannot control or influence.
 
-- A Dooder executes a step function every cycle
-- A Dooder will progress step after step until it reaches a terminal state (death)
+- A Dooder executes one Step every cycle
+- A Dooder will continue step after step until it reaches a terminal state (death)
+- Every Dooder will male a step during a cycle before the next cycle can start
 - A step has specific phases of execution (React, Move, Act)
 - Each cycle without consuming Energy will add to it's hunger state, increasing the chance of starvation
 
