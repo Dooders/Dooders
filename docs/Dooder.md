@@ -18,7 +18,7 @@ A rule is an aspect of the simulation the Dooder cannot control or influence.
 - A Dooder will continue step after step until it reaches a terminal state (death)
 - Every Dooder will execute a step during a cycle before the next cycle can start
 - A step has specific phases of execution (React, Move, Act)
-- Each cycle without Energy will add to a Dooder’s hunger state; increasing the chance of starvation
+- A Dooder’s hunger state will increase every consecutive cycle without energy; increasing the chance of starvation
 
 ## Movement
 
