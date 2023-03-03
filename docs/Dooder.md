@@ -6,11 +6,7 @@ A Dooder is the primary agent object in the [simulation](Simulation.md). An agen
 
 An agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
 
-#### For more explanations:
-- How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
-- How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
-
-### Rules
+## Rules
 
 A rule is an aspect of the simulation the Dooder cannot control or influence.
 
@@ -20,24 +16,12 @@ A rule is an aspect of the simulation the Dooder cannot control or influence.
 - A step has specific phases of execution (React, Move, Act)
 - A Dooder’s hunger state will increase every consecutive cycle without energy; increasing the chance of starvation
 
-## Movement
+#### For more explanations:
+- How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
+- How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
 
-- During the React phase, a Dooder will resolve any debts to the simulation
-  - A debt is a situation that affects a Dooder while outside the Dooder's turn
-- During the Move phase, a Dooder can relocate to a new location
-- During the Act phase, a Dooder can execute more intentional actions
-- The React phase is restricted to simple and quick actions, while the Act phase allows for more complex actions
-- A Dooder needs Energy to survive
+---
 
-## Energy
-
-The [Environment](Environment.md) model is responsible for managing any object that has a spatial component like a Dooder or Energy object. These objects move to different locations within a grid and interact with each other.  
-
-[Energy](Energy.md) is the primary resource a Dooder has to interact in the environment. Every action will have a cost and energy will be allocated to the environment every cycle.  
-
-The [Resources](Resources.md) model will manage the allocation of energy to the environment. Following a user defined strategy.  
-
-The current strategy is to randomly select locations in the environment and place a variable number of energy units for Dooder's to consume. Each Dooder gets a Genetics defined starting energy level, max energy supply, and energy consumption rate.  
 
 ## Genetics and Behavior
 
