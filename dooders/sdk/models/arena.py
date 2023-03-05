@@ -4,7 +4,7 @@ Arena Model
 Responsible for creation and management of Dooder objects in the simulation.   
 """
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generator
 
 import networkx as nx
 from pydantic import BaseModel
@@ -189,6 +189,17 @@ class Arena:
                 return self.simulation.random.choice(list(self.active_dooders.values()))
         else:
             return self.active_dooders[dooder_id]
+    
+    def dooders(self) -> Generator['Dooder', None, None]:
+        """ 
+        Generator that yields all active dooders
+        
+        Yields
+        ------
+        Dooder: dooder object
+        """
+        for dooder in self.active_dooders.values():
+            yield dooder
 
     @property
     def active_dooder_count(self) -> int:
@@ -206,4 +217,4 @@ class Arena:
             'active_dooders': {k:v.state for k,v in self.active_dooders.items()},
             # 'graveyard': {k:v.state for k,v in self.graveyard.items()},
             # 'settings': self.settings #! work this out to do something will partials
-        }
+        }   
