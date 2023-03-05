@@ -19,10 +19,3 @@ A rule is an aspect of the simulation the Dooder cannot control or influence.
 #### For more explanations:
 - How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
 - How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
-
-
-## Death and Reproduction
-
-A Dooder agent will continue as long as it meets defined conditions (or states). For example, hunger is represented by a function that will keep track of the number of cycles with `energy_supply = 0`.  
-
-Dooder reproduction is still in the works after the base functionality is in the library.  
