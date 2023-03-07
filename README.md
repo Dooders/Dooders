@@ -41,7 +41,13 @@ This project is a space where I can experiment, learn more about complexity theo
   
 ### How it works
 
-   > TBD
+```python
+from dooders import Experiment
+
+experiment = Experiment()
+
+experiment.simulate()
+```
 
 ### Current Functionality
 
