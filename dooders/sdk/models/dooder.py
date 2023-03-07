@@ -188,7 +188,7 @@ class Dooder(BaseAgent):
             self.position)
 
         for object in near_dooders:
-            if isinstance(object, Dooder):
+            if isinstance(object, Dooder) and object.id != self.id:
                 return object
 
         return None
