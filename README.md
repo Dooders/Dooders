@@ -2,10 +2,10 @@
 # Dooders
 
 ![dooders logo](./docs/dooder_logo.png)
-  
-## Overview
 
 > Reality works; simulate it.  
+  
+## Overview
 
 Dooders is a python library for *complex model-based simulations*.  
 
@@ -41,7 +41,13 @@ This project is a space where I can experiment, learn more about complexity theo
   
 ### How it works
 
-   > TBD
+```python
+from dooders import Experiment
+
+experiment = Experiment()
+
+experiment.simulate()
+```
 
 ### Current Functionality
 
