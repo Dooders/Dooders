@@ -2,10 +2,10 @@
 # Dooders
 
 ![dooders logo](./docs/dooder_logo.png)
-  
-## Overview
 
 > Reality works; simulate it.  
+  
+## Overview
 
 Dooders is a python library for *complex model-based simulations*.  
 
