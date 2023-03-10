@@ -49,6 +49,7 @@ experiment = Experiment()
 experiment.simulate()
 
 experiment.experiment_summary()
+
 {'SimulationID': 'XGZBhzoc8juERXpZjLZMPR',
  'Timestamp': '2023-03-09, 18:20:33',
  'CycleCount': 53,
