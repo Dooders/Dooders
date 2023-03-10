@@ -47,6 +47,17 @@ from dooders import Experiment
 experiment = Experiment()
 
 experiment.simulate()
+
+experiment.experiment_summary()
+{'SimulationID': 'XGZBhzoc8juERXpZjLZMPR',
+ 'Timestamp': '2023-03-09, 18:20:33',
+ 'CycleCount': 53,
+ 'TotalEnergy': 634,
+ 'ConsumedEnergy': 41,
+ 'StartingDooderCount': 10,
+ 'EndingDooderCount': 0,
+ 'ElapsedSeconds': 0,
+ 'AverageAge': 14}
 ```
 
 ### Current Functionality
