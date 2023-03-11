@@ -50,6 +50,7 @@ experiment.simulate()
 
 experiment.experiment_summary()
 
+# Example output
 {'SimulationID': 'XGZBhzoc8juERXpZjLZMPR',
  'Timestamp': '2023-03-09, 18:20:33',
  'CycleCount': 53,
