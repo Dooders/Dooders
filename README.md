@@ -25,6 +25,8 @@ Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Doo
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
+I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list)
+
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
 ### Main Concepts
@@ -47,6 +49,19 @@ from dooders import Experiment
 experiment = Experiment()
 
 experiment.simulate()
+
+experiment.experiment_summary()
+
+# Example output
+{'SimulationID': 'XGZBhzoc8juERXpZjLZMPR',
+ 'Timestamp': '2023-03-09, 18:20:33',
+ 'CycleCount': 53,
+ 'TotalEnergy': 634,
+ 'ConsumedEnergy': 41,
+ 'StartingDooderCount': 10,
+ 'EndingDooderCount': 0,
+ 'ElapsedSeconds': 0,
+ 'AverageAge': 14}
 ```
 
 ### Current Functionality
