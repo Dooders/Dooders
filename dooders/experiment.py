@@ -13,6 +13,8 @@ from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
 from dooders.sdk.utils import ShortID
 
+import shutil
+
 
 class Experiment:
     """
@@ -109,12 +111,10 @@ class Experiment:
             A list of dictionaries containing the log entries.
         """
         logs = []
-        with open(f"logs/log.log", "r") as f:
+        with open(f"logs/log.json", "r") as f:
             lines = f.readlines()
             for line in lines:
-                if self.experiment_id in line:
-                    final = line[:-2]
-                    logs.append(ast.literal_eval(final))
+                logs.append(ast.literal_eval(line))
 
     def print_log(self, n: int = 20) -> List[str]:
         """ 
@@ -240,6 +240,19 @@ class Experiment:
             A dictionary of the experiment summary.
         """
         return self.simulation.simulation_summary()
+    
+    def save(self, experiment_name):
+        folder_path = f"experiments/{experiment_name}"
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+            
+        with open(f"{folder_path}/state.json", "w") as f:
+            json.dump(self.simulation.state, f)
+            
+        shutil.copyfile("logs/log.json", f"{folder_path}/log.json")
+            
+        with open(f"{folder_path}/summary.json", "w") as f:
+            json.dump(self.experiment_summary(), f)
 
     @property
     def is_running(self) -> bool:

@@ -215,6 +215,5 @@ class Arena:
         """
         return {
             'active_dooders': {k:v.state for k,v in self.active_dooders.items()},
-            # 'graveyard': {k:v.state for k,v in self.graveyard.items()},
-            # 'settings': self.settings #! work this out to do something will partials
+            'graveyard': {k:v.state for k,v in self.graveyard.items()}
         }   

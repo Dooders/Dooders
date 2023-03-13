@@ -8,6 +8,11 @@ def get_logger():
     # Build Log file directory, based on the OS and supplied input
     log_dir = 'logs/'
     log_file_name = 'log'
+    
+    try:
+        os.remove('logs/log.json')
+    except OSError:
+        pass
 
     # Create Log file directory if not exists
     if not os.path.exists(log_dir):
