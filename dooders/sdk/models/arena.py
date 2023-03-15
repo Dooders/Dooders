@@ -66,6 +66,8 @@ class Arena:
     _generate_dooder()
         Generate a new dooder with a provided position
     """
+    
+    total_counter = 0
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
         self.graph = nx.Graph()
@@ -113,6 +115,7 @@ class Arena:
         dooder = Dooder(self.simulation.generate_id(),
                         position, self.simulation)
         dooder.tag = tag
+        
         return dooder
 
     def generate_dooder(self, position: tuple) -> None:
@@ -150,6 +153,8 @@ class Arena:
         #! TODO: Add more attributes to graph node
         self.graph.add_node(dooder.id)
         self.dooders_created += 1
+        self.total_counter += 1
+        dooder.number = self.total_counter
 
     def terminate_dooder(self, dooder: 'Dooder') -> None:
         """

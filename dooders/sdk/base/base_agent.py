@@ -6,8 +6,10 @@ from pydantic import BaseModel
 
 class BaseStats(BaseModel):
     id: str = None
+    number: int = 0
     age: int = 0
     birth: int = 0
+    death: int = None
     position: tuple = None
     status: str = 'Alive'
     reproduction_count: int = 0

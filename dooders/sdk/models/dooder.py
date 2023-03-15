@@ -28,10 +28,12 @@ MotivationList = ['Consume', 'Reproduce']
 
 class MainStats(BaseModel):
     id: str
+    number: int
     position: tuple
     hunger: int
     age: int
     birth: int
+    death: int = None
     status: str
     reproduction_count: int
     move_count: int
@@ -129,6 +131,7 @@ class Dooder(BaseAgent):
         """
         self.simulation.arena.terminate_dooder(self)
         self.status = 'Terminated'
+        self.death = self.simulation.cycles
         message = f"Died from {reason}"
 
         self.log(granularity=1, message=message, scope='Dooder')
