@@ -47,7 +47,7 @@ def reproduce(dooderX) -> None:
         if dooderY:
             genetics = Policy.execute(reproduction_policy, dooderX, dooderY)
             offspring = dooderX.simulation.arena._generate_dooder(
-                dooderX.position)
+                dooderX.position, tag = 'Offspring')
             offspring.internal_models.inherit_weights(genetics)
             offspring.simulation.arena.place_dooder(
                 offspring, offspring.position)

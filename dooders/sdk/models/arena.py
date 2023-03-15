@@ -96,7 +96,7 @@ class Arena:
         for position in self.SeedPlacement(self.SeedCount()):
             self.generate_dooder(position)
 
-    def _generate_dooder(self, position: tuple) -> 'Dooder':
+    def _generate_dooder(self, position: tuple, tag: str = 'Seed') -> 'Dooder':
         """
         Generate a new dooder with a provided position
 
@@ -112,6 +112,7 @@ class Arena:
         """
         dooder = Dooder(self.simulation.generate_id(),
                         position, self.simulation)
+        dooder.tag = tag
         return dooder
 
     def generate_dooder(self, position: tuple) -> None:
