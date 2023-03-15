@@ -96,8 +96,6 @@ class Dooder(BaseAgent):
                  simulation: 'BaseSimulation') -> None:
 
         super().__init__(id, position, simulation)
-        # self.genetics = Genetics.compile_genetics(self)
-        # self.behavior = self.genetics.copy()
         self.cognition = Cognition()
         self.direction = 'Origin'
         self.moore = True
@@ -129,6 +127,7 @@ class Dooder(BaseAgent):
             For example: starvation, old age, etc.
         """
         self.simulation.arena.terminate_dooder(self)
+        self.status = 'Terminated'
         message = f"Died from {reason}"
 
         self.log(granularity=1, message=message, scope='Dooder')
@@ -192,17 +191,6 @@ class Dooder(BaseAgent):
                 return object
 
         return None
-
-    # def __str__(self) -> str:
-    #     """
-    #     Return string of class attributes and genetics.
-
-    #     Returns
-    #     -------
-    #     string: str
-    #         A string of the dooder's attributes and genetics.
-    #     """
-    #     return f"UniqueID: {self.id} \n Position: {self.position} \n Hunger: {self.hunger} \n Age: {self.age} \n Genetics: {self.genetics}"
 
     @property
     def history(self) -> list:
