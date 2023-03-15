@@ -14,6 +14,7 @@ class BaseStats(BaseModel):
     move_count: int = 0
     energy_consumed: int = 0
     hunger: int = 0
+    tag: str = None
 
 
 class BaseAgent(ABC):

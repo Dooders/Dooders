@@ -36,6 +36,7 @@ class MainStats(BaseModel):
     reproduction_count: int
     move_count: int
     energy_consumed: int
+    tag: str
 
 
 class Dooder(BaseAgent):
