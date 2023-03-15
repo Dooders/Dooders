@@ -6,8 +6,8 @@ class Investigate:
     
     def __init__(self, experiment_name):
         self.experiment_name = experiment_name
-        self.state = self.load_state("dooders/experiments/" + experiment_name, "state.json")
-        self.log = self.load_log("dooders/experiments/" + experiment_name + "/log.json")
+        self.state = self.load_state("experiments/" + experiment_name, "state.json")
+        self.log = self.load_log("experiments/" + experiment_name + "/log.json")
         self.data = self.state['information']
 
     def load_log(self, file_path):
