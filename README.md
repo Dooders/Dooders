@@ -34,8 +34,6 @@ I will also be documenting experiments in [substack](https://rememberization.sub
 | Concept                                | Explanation                                                                            |
 | :------------------------------------- | -------------------------------------------------------------------------------------- |
 | [**Dooder**](docs/Dooder.md)           | Agent object with causal control in the simulation |
-| [**Model**](docs/Concepts.md#Model)    | Analogous to a system. In reality, just about everything is a system of some kind      |
-| [**Simulation**](docs/Simulation.md)   | A full execution of the agent model and additional models (I.e., Environment, Society) |
 | [**Experiment**](docs/Experiment.md)   | One or multiple simulations                                                            |
 | [**Environment**](docs/Environment.md) | Proxy for spatial interactions and effects. A lot like a game board                    |
 | [**Energy**](docs/Energy.md)           | An object that allows a Dooder to perform “work” (execute movements and actions)       |
