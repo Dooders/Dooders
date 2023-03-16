@@ -25,7 +25,7 @@ Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Doo
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
-I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list)
+I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list).
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
@@ -52,7 +52,9 @@ experiment.simulate()
 
 experiment.experiment_summary()
 
-# Example output
+# Example output using the default settings
+# This simulation ended after 53 cycle when 
+# all Dooders died from starvation
 {'SimulationID': 'XGZBhzoc8juERXpZjLZMPR',
  'Timestamp': '2023-03-09, 18:20:33',
  'CycleCount': 53,
