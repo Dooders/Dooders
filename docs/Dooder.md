@@ -15,6 +15,7 @@ A rule is an aspect of the simulation the Dooder cannot control or influence.
 - Every Dooder will execute a step during a cycle before the next cycle can start
 - A step has specific phases of execution (React, Move, Act)
 - A Dooder’s hunger state will increase every consecutive cycle without energy; increasing the chance of starvation
+- A Dooder can alter the environment and interact in the simulation
 
 #### For more explanations:
 - How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
