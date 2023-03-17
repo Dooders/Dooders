@@ -20,3 +20,5 @@ A rule is an aspect of the simulation the Dooder cannot control or influence.
 #### For more explanations:
 - How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
 - How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
+
+## Data
