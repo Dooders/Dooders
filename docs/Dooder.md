@@ -2,7 +2,7 @@
 
 ***This page is a work-in-progress***
 
-A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is an object that has `causal power` and the ability to interact with its environment.
+A Dooder is the primary agent object in the [simulation](Simulation.md). An agent is an object that has causal power and the ability to interact with its environment.
 
 An agent can take in information and use that to increase its survivability. Naturally, an agent's causal power increases as its ability to evaluate information also increases.
 
