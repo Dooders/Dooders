@@ -17,8 +17,8 @@ A rule is an aspect of the simulation the Dooder cannot control or influence.
 - A Dooder’s hunger state will increase every consecutive cycle without energy; increasing the chance of starvation
 - A Dooder can alter the environment and interact in the simulation
 
-#### For more explanations:
-- How a Dooder will [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)
-- How it will [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings
+## FAQ
+- How will a Dooder [learn](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md)?
+- How can a Dooder [percieve](https://github.com/csmangum/Dooders/blob/main/docs/Perception.md) its surroundings?
 
 ## Data
