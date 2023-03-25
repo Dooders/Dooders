@@ -25,7 +25,7 @@ Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Doo
 
 This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
-I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list).
+I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list). Including the results from my [first experiment](https://rememberization.substack.com/p/experiment-1-single-simulation).
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
