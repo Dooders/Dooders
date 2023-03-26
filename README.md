@@ -7,7 +7,7 @@
   
 ## Overview
 
-Dooders is a Python library designed for conducting *complex model-based simulations* for research in Cognitive AI. Its primary purpose is to facilitate the exploration and analysis of advanced designs for Artificial Intelligence systems with cognitive capabilities.
+Dooders is a Python library to conduct *complex model-based simulations* for research in Cognitive AI. Its primary purpose is to facilitate the exploration and analysis of advanced designs for Artificial Intelligence systems with cognitive capabilities.
 
 Unpacking some of the terminology: 
 
