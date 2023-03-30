@@ -176,6 +176,10 @@ class Dooder(BaseAgent):
                 self.log(granularity=1,
                          message="Terminated during cycle",
                          scope='Dooder')
+                
+    def post_step(self):
+        # store condensed weights over time
+        pass
 
     def find_partner(self) -> 'Dooder':
         #! Make this an action and model? Yes
