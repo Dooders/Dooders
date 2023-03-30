@@ -195,7 +195,18 @@ class Dooder(BaseAgent):
                 return object
 
         return None
+    
+    @property
+    def condensed_weights(self):
+        # PCA transform of internal model weights
+        # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
+        pass
 
+    @property
+    def weights(self):
+        # dict of weights
+        pass
+        
     @property
     def history(self) -> list:
         """ 
