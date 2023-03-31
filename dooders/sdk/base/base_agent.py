@@ -1,5 +1,6 @@
 import random
 from abc import ABC, abstractmethod
+from typing import Any, List
 
 from pydantic import BaseModel
 
@@ -17,6 +18,7 @@ class BaseStats(BaseModel):
     energy_consumed: int = 0
     hunger: int = 0
     tag: str = None
+    condensed_weights: dict = {}
 
 
 class BaseAgent(ABC):

@@ -6,9 +6,10 @@ Each object will have the ability to move around the environment and
 interact with other objects.
 """
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, List
 
 from pydantic import BaseModel
+from sklearn.decomposition import PCA
 
 from dooders.sdk import steps
 from dooders.sdk.base.base_agent import BaseAgent
@@ -39,6 +40,7 @@ class MainStats(BaseModel):
     move_count: int
     energy_consumed: int
     tag: str
+    condensed_weights: dict
 
 
 class Dooder(BaseAgent):
@@ -102,6 +104,7 @@ class Dooder(BaseAgent):
         self.cognition = Cognition()
         self.direction = 'Origin'
         self.moore = True
+        self.condensed_weight_list = list()
         self.internal_models = InternalModels(MotivationList)
         self.log(granularity=1,
                  message=f"Created",
@@ -176,10 +179,14 @@ class Dooder(BaseAgent):
                 self.log(granularity=1,
                          message="Terminated during cycle",
                          scope='Dooder')
+           
+        self.post_step()
                 
     def post_step(self):
         # store condensed weights over time
-        pass
+        condensed_weights_value = list(self.get_condensed_weights)
+        cycle_number = self.simulation.cycles
+        self.condensed_weights[cycle_number] = condensed_weights_value
 
     def find_partner(self) -> 'Dooder':
         #! Make this an action and model? Yes
@@ -201,15 +208,19 @@ class Dooder(BaseAgent):
         return None
     
     @property
-    def condensed_weights(self):
+    def get_condensed_weights(self):
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
-        pass
+        weights = self.weights['Consume'][0]
+        layer_pca = PCA(n_components=3)
+        layer_pca.fit(weights)
+        return layer_pca.singular_values_
+   
 
     @property
     def weights(self):
         # dict of weights
-        pass
+        return self.internal_models.weights
         
     @property
     def history(self) -> list:
@@ -263,4 +274,6 @@ class Dooder(BaseAgent):
     
     @property
     def state(self):
-        return self.stats.dict()
+        state = self.stats.dict()
+        state['condensed_weights'] = self.condensed_weights
+        return state
