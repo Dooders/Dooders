@@ -41,17 +41,37 @@ class AverageWeights(BasePolicy):
     """
 
     @classmethod
-    def execute(self, dooderA: 'Dooder', dooderB: 'Dooder') -> np.ndarray:
+    def execute(cls, agentA: 'Dooder', agentB: 'Dooder') -> np.ndarray:
+        """
+        This method computes the average weights of two agents' internal models.
+        
+        Args:
+            agentA: The first agent.
+            agentB: The second agent.
+        
+        Returns:
+            new_weights: A dictionary containing the average weights of the agents' internal models.
+        """
         new_weights = {}
-        weightsA = dooderA.internal_models.weights
-        weightsB = dooderB.internal_models.weights
+        weightsA = agentA.internal_models.weights
+        weightsB = agentB.internal_models.weights
 
-        for key in weightsA.keys():
-            modelA = weightsA[key]
-            modelB = weightsB[key]
-            new_weights[key] = [(A + B) / 2 for A,B in zip(modelA, modelB)]
+        model_names = list(weightsA.keys())
 
+        for model in model_names:
+            new_weights[model] = []
+            a_weights = weightsA[model]
+            b_weights = weightsB[model]
+            
+            combined_weights = []
+            
+            for i in range(len(a_weights)):
+                combined_weights.append((a_weights[i] + b_weights[i]) / 2)
+                
+            new_weights[model] = combined_weights
+            
         return new_weights
+
 
 
 @Core.register('policy')
