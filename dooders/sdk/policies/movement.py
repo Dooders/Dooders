@@ -121,6 +121,9 @@ class NeuralNetwork(BasePolicy):
 
         goal = cls.infer_goal(dooder, neighborhood)
         target = cls.base_goals[goal]
+        
+        #! save the input, prediction, and reality to each dooder, over time
+        #! {'action': {'movement': {'input':input, 'prediction':prediction, 'reality':reality}}}
 
         # Check if the target is inside the Dooder's neighborhood
         target_array = np.array([neighborhood.contains(target)], dtype='uint8')
