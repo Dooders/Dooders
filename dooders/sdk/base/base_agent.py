@@ -18,7 +18,7 @@ class BaseStats(BaseModel):
     energy_consumed: int = 0
     hunger: int = 0
     tag: str = None
-    condensed_weights: dict = {}
+    encoded_weights: dict = {}
 
 
 class BaseAgent(ABC):

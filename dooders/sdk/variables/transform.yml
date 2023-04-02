@@ -1,0 +1,6 @@
+---
+WeightEncoding: 
+  type: "encode"
+  function: "pca_transform"
+  args: { "components": 3}
+  description: ''

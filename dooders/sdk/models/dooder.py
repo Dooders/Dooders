@@ -8,8 +8,10 @@ interact with other objects.
 
 from typing import TYPE_CHECKING, Any, List
 
+import numpy as np
 from pydantic import BaseModel
 from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 from dooders.sdk import steps
 from dooders.sdk.base.base_agent import BaseAgent
@@ -40,7 +42,7 @@ class MainStats(BaseModel):
     move_count: int
     energy_consumed: int
     tag: str
-    condensed_weights: dict
+    encoded_weights: dict
 
 
 class Dooder(BaseAgent):
@@ -184,9 +186,9 @@ class Dooder(BaseAgent):
                 
     def post_step(self):
         # store condensed weights over time
-        condensed_weights_value = list(self.get_condensed_weights)
+        encoded_weights_value = list(self.get_encoded_weights)
         cycle_number = self.simulation.cycles
-        self.condensed_weights[cycle_number] = condensed_weights_value
+        self.encoded_weights[cycle_number] = encoded_weights_value
 
     def find_partner(self) -> 'Dooder':
         #! Make this an action and model? Yes
@@ -208,13 +210,20 @@ class Dooder(BaseAgent):
         return None
     
     @property
-    def get_condensed_weights(self):
+    def get_encoded_weights(self):
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
-        layer_pca = PCA(n_components=3)
-        layer_pca.fit(weights)
-        return layer_pca.singular_values_
+        # layer_pca = PCA(n_components=3)
+        # layer_pca.fit(weights)
+        # return layer_pca.singular_values_
+        
+        tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
+        encoded_weights = tsne.fit_transform(weights)
+        
+        final_encoding = np.mean(encoded_weights, axis=0)
+        
+        return final_encoding
    
 
     @property
@@ -275,5 +284,5 @@ class Dooder(BaseAgent):
     @property
     def state(self):
         state = self.stats.dict()
-        state['condensed_weights'] = self.condensed_weights
+        state['encoded_weights'] = self.encoded_weights
         return state
