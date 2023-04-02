@@ -425,6 +425,11 @@ class SimpleNeuralNet:
             The path to save the model
         """
         self.model.save(path)
+        
+    @property
+    def layers(self):
+        # return needed layers
+        pass
 
     @property
     def weights(self) -> np.ndarray:
