@@ -214,16 +214,16 @@ class Dooder(BaseAgent):
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
-        # layer_pca = PCA(n_components=3)
-        # layer_pca.fit(weights)
-        # return layer_pca.singular_values_
+        layer_pca = PCA(n_components=3)
+        layer_pca.fit(weights)
+        return layer_pca.singular_values_
         
-        tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
-        encoded_weights = tsne.fit_transform(weights)
+        # tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
+        # encoded_weights = tsne.fit_transform(weights)
         
-        final_encoding = np.mean(encoded_weights, axis=0)
+        # final_encoding = np.mean(encoded_weights, axis=0)
         
-        return final_encoding
+        # return [str(x) for x in final_encoding]
    
 
     @property

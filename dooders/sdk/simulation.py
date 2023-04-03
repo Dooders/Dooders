@@ -127,7 +127,6 @@ class Simulation(Reality):
 
             while self.stop_conditions():
                 self.step()
-                print(self.cycles)
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
