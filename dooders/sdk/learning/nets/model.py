@@ -37,8 +37,8 @@ class SimpleNeuralNet:
         )
 
         self.model = Sequential([
-            Dense(512, activation='relu', input_shape=(9,)),
-            Dense(9, activation='softmax')
+            Dense(512, activation='relu', input_shape=(9,), name='genetic_layer'),
+            Dense(9, activation='softmax', name='behavior_layer')
         ])
 
         self.model.compile(
