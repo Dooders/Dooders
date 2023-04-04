@@ -62,10 +62,18 @@ class SimpleNeuralNet:
             The class of the input data
         """
         self.input = input_array
-        self.output = self.model(input_array.reshape(1, -1), training=True)
+
+        # Convert input array to a tensor and reshape it
+        input_tensor = tf.convert_to_tensor(input_array, dtype=tf.float32)
+        input_tensor = tf.reshape(input_tensor, [1, -1])
+
+        # Pass the input tensor to the model
+        self.output = self.model(input_tensor, training=False)
         prediction = np.argmax(self.output)
 
         return prediction
+
+
 
     def learn(self, reality: list) -> None:
         """
@@ -79,8 +87,19 @@ class SimpleNeuralNet:
         self.reality = reality
         reality_array = np.array(self.reality, dtype='uint8')
 
-        self.model.train_on_batch(self.input.reshape(
-            1, -1), reality_array.reshape(1, -1))
+        # Convert input array to a tensor and reshape it
+        input_tensor = tf.convert_to_tensor(self.input, dtype=tf.float32)
+        input_tensor = tf.reshape(input_tensor, [1, -1])
+
+        # Reshape reality_array
+        reality_tensor = tf.convert_to_tensor(reality_array, dtype=tf.float32)
+        reality_tensor = tf.reshape(reality_tensor, [1, -1])
+
+        # Optimize parameters
+        self.model.train_on_batch(input_tensor, reality_tensor)
+
+
+
 
     def inherit_weights(self, genetics: List[np.ndarray]) -> None:
         """
