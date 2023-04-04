@@ -239,8 +239,8 @@ class Dooder(BaseAgent):
         
         # final_encoding = np.mean(encoded_weights, axis=0)
         
-        # return final_encoding
-
+        # return [str(x) for x in final_encoding]
+   
     @property
     def weights(self) -> dict:
         """ 
