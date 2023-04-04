@@ -19,6 +19,7 @@ class BaseStats(BaseModel):
     hunger: int = 0
     tag: str = None
     encoded_weights: dict = {}
+    inference_record: dict = {}
 
 
 class BaseAgent(ABC):

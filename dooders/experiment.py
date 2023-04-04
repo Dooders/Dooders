@@ -1,5 +1,6 @@
 import ast
 import json
+import shutil
 from random import choices
 from typing import Dict, List
 
@@ -13,13 +14,11 @@ from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
 from dooders.sdk.utils import ShortID
 
-import shutil
-
 
 class Experiment:
     """
     Class to manage the overall experiment and each simulation.
-    
+
     Parameters
     ----------
     settings: dict
@@ -33,7 +32,7 @@ class Experiment:
         A `ShortID` object to generate random ids.
     settings: dict
         The settings of the experiment.
-        
+
     Methods
     -------
     create_simulation()
@@ -69,7 +68,7 @@ class Experiment:
             A simulation object. Through the Assembly class.
         """
         return Assemble.execute(self.settings)
-    
+
     def simulate(self) -> None:
         """ 
         Simulate a single cycle.
@@ -77,7 +76,7 @@ class Experiment:
         self.simulation = self.create_simulation()
         self.simulation.run_simulation()
         self._save_state()
-        
+
     def _save_state(self) -> None:
         """ 
         Save the state of the simulation into a json file.
@@ -104,7 +103,7 @@ class Experiment:
         """ 
         Fetch the log for the current experiment, append each 
         line to logs list and return a list of dictionaries.
-        
+
         Returns
         -------
         List[str]
@@ -119,12 +118,12 @@ class Experiment:
     def print_log(self, n: int = 20) -> List[str]:
         """ 
         Print the past n log entries.
-        
+
         Parameters
         ----------
         n: int
             The number of log entries to print.
-            
+
         Returns
         -------
         List[str]
@@ -144,7 +143,7 @@ class Experiment:
         ----------
         object_id: str
             The id of the object.
-            
+
         Returns
         -------
         BaseAgent
@@ -161,7 +160,7 @@ class Experiment:
         ----------
         object_type: str
             The type of object to get.
-            
+
         Returns
         -------
         List[BaseAgent]
@@ -169,8 +168,8 @@ class Experiment:
         """
         return self.simulation.environment.get_objects(object_type)
 
-    def get_random_objects(self, 
-                           object_type: str = 'BaseAgent', 
+    def get_random_objects(self,
+                           object_type: str = 'BaseAgent',
                            n: int = 1) -> List[BaseAgent]:
         """ 
         Get n random objects of a given type.
@@ -182,7 +181,7 @@ class Experiment:
             The type of object to get.
         n: int
             The number of objects to get.
-        
+
         Returns
         -------
         List[BaseAgent]
@@ -197,7 +196,7 @@ class Experiment:
     def get_cycle_results(self) -> Dict:
         """         
         Get the results of the current cycle.
-        
+
         Returns
         -------
         Dict
@@ -214,7 +213,7 @@ class Experiment:
         ----------
         object_id: str
             The id of the dooder.
-        
+
         Returns
         -------
         Dict
@@ -233,24 +232,24 @@ class Experiment:
     def experiment_summary(self) -> Dict:
         """
         Returns a summary of the experiment.
-        
+
         Returns
         -------
         Dict
             A dictionary of the experiment summary.
         """
         return self.simulation.simulation_summary()
-    
+
     def save(self, experiment_name):
         folder_path = f"experiments/{experiment_name}"
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-            
+
         with open(f"{folder_path}/state.json", "w") as f:
             json.dump(self.simulation.state, f)
-            
+
         shutil.copyfile("logs/log.json", f"{folder_path}/log.json")
-            
+
         with open(f"{folder_path}/summary.json", "w") as f:
             json.dump(self.experiment_summary(), f)
 

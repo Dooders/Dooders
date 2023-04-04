@@ -43,6 +43,7 @@ class MainStats(BaseModel):
     energy_consumed: int
     tag: str
     encoded_weights: dict
+    inference_record: dict
 
 
 class Dooder(BaseAgent):

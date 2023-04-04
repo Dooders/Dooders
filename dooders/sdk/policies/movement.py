@@ -119,19 +119,20 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(cls, dooder: 'Dooder') -> tuple:
-        neighborhood = dooder.neighborhood
+        perception_array = dooder.neighborhood
 
-        goal = cls.infer_goal(dooder, neighborhood)
-        target = cls.base_goals[goal]
+        inferred_goal = cls.infer_goal(dooder, perception_array)
+        primary_target = cls.base_goals[inferred_goal]
 
         #! save the input, prediction, and reality to each dooder, over time
-        #! {'action': {'movement': {'input':input, 'prediction':prediction, 'reality':reality}}}
+        #! {'action': {'movement': {'input':input, 'prediction':prediction, 'reality':reality, 'accurate':True/False}}}
 
-        # Check if the target is inside the Dooder's neighborhood
-        target_array = np.array([neighborhood.contains(target)], dtype='uint8')
+        # Check if the target is inside the Dooder's perception
+        target_array = np.array(
+            [perception_array.contains(primary_target)], dtype='uint8')
 
         # Get model if it exists, else return an error
-        model = dooder.internal_models.get(goal, None)
+        model = dooder.internal_models.get(inferred_goal, None)
 
         if model is None:
             # raise error
@@ -139,15 +140,24 @@ class NeuralNetwork(BasePolicy):
 
         # Predict where to move
         prediction = model.predict(target_array)
-        predicted_location = neighborhood.coordinates[prediction]
+        predicted_location = perception_array.coordinates[prediction]
 
         # Learn from the reality
         # Note: Prediction happens before learning.
         # Learning happens after action is taken
         correct_choices = [location[0] for location in enumerate(
-            neighborhood.contains(target)) if location[1] == True]
+            perception_array.contains(primary_target)) if location[1] == True]
 
         model.learn(correct_choices)
+
+        inference_record = {'action': 'movement',
+                            'perception': [str(x) for x in target_array[0]],
+                            'decision': str(prediction),
+                            'reality': [str(choice) for choice in correct_choices],
+                            'inferred_goal': str(inferred_goal),
+                            'accurate': prediction in correct_choices}
+
+        dooder.inference_record[dooder.simulation.cycles] = inference_record
 
         return predicted_location
 
