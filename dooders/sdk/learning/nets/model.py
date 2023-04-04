@@ -46,6 +46,8 @@ class SimpleNeuralNet:
             optimizer=Adam(learning_rate=lr_schedule),
             metrics=['accuracy']
         )
+        
+        self.model.layers[0].trainable = False
 
     def predict(self, input_array: np.ndarray) -> int:
         """
@@ -73,8 +75,6 @@ class SimpleNeuralNet:
 
         return prediction
 
-
-
     def learn(self, reality: list) -> None:
         """
         Learn from the reality
@@ -97,9 +97,6 @@ class SimpleNeuralNet:
 
         # Optimize parameters
         self.model.train_on_batch(input_tensor, reality_tensor)
-
-
-
 
     def inherit_weights(self, genetics: List[np.ndarray]) -> None:
         """
