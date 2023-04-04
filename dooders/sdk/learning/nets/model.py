@@ -377,7 +377,7 @@ class SimpleNeuralNet:
             The class of the input data
         """
         self.input = input_array
-        self.output = self.model.forward(input_array, training=True)
+        self.output = self.model.forward(input_array, training=False)
         prediction = self.model.output_layer_activation.predictions(
             self.output)
 

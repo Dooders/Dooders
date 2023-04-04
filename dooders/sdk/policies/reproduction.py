@@ -66,9 +66,10 @@ class AverageWeights(BasePolicy):
             combined_weights = []
             
             for i in range(len(a_weights)):
-                weight_matrix_avg = (np.array(a_weights[i][0]) + np.array(b_weights[i][0])) / 2
-                bias_vector_avg = (np.array(a_weights[i][1]) + np.array(b_weights[i][1])) / 2
-                combined_weights.append([weight_matrix_avg, bias_vector_avg])
+                combined_weights.append((a_weights[i] + b_weights[i]) / 2)
+                # weight_matrix_avg = (np.array(a_weights[i][0]) + np.array(b_weights[i][0])) / 2
+                # bias_vector_avg = (np.array(a_weights[i][1]) + np.array(b_weights[i][1])) / 2
+                # combined_weights.append([weight_matrix_avg, bias_vector_avg])
     
             new_weights[model] = combined_weights
             

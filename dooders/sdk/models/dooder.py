@@ -182,7 +182,7 @@ class Dooder(BaseAgent):
                          message="Terminated during cycle",
                          scope='Dooder')
            
-        # self.post_step()
+        self.post_step()
                 
     def post_step(self) -> None:
         """ 
@@ -230,9 +230,11 @@ class Dooder(BaseAgent):
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
+        #! check that the last layer isn't all zeros
         layer_pca = PCA(n_components=3)
         layer_pca.fit(weights)
         return layer_pca.singular_values_
+        # return [str(x) for x in layer_pca.singular_values_]
         
         # tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
         # encoded_weights = tsne.fit_transform(weights)

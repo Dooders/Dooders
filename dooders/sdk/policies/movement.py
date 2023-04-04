@@ -144,7 +144,10 @@ class NeuralNetwork(BasePolicy):
         # Learn from the reality
         # Note: Prediction happens before learning.
         # Learning happens after action is taken
-        model.learn(target_array)
+        correct_choices = [location[0] for location in enumerate(
+            neighborhood.contains(target)) if location[1] == True]
+
+        model.learn(correct_choices)
 
         return predicted_location
 
