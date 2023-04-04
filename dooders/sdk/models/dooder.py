@@ -182,9 +182,17 @@ class Dooder(BaseAgent):
                          message="Terminated during cycle",
                          scope='Dooder')
            
-        self.post_step()
+        # self.post_step()
                 
-    def post_step(self):
+    def post_step(self) -> None:
+        """ 
+        Post step flow for a dooder.
+        
+        Process
+        -------
+        1. Update encoded weights
+        2. Update condensed weights
+        """
         # store condensed weights over time
         encoded_weights_value = list(self.get_encoded_weights)
         cycle_number = self.simulation.cycles
@@ -210,7 +218,15 @@ class Dooder(BaseAgent):
         return None
     
     @property
-    def get_encoded_weights(self):
+    def get_encoded_weights(self) -> np.ndarray:
+        """ 
+        Get the encoded weights of the dooder.
+        
+        Returns
+        -------
+        encoded_weights: np.ndarray
+            The encoded weights of the dooder.
+        """
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
@@ -225,10 +241,16 @@ class Dooder(BaseAgent):
         
         # return [str(x) for x in final_encoding]
    
-
     @property
-    def weights(self):
-        # dict of weights
+    def weights(self) -> dict:
+        """ 
+        Get the weights of the dooder.
+        
+        Returns
+        -------
+        weights: dict
+            The weights of the dooder.
+        """
         return self.internal_models.weights
         
     @property
@@ -282,7 +304,15 @@ class Dooder(BaseAgent):
         return Neighborhood(locations, self)
     
     @property
-    def state(self):
+    def state(self) -> dict:
+        """ 
+        Return the state of the dooder.
+        
+        Returns
+        -------
+        state: dict
+            The state of the dooder.
+        """
         state = self.stats.dict()
         state['encoded_weights'] = self.encoded_weights
         return state
