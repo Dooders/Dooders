@@ -182,9 +182,17 @@ class Dooder(BaseAgent):
                          message="Terminated during cycle",
                          scope='Dooder')
            
-        self.post_step()
+        # self.post_step()
                 
-    def post_step(self):
+    def post_step(self) -> None:
+        """ 
+        Post step flow for a dooder.
+        
+        Process
+        -------
+        1. Update encoded weights
+        2. Update condensed weights
+        """
         # store condensed weights over time
         encoded_weights_value = list(self.get_encoded_weights)
         cycle_number = self.simulation.cycles
@@ -210,25 +218,39 @@ class Dooder(BaseAgent):
         return None
     
     @property
-    def get_encoded_weights(self):
+    def get_encoded_weights(self) -> np.ndarray:
+        """ 
+        Get the encoded weights of the dooder.
+        
+        Returns
+        -------
+        encoded_weights: np.ndarray
+            The encoded weights of the dooder.
+        """
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
-        # layer_pca = PCA(n_components=3)
-        # layer_pca.fit(weights)
-        # return layer_pca.singular_values_
+        layer_pca = PCA(n_components=3)
+        layer_pca.fit(weights)
+        return layer_pca.singular_values_
         
-        tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
-        encoded_weights = tsne.fit_transform(weights)
+        # tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
+        # encoded_weights = tsne.fit_transform(weights)
         
-        final_encoding = np.mean(encoded_weights, axis=0)
+        # final_encoding = np.mean(encoded_weights, axis=0)
         
-        return final_encoding
-   
+        # return final_encoding
 
     @property
-    def weights(self):
-        # dict of weights
+    def weights(self) -> dict:
+        """ 
+        Get the weights of the dooder.
+        
+        Returns
+        -------
+        weights: dict
+            The weights of the dooder.
+        """
         return self.internal_models.weights
         
     @property
@@ -282,7 +304,15 @@ class Dooder(BaseAgent):
         return Neighborhood(locations, self)
     
     @property
-    def state(self):
+    def state(self) -> dict:
+        """ 
+        Return the state of the dooder.
+        
+        Returns
+        -------
+        state: dict
+            The state of the dooder.
+        """
         state = self.stats.dict()
         state['encoded_weights'] = self.encoded_weights
         return state

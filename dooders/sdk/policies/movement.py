@@ -26,7 +26,7 @@ class RandomMove(BasePolicy):
     """
     Given a Dooder object, returns a random location in the objects neighborhood
     A neighborhood is all surrounding positions, including the current position
-    
+
     Parameters
     ----------
     dooder: Dooder
@@ -36,7 +36,7 @@ class RandomMove(BasePolicy):
     -------
     random_cell: tuple
         A random location in the Dooder's neighborhood
-        
+
     Methods
     -------
     execute(dooder: Dooder) -> tuple
@@ -49,6 +49,7 @@ class RandomMove(BasePolicy):
         random_cell = choice(neighborhood.coordinates)
 
         return random_cell
+
 
 @Core.register('policy')
 class RuleBased(BasePolicy):
@@ -65,7 +66,7 @@ class RuleBased(BasePolicy):
     -------
     random_cell: tuple
         A random location in the Dooder's neighborhood that has energy
-        
+
     Methods
     -------
     execute(dooder: Dooder) -> tuple
@@ -85,6 +86,7 @@ class RuleBased(BasePolicy):
 
         return random_cell
 
+
 @Core.register('policy')
 class NeuralNetwork(BasePolicy):
     #! Change this name to TargetBased or GoalBased
@@ -103,7 +105,7 @@ class NeuralNetwork(BasePolicy):
     -------
     predicted_location: tuple
         A location based on neural network output
-        
+
     Methods
     -------
     execute(dooder: Dooder) -> tuple
@@ -121,31 +123,28 @@ class NeuralNetwork(BasePolicy):
 
         goal = cls.infer_goal(dooder, neighborhood)
         target = cls.base_goals[goal]
-        
+
         #! save the input, prediction, and reality to each dooder, over time
         #! {'action': {'movement': {'input':input, 'prediction':prediction, 'reality':reality}}}
 
         # Check if the target is inside the Dooder's neighborhood
         target_array = np.array([neighborhood.contains(target)], dtype='uint8')
 
-        # Get model if it exists, else return an error  
+        # Get model if it exists, else return an error
         model = dooder.internal_models.get(goal, None)
 
         if model is None:
             # raise error
             pass
-        
+
         # Predict where to move
         prediction = model.predict(target_array)
         predicted_location = neighborhood.coordinates[prediction]
 
         # Learn from the reality
-        # Note: Prediction happens before learning. 
-        # Learning happens after action
-        correct_choices = [location[0] for location in enumerate(
-            neighborhood.contains(target)) if location[1] == True]
-
-        model.learn(correct_choices)
+        # Note: Prediction happens before learning.
+        # Learning happens after action is taken
+        model.learn(target_array)
 
         return predicted_location
 
