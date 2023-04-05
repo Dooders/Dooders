@@ -155,7 +155,8 @@ class NeuralNetwork(BasePolicy):
                             'decision': str(prediction),
                             'reality': [str(choice) for choice in correct_choices],
                             'inferred_goal': str(inferred_goal),
-                            'accurate': prediction in correct_choices}
+                            'accurate': prediction in correct_choices if correct_choices else None}
+                            
 
         dooder.inference_record[dooder.simulation.cycles] = inference_record
 
@@ -184,7 +185,7 @@ class NeuralNetwork(BasePolicy):
         """
         if dooder.hunger > 0:
             return 'Consume'
-        elif any(neighborhood.contains('Dooder')):
+        elif any(neighborhood.contains('Dooder')) and dooder.age >= 5:
             return 'Reproduce'
         else:
             return 'Consume'

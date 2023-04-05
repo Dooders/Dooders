@@ -35,6 +35,7 @@ class MainStats(BaseModel):
     position: tuple
     hunger: int
     age: int
+    generation: int
     birth: int
     death: int = None
     status: str

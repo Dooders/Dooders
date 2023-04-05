@@ -9,6 +9,7 @@ class BaseStats(BaseModel):
     id: str = None
     number: int = 0
     age: int = 0
+    generation: int = 0
     birth: int = 0
     death: int = None
     position: tuple = None
@@ -45,7 +46,10 @@ class BaseAgent(ABC):
         """
         self.simulation = simulation
         
-        for attribute in BaseStats(id=id, position=position, birth=simulation.cycles):
+        for attribute in BaseStats(id=id, 
+                                   position=position, 
+                                   generation=(simulation.cycles - 1) // 10 + 1,
+                                   birth=simulation.cycles):
             setattr(self, attribute[0], attribute[1])
 
     def log(self, granularity: int, message: str, scope: str) -> None:
