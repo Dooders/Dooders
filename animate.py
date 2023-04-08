@@ -83,13 +83,7 @@ class Grid:
         Saves the current state of the grid as a gif
     """
 
-    def __init__(self,
-                 L: int,
-                 W: int,
-                 caption: str = "Grid Animation",
-                 save: bool = False,
-                 trail: bool = False
-                 ) -> None:
+    def __init__(self, L: int, W: int, caption: str = "Grid Animation", save: bool = False, trail: bool = False) -> None:
         self.L = L
         self.W = W
         self.grid_size = L
@@ -128,15 +122,9 @@ class Grid:
                     self.cell_size,
                     self.cell_size,
                 )
-                pygame.draw.rect(self.screen, (211, 211, 211),
-                                 rect, border_radius=5)
+                pygame.draw.rect(self.screen, (211, 211, 211), rect, border_radius=5)
 
-    def draw_agent(self,
-                   pos: tuple,
-                   color: tuple,
-                   text_color: tuple = (255, 255, 255),
-                   text: str = None
-                   ) -> None:
+    def draw_agent(self, pos: tuple, color: tuple, text_color: tuple = (255, 255, 255), text: str = None) -> None:
         """ 
         Draws an agent in the grid
 
@@ -167,12 +155,6 @@ class Grid:
             self.letter = self.font.render(text, True, text_color)
             self.letter_rect = self.letter.get_rect(center=rect.center)
             self.screen.blit(self.letter, self.letter_rect)
-
-            # Draw the count near the upper right corner of the 'D'
-            # font = pygame.font.Font("Roboto-Bold.ttf", 12)
-            # count_text = font.render(str(1), True, text_color)
-            # count_rect = count_text.get_rect(topright=(rect.right - 5, rect.top + 5))
-            # screen.blit(count_text, count_rect)
 
     def draw_cycle_counter(self, cycles: int) -> None:
         """ 
@@ -242,8 +224,7 @@ class Grid:
             self.cell_size,
             self.cell_size,
         )
-        green_surface = pygame.Surface(
-            (self.cell_size, self.cell_size), pygame.SRCALPHA)
+        green_surface = pygame.Surface((self.cell_size, self.cell_size), pygame.SRCALPHA)
         green_surface.fill((*color, alpha))
         self.screen.blit(green_surface, rect.topleft)
 
