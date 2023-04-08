@@ -7,7 +7,7 @@
   
 ## Overview
 
-Dooders is a Python library to conduct *complex model-based simulations* for research in Cognitive AI. Its primary purpose is to facilitate the exploration and analysis of advanced designs for Artificial Intelligence systems with cognitive capabilities.
+Dooders is a Python library to conduct *complex model-based simulations* for research in Cognitive AI.[^1] Its primary purpose is to facilitate the exploration and analysis of advanced designs for Artificial Intelligence systems with cognitive capabilities.
 
 Unpacking some of the terminology: 
 
@@ -17,7 +17,7 @@ Unpacking some of the terminology:
 
 Systems are collections of interacting and dynamic components. These can range from the complex ecological system of the Earth's environment, the chemical system of a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/), to even digital systems such as a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png).
 
-Systems are everywhere.[^1]  
+Systems are everywhere.[^3]  
 
 A [Dooder](docs/Dooder.md) is an agent object in the simulation with an amount of causal control. It acts in the simulation only as long as it consumes [Energy](https://github.com/csmangum/Dooders/blob/main/docs/Energy.md).
 
@@ -50,9 +50,11 @@ experiment.simulate()
 
 experiment.experiment_summary()
 
+
 # Example output using the default settings
 # This simulation ended after 53 cycle when 
 # all Dooders died from starvation
+
 {'SimulationID': 'XGZBhzoc8juERXpZjLZMPR',
  'Timestamp': '2023-03-09, 18:20:33',
  'CycleCount': 53,
@@ -87,5 +89,6 @@ experiment.experiment_summary()
   
 ### Footnotes
 
-[^1]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
+[^1]: https://towardsdatascience.com/the-rise-of-cognitive-ai-a29d2b724ccc
 [^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships.  
+[^3]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
