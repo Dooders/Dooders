@@ -3,6 +3,7 @@ Class to create and return a default pygame rendered grid of LxW dimensions
 """
 
 import math
+import os
 import sys
 
 import imageio
@@ -14,14 +15,16 @@ class DefaultSettings(BaseModel):
     Length: int = 10
     Width: int = 10
     CellSize: int = 50
-    CellPadding: int = 40
-    CounterPadding: int = 2
+    CellPadding: int = 5
+    Padding: int = 20
+    CounterPadding: int = 30
     FontColor: tuple = (255, 255, 255)
     BackgroundColor: tuple = (211, 211, 211)
-    AgentColor: tuple = (255, 255, 255)
-    EnergyColor: tuple = (255, 255, 255)
+    AgentColor: tuple = (29, 48, 36)
+    EnergyColor: tuple = (0, 0, 139)
     TrailColor: tuple = (132, 150, 139)
-
+    ChosenColor: tuple = (0, 255, 0)
+    ChosenAlpha: int = 128
 
 class Grid:
     """ 
@@ -83,14 +86,14 @@ class Grid:
         Saves the current state of the grid as a gif
     """
 
-    def __init__(self, L: int, W: int, caption: str = "Grid Animation", save: bool = False, trail: bool = False) -> None:
+    def __init__(self, L: int, W: int, caption: str = "Grid Animation", 
+                 save: bool = False, trail: bool = False, 
+                 settings: DefaultSettings = None) -> None:
+        self.settings = settings or DefaultSettings()
+        self._initialize_default_settings()
         self.L = L
         self.W = W
         self.grid_size = L
-        self.cell_size = 50
-        self.cell_padding = 5
-        self.padding = 20
-        self.counter_padding = 30
         self.save = save
         self.trail = trail
         self.caption = caption
@@ -98,6 +101,17 @@ class Grid:
             self.cell_padding * (self.grid_size - 1) + 2 * self.padding
         self.screen_height = self.grid_size * self.cell_size + self.cell_padding * \
             (self.grid_size - 1) + 2 * self.padding + self.counter_padding
+
+    def _initialize_default_settings(self):
+        self.cell_size = self.settings.CellSize
+        self.cell_padding = self.settings.CellPadding
+        self.padding = self.settings.Padding
+        self.counter_padding = self.settings.CounterPadding
+        self.agent_color = self.settings.AgentColor
+        self.energy_color = self.settings.EnergyColor
+        self.trail_color = self.settings.TrailColor
+        self.chosen_color = self.settings.ChosenColor
+        self.chosen_alpha = self.settings.ChosenAlpha
 
     def setup(self):
         pygame.init()
@@ -122,9 +136,15 @@ class Grid:
                     self.cell_size,
                     self.cell_size,
                 )
-                pygame.draw.rect(self.screen, (211, 211, 211), rect, border_radius=5)
+                pygame.draw.rect(self.screen, self.settings.BackgroundColor,
+                         rect, border_radius=5)
 
-    def draw_agent(self, pos: tuple, color: tuple, text_color: tuple = (255, 255, 255), text: str = None) -> None:
+    def draw_agent(self,
+                   pos: tuple,
+                   color: tuple = None,
+                   text_color: tuple = None,
+                   text: str = None
+                   ) -> None:
         """ 
         Draws an agent in the grid
 
@@ -139,6 +159,8 @@ class Grid:
         text : str
             Text to be displayed
         """
+        color = color or self.agent_color
+        text_color = text_color or self.settings.FontColor
         x, y = pos
         rect = pygame.Rect(
             self.padding + x * (self.cell_size +
@@ -180,7 +202,7 @@ class Grid:
         for pos in visited_positions:
             self.draw_agent(pos, (132, 150, 139))
 
-    def draw_energy(self, pos: tuple, color: tuple = (0, 0, 139)) -> None:
+    def draw_energy(self, pos: tuple, color: tuple = None) -> None:
         """ 
         Draws energy as a dark blue circle within the cell
 
@@ -193,6 +215,7 @@ class Grid:
         color : tuple
             Color of the energy circle
         """
+        color = color or self.energy_color
         x, y = pos
         circle_center = (
             self.padding + x * (self.cell_size +
@@ -203,7 +226,8 @@ class Grid:
         radius = self.cell_size // 5
         pygame.draw.circle(self.screen, color, circle_center, radius)
 
-    def draw_chosen_space(self, pos: tuple, color: tuple = (0, 255, 0), alpha: int = 128) -> None:
+    def draw_chosen_space(self, pos: tuple, color: tuple = None, 
+                          alpha: int = None) -> None:
         """ 
         Makes the chosen cell semi-transparent green
 
@@ -216,6 +240,8 @@ class Grid:
         alpha : int
             Transparency value (0 to 255)
         """
+        color = color or self.chosen_color
+        alpha = alpha or self.chosen_alpha
         x, y = pos
         rect = pygame.Rect(
             self.padding + x * (self.cell_size + self.cell_padding),
@@ -224,14 +250,13 @@ class Grid:
             self.cell_size,
             self.cell_size,
         )
-        green_surface = pygame.Surface((self.cell_size, self.cell_size), pygame.SRCALPHA)
+        green_surface = pygame.Surface(
+            (self.cell_size, self.cell_size), pygame.SRCALPHA)
         green_surface.fill((*color, alpha))
         self.screen.blit(green_surface, rect.topleft)
 
-    def render(self, **data):
-        pass
-
-    def animate(self, player_positions: list, energy_data: list, chosen_positions: list) -> None:
+    def animate(self, player_positions: list, energy_data: list, 
+                chosen_positions: list) -> None:
         """ 
         Animates the agent moving through the grid, displays energy information, and indicates the chosen space
 
@@ -293,7 +318,8 @@ class Grid:
 
         pygame.quit()
 
-    def collage(self, player_positions: list, energy_data: list, chosen_positions: list, filename: str = "collage.png") -> None:
+    def collage(self, player_positions: list, energy_data: list, 
+                chosen_positions: list, filename: str = "collage.png") -> None:
         """ 
         Creates a collage of scenes
 
