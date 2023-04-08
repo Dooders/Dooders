@@ -343,15 +343,15 @@ class Grid:
         for scene_idx in range(num_scenes):
             self.screen.fill((255, 255, 255))
             self.draw_grid()
-            
+
             # Draw chosen_positions
             self.draw_chosen_space(chosen_positions[scene_idx])
-            
+
+            # Draw energy circles
             energy_positions_real = energy_data[scene_idx]
-            print(f"Scene {scene_idx}: {energy_positions_real}")  # Add this line
             for energy_pos in energy_positions_real:
                 self.draw_energy(energy_pos, (0, 0, 139))
-                
+
             if self.trail:
                 # Draw the trail of visited cells in green
                 visited_positions = player_positions[:scene_idx]
@@ -361,8 +361,6 @@ class Grid:
                 player_positions[scene_idx], (29, 48, 36), text="D")
 
             self.draw_cycle_counter(scene_idx + 1)
-
-            
 
             row = scene_idx // collage_side
             col = scene_idx % collage_side
