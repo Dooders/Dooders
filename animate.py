@@ -26,6 +26,7 @@ class DefaultSettings(BaseModel):
     ChosenColor: tuple = (0, 255, 0)
     ChosenAlpha: int = 128
 
+
 class Grid:
     """ 
     Class to create and return a default pygame rendered grid of LxW dimensions
@@ -86,8 +87,8 @@ class Grid:
         Saves the current state of the grid as a gif
     """
 
-    def __init__(self, L: int, W: int, caption: str = "Grid Animation", 
-                 save: bool = False, trail: bool = False, 
+    def __init__(self, L: int, W: int, caption: str = "Grid Animation",
+                 save: bool = False, trail: bool = False,
                  settings: DefaultSettings = None) -> None:
         self.settings = settings or DefaultSettings()
         self._initialize_default_settings()
@@ -123,12 +124,38 @@ class Grid:
         self.clock = pygame.time.Clock()
         self.clockfont = pygame.font.Font(None, 24)
 
+    def draw_border(self, color: tuple = (0, 0, 0), thickness: int = 2) -> None:
+        """
+        Draws a border around the grid
+
+        Parameters
+        ----------
+        color : tuple
+            Color of the border
+        thickness : int
+            Thickness of the border
+        """
+        border_rect = pygame.Rect(
+            self.padding - thickness,
+            self.padding + self.counter_padding - thickness,
+            self.grid_size * self.cell_size + self.cell_padding *
+            (self.grid_size - 1) + 2 * thickness,
+            self.grid_size * self.cell_size + self.cell_padding *
+            (self.grid_size - 1) + 2 * thickness,
+        )
+        pygame.draw.rect(self.screen, color, border_rect, thickness)
+
     def draw_grid(self) -> None:
         """ 
         Draws the grid
         """
+        font = pygame.font.Font(None, 16)
         for y in range(self.grid_size):
             for x in range(self.grid_size):
+                cell_number = y * self.grid_size + x
+                cell_number_text = font.render(
+                    str(cell_number + 1), True, self.settings.FontColor)
+
                 rect = pygame.Rect(
                     self.padding + x * (self.cell_size + self.cell_padding),
                     self.padding + self.counter_padding + y *
@@ -137,7 +164,18 @@ class Grid:
                     self.cell_size,
                 )
                 pygame.draw.rect(self.screen, self.settings.BackgroundColor,
-                         rect, border_radius=5)
+                                 rect, border_radius=5)
+
+                # Add cell number to the top left of the cell
+                cell_number_position = (
+                    self.padding + x * (self.cell_size +
+                                        self.cell_padding) + 5,
+                    self.padding + self.counter_padding + y *
+                    (self.cell_size + self.cell_padding) + 5
+                )
+                self.screen.blit(cell_number_text, cell_number_position)
+
+                # self.draw_border()
 
     def draw_agent(self,
                    pos: tuple,
@@ -226,7 +264,7 @@ class Grid:
         radius = self.cell_size // 5
         pygame.draw.circle(self.screen, color, circle_center, radius)
 
-    def draw_chosen_space(self, pos: tuple, color: tuple = None, 
+    def draw_chosen_space(self, pos: tuple, color: tuple = None,
                           alpha: int = None) -> None:
         """ 
         Makes the chosen cell semi-transparent green
@@ -255,8 +293,8 @@ class Grid:
         green_surface.fill((*color, alpha))
         self.screen.blit(green_surface, rect.topleft)
 
-    def animate(self, player_positions: list, energy_data: list, 
-                chosen_positions: list) -> None:
+    def animate(self, player_positions: list, energy_data: list,
+            chosen_positions: list) -> None:
         """ 
         Animates the agent moving through the grid, displays energy information, and indicates the chosen space
 
@@ -296,7 +334,15 @@ class Grid:
             for energy_pos in energy_positions:
                 self.draw_energy(energy_pos, (0, 0, 139))
 
-            self.draw_chosen_space(chosen_positions[current_position])
+            chosen_color = self.chosen_color
+
+            if energy_positions:  # If there are energy objects on the grid
+                if chosen_positions[current_position] in energy_positions:
+                    chosen_color = self.chosen_color  # Green for energy object
+                else:
+                    chosen_color = (255, 0, 0)  # Red for no energy object
+
+            self.draw_chosen_space(chosen_positions[current_position], color=chosen_color)
 
             self.draw_agent(
                 player_positions[current_position], (29, 48, 36), text="D")
@@ -318,8 +364,8 @@ class Grid:
 
         pygame.quit()
 
-    def collage(self, player_positions: list, energy_data: list, 
-                chosen_positions: list, filename: str = "collage.png") -> None:
+    def collage(self, player_positions: list, energy_data: list,
+            chosen_positions: list, filename: str = "collage.png") -> None:
         """ 
         Creates a collage of scenes
 
@@ -351,8 +397,14 @@ class Grid:
             self.screen.fill((255, 255, 255))
             self.draw_grid()
 
+            # Check if the grid has any energy objects
+            has_energy_objects = any(energy_data[scene_idx])
+
             # Draw chosen_positions
-            self.draw_chosen_space(chosen_positions[scene_idx])
+            if not has_energy_objects or chosen_positions[scene_idx] in energy_data[scene_idx]:
+                self.draw_chosen_space(chosen_positions[scene_idx], color=(0, 255, 0), alpha=self.chosen_alpha)
+            else:
+                self.draw_chosen_space(chosen_positions[scene_idx], color=(255, 0, 0), alpha=self.chosen_alpha)
 
             # Draw energy circles
             energy_positions_real = energy_data[scene_idx]
@@ -376,3 +428,21 @@ class Grid:
 
         pygame.image.save(collage_surface, filename)
         pygame.quit()
+
+    def render_map(self, filename: str = "map.png") -> None:
+        """ 
+        Renders the map
+
+        Parameters
+        ----------
+        filename : str
+            Output filename for the map
+        """
+        self.setup()
+
+        self.screen.fill((255, 255, 255))
+        self.draw_grid()
+
+        pygame.image.save(self.screen, filename)
+        pygame.quit()
+        
