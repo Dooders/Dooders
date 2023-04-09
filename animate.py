@@ -3,7 +3,6 @@ Class to create and return a default pygame rendered grid of LxW dimensions
 """
 
 import math
-import os
 import sys
 
 import imageio
