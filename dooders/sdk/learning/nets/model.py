@@ -126,7 +126,7 @@ class Model:
             # add it to the list of trainable layers
             # We don't need to check for biases -
             # checking for weights is enough
-            if hasattr(self.layers[i], 'weights'):
+            if hasattr(self.layers[i], 'weights') and self.layers[i].frozen == False:
                 self.trainable_layers.append(self.layers[i])
 
         # Update loss object with trainable layers
@@ -304,7 +304,7 @@ class Model:
         # in reversed order passing dinputs as a parameter
         for layer in reversed(self.layers):
             layer.backward(layer.next.dinputs)
-            
+
     # Saves the model
     def save(self, path):
 
@@ -351,7 +351,7 @@ class SimpleNeuralNet:
         Initialize the model
         """
         self.model = Model()
-        self.model.add(Layer_Dense(9, 512))
+        self.model.add(Layer_Dense(9, 512, frozen=False))
         self.model.add(Activation_ReLU())
         self.model.add(Layer_Dense(512, 9))
         self.model.add(Activation_Softmax())
@@ -414,7 +414,7 @@ class SimpleNeuralNet:
         """
         self.model.layers[0].weights = genetics[0]
         self.model.layers[2].weights = genetics[1]
-        
+
     def save(self, path: str) -> None:
         """ 
         Save the model
@@ -425,7 +425,7 @@ class SimpleNeuralNet:
             The path to save the model
         """
         self.model.save(path)
-        
+
     @property
     def layers(self):
         # return needed layers
