@@ -10,6 +10,8 @@ import traceback
 from datetime import datetime
 from statistics import mean
 
+from tqdm import tqdm
+
 from dooders.sdk.base.reality import Reality
 from dooders.sdk.core import Condition
 
@@ -121,18 +123,22 @@ class Simulation(Reality):
         2. Run the simulation until the stop conditions are met
         3. Collect the results
         """
+        max_cycles = int(self.simulation_settings['variables']['simulation']['MaxCycles'].args['value'])
+        pbar = tqdm(desc="Simulation Progress", total=max_cycles)
         self.starting_time = datetime.now()
         try:
             self.setup()
 
             while self.stop_conditions():
                 self.step()
+                pbar.update(1)
                 # print(f'Cycle: {self.cycles}')
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
 
         self.ending_time = datetime.now()
+        pbar.close()
 
     def reset(self) -> None:
         """
