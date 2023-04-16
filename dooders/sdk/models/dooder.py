@@ -10,8 +10,6 @@ from typing import TYPE_CHECKING, Any, List
 
 import numpy as np
 from pydantic import BaseModel
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 
 from dooders.sdk import steps
 from dooders.sdk.base.agent import Agent
@@ -183,13 +181,13 @@ class Dooder(Agent):
                 self.log(granularity=1,
                          message="Terminated during cycle",
                          scope='Dooder')
-           
+
         self.post_step()
-                
+
     def post_step(self) -> None:
         """ 
         Post step flow for a dooder.
-        
+
         Process
         -------
         1. Update encoded weights
@@ -218,12 +216,12 @@ class Dooder(Agent):
                 return object
 
         return None
-    
+
     @property
     def get_encoded_weights(self) -> np.ndarray:
         """ 
         Get the encoded weights of the dooder.
-        
+
         Returns
         -------
         encoded_weights: np.ndarray
@@ -232,31 +230,30 @@ class Dooder(Agent):
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
-        #! check that the last layer isn't all zeros
-        layer_pca = PCA(n_components=3)
-        layer_pca.fit(weights)
-        return layer_pca.singular_values_
+        #! encode only at creation and termination?
+        embedding = self.gene_embedding.fit(weights)
+        return embedding.singular_values_
         # return [str(x) for x in layer_pca.singular_values_]
-        
+
         # tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
         # encoded_weights = tsne.fit_transform(weights)
-        
+
         # final_encoding = np.mean(encoded_weights, axis=0)
-        
+
         # return [str(x) for x in final_encoding]
-   
+
     @property
     def weights(self) -> dict:
         """ 
         Get the weights of the dooder.
-        
+
         Returns
         -------
         weights: dict
             The weights of the dooder.
         """
         return self.internal_models.weights
-        
+
     @property
     def history(self) -> list:
         """ 
@@ -306,12 +303,12 @@ class Dooder(Agent):
         locations = self.simulation.environment.nearby_spaces((self.position))
 
         return Neighborhood(locations, self)
-    
+
     @property
     def state(self) -> dict:
         """ 
         Return the state of the dooder.
-        
+
         Returns
         -------
         state: dict
