@@ -309,50 +309,8 @@ class Optimizer_RMSprop:
         """
         self.iterations += 1
 
-
 class Optimizer_Adam:
-    """ 
-    Adam optimizer
-
-    Parameters
-    ----------
-    learning_rate : float, optional
-        Learning rate, by default 0.001
-    decay : float, optional
-        Decay rate, by default 0.
-    epsilon : float, optional
-        Small value to avoid division by zero, by default 1e-7
-    beta_1 : float, optional
-        Decay rate, by default 0.9
-    beta_2 : float, optional
-        Decay rate, by default 0.999
-
-    Methods
-    -------
-    pre_update_params()
-        Call once before any parameter updates
-    update_params(layer)
-        Update parameters
-    post_update_params()
-        Call once after any parameter updates
-
-    Attributes
-    ----------
-    learning_rate : float
-        Learning rate
-    current_learning_rate : float
-        Current learning rate
-    decay : float
-        Decay rate
-    iterations : int
-        Iterations
-    epsilon : float
-        Small value to avoid division by zero
-    beta_1 : float
-        Decay rate
-    beta_2 : float
-        Decay rate
-    """
+    __slots__ = ('learning_rate', 'current_learning_rate', 'decay', 'iterations', 'epsilon', 'beta_1', 'beta_2', 'cache')
 
     def __init__(self,
                  learning_rate: float = 0.001,
@@ -368,70 +326,38 @@ class Optimizer_Adam:
         self.epsilon = epsilon
         self.beta_1 = beta_1
         self.beta_2 = beta_2
+        self.cache = {}
 
     def pre_update_params(self) -> None:
-        """ 
-        Call once before any parameter updates
-        """
         if self.decay:
             self.current_learning_rate = self.learning_rate * \
                 (1. / (1. + self.decay * self.iterations))
 
     def update_params(self, layer: layer) -> None:
-        """ 
-        Update parameters
+        if layer not in self.cache:
+            self.cache[layer] = {
+                'weight_momentums': np.zeros_like(layer.weights),
+                'weight_cache': np.zeros_like(layer.weights),
+                'bias_momentums': np.zeros_like(layer.biases),
+                'bias_cache': np.zeros_like(layer.biases)
+            }
 
-        Parameters
-        ----------
-        layer : Layer
-            Layer to update
-        """
-        # If layer does not contain cache arrays,
-        # create them filled with zeros
-        if not hasattr(layer, 'weight_cache'):
-            layer.weight_momentums = np.zeros_like(layer.weights)
-            layer.weight_cache = np.zeros_like(layer.weights)
-            layer.bias_momentums = np.zeros_like(layer.biases)
-            layer.bias_cache = np.zeros_like(layer.biases)
+        cache = self.cache[layer]
 
-        # Update momentum  with current gradients
-        layer.weight_momentums = self.beta_1 * \
-            layer.weight_momentums + \
-            (1 - self.beta_1) * layer.dweights
-        layer.bias_momentums = self.beta_1 * \
-            layer.bias_momentums + \
-            (1 - self.beta_1) * layer.dbiases
-        # Get corrected momentum
-        # self.iteration is 0 at first pass
-        # and we need to start with 1 here
-        weight_momentums_corrected = layer.weight_momentums / \
-            (1 - self.beta_1 ** (self.iterations + 1))
-        bias_momentums_corrected = layer.bias_momentums / \
-            (1 - self.beta_1 ** (self.iterations + 1))
-        # Update cache with squared current gradients
-        layer.weight_cache = self.beta_2 * layer.weight_cache + \
-            (1 - self.beta_2) * layer.dweights**2
-        layer.bias_cache = self.beta_2 * layer.bias_cache + \
-            (1 - self.beta_2) * layer.dbiases**2
-        # Get corrected cache
-        weight_cache_corrected = layer.weight_cache / \
-            (1 - self.beta_2 ** (self.iterations + 1))
-        bias_cache_corrected = layer.bias_cache / \
-            (1 - self.beta_2 ** (self.iterations + 1))
+        cache['weight_momentums'] = self.beta_1 * cache['weight_momentums'] + (1 - self.beta_1) * layer.dweights
+        cache['bias_momentums'] = self.beta_1 * cache['bias_momentums'] + (1 - self.beta_1) * layer.dbiases
 
-        # Vanilla SGD parameter update + normalization
-        # with square rooted cache
-        layer.weights += -self.current_learning_rate * \
-            weight_momentums_corrected / \
-            (np.sqrt(weight_cache_corrected) +
-             self.epsilon)
-        layer.biases += -self.current_learning_rate * \
-            bias_momentums_corrected / \
-            (np.sqrt(bias_cache_corrected) +
-             self.epsilon)
+        weight_momentums_corrected = cache['weight_momentums'] / (1 - self.beta_1 ** (self.iterations + 1))
+        bias_momentums_corrected = cache['bias_momentums'] / (1 - self.beta_1 ** (self.iterations + 1))
+
+        cache['weight_cache'] = self.beta_2 * cache['weight_cache'] + (1 - self.beta_2) * layer.dweights**2
+        cache['bias_cache'] = self.beta_2 * cache['bias_cache'] + (1 - self.beta_2) * layer.dbiases**2
+
+        weight_cache_corrected = cache['weight_cache'] / (1 - self.beta_2 ** (self.iterations + 1))
+        bias_cache_corrected = cache['bias_cache'] / (1 - self.beta_2 ** (self.iterations + 1))
+
+        layer.weights -= self.current_learning_rate * weight_momentums_corrected / (np.sqrt(weight_cache_corrected) + self.epsilon)
+        layer.biases -= self.current_learning_rate * bias_momentums_corrected / (np.sqrt(bias_cache_corrected) + self.epsilon)
 
     def post_update_params(self) -> None:
-        """ 
-        Call once after any parameter updates
-        """
         self.iterations += 1
