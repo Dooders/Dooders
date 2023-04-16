@@ -23,7 +23,7 @@ class BaseStats(BaseModel):
     inference_record: dict = {}
 
 
-class BaseAgent(ABC):
+class Agent(ABC):
     """ 
 
     """

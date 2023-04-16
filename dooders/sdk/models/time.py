@@ -8,7 +8,7 @@ Essentially, the order in which agents are stepped through during a cycle.
 import random
 from collections import defaultdict
 
-from dooders.sdk.base.base_agent import BaseAgent
+from dooders.sdk.base.agent import Agent
 from dooders.sdk.base.base_time import BaseTime
 
 
@@ -44,7 +44,7 @@ class Time(BaseTime):
         self.time  = 0
         self._objects = defaultdict(dict)
 
-    def add(self, object: 'BaseAgent') -> None:
+    def add(self, object: 'Agent') -> None:
         """
         Add an object to the schedule.
 
@@ -61,7 +61,7 @@ class Time(BaseTime):
 
         self._objects[object.name][object.id] = object
 
-    def remove(self, object: 'BaseAgent') -> None:
+    def remove(self, object: 'Agent') -> None:
         """
         Remove all instances of a given agent from the schedule.
 
@@ -141,7 +141,7 @@ class Time(BaseTime):
         """
         return list(self._objects[object_class].values())
 
-    def get_object(self, object_class: str, id: int) -> 'BaseAgent':
+    def get_object(self, object_class: str, id: int) -> 'Agent':
         """ 
         Returns an object of a given class with a given id.
 

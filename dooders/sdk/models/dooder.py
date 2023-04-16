@@ -14,7 +14,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
 from dooders.sdk import steps
-from dooders.sdk.base.base_agent import BaseAgent
+from dooders.sdk.base.agent import Agent
 from dooders.sdk.core import Condition
 from dooders.sdk.core.action import Action
 from dooders.sdk.core.step import Step
@@ -47,7 +47,7 @@ class MainStats(BaseModel):
     inference_record: dict
 
 
-class Dooder(BaseAgent):
+class Dooder(Agent):
     """ 
     Primary Dooder class
 

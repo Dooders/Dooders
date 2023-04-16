@@ -8,7 +8,7 @@ from fastapi import WebSocket
 
 from dooders.sdk import strategies
 from dooders.sdk.actions import *
-from dooders.sdk.base.base_agent import BaseAgent
+from dooders.sdk.base.agent import Agent
 from dooders.sdk.core import Assemble
 from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
@@ -47,7 +47,7 @@ class Experiment:
         Print the past n log entries.
     get_object(object_id: str)
         Fetch an object by its id.
-    get_objects(object_type: str = 'BaseAgent')
+    get_objects(object_type: str = 'Agent')
         Fetch all objects of a given type.   
     """
 
@@ -135,7 +135,7 @@ class Experiment:
                 if self.experiment_id in line:
                     print(line)
 
-    def get_object(self, object_id: str) -> BaseAgent:
+    def get_object(self, object_id: str) -> Agent:
         """ 
         Fetch an object by its id.
 
@@ -146,12 +146,12 @@ class Experiment:
 
         Returns
         -------
-        BaseAgent
+        Agent
             The object with the given id.
         """
         return self.simulation.environment.get_object(object_id)
 
-    def get_objects(self, object_type: str = 'BaseAgent') -> List[BaseAgent]:
+    def get_objects(self, object_type: str = 'Agent') -> List[Agent]:
         """ 
         Get all objects of a given type.
         Returns all objects if no type is given.
@@ -163,14 +163,14 @@ class Experiment:
 
         Returns
         -------
-        List[BaseAgent]
+        List[Agent]
             A list of objects of the given type.
         """
         return self.simulation.environment.get_objects(object_type)
 
     def get_random_objects(self,
-                           object_type: str = 'BaseAgent',
-                           n: int = 1) -> List[BaseAgent]:
+                           object_type: str = 'Agent',
+                           n: int = 1) -> List[Agent]:
         """ 
         Get n random objects of a given type.
         Returns all objects if no type is given.
@@ -184,7 +184,7 @@ class Experiment:
 
         Returns
         -------
-        List[BaseAgent]
+        List[Agent]
             A list of n random objects of the given type.
         """
         object_list = self.get_objects(object_type)
