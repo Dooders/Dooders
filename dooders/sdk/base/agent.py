@@ -1,6 +1,5 @@
 import random
 from abc import ABC, abstractmethod
-from typing import Any, List
 
 from pydantic import BaseModel
 
@@ -25,25 +24,63 @@ class BaseStats(BaseModel):
 
 class Agent(ABC):
     """ 
+    Base Agent class
 
+    Parameters
+    ----------
+    id : int
+        Unique ID of the agent
+    position : tuple
+        Position of the agent
+    simulation : Simulation
+        Simulation object   
+        
+    Attributes
+    ----------
+    id : int
+        Unique ID of the agent
+    number : int
+        Number of the agent
+    age : int
+        Age of the agent    
+    generation : int
+        Generation of the agent
+    birth : int
+        Birth cycle of the agent
+    death : int
+        Death cycle of the agent
+    position : tuple
+        Position of the agent
+    status : str
+        Status of the agent
+    reproduction_count : int
+        Number of times the agent has reproduced
+    move_count : int
+        Number of times the agent has moved
+    energy_consumed : int
+        Energy consumed by the agent
+    hunger : int
+        Hunger of the agent
+    tag : str
+        Tag of the agent
+    encoded_weights : dict
+        Encoded weights of the agent
+    inference_record : dict
+        Inference record of the agent
+
+    Methods
+    -------
+    log(granularity: int, message: str, scope: str)
+        Log a message to the information object
+    step()
+        Step function of the agent
+    random
+        Random object
+    name
+        Name of the agent
     """
 
     def __init__(self, id: int, position, simulation) -> None:
-        """
-        Object Meta-Class
-
-        Args:
-            id: Unique ID for the object
-            position: Position of the object
-            simulation: Simulation object for the object
-
-        Attributes:
-            id: Unique ID for the object
-            position: Position of the object
-            simulation: Simulation object for the object
-            information: Information object for the object
-            environment: Environment object for the object
-        """
         self.simulation = simulation
         
         for attribute in BaseStats(id=id, 
@@ -56,10 +93,14 @@ class Agent(ABC):
         """ 
         Log a message to the information object
 
-        Args:
-            granularity: Granularity of the log
-            message: Message to log
-            scope: Scope of the log
+        Parameters
+        ----------
+        granularity : int
+            Granularity of the message
+        message : str
+            Message to log
+        scope : str
+            Scope of the message
         """
         cycle_number = self.simulation.time.time
 
@@ -77,20 +118,24 @@ class Agent(ABC):
 
     @abstractmethod
     def step(self) -> None:
-        pass
+        raise NotImplementedError('Agent.step() not implemented')
 
     @property
     def random(self) -> random.Random:
         """  
-        Returns:
-            Random object for the simulation
+        Returns
+        -------
+        random.Random
+            Random object
         """
         return self.simulation.random
 
     @property
     def name(self) -> str:
         """ 
-        Returns:
-            Name of the object
+        Returns
+        -------
+        str
+            Name of the agent
         """
         return self.__class__.__name__
