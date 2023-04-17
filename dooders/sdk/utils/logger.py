@@ -1,36 +1,43 @@
-import logging
 import os
-
+import logging
+from logging.handlers import QueueHandler, QueueListener
+import queue
 
 def get_logger():
     """ Creates a Log File and returns Logger object """
 
-    # Build Log file directory, based on the OS and supplied input
     log_dir = 'logs/'
     log_file_name = 'log'
-    
+
     try:
         os.remove('logs/log.json')
     except OSError:
         pass
 
-    # Create Log file directory if not exists
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    # Build Log File Full Path
     logPath = log_file_name if os.path.exists(log_file_name) else os.path.join(
         log_dir, (str(log_file_name) + '.json'))
 
-    # Create logger object and set the format for logging and other attributes
     logger = logging.Logger(log_file_name)
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(logPath, 'a+')
+    logger.setLevel(logging.INFO)  # Change the logging level to INFO
+    handler = logging.FileHandler(logPath, 'a+')  # Using a standard FileHandler
     formatter = logging.Formatter("{'Timestamp': '%(asctime)s', %(message)s},")
     handler.setFormatter(formatter)
-    logger.addHandler(handler)
 
-    return logger
+    log_queue = queue.Queue(-1)  # Create an asynchronous queue
+    queue_handler = QueueHandler(log_queue)
+    logger.addHandler(queue_handler)
+
+    # Start a listener for the queue
+    queue_listener = QueueListener(log_queue, handler)
+    queue_listener.start()
+
+    return logger, queue_listener
+
+
+
 
 ######################################
 #! May use this decorator in the future
