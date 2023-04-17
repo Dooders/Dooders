@@ -8,11 +8,16 @@ from typing import TYPE_CHECKING, Generator
 
 import networkx as nx
 from pydantic import BaseModel
+from sklearn.decomposition import PCA
+
 
 from dooders.sdk.models import Dooder
 
 if TYPE_CHECKING:
     from dooders.sdk.base.reality import BaseSimulation
+    
+
+gene_embedding = PCA(n_components=3)
 
 
 class Attributes(BaseModel):
@@ -115,6 +120,7 @@ class Arena:
         dooder = Dooder(self.simulation.generate_id(),
                         position, self.simulation)
         dooder.tag = tag
+        dooder.gene_embedding = gene_embedding
         
         return dooder
 
