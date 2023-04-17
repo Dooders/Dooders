@@ -49,6 +49,7 @@ def reproduce(dooderX) -> None:
             offspring = dooderX.simulation.arena._generate_dooder(
                 dooderX.position, tag = 'Offspring')
             offspring.internal_models.inherit_weights(genetics)
+            offspring.get_gene_embedding()
             offspring.simulation.arena.place_dooder(
                 offspring, offspring.position)
 
