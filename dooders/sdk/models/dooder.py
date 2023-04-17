@@ -137,8 +137,8 @@ class Dooder(Agent):
         self.simulation.arena.terminate_dooder(self)
         self.status = 'Terminated'
         self.death = self.simulation.cycles
+        self.get_gene_embedding()
         message = f"Died from {reason}"
-
         self.log(granularity=1, message=message, scope='Dooder')
 
     def death_check(self) -> None:
@@ -182,9 +182,7 @@ class Dooder(Agent):
                          message="Terminated during cycle",
                          scope='Dooder')
 
-        self.post_step()
-
-    def post_step(self) -> None:
+    def get_gene_embedding(self) -> None:
         """ 
         Post step flow for a dooder.
 
