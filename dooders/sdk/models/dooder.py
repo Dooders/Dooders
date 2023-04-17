@@ -228,17 +228,8 @@ class Dooder(Agent):
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
         weights = self.weights['Consume'][0]
-        #! encode only at creation and termination?
         embedding = self.gene_embedding.fit(weights)
         return embedding.singular_values_
-        # return [str(x) for x in layer_pca.singular_values_]
-
-        # tsne = TSNE(n_components=3, random_state=42, learning_rate='auto', init='random', perplexity=7)
-        # encoded_weights = tsne.fit_transform(weights)
-
-        # final_encoding = np.mean(encoded_weights, axis=0)
-
-        # return [str(x) for x in final_encoding]
 
     @property
     def weights(self) -> dict:
