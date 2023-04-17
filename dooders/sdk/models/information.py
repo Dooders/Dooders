@@ -58,7 +58,7 @@ class Information:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.collectors = Collector()
-        self.logger = get_logger()
+        self.logger, self.queue_listener = get_logger()
         self.granularity = 2
         self.simulation = simulation
         self.simulation_id = simulation.simulation_id

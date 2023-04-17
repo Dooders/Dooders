@@ -75,7 +75,7 @@ class Experiment:
         """
         self.simulation = self.create_simulation()
         self.simulation.run_simulation()
-        self._save_state()
+        # self._save_state()
 
     def _save_state(self) -> None:
         """ 
