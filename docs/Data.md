@@ -3,6 +3,8 @@
 
 ***This page is a work-in-progress***
 
+Documentation for all data schemas that the simulation produces
+
 ## Dooder-based
 
 Information for a individual dooder
