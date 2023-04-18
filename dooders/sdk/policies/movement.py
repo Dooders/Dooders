@@ -158,7 +158,7 @@ class NeuralNetwork(BasePolicy):
                             'accurate': prediction in correct_choices if correct_choices else None}
                             
 
-        dooder.inference_record[dooder.simulation.cycles] = inference_record
+        dooder.inference_record[dooder.simulation.cycle_number] = inference_record
 
         return predicted_location
 

@@ -136,7 +136,7 @@ class Dooder(Agent):
         """
         self.simulation.arena.terminate_dooder(self)
         self.status = 'Terminated'
-        self.death = self.simulation.cycles
+        self.death = self.simulation.cycle_number
         self.get_gene_embedding()
         message = f"Died from {reason}"
         self.log(granularity=1, message=message, scope='Dooder')
@@ -193,7 +193,7 @@ class Dooder(Agent):
         """
         # store condensed weights over time
         encoded_weights_value = list(self.get_encoded_weights)
-        cycle_number = self.simulation.cycles
+        cycle_number = self.simulation.cycle_number
         self.encoded_weights[cycle_number] = encoded_weights_value
 
     def find_partner(self) -> 'Dooder':

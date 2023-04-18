@@ -17,7 +17,7 @@ def setup_simulation(simulation):
 
 
 def test_simulation_initialization(simulation):
-    assert simulation.cycles == 0
+    assert simulation.cycle_number == 0
 
 
 
@@ -50,7 +50,7 @@ def test_stop(setup_simulation):
 def test_cycle(setup_simulation):
     simulation = setup_simulation
     simulation.cycle()
-    assert simulation.cycles == 1
+    assert simulation.cycle_number == 1
     assert simulation.running == True
 
 

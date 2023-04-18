@@ -85,8 +85,8 @@ class Agent(ABC):
         
         for attribute in BaseStats(id=id, 
                                    position=position, 
-                                   generation=(simulation.cycles - 1) // 10 + 1,
-                                   birth=simulation.cycles):
+                                   generation=(simulation.cycle_number - 1) // 10 + 1,
+                                   birth=simulation.cycle_number):
             setattr(self, attribute[0], attribute[1])
 
     def log(self, granularity: int, message: str, scope: str) -> None:

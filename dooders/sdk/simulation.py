@@ -30,7 +30,7 @@ class Simulation(Reality):
     ----------
     running: bool
         Whether the simulation is running or not.
-    cycles: int
+    cycle_number: int
         The number of cycles that have passed.
 
     Methods
@@ -67,7 +67,7 @@ class Simulation(Reality):
         super().__init__(settings)
         self.simulation_settings = settings
         self.running = False
-        self.cycles: int = 0
+        self.cycle_number: int = 0
 
     def setup(self) -> None:
         """
@@ -106,7 +106,7 @@ class Simulation(Reality):
         # collect stats
         self.arena.step()
 
-        self.cycles += 1
+        self.cycle_number += 1
 
     def cycle(self) -> None:
         """ 
@@ -132,7 +132,7 @@ class Simulation(Reality):
             while self.stop_conditions():
                 self.step()
                 pbar.update(1)
-                # print(f'Cycle: {self.cycles}')
+                # print(f'Cycle: {self.cycle_number}')
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
@@ -245,7 +245,7 @@ class Simulation(Reality):
         """
         return {'SimulationID': self.simulation_id,
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
-                'CycleCount': self.cycles,
+                'CycleCount': self.cycle_number,
                 'TotalEnergy': sum(self.information.data['resources']['allocated_energy']),
                 'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
                 'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
@@ -253,18 +253,6 @@ class Simulation(Reality):
                 'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds()),
                 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
-
-    @property
-    def cycle_number(self) -> int:
-        """ 
-        Get the current cycle number.
-
-        Returns
-        -------
-        int
-            The current cycle number.
-        """
-        return self.cycles
 
     @property
     def state(self) -> dict:

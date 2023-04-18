@@ -33,7 +33,7 @@ class StopConditions:
         bool
             True if the maximum number of cycles has been reached, False otherwise
         """
-        if simulation.cycles >= simulation.MaxCycles():
+        if simulation.cycle_number >= simulation.MaxCycles():
             return True
 
     @classmethod
