@@ -14,3 +14,8 @@
 * graveyard: A list of Dooder IDs for all agents terminated during the simulation (Contains only the string id, the object is deleted when terminated)
 
 ## Environment state
+* width: Surface width
+* height: Surface height
+* torus: If the surface is torus
+
+## Information state
