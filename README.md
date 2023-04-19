@@ -89,6 +89,6 @@ experiment.experiment_summary()
   
 ### Footnotes
 
-[^1]: https://towardsdatascience.com/the-rise-of-cognitive-ai-a29d2b724ccc
+[^1]: 
 [^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships.  
 [^3]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
