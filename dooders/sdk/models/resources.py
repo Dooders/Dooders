@@ -142,6 +142,7 @@ class Resources:
             The Energy object to be removed.
         """
         self.available_resources.pop(resource.id)
+        del resource
 
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
