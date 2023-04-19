@@ -560,5 +560,5 @@ class Grid:
             'width': self.width,
             'height': self.height,
             'torus': self.torus,
-            'spaces': {f'{space.x}-{space.y}': space.state for space in self.spaces()}
+            # 'spaces': {f'{space.x}-{space.y}': space.state for space in self.spaces()} # This takes up too much space
         }
