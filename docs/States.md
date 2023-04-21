@@ -17,5 +17,3 @@
 * width: Surface width
 * height: Surface height
 * torus: If the surface is torus
-
-## Information state
