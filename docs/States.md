@@ -1,5 +1,7 @@
 # States
 
+The simulation state can be saved for easy analysis.
+
 ## Simulation state
 * simulation_id: id given at the beginning of the simulation
 * running: True/False if the simulation is running
