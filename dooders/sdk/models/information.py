@@ -27,6 +27,14 @@ from dooders.sdk.utils.logger import get_logger
 
 if TYPE_CHECKING:
     from dooders.sdk.simulation import Simulation
+    
+    
+class FakeLogger:
+    
+    def info(self, message: str) -> None:
+        pass
+    def log(self, message: str, granularity: int) -> None:
+        pass
 
 
 class Information:
@@ -58,9 +66,9 @@ class Information:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.collectors = Collector()
-        self.logger, self.queue_listener = get_logger()
+        self.logger = FakeLogger()
         self.granularity = 2
-        self.simulation = simulation
+        # self.simulation = simulation
         self.simulation_id = simulation.simulation_id
 
     def collect(self, simulation: 'Simulation') -> None:

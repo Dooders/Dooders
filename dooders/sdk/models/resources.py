@@ -7,9 +7,9 @@ Responsible for creation and management of Energy objects in the simulation.
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
+
 from dooders.sdk.core.settings import Settings
 from dooders.sdk.core.strategy import Strategy
-
 from dooders.sdk.models.energy import Energy
 
 if TYPE_CHECKING:
@@ -23,6 +23,7 @@ class Attributes(BaseModel):
     allocated_energy: int = 0
     dissipated_energy: int = 0
     consumed_energy: int = 0
+
 
 class Resources:
     """ 
@@ -50,7 +51,7 @@ class Resources:
         The total number of dissipated energy (for the current cycle).
     consumed_energy : int
         The total number of consumed energy (for the current cycle).
-        
+
     Methods
     -------
     allocate_resources()
@@ -67,11 +68,11 @@ class Resources:
 
     def __init__(self, simulation: 'Simulation') -> None:
         self.simulation = simulation
-        
+
     def _setup(self) -> None:
         """ 
         Sets up the Resources class.
-        
+
         The method will allocate resources based on the strategy.
         """
         self.reset()
@@ -79,7 +80,7 @@ class Resources:
     def allocate_resources(self) -> None:
         """ 
         Allocates resources based on the provided strategy.
-        
+
         The method will generate a new Energy object and place it in the
         environment. The Energy object will be added to the available_resources
         dictionary.
@@ -90,26 +91,26 @@ class Resources:
                 self.simulation.environment.place_object(energy, location)
                 self.available_resources[energy.id] = energy
                 self.allocated_energy += 1
-                
+
     def create_energy(self, location):
         unique_id = self.simulation.generate_id()
         settings = Settings.get('variables')['energy']
         energy = Energy(unique_id, location, self)
         Strategy.compile(energy, settings)
-        
+
         return energy
 
     def step(self) -> None:
         """ 
         Performs a step in the simulation.
-        
+
         Process
         -------
         1. Calls the step method on each Energy object
         2. Compiles the strategy for the current cycle
         3. Resets the attribute counts from previous cycle
         4. Allocates resources for the current cycle
-        
+
         Notes
         -----
         The Information class will have historical data for attributes after
@@ -142,6 +143,7 @@ class Resources:
             The Energy object to be removed.
         """
         self.available_resources.pop(resource.id)
+        self.consumed_energy += 1
         del resource
 
     def log(self, granularity: int, message: str, scope: str) -> None:
@@ -159,4 +161,3 @@ class Resources:
             The scope of the message.
         """
         self.simulation.log(granularity, message, scope)
-        

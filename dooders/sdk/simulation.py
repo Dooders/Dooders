@@ -82,7 +82,7 @@ class Simulation(Reality):
 
         self.running = True
 
-        self.information.collect(self)
+        # self.information.collect(self)
 
     def step(self) -> None:
         """
@@ -251,7 +251,7 @@ class Simulation(Reality):
                 'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
                 'EndingDooderCount': len(self.arena.active_dooders),
                 'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds()),
-                'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
+                # 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
 
     @property
