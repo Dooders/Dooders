@@ -35,10 +35,6 @@ class BaseCollector(BaseModel):
     enabled: bool
 
 
-CollectorDict: Dict[str, BaseCollector]
-CollectorData: Dict[str, Union[list, dict, str, int, float]]
-
-
 class Collector(Core):
     """ 
     The factory class for creating collectors
@@ -120,7 +116,8 @@ class Collector(Core):
         >>> Collector.collect(simulation)
         """
         for scope in self.collectors:
-            self._collect(scope, simulation)
+            for name, data in self._collect(scope, simulation):
+                self.data[scope][name].append(data)
 
     def _collect(self, scope: str, simulation: 'Simulation') -> None:
         """
@@ -142,14 +139,6 @@ class Collector(Core):
         >>> Collector._collect('sdk.components', simulation)
         """
         for name, func in self.collectors[scope].items():
-
-            if callable(func):
-                self.data[scope][name].append(func(simulation))
-            else:
-
-                if func[1] is None:
-                    self.data[scope][name].append(
-                        func[0](simulation))
-                else:
-                    self.data[scope][name].append(
-                        func[0](simulation, **func[1]))
+            yield name, func(simulation)
+            # self.data[scope][name].append(func(simulation))
+    
