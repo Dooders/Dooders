@@ -103,7 +103,7 @@ class Dooder(Agent):
                  simulation: 'BaseSimulation') -> None:
 
         super().__init__(id, position, simulation)
-        self.cognition = Cognition()
+        # self.cognition = Cognition()
         self.direction = 'Origin'
         self.moore = True
         self.condensed_weight_list = list()
@@ -111,6 +111,11 @@ class Dooder(Agent):
         self.log(granularity=1,
                  message=f"Created",
                  scope='Dooder')
+        
+    def __del__(self):
+        self.condensed_weight_list = list()
+        self.internal_models = None
+        self.simulation = None
 
     def do(self, action: str) -> None:
         """ 

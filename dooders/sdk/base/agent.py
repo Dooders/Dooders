@@ -88,6 +88,11 @@ class Agent(ABC):
                                    generation=(simulation.cycle_number - 1) // 10 + 1,
                                    birth=simulation.cycle_number):
             setattr(self, attribute[0], attribute[1])
+            
+    def __del__(self) -> None:
+        self.simulation = None
+        for attribute in BaseStats():
+            setattr(self, attribute[0], None)
 
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
