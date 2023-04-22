@@ -15,7 +15,7 @@ from dooders.sdk.models import Dooder
 
 if TYPE_CHECKING:
     from dooders.sdk.base.reality import BaseSimulation
-    
+
 
 gene_embedding = PCA(n_components=3)
 
@@ -71,13 +71,13 @@ class Arena:
     _generate_dooder()
         Generate a new dooder with a provided position
     """
-    
+
     total_counter = 0
 
     def __init__(self, simulation: 'BaseSimulation') -> None:
         self.graph = nx.Graph()
         self.active_dooders = {}
-        self.graveyard = []
+        self.graveyard = {}
         self.simulation = simulation
 
     def _setup(self) -> None:
@@ -121,7 +121,7 @@ class Arena:
                         position, self.simulation)
         dooder.tag = tag
         dooder.gene_embedding = gene_embedding
-        
+
         return dooder
 
     def generate_dooder(self, position: tuple) -> None:
@@ -175,7 +175,7 @@ class Arena:
         self.simulation.time.remove(dooder)
         self.simulation.environment.remove_object(dooder)
         self.active_dooders.pop(dooder.id)
-        self.graveyard.append(dooder.id)
+        self.graveyard[dooder.id] = dooder.state
         self.dooders_died += 1
         del dooder
 
@@ -202,11 +202,11 @@ class Arena:
                 return self.simulation.random.choice(list(self.active_dooders.values()))
         else:
             return self.active_dooders[dooder_id]
-    
+
     def dooders(self) -> Generator['Dooder', None, None]:
         """ 
         Generator that yields all active dooders
-        
+
         Yields
         ------
         Dooder: dooder object
@@ -220,13 +220,10 @@ class Arena:
         Returns the number of active dooders
         """
         return len(self.active_dooders)
-    
+
     @property
     def state(self) -> dict:
         """
         Returns the state of the Arena
         """
-        return {
-            'active_dooders': {k:v.state for k,v in self.active_dooders.items()},
-            'graveyard': self.graveyard
-        }   
+        return {**self.graveyard, **{k: v.state for k, v in self.active_dooders.items()}}

@@ -38,7 +38,7 @@ def space_contents_count(simulation) -> dict:
     for space in simulation.environment.spaces():
         space_contents[str(space.coordinates)] = len(space.contents)
 
-    return space_contents
+    return 'space_contents_count', space_contents
 
 
 @Core.register('collector')
@@ -80,4 +80,4 @@ def state_space_pattern(simulation) -> dict:
         pattern = space.contents_pattern
         space_contents[str(space.coordinates)] = pattern
 
-    return space_contents
+    return 'state_space_pattern', space_contents

@@ -23,9 +23,7 @@ def active_dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    #! does this method need to just be a collector? 
-    #! Are these 3 attributes used inside the code.
-    return simulation.arena.active_dooder_count
+    return 'active_dooder_count', simulation.arena.active_dooder_count
 
 @Core.register('collector')
 def terminated_dooder_count(simulation) -> int:
@@ -42,7 +40,7 @@ def terminated_dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    return simulation.arena.dooders_died
+    return 'terminated_dooder_count', simulation.arena.dooders_died
 
 @Core.register('collector')
 def created_dooder_count(simulation) -> int:
@@ -59,7 +57,7 @@ def created_dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    return simulation.arena.dooders_created
+    return 'created_dooder_count', simulation.arena.dooders_created
 
 @Core.register('collector')
 def average_dooder_age(simulation) -> float:
@@ -79,10 +77,12 @@ def average_dooder_age(simulation) -> float:
     dooder_ages = [dooder.age for dooder in simulation.arena.dooders()]
     
     if len(dooder_ages) == 0:
-        return 0
+        result = 0
     else:
-        return sum(dooder_ages) / len(dooder_ages)
-    
+        result = sum(dooder_ages) / len(dooder_ages)
+        
+    return 'average_dooder_age', result
+
 @Core.register('collector')
 def median_dooder_age(simulation) -> float:
     """
@@ -101,9 +101,11 @@ def median_dooder_age(simulation) -> float:
     dooder_ages = [dooder.age for dooder in simulation.arena.dooders()]
     
     if len(dooder_ages) == 0:
-        return 0
+        result = 0
     else:
-        return sorted(dooder_ages)[len(dooder_ages) // 2]
+        result = sorted(dooder_ages)[len(dooder_ages) // 2]
+        
+    return 'median_dooder_age', result
     
 @Core.register('collector')
 def average_dooder_hunger(simulation) -> float:
@@ -123,9 +125,11 @@ def average_dooder_hunger(simulation) -> float:
     dooder_hunger = [dooder.hunger for dooder in simulation.arena.dooders()]
     
     if len(dooder_hunger) == 0:
-        return 0
+        result = 0
     else:
-        return sum(dooder_hunger) / len(dooder_hunger)
+        result = sum(dooder_hunger) / len(dooder_hunger)
+        
+    return 'average_dooder_hunger', result
     
 @Core.register('collector')
 def average_energy_consumed(simulation) -> float:
@@ -145,6 +149,8 @@ def average_energy_consumed(simulation) -> float:
     dooder_energy_consumed = [dooder.energy_consumed for dooder in simulation.arena.dooders()]
     
     if len(dooder_energy_consumed) == 0:
-        return 0
+        result = 0
     else:
-        return sum(dooder_energy_consumed) / len(dooder_energy_consumed)
+        result = sum(dooder_energy_consumed) / len(dooder_energy_consumed)
+        
+    return 'average_energy_consumed', result

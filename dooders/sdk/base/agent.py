@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
 
+from dooders.sdk.models.information import Information
+
 
 class BaseStats(BaseModel):
     id: str = None
@@ -88,6 +90,11 @@ class Agent(ABC):
                                    generation=(simulation.cycle_number - 1) // 10 + 1,
                                    birth=simulation.cycle_number):
             setattr(self, attribute[0], attribute[1])
+            
+    def __del__(self) -> None:
+        self.simulation = None
+        for attribute in BaseStats():
+            setattr(self, attribute[0], None)
 
     def log(self, granularity: int, message: str, scope: str) -> None:
         """ 
@@ -114,7 +121,7 @@ class Agent(ABC):
 
         final_message = str(log_dict).strip('{}')
 
-        self.simulation.information.log(final_message, granularity)
+        Information.log(final_message, granularity)
 
     @abstractmethod
     def step(self) -> None:

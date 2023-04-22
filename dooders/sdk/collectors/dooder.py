@@ -27,4 +27,4 @@ def dooder_stats(simulation) -> dict:
   for dooder in simulation.arena.active_dooders.values():
     dooder_stats.append(dooder.stats.dict())
     
-  return dooder_stats
+  return 'dooder_stats', dooder_stats

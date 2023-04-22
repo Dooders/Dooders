@@ -5,7 +5,7 @@ import yaml
 import ast
 
 # from sdk.config import ExperimentParameters
-from dooders.sdk.models import Information, Time
+from dooders.sdk.models import Time
 from dooders.sdk.utils import ShortID
 
 # maybe have a dict that contains each simulation component (Environment, etc.)
@@ -27,7 +27,6 @@ class Reality(ABC):
             params: Parameters for the experiment
             time: Time object for the simulation
             environment: Environment object for the simulation
-            information: Information object for the simulation
             components: Dictionary of components for the simulation
         """
         self.seed = ShortID()
@@ -38,7 +37,6 @@ class Reality(ABC):
         # self.params = ExperimentParameters.parse_obj(self.config)
 
         # Initialize the simulation components
-        self.information = Information(self)
         self.time = Time()
         
 

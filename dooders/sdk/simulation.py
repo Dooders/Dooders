@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 from dooders.sdk.base.reality import Reality
 from dooders.sdk.core import Condition
-
+from dooders.sdk.models.information import Information
 
 class Simulation(Reality):
     """
@@ -68,6 +68,7 @@ class Simulation(Reality):
         self.simulation_settings = settings
         self.running = False
         self.cycle_number: int = 0
+        Information._init_information(self)
 
     def setup(self) -> None:
         """
@@ -81,8 +82,6 @@ class Simulation(Reality):
         self.arena.generate_seed_population()
 
         self.running = True
-
-        self.information.collect(self)
 
     def step(self) -> None:
         """
@@ -98,7 +97,7 @@ class Simulation(Reality):
         self.time.step()
 
         # collect data at the end of the cycle
-        self.information.collect(self)
+        Information.collect(self)
 
         # place new energy
         self.resources.step()
@@ -153,17 +152,6 @@ class Simulation(Reality):
         Stop the simulation.
         """
         self.running = False
-
-    def get_results(self) -> dict:
-        """
-        Get the step results of the simulation.
-
-        Returns
-        -------
-        dict
-            A dictionary of the results of the simulation.
-        """
-        return self.information.get_result_dict(self)
 
     def generate_id(self) -> int:
         """
@@ -232,7 +220,7 @@ class Simulation(Reality):
 
         final_message = str(log_dict).strip('{}')
 
-        self.information.log(final_message, granularity)
+        Information.log(final_message, granularity)
 
     def simulation_summary(self) -> dict:
         """ 
@@ -246,12 +234,12 @@ class Simulation(Reality):
         return {'SimulationID': self.simulation_id,
                 'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
                 'CycleCount': self.cycle_number,
-                'TotalEnergy': sum(self.information.data['resources']['allocated_energy']),
-                'ConsumedEnergy': sum(self.information.data['resources']['consumed_energy']),
-                'StartingDooderCount': self.information.data['arena']['created_dooder_count'][0],
+                'TotalEnergy': sum(Information.data['resources']['allocated_energy']),
+                'ConsumedEnergy': sum(Information.data['resources']['consumed_energy']),
+                'StartingDooderCount': Information.data['arena']['created_dooder_count'][0],
                 'EndingDooderCount': len(self.arena.active_dooders),
                 'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds()),
-                'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
+                # 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
                 }
 
     @property
@@ -272,5 +260,5 @@ class Simulation(Reality):
             'ending_time': str(self.ending_time),
             'arena': self.arena.state,
             'environment': self.environment.state,
-            'information': self.information.collectors.data
+            'information': Information.collectors.data
         }

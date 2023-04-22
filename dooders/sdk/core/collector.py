@@ -17,8 +17,7 @@ A collector can return any type of information. Every Collector must input
 information from the simulation.
 """
 
-from functools import partial
-from typing import TYPE_CHECKING, Callable, Dict, Union
+from typing import TYPE_CHECKING, Callable
 
 from pydantic import BaseModel
 
@@ -33,10 +32,6 @@ class BaseCollector(BaseModel):
     file_name: str
     function_name: str
     enabled: bool
-
-
-CollectorDict: Dict[str, BaseCollector]
-CollectorData: Dict[str, Union[list, dict, str, int, float]]
 
 
 class Collector(Core):
@@ -55,20 +50,18 @@ class Collector(Core):
         
     Methods
     -------
-    compile_collectors()
+    _initialize_collectors()
         Compile the collectors into a dictionary.
-    get_collector(collector_name: str) -> Callable
-        Returns the collector that was requested.
     collect(simulation: Simulation) -> None
         Collects the data from the collectors.
     """
 
     def __init__(self) -> None:
-        self.collectors: dict = {}
+        self.collectors = []
         self.data: dict = {}
-        self.compile_collectors()
+        self._initialize_collectors()
 
-    def compile_collectors(self) -> None:
+    def _initialize_collectors(self) -> None:
         """ 
         Compile the collectors into a dictionary.
         
@@ -81,6 +74,7 @@ class Collector(Core):
         component = self.get_components('collector')
 
         for collectors in component.values():
+
             for collector in collectors.values():
                 base_collector = BaseCollector(function_name=collector.function_name,
                                                function=collector.function,
@@ -88,68 +82,21 @@ class Collector(Core):
                                                enabled=collector.enabled)
                 scope = base_collector.file_name
 
-                if base_collector.enabled:
-
-                    if scope not in self.collectors:
-                        self.collectors[scope] = {}
-                        self.data[scope] = {}
-
-                    if type(base_collector.function) is str:
-                        function = partial(self._getattr, collector.function)
-                    else:
-                        function = base_collector.function
-
-                    self.collectors[scope][base_collector.function_name] = function
-                    self.data[scope][base_collector.function_name] = []
+                if scope not in self.data:
+                    self.data[scope] = {}
+                self.data[scope][base_collector.function_name] = []
+                
+                self.collectors.append(base_collector)
 
     def collect(self, simulation: 'Simulation') -> None:
-        """ 
+        """
         Run all the collectors for all the components.
 
         Parameters
         ----------
         simulation: Simulation
-        Simulation object to collect data from.
-        
-        Examples
-        --------
-        >>> from sdk.core.collector import Collector
-        >>> from sdk.simulation import Simulation
-        >>>
-        >>> simulation = Simulation()
-        >>> Collector.collect(simulation)
-        """
-        for scope in self.collectors:
-            self._collect(scope, simulation)
-
-    def _collect(self, scope: str, simulation: 'Simulation') -> None:
-        """
-        Run all the collectors for the given component.
-
-        Parameters
-        ----------
-        scope: str, (sdk.components, sdk.collectors, etc.)
-            The name of the component to collect data from.
-        simulation: Simulation
             Simulation object to collect data from.
-            
-        Examples
-        --------
-        >>> from sdk.core.collector import Collector
-        >>> from sdk.simulation import Simulation
-        >>>
-        >>> simulation = Simulation()
-        >>> Collector._collect('sdk.components', simulation)
         """
-        for name, func in self.collectors[scope].items():
-
-            if callable(func):
-                self.data[scope][name].append(func(simulation))
-            else:
-
-                if func[1] is None:
-                    self.data[scope][name].append(
-                        func[0](simulation))
-                else:
-                    self.data[scope][name].append(
-                        func[0](simulation, **func[1]))
+        for collector in self.collectors:
+            name, data = collector.function(simulation)
+            self.data[collector.file_name][name].append(data)
