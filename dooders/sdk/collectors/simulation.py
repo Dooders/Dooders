@@ -24,7 +24,7 @@ def dooder_count(simulation) -> int:
     int
         The number of dooders in the simulation.
     """
-    return simulation.time.get_object_count('Dooder')
+    return 'dooder_count', simulation.time.get_object_count('Dooder')
 
 
 @Core.register('collector')
@@ -42,7 +42,7 @@ def energy_count(simulation) -> int:
     int
         The number of energy in the simulation.
     """
-    return simulation.environment.get_object_count('Energy')
+    return 'energy_count', simulation.environment.get_object_count('Energy')
 
 
 # @Collector.register('DirectionCounts')
@@ -88,9 +88,9 @@ def average_energy_age(simulation) -> float:
         energy.cycle_count for energy in simulation.environment.get_objects('Energy')]
 
     if len(energy_age) == 0:
-        return 0
+        return 'average_energy_age', 0
 
-    return round(mean(energy_age), 2)
+    return 'average_energy_age', round(mean(energy_age), 2)
 
 # @Collector.register()
 # def average_genetics(simulation) -> dict:
