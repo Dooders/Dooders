@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
 
+from dooders.sdk.models.information import Information
+
 
 class BaseStats(BaseModel):
     id: str = None
@@ -119,7 +121,7 @@ class Agent(ABC):
 
         final_message = str(log_dict).strip('{}')
 
-        self.simulation.information.log(final_message, granularity)
+        Information.log(final_message, granularity)
 
     @abstractmethod
     def step(self) -> None:
