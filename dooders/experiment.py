@@ -53,10 +53,11 @@ class Experiment:
 
     results = {}
 
-    def __init__(self, settings: dict = {}) -> None:
+    def __init__(self, settings: dict = {}, save_state: bool = False) -> None:
         self.seed = ShortID()
         self.experiment_id = self.seed.uuid()
         self.settings = settings
+        self.save_state = save_state
 
     def create_simulation(self) -> None:
         """
@@ -75,7 +76,8 @@ class Experiment:
         """
         self.simulation = self.create_simulation()
         self.simulation.run_simulation()
-        # self._save_state()
+        if self.save_state:
+            self._save_state()
 
     def _save_state(self) -> None:
         """ 

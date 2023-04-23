@@ -63,11 +63,12 @@ class Simulation(Reality):
         Get a summary of the simulation.
     """
 
-    def __init__(self, settings: dict) -> None:
+    def __init__(self, settings: dict, auto_restart: bool = True) -> None:
         super().__init__(settings)
         self.simulation_settings = settings
         self.running = False
         self.cycle_number: int = 0
+        self.auto_restart = auto_restart
         Information._init_information(self)
 
     def setup(self) -> None:
@@ -139,7 +140,7 @@ class Simulation(Reality):
         self.ending_time = datetime.now()
         pbar.close()
         
-        if self.cycle_number < max_cycles:
+        if self.cycle_number < max_cycles and self.auto_restart:
             print('Restarting simulation')
             self.reset()
             self.run_simulation()
