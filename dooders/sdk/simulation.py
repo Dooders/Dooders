@@ -138,6 +138,11 @@ class Simulation(Reality):
 
         self.ending_time = datetime.now()
         pbar.close()
+        
+        if self.cycle_number < max_cycles:
+            print('Restarting simulation')
+            self.reset()
+            self.run_simulation()
 
     def reset(self) -> None:
         """
@@ -145,7 +150,7 @@ class Simulation(Reality):
 
         This is useful for resetting the simulation after a parameter change.
         """
-        self.__init__(self.simulation_id, self.params)
+        self.__init__(self.simulation_settings)
 
     def stop(self) -> None:
         """
