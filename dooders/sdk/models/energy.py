@@ -64,6 +64,9 @@ class Energy:
         self.position = position
         self.cycle_count = 0
         self.resources = resources
+        
+    def __del__(self):
+        self.resources = None
 
     def step(self) -> None:
         """
