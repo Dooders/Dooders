@@ -201,7 +201,6 @@ class Dooder(Agent):
         cycle_number = self.simulation.cycle_number
         self.encoded_weights[cycle_number] = encoded_weights_value
 
-<<<<<<< HEAD
     def find_partner(self) -> 'Dooder':
         """
         Find another Dooder from current position.
@@ -220,8 +219,6 @@ class Dooder(Agent):
 
         return None
 
-=======
->>>>>>> f93d36d76d7c97ac3f982e8345e32144e3c579de
     @property
     def get_encoded_weights(self) -> np.ndarray:
         """ 
