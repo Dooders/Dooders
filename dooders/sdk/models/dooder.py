@@ -201,25 +201,6 @@ class Dooder(Agent):
         cycle_number = self.simulation.cycle_number
         self.encoded_weights[cycle_number] = encoded_weights_value
 
-    def find_partner(self) -> 'Dooder':
-        #! Make this an action and model? Yes
-        """
-        Find another Dooder from current position.
-
-        Returns
-        -------
-        partner: Dooder
-            A Dooder object, if found.
-        """
-        near_dooders = self.simulation.environment.contents(
-            self.position)
-
-        for object in near_dooders:
-            if isinstance(object, Dooder) and object.id != self.id:
-                return object
-
-        return None
-
     @property
     def get_encoded_weights(self) -> np.ndarray:
         """ 
