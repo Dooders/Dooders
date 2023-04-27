@@ -266,5 +266,5 @@ class Simulation(Reality):
             'ending_time': str(self.ending_time),
             'arena': self.arena.state,
             'environment': self.environment.state,
-            'information': Information.collectors.data
+            'information': Information.data
         }

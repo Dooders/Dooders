@@ -10,7 +10,6 @@ import networkx as nx
 from pydantic import BaseModel
 from sklearn.decomposition import PCA
 
-
 from dooders.sdk.models import Dooder
 
 if TYPE_CHECKING:
@@ -213,6 +212,30 @@ class Arena:
         """
         for dooder in self.active_dooders.values():
             yield dooder
+            
+    def collect(self) -> dict:
+        """" 
+        Collecting the dooder's attributes for the simulation's stats.
+        
+        Returns
+        -------
+        dict
+            A dictionary of the dooder's attributes.
+        """
+        dooder_ages = [dooder.age for dooder in self.dooders()]
+        dooder_energy_consumed = [
+            dooder.energy_consumed for dooder in self.dooders()]
+        dooder_hunger = [dooder.hunger for dooder in self.dooders()]
+
+        return {
+            'active_dooder_count': self.active_dooder_count,
+            'terminated_dooder_count': self.dooders_died,
+            'created_dooder_count': self.dooders_created,
+            'average_dooder_hunger': round(sum(dooder_hunger) / len(dooder_hunger), 3),
+            'median_dooder_age': sorted(dooder_ages)[len(dooder_ages) // 2],
+            'average_dooder_age': round(sum(dooder_ages) / len(dooder_ages), 3),
+            'average_energy_consumed': round(sum(dooder_energy_consumed) / len(dooder_energy_consumed), 3)
+        }
 
     @property
     def active_dooder_count(self) -> int:

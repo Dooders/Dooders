@@ -161,3 +161,34 @@ class Resources:
             The scope of the message.
         """
         self.simulation.log(granularity, message, scope)
+        
+    @property
+    def average_energy_age(self) -> int:
+        """ 
+        Returns the average age of the available energy.
+
+        Returns
+        -------
+        int
+            The average age of the available energy.
+        """
+        try:
+            return round(sum([energy.age for energy in self.available_resources.values()]) / len(self.available_resources),3)
+        except ZeroDivisionError:
+            return 0
+
+    def collect(self):
+        """ 
+        Returns the data to be collected.
+
+        Returns
+        -------
+        dict
+            The data to be collected.
+        """
+        return {
+            'available_energy': len(self.available_resources),
+            'allocated_energy': self.allocated_energy,
+            'consumed_energy': self.consumed_energy,
+            'average_energy_age': self.average_energy_age,
+        }
