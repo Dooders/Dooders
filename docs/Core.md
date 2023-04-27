@@ -5,7 +5,6 @@ The core components serve as the foundation for the library and its capabilities
 Currently, the core components include:
 
 * [Actions](#Actions)
-* [Collectors](#Collectors)
 * [Conditions](#Conditions)
 * [Policies](#Policies)
 * [Steps](#Steps)
@@ -25,15 +24,6 @@ Action.execute('move', dooder)
 This command will start the process for a Dooder to move (with default settings, the Dooder will learn to search for energy via a neural network model)
 
 > More information on Actions can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Actions.md)
-
-## Collectors
-
-Collectors are functions that run every cycle to collect data from objects and models in the simulation. This data can be used to create vizualizations, or to analyze the simulation results.
-
-***For example:***  
-Each model or object has several collectors. One example is a collector that keeps track of the number of energy objects in the Environment.
-
-> More information on Collectors can be found [here](https://github.com/csmangum/Dooders/blob/main/docs/Collectors.md)
 
 ## Conditions
 
