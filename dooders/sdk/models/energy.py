@@ -35,7 +35,7 @@ class Energy:
         See Parameters.
     resources: Resources
         See Parameters.
-    cycle_count: int
+    age: int
         Current cycle count. AKA, age.
     strategies: dict    
         Defined Energy strategies
@@ -62,7 +62,7 @@ class Energy:
                  resources: 'Resources') -> None:
         self.id = id
         self.position = position
-        self.cycle_count = 0
+        self.age = 0
         self.resources = resources
         
     def __del__(self):
@@ -73,8 +73,8 @@ class Energy:
         Step through for the object.
         If the object gets to its max age, it will be dissipated.
         """
-        self.cycle_count += 1
-        if self.cycle_count >= self.EnergyLifespan():
+        self.age += 1
+        if self.age >= self.EnergyLifespan():
             self.consume()
             self.resources.dissipated_energy += 1
             self.resources.log(

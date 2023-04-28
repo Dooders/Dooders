@@ -18,21 +18,22 @@ when energy dissipation occurs, failed movements, and failed actions, etc..
 """
 
 import ast
+import traceback
 from typing import TYPE_CHECKING, List
 
 import pandas as pd
 
-from dooders.sdk.core import Collector
 from dooders.sdk.utils.logger import get_logger
 
 if TYPE_CHECKING:
     from dooders.sdk.simulation import Simulation
-    
-    
+
+
 class FakeLogger:
-    
+
     def info(self, message: str) -> None:
         pass
+
     def log(self, message: str, granularity: int) -> None:
         pass
 
@@ -53,7 +54,7 @@ class Information:
         Logger that handles all logging for the simulation.
     granularity: int
         Higher granularity means more detailed logging.
-        
+
     Methods
     -------
     collect(simulation: 'Simulation')
@@ -64,10 +65,11 @@ class Information:
         Get a dictionary of the results of the experiment.
     """
 
+    data: dict = {}
+
     @classmethod
     def _init_information(cls, simulation: 'Simulation') -> None:
-        cls.collectors = Collector()
-        cls.logger = FakeLogger()
+        cls.logger = FakeLogger() #! remove this from the class
         cls.granularity = 2
         cls.simulation_id = simulation.simulation_id
 
@@ -81,7 +83,17 @@ class Information:
         simulation: Object
             Data is collected from the simulation object.
         """
-        cls.collectors.collect(simulation)
+        models = ['arena', 'resources', 'environment']
+        try:
+            cls_data = cls.data
+            for model_name in models:
+                model = getattr(simulation, model_name)
+                model_data = model.collect()
+                model_data_store = cls_data.setdefault(model_name, {})
+                for key, value in model_data.items():
+                    model_data_store.setdefault(key, []).append(value)
+        except Exception as e:
+            print(traceback.format_exc())
 
     @classmethod
     def log(cls, message: str, granularity: int) -> None:
@@ -98,17 +110,17 @@ class Information:
         if granularity <= cls.granularity:
             message_string = f"'SimulationID':'{cls.simulation_id}', {message}"
 
-            cls.logger.info(message_string) 
+            cls.logger.info(message_string)
 
-    @classmethod
-    @property
-    def data(cls) -> dict:
-        """ 
-        Get the data collected from the simulation.
+    # @classmethod
+    # @property
+    # def data(cls) -> dict:
+    #     """ 
+    #     Get the data collected from the simulation.
 
-        Returns
-        -------
-        data: dict
-            A dictionary of the data collected from the simulation.
-        """
-        return cls.collectors.data
+    #     Returns
+    #     -------
+    #     data: dict
+    #         A dictionary of the data collected from the simulation.
+    #     """
+    #     return cls.collectors.data

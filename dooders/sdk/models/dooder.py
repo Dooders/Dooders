@@ -202,7 +202,6 @@ class Dooder(Agent):
         self.encoded_weights[cycle_number] = encoded_weights_value
 
     def find_partner(self) -> 'Dooder':
-        #! Make this an action and model? Yes
         """
         Find another Dooder from current position.
 

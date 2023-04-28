@@ -8,7 +8,6 @@ from typing import Any, List, Union
 from dooders.sdk.base.agent import Agent
 from dooders.sdk.core.surface import Surface
 
-
 GridCell = List[Any]
 
 
@@ -91,24 +90,6 @@ class Environment:
         self.remove_object(object)
         self.place_object(object, location)
 
-    # def get_object_types(self) -> List[Agent]:
-    #     """
-    #     Get all object types in the environment.
-
-    #     Returns
-    #     -------
-    #     object_types: List[Agent]
-    #         A list of all object types in the environment.
-    #     """
-    #     #! redo this to use the iterator instead
-    #     object_types = []
-    #     for x in range(self.surface.width):
-    #         for y in range(self.surface.height):
-    #             for obj in self.surface[x, y].contents.values():
-    #                 if obj.name not in object_types:
-    #                     object_types.append(obj.__class__.__name__)
-    #     return object_types
-
     def get_objects(self, object_type: str = None) -> List[Agent]:
         """
         Get all objects of a given type.
@@ -143,63 +124,6 @@ class Environment:
         """
         return self.surface[object_id]
 
-    # def get_random_neighbors(self,
-    #                          object: 'Agent',
-    #                          object_type: Agent = 'Agent') -> List[Agent]:
-    #     """
-    #     Get all objects in the neighborhood of the given object.
-
-    #     Parameters
-    #     ----------
-    #     object: Agent
-    #         The object to get the neighborhood of.
-    #     object_type: str
-    #         The type of object to get.
-
-    #     Returns
-    #     -------
-    #     objects: List[Agent]
-    #         A list of all objects in the neighborhood of the given object.
-    #     """
-    #     #! is this duplicative too?
-    #     if object_type == 'Agent':
-    #         object_type_list = self.get_object_types()
-    #     else:
-    #         object_type_list = [object_type]
-
-    #     objects = []
-    #     for iter in self.surface.nearby_contents(object[0].position):
-    #         if iter.name in object_type_list:
-    #             objects.append(iter)
-    #     if len(objects) == 0:
-    #         return 'No objects found'
-
-    #     return objects
-
-    # def get_random_neighborhoods(self, location: tuple, n: int = 1) -> List[GridCell]:
-    #     """
-    #     Get all objects in the neighborhood of the given location.
-
-    #     Parameters
-    #     ----------
-    #     location: tuple
-    #         The location to get the neighborhood of.
-    #     n: int
-    #         The number of neighborhoods to get.
-
-    #     Returns
-    #     -------
-    #     random_neighborhoods: List[GridCell]
-    #         A list of all objects in the neighborhood of the given location.
-    #     """
-    #     #! this takes the coordinates of the location???
-    #     neighborhoods = self.surface.nearby_coordinates(location)
-
-    #     k = min(n, len(neighborhoods))
-    #     random_neighborhoods = choices(neighborhoods, k=k)
-
-    #     return random_neighborhoods
-
     def get_object_count(self, object_type: str = 'Agent') -> int:
         """ 
         Get the number of objects of a given type.
@@ -221,13 +145,40 @@ class Environment:
 
     def spaces(self):
         return self.surface.spaces()
-    
+
     def nearby_spaces(self, location: tuple):
         return self.surface.nearby_spaces(location)
-    
+
     def contents(self, location: tuple):
         return self.surface.contents(location)
     
+    def collect(self) -> dict:
+        """ 
+        Get a dictionary of all objects in the environment.
+
+        Returns
+        -------
+        collect: dict
+            A dictionary of all objects in the environment.
+        """
+        space_info = {}
+
+        for space in self.spaces():
+            space_coords = str(space.coordinates)
+            contents_count = len(space.contents)
+            contents_pattern = space.contents_pattern
+            space_info[space_coords] = (contents_count, contents_pattern)
+
+        return space_info
+
     @property
-    def state(self):
+    def state(self) -> dict:
+        """ 
+        Get the state of the environment.
+
+        Returns
+        -------
+        state: dict
+            The state of the environment.
+        """
         return self.surface.state

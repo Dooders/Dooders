@@ -1,4 +1,3 @@
-from dooders.sdk.core.collector import Collector as Collector
 from dooders.sdk.core.condition import Condition as Condition
 from dooders.sdk.core.strategy import Strategy as Strategy
 from dooders.sdk.core.policy import Policy as Policy

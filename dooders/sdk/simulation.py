@@ -16,6 +16,7 @@ from dooders.sdk.base.reality import Reality
 from dooders.sdk.core import Condition
 from dooders.sdk.models.information import Information
 
+
 class Simulation(Reality):
     """
     The simulation class is the main class of the simulation. It is responsible for
@@ -123,7 +124,8 @@ class Simulation(Reality):
         2. Run the simulation until the stop conditions are met
         3. Collect the results
         """
-        max_cycles = int(self.simulation_settings['variables']['simulation']['MaxCycles'].args['value'])
+        max_cycles = int(
+            self.simulation_settings['variables']['simulation']['MaxCycles'].args['value'])
         pbar = tqdm(desc="Simulation Progress", total=max_cycles)
         self.starting_time = datetime.now()
         try:
@@ -137,9 +139,10 @@ class Simulation(Reality):
             print(traceback.format_exc())
             print('Simulation failed')
 
-        self.ending_time = datetime.now()
-        pbar.close()
-        
+        finally:
+            self.ending_time = datetime.now()
+            pbar.close()
+
         if self.cycle_number < max_cycles and self.auto_restart:
             print('Restarting simulation')
             self.reset()
@@ -266,5 +269,5 @@ class Simulation(Reality):
             'ending_time': str(self.ending_time),
             'arena': self.arena.state,
             'environment': self.environment.state,
-            'information': Information.collectors.data
+            'information': Information.data
         }
