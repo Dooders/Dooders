@@ -18,6 +18,7 @@ when energy dissipation occurs, failed movements, and failed actions, etc..
 """
 
 import ast
+import traceback
 from typing import TYPE_CHECKING, List
 
 import pandas as pd
@@ -82,12 +83,17 @@ class Information:
         simulation: Object
             Data is collected from the simulation object.
         """
-        cls_data = cls.data
-        for model_name, model in ((name, getattr(simulation, name)) for name in dir(simulation) if hasattr(getattr(simulation, name), 'collect')):
-            model_data = model.collect()
-            model_data_store = cls_data.setdefault(model_name, {})
-            for key, value in model_data.items():
-                model_data_store.setdefault(key, []).append(value)
+        models = ['arena', 'resources', 'environment']
+        try:
+            cls_data = cls.data
+            for model_name in models:
+                model = getattr(simulation, model_name)
+                model_data = model.collect()
+                model_data_store = cls_data.setdefault(model_name, {})
+                for key, value in model_data.items():
+                    model_data_store.setdefault(key, []).append(value)
+        except Exception as e:
+            print(traceback.format_exc())
 
     @classmethod
     def log(cls, message: str, granularity: int) -> None:

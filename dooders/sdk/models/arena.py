@@ -212,29 +212,39 @@ class Arena:
         """
         for dooder in self.active_dooders.values():
             yield dooder
-            
+
     def collect(self) -> dict:
-        """" 
-        Collecting the dooder's attributes for the simulation's stats.
-        
+        """
+        Collects the attributes of dooders for simulation statistics.
+
         Returns
         -------
         dict
-            A dictionary of the dooder's attributes.
+            A dictionary of the dooders' attributes.
         """
-        dooder_ages = [dooder.age for dooder in self.dooders()]
-        dooder_energy_consumed = [
-            dooder.energy_consumed for dooder in self.dooders()]
-        dooder_hunger = [dooder.hunger for dooder in self.dooders()]
+        dooder_attributes = [
+            (dooder.age, dooder.hunger, dooder.energy_consumed) for dooder in self.dooders()]
+        dooder_count = len(dooder_attributes)
+
+        def median(data: list) -> float:
+            data = sorted(data)
+            n = len(data)
+            mid = n // 2
+            return (data[mid] if n % 2 else (data[mid - 1] + data[mid]) / 2)
+
+        if dooder_count > 0:
+            ages, hunger, energy_consumed = zip(*dooder_attributes)
+        else:
+            ages, hunger, energy_consumed = [], [], []
 
         return {
             'active_dooder_count': self.active_dooder_count,
             'terminated_dooder_count': self.dooders_died,
             'created_dooder_count': self.dooders_created,
-            'average_dooder_hunger': round(sum(dooder_hunger) / len(dooder_hunger), 3),
-            'median_dooder_age': sorted(dooder_ages)[len(dooder_ages) // 2],
-            'average_dooder_age': round(sum(dooder_ages) / len(dooder_ages), 3),
-            'average_energy_consumed': round(sum(dooder_energy_consumed) / len(dooder_energy_consumed), 3)
+            'average_dooder_hunger': round(sum(hunger) / dooder_count, 3) if hunger else 0,
+            'median_dooder_age': median(ages) if ages else 0,
+            'average_dooder_age': round(sum(ages) / dooder_count, 3) if ages else 0,
+            'average_energy_consumed': round(sum(energy_consumed) / dooder_count, 3) if energy_consumed else 0
         }
 
     @property
