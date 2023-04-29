@@ -260,3 +260,10 @@ class Arena:
         Returns the state of the Arena
         """
         return {**self.graveyard, **{k: v.state for k, v in self.active_dooders.items()}}
+
+    @property
+    def weights(self) -> dict:
+        """
+        Returns the weights of the Arena
+        """
+        return [v.weights['Consume'] for v in self.active_dooders.values()]
