@@ -4,7 +4,7 @@ InternalModels
 The InternalModels class models a Dooder's learned behaviors.
 """
 
-from dooders.sdk.learning.nets.model import SimpleNeuralNet
+from dooders.sdk.learning.scratch.model import SimpleNeuralNet
 
 class InternalModels(dict):
     """ 

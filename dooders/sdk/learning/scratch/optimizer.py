@@ -5,7 +5,7 @@ https://nnfs.io/
 
 import numpy as np
 
-from dooders.sdk.learning.nets import layer
+from dooders.sdk.learning.scratch import layer
 
 
 class Optimizer_SGD:

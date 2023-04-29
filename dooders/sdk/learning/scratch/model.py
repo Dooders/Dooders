@@ -7,11 +7,11 @@ import copy
 import pickle
 from typing import List
 
-from dooders.sdk.learning.nets.activation import *
-from dooders.sdk.learning.nets.eval import *
-from dooders.sdk.learning.nets.layer import *
-from dooders.sdk.learning.nets.loss import *
-from dooders.sdk.learning.nets.optimizer import *
+from dooders.sdk.learning.scratch.activation import *
+from dooders.sdk.learning.scratch.eval import *
+from dooders.sdk.learning.scratch.layer import *
+from dooders.sdk.learning.scratch.loss import *
+from dooders.sdk.learning.scratch.optimizer import *
 
 
 class Model:

@@ -1,7 +1,7 @@
 
 
 from collections import OrderedDict
-from dooders.sdk.learning.nets.model import SimpleNeuralNet
+from dooders.sdk.learning.scratch.model import SimpleNeuralNet
 
 #! What is the best way to manage multiple internal models
 #! And create them
