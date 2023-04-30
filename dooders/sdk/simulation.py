@@ -26,6 +26,8 @@ class Simulation(Reality):
     ----------
     settings: dict
         The settings for the simulation.
+    auto_restart: bool
+        Whether the simulation should restart if it fails.
 
     Attributes
     ----------
@@ -36,32 +38,33 @@ class Simulation(Reality):
 
     Methods
     -------
-    setup()
+    setup() -> None
         Setup the simulation.
-    step()
+    step() -> None
         Advance the simulation by one cycle.
-    cycle()
-        Advance the simulation by one cycle.
-    run_simulation()
-        Run the simulation for a specified number of steps.
-    post_simulation()
-        Post cycle processes. Like sending data to a postgres db
-    reset()
-        Reset the simulation object, using the current parameters.
-    stop()
+    cycle() -> None
+        Run the simulation until a condition is met.
+    run_simulation() -> None
+        Run the simulation until a condition is met.
+    reset() -> None
+        Reset the simulation.
+    stop() -> None
         Stop the simulation.
-    get_results()
-        Get the step results of the simulation.
-    generate_id()
-        Generate a new id for an object.
-    random_dooder()
-        Get a random dooder from the simulation.
-    stop_conditions()
+    generate_id() -> str
+        Generate a unique ID for the simulation.
+    random_dooder() -> Dooder
+        Generate a random dooder.
+    stop_conditions() -> bool
         Check if the simulation should stop.
-    log(granularity, message, scope)
-        Log a message to the logger.
-    simulation_summary()
-        Get a summary of the simulation.
+    log(granularity: int, message: str, scope: str = 'simulation') -> None
+        Log a message.
+
+    Properties
+    ----------
+    simulation_summary: dict
+        The summary of the simulation.
+    state: dict
+        The state of the simulation.
     """
 
     def __init__(self, settings: dict, auto_restart: bool = True) -> None:
@@ -142,6 +145,7 @@ class Simulation(Reality):
         finally:
             self.ending_time = datetime.now()
             pbar.close()
+            Information.store()
 
         if self.cycle_number < max_cycles and self.auto_restart:
             print('Restarting simulation')
@@ -155,6 +159,7 @@ class Simulation(Reality):
         This is useful for resetting the simulation after a parameter change.
         """
         self.__init__(self.simulation_settings)
+        Information.reset()
 
     def stop(self) -> None:
         """
@@ -173,7 +178,7 @@ class Simulation(Reality):
         """
         return self.seed.uuid()
 
-    def random_dooder(self):
+    def random_dooder(self) -> object:
         """
         Get a random dooder from the simulation.
 
@@ -231,6 +236,7 @@ class Simulation(Reality):
 
         Information.log(final_message, granularity)
 
+    @property
     def simulation_summary(self) -> dict:
         """ 
         Get a summary of the simulation.
@@ -245,10 +251,9 @@ class Simulation(Reality):
                 'CycleCount': self.cycle_number,
                 'TotalEnergy': sum(Information.data['resources']['allocated_energy']),
                 'ConsumedEnergy': sum(Information.data['resources']['consumed_energy']),
-                'StartingDooderCount': Information.data['arena']['created_dooder_count'][0],
+                'StartingDooderCount': self.arena.initial_dooder_count,
                 'EndingDooderCount': len(self.arena.active_dooders),
-                'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds()),
-                # 'AverageAge': int(mean([d.age for d in self.arena.graveyard.values()])),
+                'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds())
                 }
 
     @property
