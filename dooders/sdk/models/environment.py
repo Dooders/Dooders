@@ -152,24 +152,24 @@ class Environment:
     def contents(self, location: tuple):
         return self.surface.contents(location)
     
-    def collect(self) -> dict:
-        """ 
-        Get a dictionary of all objects in the environment.
+    # def collect(self) -> dict:
+    #     """ 
+    #     Get a dictionary of all objects in the environment.
 
-        Returns
-        -------
-        collect: dict
-            A dictionary of all objects in the environment.
-        """
-        space_info = {}
+    #     Returns
+    #     -------
+    #     collect: dict
+    #         A dictionary of all objects in the environment.
+    #     """
+    #     space_info = {}
 
-        for space in self.spaces():
-            space_coords = str(space.coordinates)
-            contents_count = len(space.contents)
-            contents_pattern = space.contents_pattern
-            space_info[space_coords] = (contents_count, contents_pattern)
+    #     for space in self.spaces():
+    #         space_coords = str(space.coordinates)
+    #         contents_count = len(space.contents)
+    #         contents_pattern = space.contents_pattern
+    #         space_info[space_coords] = (contents_count, contents_pattern)
 
-        return space_info
+    #     return space_info
 
     @property
     def state(self) -> dict:

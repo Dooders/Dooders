@@ -240,7 +240,7 @@ class Experiment:
         Dict
             A dictionary of the experiment summary.
         """
-        return self.simulation.simulation_summary()
+        return self.simulation.simulation_summary
 
     def save(self, experiment_name):
         folder_path = f"experiments/{experiment_name}"

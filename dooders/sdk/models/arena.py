@@ -57,18 +57,37 @@ class Arena:
 
     Methods
     -------
-    step()
+    _setup() -> None
+        Setup the Arena. This will reset attributes.
+    step() -> None
         Step the Arena forward. Currently, this will only reset attributes.
-    reset()
+    reset() -> None
         Reset main attributes after each cycle.
-    generate_seed_population()
+    generate_seed_population() -> None
         Generate seed population based on the selected strategy.
-    generate_dooder()
+    generate_dooder(position: tuple, tag: str = 'Seed') -> Dooder
         Generate a new dooder and place it in the environment
-    place_dooder()
+    place_dooder(dooder: Dooder, position: tuple) -> None
         Place a dooder in the environment
-    _generate_dooder()
+    _generate_dooder(position: tuple, tag: str = 'Seed') -> Dooder
         Generate a new dooder with a provided position
+    terminate_dooder(dooder: Dooder) -> None
+        Terminate a dooder
+    get_dooder(dooder_id: str) -> Dooder
+        Get a dooder by its unique id
+    dooders() -> Generator[Dooder, None, None]
+        Get all dooders in the environment
+    collect_dooders() -> None
+        Collect all stats from dooders
+
+    Properties
+    ----------
+    active_dooder_count : int
+        The number of active Dooders.
+    state : dict
+        The state of the Arena.
+    weights : list
+        The weights of all active Dooders.
     """
 
     total_counter = 0
@@ -99,7 +118,8 @@ class Arena:
         """
         Generate seed population based on the selected strategy.
         """
-        for position in self.SeedPlacement(self.SeedCount()):
+        self.initial_dooder_count = self.SeedCount()
+        for position in self.SeedPlacement(self.initial_dooder_count):
             self.generate_dooder(position)
 
     def _generate_dooder(self, position: tuple, tag: str = 'Seed') -> 'Dooder':
@@ -257,13 +277,13 @@ class Arena:
     @property
     def state(self) -> dict:
         """
-        Returns the state of the Arena
+        Returns the state of the Arena of all active dooders
         """
         return {**self.graveyard, **{k: v.state for k, v in self.active_dooders.items()}}
 
     @property
     def weights(self) -> dict:
         """
-        Returns the weights of the Arena
+        Returns the weights of the Arena for all active dooders
         """
         return [v.weights['Consume'] for v in self.active_dooders.values()]
