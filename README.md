@@ -65,6 +65,7 @@ experiment.experiment_summary()
  'ElapsedSeconds': 0,
  'AverageAge': 14}
 ```
+For more details, see the [Quick Start guide](docs/QuickStart.md).  
 
 ### Current Functionality
 
