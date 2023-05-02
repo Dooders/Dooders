@@ -70,13 +70,17 @@ class Experiment:
         """
         return Assemble.execute(self.settings)
 
-    def simulate(self) -> None:
+    def simulate(self, simulation_count: int = 1) -> None:
         """ 
         Simulate a single cycle.
         """
         self.simulation = self.create_simulation()
-        self.simulation.run_simulation()
-        if self.save_state:
+        restart = self.simulation.run_simulation(simulation_count)
+        if restart:
+            del self.simulation
+            self.simulate(simulation_count+1)
+            
+        elif self.save_state:
             self._save_state()
 
     def _save_state(self) -> None:

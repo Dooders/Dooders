@@ -119,7 +119,7 @@ class Simulation(Reality):
         if self.stop_conditions():
             self.step()
 
-    def run_simulation(self) -> None:
+    def run_simulation(self, simulation_count: int = 1) -> None:
         """
         Run the simulation for a specified number of steps.
 
@@ -129,7 +129,7 @@ class Simulation(Reality):
         """
         max_cycles = int(
             self.simulation_settings['variables']['simulation']['MaxCycles'].args['value'])
-        pbar = tqdm(desc="Simulation Progress", total=max_cycles)
+        pbar = tqdm(desc=f"Simulation[{simulation_count}] Progress", total=max_cycles)
         self.starting_time = datetime.now()
         try:
             self.setup()
@@ -137,7 +137,7 @@ class Simulation(Reality):
             while self.stop_conditions():
                 self.step()
                 pbar.update(1)
-                # print(f'Cycle: {self.cycle_number}')
+                
         except Exception as e:
             print(traceback.format_exc())
             print('Simulation failed')
@@ -148,9 +148,7 @@ class Simulation(Reality):
             Information.store()
 
         if self.cycle_number < max_cycles and self.auto_restart:
-            print('Restarting simulation')
-            self.reset()
-            self.run_simulation()
+            return True
 
     def reset(self) -> None:
         """

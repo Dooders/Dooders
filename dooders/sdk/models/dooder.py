@@ -97,21 +97,13 @@ class Dooder(Agent):
         The neighborhood of the dooder.
     """
 
-    def __init__(self,
-                 id: 'UniqueID',
-                 position: 'Position',
-                 simulation: 'BaseSimulation') -> None:
-
+    def __init__(self, id: str, position: tuple, simulation: 'BaseSimulation') -> None:
         super().__init__(id, position, simulation)
-        # self.cognition = Cognition()
-        self.direction = 'Origin'
         self.moore = True
         self.condensed_weight_list = list()
         self.internal_models = InternalModels(MotivationList)
-        self.log(granularity=1,
-                 message=f"Created",
-                 scope='Dooder')
-        
+        self.log(granularity=1, message=f"Created", scope='Dooder')
+
     def __del__(self):
         self.condensed_weight_list = list()
         self.internal_models = None
@@ -173,6 +165,7 @@ class Dooder(Agent):
         4. Check if the dooder should die at the end of its step
 
         """
+        self.get_gene_embedding()
         self.age += 1
 
         if self.death_check():
