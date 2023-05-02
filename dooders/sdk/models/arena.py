@@ -287,3 +287,10 @@ class Arena:
         Returns the weights of the Arena for all active dooders
         """
         return [v.weights['Consume'] for v in self.active_dooders.values()]
+    
+    @property
+    def current_cycle(self) -> int:
+        """
+        Returns the current cycle of the simulation
+        """
+        return self.simulation.cycle_number

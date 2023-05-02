@@ -38,6 +38,8 @@ class Time(BaseTime):
     _step(object_class, shuffle)
         Step through the schedule for a given object class.
     """
+    
+    __slots__ = ["time", "_objects", "random"]
 
     def __init__(self) -> None:
         self.random = random
