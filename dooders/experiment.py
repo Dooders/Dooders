@@ -53,11 +53,17 @@ class Experiment:
 
     results = {}
 
-    def __init__(self, settings: dict = {}, save_state: bool = False) -> None:
+    def __init__(self, 
+                 settings: dict = {}, 
+                 save_state: bool = False,
+                 max_reset: int = 5,
+                 batch: bool = False) -> None:
         self.seed = ShortID()
         self.experiment_id = self.seed.uuid()
         self.settings = settings
         self.save_state = save_state
+        self.batch = batch
+        self.max_reset = max_reset
 
     def create_simulation(self) -> None:
         """
@@ -70,13 +76,17 @@ class Experiment:
         """
         return Assemble.execute(self.settings)
 
-    def simulate(self) -> None:
+    def simulate(self, simulation_count: int = 1) -> None:
         """ 
         Simulate a single cycle.
         """
         self.simulation = self.create_simulation()
-        self.simulation.run_simulation()
-        if self.save_state:
+        restart = self.simulation.run_simulation(self.batch, simulation_count)
+        if restart and simulation_count < self.max_reset:
+            del self.simulation
+            self.simulate(simulation_count+1)
+            
+        elif self.save_state:
             self._save_state()
 
     def _save_state(self) -> None:
