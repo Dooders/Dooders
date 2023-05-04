@@ -28,18 +28,8 @@ This project is a space where I can experiment, learn more about complexity theo
 I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list). Including the results from my [first experiment](https://rememberization.substack.com/p/experiment-1-single-simulation).
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
-
-### Main Concepts
-
-| Concept                                | Explanation                                                                            |
-| :------------------------------------- | -------------------------------------------------------------------------------------- |
-| [**Dooder**](docs/Dooder.md)           | Agent object with causal control in the simulation |
-| [**Experiment**](docs/Experiment.md)   | One or multiple simulations                                                            |
-| [**Environment**](docs/Environment.md) | Proxy for spatial interactions and effects. A lot like a game board                    |
-| [**Energy**](docs/Energy.md)           | An object that allows a Dooder to perform “work” (execute movements and actions)       |
-| [**Cycle**](docs/Concepts.md)          | An iteration of object steps. Given 10 Dooders, 1 cycle would include 10 steps         |
   
-### How it works
+### How to use it
 
 ```python
 from dooders import Experiment
