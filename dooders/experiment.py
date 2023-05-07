@@ -5,6 +5,7 @@ from random import choices
 from typing import Dict, List
 
 from fastapi import WebSocket
+from tqdm import tqdm
 
 from dooders.sdk import strategies
 from dooders.sdk.actions import *
@@ -96,7 +97,7 @@ class Experiment:
         with open("recent/state.json", "w") as f:
             json.dump(self.simulation.state, f)
 
-    def batch_simulate(self, n: int = 1) -> None:
+    def batch_simulate(self, n: int = 100) -> None:
         """ 
         Simulate n cycles.
 
@@ -105,11 +106,20 @@ class Experiment:
         n: int
             The number of simulations to run.
         """
+        experiment_count = 1
+        pbar = tqdm(desc=f"Simulation[{experiment_count}] Progress", total=n)
         for i in range(n):
-            self.simulation = self.create_simulation(self.settings)
-            self.simulation.run_simulation()
-            self.results[i] = self.simulation.simulation_summary()
+            self.simulation = self.create_simulation()
+            self.simulation.auto_restart = False
+            self.simulation.run_simulation(batch = True)
+            self.results[i] = {}
+            self.results[i]['summary'] = self.simulation.simulation_summary
+            self.results[i]['state'] = self.simulation.state
             del self.simulation
+            pbar.update(1)
+            experiment_count += 1
+            
+        pbar.close()
 
     def get_log(self) -> List[str]:
         """ 

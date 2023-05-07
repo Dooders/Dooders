@@ -78,6 +78,7 @@ class Information:
         cls.logger = FakeLogger()  # ! remove this from the class
         cls.granularity = 2
         cls.simulation_id = simulation.simulation_id
+        cls.batch_process = simulation.batch_process
 
         with sqlite3.connect("recent/Simulation.db") as conn:
             cls._delete_existing_tables(conn)
@@ -103,7 +104,8 @@ class Information:
                     model_data_store.setdefault(key, []).append(value)
 
             if simulation.cycle_number % 1000 == 0:
-                cls.store()
+                if cls.batch_process:
+                    cls.store()
                 cls.data = cls.clear()
 
         except Exception as e:
@@ -177,7 +179,7 @@ class Information:
     def _delete_existing_tables(cls, conn: sqlite3.Connection) -> None:
         """ 
         Delete all existing tables in the database.
-        
+
         Parameters
         ----------
         conn: sqlite3.Connection
@@ -194,7 +196,7 @@ class Information:
     def _create_table_and_insert_data(cls, conn: sqlite3.Connection) -> None:
         """ 
         Create a table for each model and insert the data into the table.
-        
+
         Parameters
         ----------
         conn: sqlite3.Connection
