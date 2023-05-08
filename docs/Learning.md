@@ -34,7 +34,7 @@ The default design uses a straightforward [neural network](https://github.com/cs
 
 The weights that `fit` closest to the simulation dynamics will persist through generations of Dooders.
 
-Example implementation: [movement policy](https://github.com/csmangum/Dooders/blob/main/sdk/policies/movement.py)
+Example implementation: [movement policy](/dooders/sdk/policies/movement.py)
 
 ### Future Research
 
