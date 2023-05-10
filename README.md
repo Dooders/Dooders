@@ -57,14 +57,6 @@ experiment.experiment_summary()
 ```
 For more details, see the [Quick Start guide](docs/QuickStart.md).  
 
-### Current Functionality
-
-| Feature | Description |
-| :------ | :---------- |
-| [Reproduction](docs/Reproduction.md) | Dooders can reproduce with variable genetic blending|
-| [Movement](docs/Movement.md) | Dooders can move around the environment, primarily searching for energy |
-| [Core Components](docs/Core.md) | Underlying infrastructure for the library |
-
 ### Future Plans
 
 | Idea                                                                                          | Description                                                                                                                                                  |
