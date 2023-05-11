@@ -2,5 +2,5 @@
 MaxCycles:
   type: "generation"
   function: "fixed_value"
-  args: { "value": 1000}
+  args: { "value": 100}
   description: 'The max number of cycles before the simulation stops'
