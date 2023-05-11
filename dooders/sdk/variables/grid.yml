@@ -7,10 +7,10 @@ torus:
 height:
   type: "generation"
   function: "fixed_value"
-  args: { "value": 10 }
+  args: { "value": 5 }
   description: ''
 width:
   type: "generation"
   function: "fixed_value"
-  args: { "value": 10 }
+  args: { "value": 5 }
   description: ''

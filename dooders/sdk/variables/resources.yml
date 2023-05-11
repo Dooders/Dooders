@@ -1,5 +1,9 @@
 ---
 EnergyPerCycle:
+  # type: "generation"
+  # function: "fixed_value"
+  # args: { "value": 23}
+  # description: ''
   type: "generation"
   function: "uniform_distribution"
   args: { "min": 10, "max": 15 }
