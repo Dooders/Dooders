@@ -350,6 +350,7 @@ class SimpleNeuralNet:
         """ 
         Initialize the model
         """
+        self.purpose = 'Movement'
         self.model = Model()
         self.model.add(Layer_Dense(9, 512, frozen=False))
         self.model.add(Activation_ReLU())
@@ -426,10 +427,29 @@ class SimpleNeuralNet:
         """
         self.model.save(path)
 
+    def load(self, weights_to_load: str) -> None:
+        """ 
+        Load the model
+
+        Parameters
+        ----------
+        weights_to_load : str
+            The filename for the weights to load i.e. "model_xyz123_1_Movement"
+        """
+        loaded_weights = np.load(f"{weights_to_load}.npy", allow_pickle=True)
+        self.inherit_weights(loaded_weights)
+
     @property
-    def layers(self):
-        # return needed layers
-        pass
+    def layers(self) -> list:
+        """ 
+        Get the layers of the neural network
+
+        Returns
+        -------
+        list
+            The layers of the neural network
+        """
+        return self.model.layers
 
     @property
     def weights(self) -> np.ndarray:
@@ -446,3 +466,11 @@ class SimpleNeuralNet:
             if isinstance(layer, Layer_Dense):
                 weights.append(layer.weights)
         return weights
+
+    @property
+    def save_weights(self) -> None:
+        """ 
+        Save the weights of the neural network from every dense layer
+        """
+        file_name = f"model_{self.id}_{self.cycle_number}_{self.purpose}.npy"
+        np.save(file_name, self.weights)
