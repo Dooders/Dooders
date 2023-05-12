@@ -67,12 +67,13 @@ class Simulation(Reality):
         The state of the simulation.
     """
 
-    def __init__(self, settings: dict, auto_restart: bool = True) -> None:
+    def __init__(self, settings: dict, auto_restart: bool = True, batch_process: bool = True) -> None:
         super().__init__(settings)
         self.simulation_settings = settings
         self.running = False
         self.cycle_number: int = 0
         self.auto_restart = auto_restart
+        self.batch_process = batch_process
         Information._init_information(self)
 
     def setup(self) -> None:
@@ -127,6 +128,7 @@ class Simulation(Reality):
         2. Run the simulation until the stop conditions are met
         3. Collect the results
         """
+        self.batch = batch
         max_cycles = int(
             self.simulation_settings['variables']['simulation']['MaxCycles'].args['value'])
         if batch:
