@@ -1,6 +1,7 @@
 from random import randrange
 
 import numpy as np
+from numpy.random import default_rng
 
 
 class Scenario:
@@ -8,18 +9,28 @@ class Scenario:
     Scenario class is responsible for creating input data
     for Dooder internal models based on defined scenario methods
 
+    Attributes
+    ----------
+    results : list
+        The results of the scenario run
+
     Methods
     -------
     random(n: int = 9) -> np.ndarray
         Create a random input array for Dooder internal models
     run(type: str = 'random') -> np.ndarray
         Run a scenario method and return the output
+
+    Properties
+    ----------
+    accuracy() -> float
+        Calculate the accuracy of the scenario run
     """
 
     results: list = []
 
     @classmethod
-    def random(cls, n: int = 9) -> np.ndarray:
+    def random(cls, n: int = 9, m: int = 1) -> np.ndarray:
         """ 
         Create a random input array for Dooder internal models
 
@@ -27,17 +38,25 @@ class Scenario:
         ----------
         n : int
             The size of the input array
+        m : int
+            The number of positions to set to 1
 
         Returns
         -------
         np.ndarray
             The input array
         """
-        base_array = np.zeros(n, dtype='uint8')
-        position = randrange(n)
-        base_array[position] = 1
+        if m > n:
+            raise ValueError("m cannot be larger than n")
 
-        return position, base_array
+        base_array = np.zeros(n, dtype='uint8')
+
+        rng = default_rng()
+        positions = rng.choice(n, size=m, replace=False)
+
+        base_array[positions] = 1
+
+        return positions, base_array
 
     @classmethod
     def generate_input(cls, type: str = 'random') -> np.ndarray:
@@ -68,10 +87,10 @@ class Scenario:
             The model to test
         """
 
-        position, input_array = cls.generate_input()
+        positions, input_array = cls.generate_input()
         result = model.predict(input_array)
 
-        if result == position:
+        if result in positions:
             cls.results.append(1)
         else:
             cls.results.append(0)
@@ -93,7 +112,7 @@ class Scenario:
         list
             The results of the scenario run
         """
-
+        cls.results = []
         for _ in range(runs):
             cls._run(model)
 
