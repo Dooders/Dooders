@@ -16,7 +16,6 @@ from dooders.sdk.base.agent import Agent
 from dooders.sdk.core import Condition
 from dooders.sdk.core.action import Action
 from dooders.sdk.core.step import Step
-from dooders.sdk.modules.cognition import Cognition
 from dooders.sdk.modules.internal_models import InternalModels
 from dooders.sdk.modules.neighborhood import Neighborhood
 
@@ -101,10 +100,12 @@ class Dooder(Agent):
         super().__init__(id, position, simulation)
         self.moore = True
         self.condensed_weight_list = list()
-        self.internal_models = InternalModels(MotivationList)
+        #! maybe InternalModels class is renamed "Genes"
+        self.internal_models = InternalModels(MotivationList, self.id) #! need to make a state property for the internal model class
         self.log(granularity=1, message=f"Created", scope='Dooder')
 
     def __del__(self):
+        self.process_death()
         self.condensed_weight_list = list()
         self.internal_models = None
         self.simulation = None
@@ -134,9 +135,22 @@ class Dooder(Agent):
         self.simulation.arena.terminate_dooder(self)
         self.status = 'Terminated'
         self.death = self.simulation.cycle_number
-        self.get_gene_embedding()
         message = f"Died from {reason}"
         self.log(granularity=1, message=message, scope='Dooder')
+        
+    def process_death(self) -> None:
+        """
+        Handle the death of a dooder.
+        """
+        #! I'm looking for a custom mechanism to handle the death of a dooder
+        #! like if you store it on hard drive, do some async processing
+        #! or to do nothing
+        pass
+        # self.simulation.arena.graveyard[self.id] = self.final_state
+        # self.simulation.arena.graph.remove_node(self.id)
+        # self.simulation.arena.active_dooders.pop(self.id)
+        # self.simulation.arena.dooders_terminated += 1
+        #! do I need this stuff even????
 
     def death_check(self) -> None:
         """
@@ -302,4 +316,18 @@ class Dooder(Agent):
         """
         state = self.stats.dict()
         state['encoded_weights'] = self.encoded_weights
+        return state
+
+    @property
+    def final_state(self):
+        """ 
+        Return the final state of the dooder.
+
+        Returns
+        -------
+        state: dict
+            The final state of the dooder.
+        """
+        state = self.state
+        state['final_state'] = self.weights['Consume'][0]
         return state
