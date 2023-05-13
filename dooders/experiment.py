@@ -84,12 +84,33 @@ class Experiment:
         self.simulation = self.create_simulation()
         restart = self.simulation.run_simulation(self.batch, simulation_count)
         if restart and simulation_count < self.max_reset:
+            self.cleanup()
             del self.simulation
             self.simulate(simulation_count+1)
             
         elif self.save_state:
             self._save_state()
 
+    def cleanup(self) -> None:
+        """ 
+        Remove all contents of the 'recent' directory
+        """
+        
+        folder = 'recent/dooders/'  # replace with your folder path
+
+        # iterate over all files in the folder
+        for filename in os.listdir(folder):
+            # construct full file path
+            file_path = os.path.join(folder, filename)
+            # remove the file
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                pass
+    
     def _save_state(self) -> None:
         """ 
         Save the state of the simulation into a json file.
