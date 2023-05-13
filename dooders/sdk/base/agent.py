@@ -36,7 +36,7 @@ class Agent(ABC):
         Position of the agent
     simulation : Simulation
         Simulation object   
-        
+
     Attributes
     ----------
     id : int
@@ -84,13 +84,14 @@ class Agent(ABC):
 
     def __init__(self, id: int, position, simulation) -> None:
         self.simulation = simulation
-        
-        for attribute in BaseStats(id=id, 
-                                   position=position, 
-                                   generation=(simulation.cycle_number - 1) // 10 + 1,
+
+        for attribute in BaseStats(id=id,
+                                   position=position,
+                                   generation=(
+                                       simulation.cycle_number - 1) // 10 + 1,
                                    birth=simulation.cycle_number):
             setattr(self, attribute[0], attribute[1])
-            
+
     def __del__(self) -> None:
         self.simulation = None
         for attribute in BaseStats():
