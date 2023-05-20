@@ -6,12 +6,12 @@ EnergyPerCycle:
   # description: ''
   type: "generation"
   function: "uniform_distribution"
-  args: { "min": 10, "max": 15 }
+  args: { "min": 5, "max": 10 }
   description: ''
 MaxTotalEnergy:
   type: "generation"
   function: "normal_distribution"
-  args: { "min": 1, "max": 100 }
+  args: { "min": 1, "max": 8 }
   description: ''
 EnergyPlacement:
   type: "placement"
