@@ -13,6 +13,9 @@ from dooders.sdk.models.environment import Environment
 from dooders.sdk.simulation import Simulation
 
 
+#! need to simplify settings
+#! need easy way to "discover" existing settings
+
 class Assemble:
     """
     Assemble the simulation by importing necessary modules and classes.
