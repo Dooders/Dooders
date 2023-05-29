@@ -23,7 +23,7 @@ class Config:
     get(setting_name: str) -> object
         Get a setting from the settings
     """
-    def __init__(self) -> None:
+    def __init__(self, settings: dict = {}) -> None:
         self.settings: dict = {
             'MaxCycles': 100,
             'SeedCount': 1,
@@ -33,6 +33,8 @@ class Config:
             'GridWidth': 5,
             'EnergyLifespan': ValueGenerator('uniform', 2, 5),
         }
+        
+        self.update(settings)
 
     def update(self, new_settings: dict) -> None:
         """ 
@@ -46,8 +48,6 @@ class Config:
         for key, value in new_settings.items():
             if key in self.settings:
                 self.settings[key] = value
-            else:
-                raise KeyError(f"{key} does not exist in the settings")
 
     def get(self, setting_name: str) -> object:
         """ 
@@ -62,4 +62,15 @@ class Config:
             return self.settings[setting_name]
         except KeyError:
             raise KeyError(f"{setting_name} does not exist in the settings")
+        
+    def __getitem__(self, key: str) -> object:
+        """ 
+        Get a setting from the settings
+        
+        Parameters
+        ----------
+        key : str
+            Name of the setting to get
+        """
+        return self.get(key)
 
