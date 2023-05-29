@@ -68,8 +68,8 @@ class Simulation(Reality):
     """
 
     def __init__(self, settings: dict, auto_restart: bool = True, batch_process: bool = True) -> None:
-        super().__init__(settings)
-        self.simulation_settings = settings
+        super().__init__()
+        self.settings = settings
         self.running = False
         self.cycle_number: int = 0
         self.auto_restart = auto_restart
@@ -129,8 +129,8 @@ class Simulation(Reality):
         3. Collect the results
         """
         self.batch = batch
-        max_cycles = int(
-            self.simulation_settings['variables']['simulation']['MaxCycles'].args['value'])
+        max_cycles = self.settings.get('MaxCycles')
+
         if batch:
             disable = True
         else:
@@ -163,7 +163,7 @@ class Simulation(Reality):
 
         This is useful for resetting the simulation after a parameter change.
         """
-        self.__init__(self.simulation_settings)
+        self.__init__(self.settings)
         Information.reset()
 
     def stop(self) -> None:
@@ -273,7 +273,6 @@ class Simulation(Reality):
         """
         return {
             'simulation_id': self.simulation_id,
-            # 'settings': self.simulation_settings['variables'], #! resolve partial funcs
             'running': self.running,
             'starting_time': str(self.starting_time),
             'ending_time': str(self.ending_time),
