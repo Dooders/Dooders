@@ -33,7 +33,7 @@ class Environment:
         Get all objects in the neighborhood of the given object.
     """
 
-    def __init__(self, settings) -> None:
+    def __init__(self, settings: dict) -> None:
         """
         Parameters
         ----------
@@ -44,6 +44,7 @@ class Environment:
         torus: bool
             Whether the environment is a torus or not.
         """
+        self.settings = settings
 
     def _setup(self) -> None:
         """ 
