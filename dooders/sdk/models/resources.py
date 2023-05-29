@@ -66,8 +66,9 @@ class Resources:
 
     available_resources = {}
 
-    def __init__(self, simulation: 'Simulation') -> None:
+    def __init__(self, simulation: 'Simulation', settings) -> None:
         self.simulation = simulation
+        self.settings = settings
 
     def _setup(self) -> None:
         """ 
@@ -85,7 +86,8 @@ class Resources:
         environment. The Energy object will be added to the available_resources
         dictionary.
         """
-        for location in self.EnergyPlacement(self.EnergyPerCycle()):
+        energy_count = self.EnergyPerCycle()
+        for location in self.EnergyPlacement(energy_count):
             if len(self.available_resources) < self.MaxTotalEnergy():
                 energy = self.create_energy(location)
                 self.simulation.environment.place_object(energy, location)
@@ -161,7 +163,7 @@ class Resources:
             The scope of the message.
         """
         self.simulation.log(granularity, message, scope)
-        
+
     @property
     def average_energy_age(self) -> int:
         """ 
@@ -173,7 +175,7 @@ class Resources:
             The average age of the available energy.
         """
         try:
-            return round(sum([energy.age for energy in self.available_resources.values()]) / len(self.available_resources),3)
+            return round(sum([energy.age for energy in self.available_resources.values()]) / len(self.available_resources), 3)
         except ZeroDivisionError:
             return 0
 

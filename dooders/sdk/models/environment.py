@@ -33,7 +33,7 @@ class Environment:
         Get all objects in the neighborhood of the given object.
     """
 
-    def __init__(self, settings: dict) -> None:
+    def __init__(self, simulation, settings: dict) -> None:
         """
         Parameters
         ----------
@@ -152,9 +152,9 @@ class Environment:
 
     def contents(self, location: tuple):
         return self.surface.contents(location)
-    
+
     # def collect(self) -> dict:
-    #     """ 
+    #     """
     #     Get a dictionary of all objects in the environment.
 
     #     Returns

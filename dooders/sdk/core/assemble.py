@@ -8,7 +8,9 @@
 import importlib
 from typing import List
 
-from dooders.sdk.core import Action, Condition, Policy, Settings, Strategy, Surface
+from dooders.sdk.config import Config
+from dooders.sdk.core import (Action, Condition, Policy, Settings, Strategy,
+                              Surface)
 from dooders.sdk.models.environment import Environment
 from dooders.sdk.simulation import Simulation
 
@@ -34,7 +36,7 @@ class Assemble:
     ALL_MODELS: List[str] = BASE_MODELS + ['resources', 'arena']
 
     @classmethod
-    def execute(cls, settings: dict = {}) -> Simulation:
+    def execute(cls, user_settings: dict = {}) -> Simulation:
         """
         Execute the assembly of the simulation.
 
@@ -44,21 +46,24 @@ class Assemble:
             A `Simulation` object representing the simulation.
 
         """
-        settings = Settings.compile(settings)
-        simulation = Simulation(settings)
-        simulation_variables = settings['variables']['simulation']
-        Strategy.compile(simulation, simulation_variables)
+        #! need to improve the dynamic variable creation
+        settings_old = Settings.compile()
+        final_settings = Config(user_settings)
+
+        simulation = Simulation(final_settings)
 
         for model_name in cls.ALL_MODELS:
             try:
-                module = importlib.import_module(f'dooders.sdk.models.{model_name}')
+                module = importlib.import_module(
+                    f'dooders.sdk.models.{model_name}')
             except ImportError:
                 raise ImportError(
                     f"Failed to import module for model '{model_name}'")
+
             class_name = model_name.title()
             model_class = getattr(module, class_name)
-            model = model_class(simulation)
-            model_variables = settings['variables'][model_name]
+            model = model_class(simulation, final_settings)
+            model_variables = settings_old['variables'][model_name]
             Strategy.compile(model, model_variables)
             cls._setup_model(simulation, model_name, model)
 

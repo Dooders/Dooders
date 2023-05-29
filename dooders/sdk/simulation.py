@@ -256,7 +256,7 @@ class Simulation(Reality):
                 'CycleCount': self.cycle_number,
                 'TotalEnergy': sum(Information.data['resources']['allocated_energy']),
                 'ConsumedEnergy': sum(Information.data['resources']['consumed_energy']),
-                'StartingDooderCount': self.arena.initial_dooder_count,
+                'StartingDooderCount': self.settings.get('SeedCount'),
                 'EndingDooderCount': len(self.arena.active_dooders),
                 'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds())
                 }
