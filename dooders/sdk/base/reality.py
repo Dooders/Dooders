@@ -16,7 +16,7 @@ class Reality(ABC):
     """ 
     """
 
-    def __init__(self, settings: dict = {}):
+    def __init__(self):
         """ 
         Args:
             experiment_id: Unique ID for the experiment
@@ -31,7 +31,6 @@ class Reality(ABC):
         """
         self.seed = ShortID()
         self.simulation_id = self.seed.uuid()
-        self.settings = settings
         # self.config = self.load_config(params)
         self.random = random
         # self.params = ExperimentParameters.parse_obj(self.config)
