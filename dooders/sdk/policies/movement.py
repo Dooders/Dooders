@@ -149,7 +149,6 @@ class NeuralNetwork(BasePolicy):
             perception_array.contains(primary_target)) if location[1] == True]
 
         model.learn(correct_choices)
-        model.save_weights(dooder.simulation.cycle_number)
 
         inference_record = {'action': 'movement',
                             'perception': [str(x) for x in target_array[0]],
