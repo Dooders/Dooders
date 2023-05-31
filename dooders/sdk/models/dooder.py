@@ -100,12 +100,10 @@ class Dooder(Agent):
         super().__init__(id, position, simulation)
         self.moore = True
         self.condensed_weight_list = list()
-        #! maybe InternalModels class is renamed "Genes"
         self.internal_models = InternalModels(MotivationList, self.id)
         self.log(granularity=1, message=f"Created", scope='Dooder')
 
     def __del__(self):
-        self.process_death()
         self.condensed_weight_list = list()
         self.internal_models = None
         self.simulation = None
@@ -189,7 +187,6 @@ class Dooder(Agent):
         1. Update encoded weights
         2. Update condensed weights
         """
-        # store condensed weights over time
         encoded_weights_value = list(self.get_encoded_weights)
         cycle_number = self.simulation.cycle_number
         self.encoded_weights[cycle_number] = encoded_weights_value
