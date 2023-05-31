@@ -54,8 +54,8 @@ class Experiment:
 
     results = {}
 
-    def __init__(self, 
-                 settings: dict = {}, 
+    def __init__(self,
+                 settings: dict = {},
                  save_state: bool = False,
                  max_reset: int = 5,
                  batch: bool = False) -> None:
@@ -87,7 +87,7 @@ class Experiment:
             self.cleanup()
             del self.simulation
             self.simulate(simulation_count+1)
-            
+
         elif self.save_state:
             self._save_state()
 
@@ -95,7 +95,7 @@ class Experiment:
         """ 
         Remove all contents of the 'recent' directory
         """
-        
+
         folder = 'recent/dooders/'  # replace with your folder path
 
         # iterate over all files in the folder
@@ -110,7 +110,7 @@ class Experiment:
                     shutil.rmtree(file_path)
             except Exception as e:
                 pass
-    
+
     def _save_state(self) -> None:
         """ 
         Save the state of the simulation into a json file.
@@ -132,14 +132,14 @@ class Experiment:
         for i in range(n):
             self.simulation = self.create_simulation()
             self.simulation.auto_restart = False
-            self.simulation.run_simulation(batch = True)
+            self.simulation.run_simulation(batch=True)
             self.results[i] = {}
             self.results[i]['summary'] = self.simulation.simulation_summary
             self.results[i]['state'] = self.simulation.state
             del self.simulation
             pbar.update(1)
             experiment_count += 1
-            
+
         pbar.close()
 
     def get_log(self) -> List[str]:
