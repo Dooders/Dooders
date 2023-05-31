@@ -118,7 +118,7 @@ class Experiment:
         with open("recent/state.json", "w") as f:
             json.dump(self.simulation.state, f)
 
-    def batch_simulate(self, n: int = 100) -> None:
+    def batch_simulate(self, n: int = 100, save_folder: str = 'recent/') -> None:
         """ 
         Simulate n cycles.
 
@@ -141,6 +141,18 @@ class Experiment:
             experiment_count += 1
 
         pbar.close()
+        self.save_experiment_results(save_folder)
+        
+    def save_experiment_results(self, save_folder):
+        
+        if save_folder == 'recent/experiment_results.json':
+            save_path = save_folder
+            
+        else:
+            save_path = f'experiments/{save_folder}/experiment_results.json'
+            
+        with open(save_path, "w") as outfile:
+            json.dump(self.results, outfile)
 
     def get_log(self) -> List[str]:
         """ 
