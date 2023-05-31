@@ -1,79 +1,76 @@
-import yaml
-from typing import Callable, List
-
-from pydantic import BaseModel, Field
-
-#! Need better config, and a way to change settings on the fly
-#! will also need a settings view on the front-end
+from dataclasses import dataclass
 
 
-class BaseCollector(BaseModel):
-    """ Base class for all collectors """
-    name: str = Field(..., description="Name of the collector")
-    function: Callable = Field(..., description="Function to be called")
-    component: str = Field(..., description="Component type to collect")
+@dataclass
+class ValueGenerator:
+    distribution_type: str
+    min_value: int
+    max_value: int
     
-with open("sdk/config.yml", "r") as f:
-      default_config = yaml.load(f, Loader=yaml.FullLoader)
-
-
-
-#### Parameters #####
-class DooderParameters(BaseModel):
-    """ Parameters for Dooder object """
-    StartingEnergySupply: int = Field(5, description="Starting energy count")
-    StartingAgentCount: int = Field(10, description="Starting agent count")
-    Moore: bool = Field(True, description="If the dooder is a moore neighborhood")
-
-class EnergyParameters(BaseModel):
-    """ Parameters for Energy object """
-    # Random value between Min and Max lifecycle
-    MaxEnergyLife: int = Field(10, description="Maximum lifespan of an energy")
-    MinEnergyLife: int = Field(2, description="Minimum lifespan of an energy")
-    StartingEnergyCount: int = Field(10, description="Starting energy count")
-
-class SimulationParameters(BaseModel):
-    """ Parameters for the Simulation """
-    MaxCycles: int = Field(100, description="Maximum number of cycles to run")
-    # StopConditions: List[StopCondition] = Field(None, description="List of stop conditions")
-    EnergyPerCycle: int = Field(10, description="Energy added per cycle")
-
-class InformationParameters(BaseModel):
-    """ Parameters for the Information component """
-    Collectors: List[str] = []
-    Granularity: int = Field(2, description="Granularity of the log")
-
-class EnvironmentParameters(BaseModel):
-    """ Parameters for the Environment component """
-    Width: int = Field(10, description="Width of the environment")
-    Height: int = Field(10, description="Height of the environment")
-    Torus: bool = Field(True, description="Whether the environment is torus")
-
-
-class PolicyParameters(BaseModel):
-    Movement: str = Field("RuleBased", description="Move policy")
-    Reproduction: str = Field("AverageWeights", description="Reproduction policy")
+class Config:
+    """ 
+    Class to hold the settings for the simulation
     
-    
-    
-    
-class ExperimentParameters(BaseModel):
-    """ Parameters for the Experiment """
-    Simulation = SimulationParameters()
-    Environment = EnvironmentParameters()
-    Dooder = DooderParameters()
-    Energy = EnergyParameters()
-    Information = InformationParameters()
-    Policies = PolicyParameters()
-    
-    def get(self, key: str) -> object:
+    Attributes
+    ----------
+    settings : dict
+        Dictionary of settings
+        
+    Methods
+    -------
+    update(new_settings: dict) -> None
+        Update the settings with new settings
+    get(setting_name: str) -> object
+        Get a setting from the settings
+    """
+    def __init__(self, settings: dict = {}) -> None:
+        self.settings: dict = {
+            'MaxCycles': 100,
+            'SeedCount': 1,
+            'EnergyPerCycle': ValueGenerator('uniform', 5, 10),
+            'MaxTotalEnergy': 10,
+            'GridHeight': 5,
+            'GridWidth': 5,
+            'EnergyLifespan': ValueGenerator('uniform', 2, 5),
+        }
+        
+        self.update(settings)
+
+    def update(self, new_settings: dict) -> None:
         """ 
-        Get a parameter from the experiment parameters
+        Update the settings with new settings
         
-        Args:
-            key (str): Key to get from the parameters
-        
-        Returns:
-            object: Value of the key
+        Parameters
+        ----------
+        new_settings : dict
+            New settings to update the current settings with
         """
-        return self.__dict__[key]
+        for key, value in new_settings.items():
+            if key in self.settings:
+                self.settings[key] = value
+
+    def get(self, setting_name: str) -> object:
+        """ 
+        Get a setting from the settings
+        
+        Parameters
+        ----------
+        setting_name : str
+            Name of the setting to get
+        """
+        try:
+            return self.settings[setting_name]
+        except KeyError:
+            raise KeyError(f"{setting_name} does not exist in the settings")
+        
+    def __getitem__(self, key: str) -> object:
+        """ 
+        Get a setting from the settings
+        
+        Parameters
+        ----------
+        key : str
+            Name of the setting to get
+        """
+        return self.get(key)
+

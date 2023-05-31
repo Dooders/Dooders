@@ -23,6 +23,12 @@ def random_location(model: Callable, *value) -> list:
         A list of random locations based on the SeedCount.
     """
     locations = [loc for loc in model.simulation.environment.coordinates()]
-    random_locations = choices(locations, k=value[1])
+
+    if value[1].__class__.__name__ == 'int':
+        final_value = value[1]
+    elif value[1].__class__.__name__ == 'partial':
+        final_value = value[1]()
+
+    random_locations = choices(locations, k=final_value)
 
     return random_locations

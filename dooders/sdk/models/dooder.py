@@ -100,12 +100,10 @@ class Dooder(Agent):
         super().__init__(id, position, simulation)
         self.moore = True
         self.condensed_weight_list = list()
-        #! maybe InternalModels class is renamed "Genes"
-        self.internal_models = InternalModels(MotivationList, self.id) #! need to make a state property for the internal model class
+        self.internal_models = InternalModels(MotivationList, self.id)
         self.log(granularity=1, message=f"Created", scope='Dooder')
 
     def __del__(self):
-        self.process_death()
         self.condensed_weight_list = list()
         self.internal_models = None
         self.simulation = None
@@ -137,20 +135,6 @@ class Dooder(Agent):
         self.death = self.simulation.cycle_number
         message = f"Died from {reason}"
         self.log(granularity=1, message=message, scope='Dooder')
-        
-    def process_death(self) -> None:
-        """
-        Handle the death of a dooder.
-        """
-        #! I'm looking for a custom mechanism to handle the death of a dooder
-        #! like if you store it on hard drive, do some async processing
-        #! or to do nothing
-        pass
-        # self.simulation.arena.graveyard[self.id] = self.final_state
-        # self.simulation.arena.graph.remove_node(self.id)
-        # self.simulation.arena.active_dooders.pop(self.id)
-        # self.simulation.arena.dooders_terminated += 1
-        #! do I need this stuff even????
 
     def death_check(self) -> None:
         """
@@ -203,7 +187,6 @@ class Dooder(Agent):
         1. Update encoded weights
         2. Update condensed weights
         """
-        # store condensed weights over time
         encoded_weights_value = list(self.get_encoded_weights)
         cycle_number = self.simulation.cycle_number
         self.encoded_weights[cycle_number] = encoded_weights_value

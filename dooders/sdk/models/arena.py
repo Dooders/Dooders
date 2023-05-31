@@ -92,11 +92,12 @@ class Arena:
 
     total_counter = 0
 
-    def __init__(self, simulation: 'BaseSimulation') -> None:
+    def __init__(self, simulation: 'BaseSimulation', settings) -> None:
         self.graph = nx.Graph()
         self.active_dooders = {}
         self.graveyard = {}
         self.simulation = simulation
+        self.settings = settings
 
     def _setup(self) -> None:
         self.reset()  # set attributes
@@ -118,7 +119,8 @@ class Arena:
         """
         Generate seed population based on the selected strategy.
         """
-        self.initial_dooder_count = self.SeedCount()
+        self.initial_dooder_count = self.settings.get('SeedCount')
+
         for position in self.SeedPlacement(self.initial_dooder_count):
             self.generate_dooder(position)
 

@@ -1,16 +1,17 @@
 from collections import Counter
+from typing import Union
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pygame
 
-from dooders.grid_viz import GridViz
+from dooders.viz.grid import GridViz
 
 
 def perception_state_grid(cycle_count: int,
                           filename: str = 'perception_state_grid',
                           energy_positions: list = [],
-                          decision: str = None
+                          decision: Union[str, None] = None
                           ) -> None:
     """ 
     Creates a grid visualization of the perception state of the agent.
@@ -51,7 +52,12 @@ def perception_state_grid(cycle_count: int,
         else:
             space_color = (255, 0, 0)
 
-        g.fill_space(mapping.get(decision), space_color)
+        pos = mapping.get(decision, (None, None))
+        if None in pos:
+            raise ValueError(
+                f'Invalid decision value: {decision}. Must be between 0 and 8.')
+        else:
+            g.fill_space(pos, space_color)
 
     if energy_positions:
         for position in energy_positions:
