@@ -33,6 +33,14 @@ class Experiment:
         A `ShortID` object to generate random ids.
     settings: dict
         The settings of the experiment.
+    save_state: bool
+        Whether to save the state of the simulation.
+    batch: bool
+        Whether to run the simulation in batch mode.
+    max_reset: int
+        The maximum number of times to reset the simulation.
+    simulation: Simulation
+        The simulation object.
 
     Methods
     -------
@@ -42,6 +50,10 @@ class Experiment:
         Simulate a single cycle.
     batch_simulate(n: int = 1)
         Simulate n cycles.  
+    cleanup()
+        Remove all contents of the 'recent' directory.
+    save_experiment_results(save_folder: str = 'recent/')
+        Save the results of the experiment into a json file.
     get_log()
         Fetch the log for the current experiment, append each line to logs list and return a list of dictionaries.
     print_log(n: int = 20)
@@ -126,6 +138,8 @@ class Experiment:
         ----------
         n: int
             The number of simulations to run.
+        save_folder: str
+            The folder to save the results in.
         """
         experiment_count = 1
         pbar = tqdm(desc=f"Simulation[{experiment_count}] Progress", total=n)
@@ -143,8 +157,15 @@ class Experiment:
         pbar.close()
         self.save_experiment_results(save_folder)
         
-    def save_experiment_results(self, save_folder):
+    def save_experiment_results(self, save_folder: str) -> None:
+        """ 
+        Save the results of the experiment into a json file.
         
+        Parameters
+        ----------
+        save_folder: str
+            The folder to save the results in.
+        """
         if save_folder == 'recent/experiment_results.json':
             save_path = save_folder
             
