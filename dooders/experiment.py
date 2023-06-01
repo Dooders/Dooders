@@ -166,11 +166,14 @@ class Experiment:
         save_folder: str
             The folder to save the results in.
         """
-        if save_folder == 'recent/experiment_results.json':
-            save_path = save_folder
+        if save_folder == 'recent/':
+            save_path = 'recent/experiment_results.json'
             
         else:
             save_path = f'experiments/{save_folder}/experiment_results.json'
+            
+            if not os.path.exists(f'experiments/{save_folder}/'):
+                os.makedirs(f'experiments/{save_folder}/')
             
         with open(save_path, "w") as outfile:
             json.dump(self.results, outfile)
