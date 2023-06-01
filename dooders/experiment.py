@@ -156,11 +156,11 @@ class Experiment:
 
         pbar.close()
         self.save_experiment_results(save_folder)
-        
+
     def save_experiment_results(self, save_folder: str) -> None:
         """ 
         Save the results of the experiment into a json file.
-        
+
         Parameters
         ----------
         save_folder: str
@@ -168,13 +168,13 @@ class Experiment:
         """
         if save_folder == 'recent/':
             save_path = 'recent/experiment_results.json'
-            
+
         else:
             save_path = f'experiments/{save_folder}/experiment_results.json'
-            
+
             if not os.path.exists(f'experiments/{save_folder}/'):
                 os.makedirs(f'experiments/{save_folder}/')
-            
+
         with open(save_path, "w") as outfile:
             json.dump(self.results, outfile)
 
