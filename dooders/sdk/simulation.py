@@ -152,7 +152,7 @@ class Simulation(Reality):
         finally:
             self.ending_time = datetime.now()
             pbar.close()
-            Information.store()
+            # Information.store()
 
         if self.cycle_number < max_cycles and self.auto_restart:
             return True

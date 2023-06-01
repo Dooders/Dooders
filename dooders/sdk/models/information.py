@@ -80,8 +80,8 @@ class Information:
         cls.simulation_id = simulation.simulation_id
         cls.batch_process = simulation.batch_process
 
-        with sqlite3.connect("recent/Simulation.db") as conn:
-            cls._delete_existing_tables(conn)
+        # with sqlite3.connect("recent/Simulation.db") as conn:
+        #     cls._delete_existing_tables(conn)
 
     @classmethod
     def collect(cls, simulation: 'Simulation') -> None:
@@ -105,7 +105,8 @@ class Information:
 
             if simulation.cycle_number % 1000 == 0:
                 if cls.batch_process:
-                    cls.store()
+                    # cls.store()
+                    pass
                 cls.data = cls.clear()
 
         except Exception as e:
