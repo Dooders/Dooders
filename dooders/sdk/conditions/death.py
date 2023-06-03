@@ -43,10 +43,13 @@ class DeathConditions:
         # The higher the dooder's hunger, the more likely they are to starve
         # TODO make the probabilities a setting
         probabilities = [0, 1, 2, 3, 20, 30, 50]
+        
+        if dooder.hunger >= 5:
+            return True
 
-        if dooder.hunger >= 1 and dooder.hunger < 5:
-            return Fate.ask_fate(probabilities[dooder.hunger])
-        elif dooder.hunger >= 5:
-            return Fate.ask_fate(probabilities[-1])
+        # if dooder.hunger >= 1 and dooder.hunger < 5:
+        #     return Fate.ask_fate(probabilities[dooder.hunger-1])
+        # elif dooder.hunger >= 5:
+        #     return Fate.ask_fate(probabilities[-1])
         else:
             return False
