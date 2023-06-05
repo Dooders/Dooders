@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def total_accuracy(inference_record):
     results = [a['accurate']
                for a in inference_record.values() if a['accurate'] is not None]
