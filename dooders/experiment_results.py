@@ -1,16 +1,45 @@
-import pandas as pd
+from functools import reduce
 
 
-def total_accuracy(inference_record):
+def total_accuracy(inference_record: dict) -> float:
+    """ 
+    Calculates the total accuracy of the inference record.
+    
+    Parameters
+    ----------
+    inference_record : dict
+        The inference record to calculate the total accuracy for.
+        
+    Returns
+    -------
+    percentage : float
+        The total accuracy of the inference record.
+    total_count : int
+        The total number of inferences in the inference record.
+    """
     results = [a['accurate']
                for a in inference_record.values() if a['accurate'] is not None]
     true_count = sum(results)
     total_count = len(results)
     percentage = (true_count / total_count) * 100 if total_count > 0 else 0.0
+    
     return percentage, total_count
 
 
-def running_accuracy(inference_record):
+def running_accuracy(inference_record: dict) -> list:
+    """ 
+    Calculates the running accuracy of the inference record.
+    
+    Parameters
+    ----------
+    inference_record : dict
+        The inference record to calculate the running accuracy for.
+        
+    Returns
+    -------
+    accuracies : list
+        A list of the running accuracies.
+    """
     count_true = 0
     total = 0
     accuracies = []
@@ -24,7 +53,22 @@ def running_accuracy(inference_record):
     return accuracies
 
 
-def n_running_accuracy(inference_record, n=200):
+def n_running_accuracy(inference_record: dict, n: int = 200) -> list:
+    """ 
+    Calculates the running accuracy of the inference record for the last n cycles.
+    
+    Parameters
+    ----------
+    inference_record : dict
+        The inference record to calculate the running accuracy for.
+    n : int
+        The number of cycles to calculate the running accuracy for.
+        
+    Returns
+    -------
+    accuracies : list
+        A list of the running accuracies for the last n cycles.
+    """
     count_true = 0
     total = 0
     accuracies = []
@@ -42,3 +86,28 @@ def n_running_accuracy(inference_record, n=200):
         accuracies.append(count_true / total)
 
     return accuracies
+
+
+def probability_from_counts(count_list: list) -> float:
+    """ 
+    Calculates the probability of a given list of reality counts by the comparison
+    of the inverse probabilities of each count.
+
+    This returns the probability that given 5 cycles, the probability that at least
+    one cycle the Dooder will successfully choose an energy object.
+
+    Parameters
+    ----------
+    count_list : list
+        A list of counts for each class.
+
+    Returns
+    -------
+    probability : float
+        The probability that at least one cycle the Dooder will successfully choose
+        an energy object.
+    """
+    inverse_probabilities = [(9-x)/9 for x in count_list]
+    probability = 1 - reduce(lambda x, y: x * y, inverse_probabilities)
+
+    return probability
