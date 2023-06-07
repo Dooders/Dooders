@@ -1,15 +1,17 @@
 from functools import reduce
 
+import pandas as pd
+
 
 def total_accuracy(inference_record: dict) -> float:
     """ 
     Calculates the total accuracy of the inference record.
-    
+
     Parameters
     ----------
     inference_record : dict
         The inference record to calculate the total accuracy for.
-        
+
     Returns
     -------
     percentage : float
@@ -22,19 +24,19 @@ def total_accuracy(inference_record: dict) -> float:
     true_count = sum(results)
     total_count = len(results)
     percentage = (true_count / total_count) * 100 if total_count > 0 else 0.0
-    
+
     return percentage, total_count
 
 
 def running_accuracy(inference_record: dict) -> list:
     """ 
     Calculates the running accuracy of the inference record.
-    
+
     Parameters
     ----------
     inference_record : dict
         The inference record to calculate the running accuracy for.
-        
+
     Returns
     -------
     accuracies : list
@@ -56,14 +58,14 @@ def running_accuracy(inference_record: dict) -> list:
 def n_running_accuracy(inference_record: dict, n: int = 200) -> list:
     """ 
     Calculates the running accuracy of the inference record for the last n cycles.
-    
+
     Parameters
     ----------
     inference_record : dict
         The inference record to calculate the running accuracy for.
     n : int
         The number of cycles to calculate the running accuracy for.
-        
+
     Returns
     -------
     accuracies : list
@@ -111,3 +113,56 @@ def probability_from_counts(count_list: list) -> float:
     probability = 1 - reduce(lambda x, y: x * y, inverse_probabilities)
 
     return probability
+
+
+def reality_counts(inference_df: pd.DataFrame) -> dict:
+    """ 
+    Calculates the reality counts for each Dooder in the inference dataframe.
+
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the reality counts for.
+
+    Returns
+    -------
+    reality_counts : dict
+        A dictionary of the reality counts for each Dooder.
+    """
+    dooder_ids = set(inference_df['dooder'])
+
+    reality_counts = {}
+
+    for dooder in dooder_ids:
+        filtered_df = inference_df[inference_df['dooder'] == dooder].head(5)
+        count = [len(x) for x in filtered_df['reality']]
+
+        reality_counts[dooder] = count
+
+    return reality_counts
+
+
+def probabilities(inference_df: pd.DataFrame) -> dict:
+    """ 
+    Calculates the probabilities for each Dooder in the inference dataframe.
+
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the probabilities for.
+
+    Returns
+    -------
+    probabilities : dict
+        A dictionary of the probabilities for each Dooder.
+    """
+
+    reality_counts = reality_counts(inference_df)
+
+    probabilities = {}
+
+    for dooder, count in reality_counts.items():
+        result = probability_from_counts(count)
+        probabilities[dooder] = result
+
+    return probabilities
