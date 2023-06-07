@@ -124,9 +124,6 @@ class NeuralNetwork(BasePolicy):
         inferred_goal = cls.infer_goal(dooder, perception_array)
         primary_target = cls.base_goals[inferred_goal]
 
-        #! save the input, prediction, and reality to each dooder, over time
-        #! {'action': {'movement': {'input':input, 'prediction':prediction, 'reality':reality, 'accurate':True/False}}}
-
         # Check if the target is inside the Dooder's perception
         target_array = np.array(
             [perception_array.contains(primary_target)], dtype='uint8')
@@ -143,7 +140,7 @@ class NeuralNetwork(BasePolicy):
         predicted_location = perception_array.coordinates[prediction]
 
         # Learn from the reality
-        # Note: Prediction happens before learning.
+        # Note: Inference (prediction) happens before learning.
         # Learning happens after action is taken
         correct_choices = [location[0] for location in enumerate(
             perception_array.contains(primary_target)) if location[1] == True]
@@ -151,6 +148,8 @@ class NeuralNetwork(BasePolicy):
         model.learn(correct_choices)
 
         inference_record = {'action': 'movement',
+                            'hunger': dooder.hunger,
+                            'position': dooder.position,
                             'perception': [str(x) for x in target_array[0]],
                             'decision': str(prediction),
                             'reality': [str(choice) for choice in correct_choices],
