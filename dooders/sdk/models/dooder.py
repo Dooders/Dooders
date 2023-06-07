@@ -17,7 +17,7 @@ from dooders.sdk.core import Condition
 from dooders.sdk.core.action import Action
 from dooders.sdk.core.step import Step
 from dooders.sdk.modules.internal_models import InternalModels
-from dooders.sdk.modules.neighborhood import Neighborhood
+from dooders.sdk.modules.perception import Perception
 
 if TYPE_CHECKING:
     from dooders.sdk.base.reality import BaseSimulation
@@ -92,8 +92,8 @@ class Dooder(Agent):
     ----------
     main_stats: MainStats
         The main stats of the dooder.
-    neighborhood: Neighborhood
-        The neighborhood of the dooder.
+    perception: Perception
+        The Dooder's perception.
     """
 
     def __init__(self, id: str, position: tuple, simulation: 'BaseSimulation') -> None:
@@ -274,18 +274,18 @@ class Dooder(Agent):
         return MainStats(**stats)
 
     @property
-    def neighborhood(self) -> 'Neighborhood':
+    def perception(self) -> 'Perception':
         """
-        Return a list of the dooder's neighborhood locations.
+        Return a list of the dooder's perception locations.
 
         Returns
         -------
-        neighborhood: list
-            A list of the dooder's nearby neighborhood locations.
+        perception: list
+            A list of the dooder's nearby perception locations.
         """
         locations = self.simulation.environment.nearby_spaces((self.position))
 
-        return Neighborhood(locations, self)
+        return Perception(locations, self)
 
     @property
     def state(self) -> dict:

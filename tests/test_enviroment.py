@@ -47,17 +47,17 @@ def test_get_objects(simulation):
     assert simulation.environment.get_objects() == [DooderTestObject, EnergyTestObject]
 
 
-def test_iter_neighborhood(simulation):
+def test_iter_perception(simulation):
     #! Need to update
-    # neighborhood = list(simulation.environment.iter_neighborhood((1, 1)))
-    # assert neighborhood == [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
+    # perception = list(simulation.environment.iter_perception((1, 1)))
+    # assert perception == [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
     pass
 
 
-def test_get_neighborhood(simulation):
+def test_get_perception(simulation):
     #! Need to update
-    # assert simulation.environment.get_neighborhood((1, 1)) == [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
-    # assert simulation.environment.get_neighborhood((0, 0)) == [(0, 1), (0, 9), (1, 0), (1, 1), (1, 9), (9, 0), (9, 1), (9, 9)]
+    # assert simulation.environment.get_perception((1, 1)) == [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
+    # assert simulation.environment.get_perception((0, 0)) == [(0, 1), (0, 9), (1, 0), (1, 1), (1, 9), (9, 0), (9, 1), (9, 9)]
     pass
 
 
@@ -92,13 +92,3 @@ def test_is_cell_empty(simulation):
 
 def test_get_object_types(simulation):
     assert simulation.environment.get_object_types() == ['Dooder', 'Energy']
-    
-    
-# def test_get_random_neighbors(simulation):
-#     assert simulation.environment.get_random_neighbors((1, 1)) == DooderTestObject
-#     assert simulation.environment.get_random_neighbors((1, 2)) == None
-    
-    
-# def test_get_random_neighborhoods(simulation):
-#     assert simulation.environment.get_random_neighborhood((1, 1)) == (0, 0)
-#     assert simulation.environment.get_random_neighborhood((1, 2)) == None

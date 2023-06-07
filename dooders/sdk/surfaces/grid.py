@@ -299,13 +299,13 @@ class Grid:
         position: Coordinate, (int, int)
             The position to get the nearby spaces from.
         moore: bool, optional, default = True
-            A boolean indicating if the neighborhood 
+            A boolean indicating if the perception 
             should be Moore or Von Neumann.
         include_center: bool, optional, default = True
             A boolean indicating if the center position 
-            should be included in the neighborhood.
+            should be included in the perception.
         radius: int, default = 1
-            The radius of the neighborhood
+            The radius of the perception
 
         Returns
         -------
@@ -339,13 +339,13 @@ class Grid:
         position: Coordinate, (int, int)
             The position to get the nearby contents from.
         moore: bool, optional, default = True
-            A boolean indicating if the neighborhood 
+            A boolean indicating if the perception 
             should be Moore or Von Neumann.
         include_center: bool, optional, default = False
             A boolean indicating if the center position 
-            should be included in the neighborhood.
+            should be included in the perception.
         radius: int, optional, default = 1
-            The radius of the neighborhood.
+            The radius of the perception.
 
         Returns
         -------
@@ -378,13 +378,13 @@ class Grid:
         position: Coordinate, (int, int)
             The position to get the nearby coordinates from.
         moore: bool, optional, default = True
-            A boolean indicating if the neighborhood 
+            A boolean indicating if the perception 
             should be Moore or Von Neumann.
         include_center: bool, optional, default = False
             A boolean indicating if the center position 
-            should be included in the neighborhood.
+            should be included in the perception.
         radius: int, optional, default = 1
-            The radius of the neighborhood.
+            The radius of the perception.
 
         Returns
         -------

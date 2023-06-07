@@ -1,8 +1,7 @@
 """ 
-Neighborhood Module
+Perception Module
 -------------------
-Neighborhood class representS a neighborhood in the simulation. 
-A neighborhood is a list of Spaces adjacent to a Dooder.
+A perception is a list of Spaces adjacent to a Dooder.
 """
 
 import random
@@ -12,9 +11,9 @@ if TYPE_CHECKING:
     from dooders.sdk.modules.space import Space
 
 
-class Neighborhood(list):
+class Perception(list):
     """ 
-    A neighborhood is a list of Spaces that are adjacent to a dooder, 
+    A perception is a list of Spaces that are adjacent to a dooder, 
     including the dooder's current Space
 
     Parameters
@@ -22,7 +21,7 @@ class Neighborhood(list):
     Space: list
         A list of Space adjacent to the dooder
     dooder: Dooder
-        The dooder to create the neighborhood around
+        The dooder to create the perception around
 
     Attributes
     ----------
@@ -32,22 +31,21 @@ class Neighborhood(list):
     Methods
     -------
     to_direction(Space: Location) -> str
-        Convert the direction of a Space in the neighborhood
+        Convert the direction of a Space in the perception
     contains(object_type: str) -> list[bool]
-        Check whether the neighborhood contains a given object type
+        Check whether the perception contains a given object type
     fetch(object_type: str) -> list[object]
-        Fetch all objects of a given type in the neighborhood
+        Fetch all objects of a given type in the perception
         
     Properties
     ----------
     Spaces: list
         A list of Spaces adjacent to the dooder
     coordinates: list
-        A list of coordinates of the Spaces in the neighborhood
+        A list of coordinates of the Spaces in the perception
     random: Location
-        A random Space in the neighborhood
+        A random Space in the perception
     """
-    #! where is neighborhood created????
     __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
                    4: '-', 5: 'E', 6: 'SW', 7: 'S', 8: 'SE'}
 
@@ -57,7 +55,7 @@ class Neighborhood(list):
 
     def to_direction(self, space: 'Space') -> str:
         """ 
-        Convert the direction of a Space in the neighborhood
+        Convert the direction of a Space in the perception
 
         Parameters
         ----------
@@ -68,7 +66,7 @@ class Neighborhood(list):
 
     def contains(self, object_type: str) -> List[bool]:
         """ 
-        Check whether the neighborhood contains a given object type
+        Check whether the perception contains a given object type
 
         Parameters
         ----------
@@ -78,7 +76,7 @@ class Neighborhood(list):
         Returns
         -------
         result: list[bool]
-            True if the neighborhood contains the object type, False otherwise
+            True if the perception contains the object type, False otherwise
         """
         result = []
         for space in self:
@@ -88,7 +86,7 @@ class Neighborhood(list):
 
     def fetch(self, object_type: str) -> List['object']:
         """ 
-        Fetch a list of objects of a given type in the neighborhood
+        Fetch a list of objects of a given type in the perception
 
         Parameters
         ----------
@@ -111,35 +109,35 @@ class Neighborhood(list):
     @property
     def spaces(self) -> List['Space']:
         """ 
-        Fetch a List of Spaces in the neighborhood
+        Fetch a List of Spaces in the perception
 
         Returns
         -------
         Spaces: list[Location]
-            The Spaces in the neighborhood
+            The Spaces in the perception
         """
         return self
 
     @property
     def coordinates(self) -> List[Tuple[int, int]]:
         """ 
-        Fetch the coordinates of the Spaces in the neighborhood
+        Fetch the coordinates of the Spaces in the perception
 
         Returns
         -------
         coordinates: list[tuple[int, int]]
-            The coordinates of the Spaces in the neighborhood
+            The coordinates of the Spaces in the perception
         """
         return [x.coordinates for x in self]
 
     @property
     def random(self) -> 'Space':
         """ 
-        Fetch random Space in the neighborhood
+        Fetch random Space in the perception
 
         Returns
         -------
         Space: Location
-            A random Space in the neighborhood
+            A random Space in the perception
         """
         return random.choice(self)

@@ -30,7 +30,7 @@ class Environment:
     get_object(object_id: str) -> Agent
         Get an object by its id.
     get_random_neighbors(object: Agent, object_type: Agent = 'Agent') -> List[Agent]
-        Get all objects in the neighborhood of the given object.
+        Get all objects in the perception of the given object.
     """
 
     def __init__(self, simulation, settings: dict) -> None:

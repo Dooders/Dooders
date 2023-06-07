@@ -24,8 +24,8 @@ if TYPE_CHECKING:
 @Core.register('policy')
 class RandomMove(BasePolicy):
     """
-    Given a Dooder object, returns a random location in the objects neighborhood
-    A neighborhood is all surrounding positions, including the current position
+    Given a Dooder object, returns a random location in the objects perception
+    A perception is all surrounding positions, including the current position
 
     Parameters
     ----------
@@ -35,18 +35,18 @@ class RandomMove(BasePolicy):
     Returns
     -------
     random_cell: tuple
-        A random location in the Dooder's neighborhood
+        A random location in the Dooder's perception
 
     Methods
     -------
     execute(dooder: Dooder) -> tuple
-        Returns a random location in the Dooder's neighborhood
+        Returns a random location in the Dooder's perception
     """
 
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
-        neighborhood = dooder.neighborhood
-        random_cell = choice(neighborhood.coordinates)
+        perception = dooder.perception
+        random_cell = choice(perception.coordinates)
 
         return random_cell
 
@@ -54,8 +54,8 @@ class RandomMove(BasePolicy):
 @Core.register('policy')
 class RuleBased(BasePolicy):
     """
-    Given a Dooder object, returns a random location in the objects neighborhood that has energy.
-    A neighborhood is all surrounding positions, including the current position
+    Given a Dooder object, returns a random location in the objects perception that has energy.
+    A perception is all surrounding positions, including the current position
 
     Parameters
     ----------
@@ -65,17 +65,17 @@ class RuleBased(BasePolicy):
     Returns
     -------
     random_cell: tuple
-        A random location in the Dooder's neighborhood that has energy
+        A random location in the Dooder's perception that has energy
 
     Methods
     -------
     execute(dooder: Dooder) -> tuple
-        Returns a random location in the Dooder's neighborhood that has energy
+        Returns a random location in the Dooder's perception that has energy
     """
     @classmethod
     def execute(self, dooder: 'Dooder') -> tuple:
-        neighborhood = dooder.neighborhood
-        energy = neighborhood.fetch('Energy')
+        perception = dooder.perception
+        energy = perception.fetch('Energy')
 
         if energy:
             energy_positions = [e.position for e in energy]
@@ -110,16 +110,15 @@ class NeuralNetwork(BasePolicy):
     -------
     execute(dooder: Dooder) -> tuple
         Returns a location based on neural network output
-    infer_goal(dooder, neighborhood) -> str
+    infer_goal(dooder, perception) -> str
         Returns the goal of the Dooder
     """
-    #! change neighborhood to perception
 
     base_goals = {'Reproduce': 'Dooder', 'Consume': 'Energy'}
 
     @classmethod
     def execute(cls, dooder: 'Dooder') -> tuple:
-        perception_array = dooder.neighborhood
+        perception_array = dooder.perception
 
         inferred_goal = cls.infer_goal(dooder, perception_array)
         primary_target = cls.base_goals[inferred_goal]
@@ -161,7 +160,7 @@ class NeuralNetwork(BasePolicy):
         return predicted_location
 
     @classmethod
-    def infer_goal(cls, dooder, neighborhood) -> str:
+    def infer_goal(cls, dooder, perception) -> str:
         """ 
         Function to infer the goal of the Dooder
         The goal is to reproduce or consume energy
@@ -173,8 +172,8 @@ class NeuralNetwork(BasePolicy):
         ----------
         dooder: Dooder
             The Dooder object to move
-        neighborhood: Neighborhood
-            The Dooder's neighborhood
+        perception: Perception
+            The Dooder's perception
 
         Returns
         -------
@@ -183,7 +182,7 @@ class NeuralNetwork(BasePolicy):
         """
         if dooder.hunger > 0:
             return 'Consume'
-        elif any(neighborhood.contains('Dooder')) and dooder.age >= 5:
+        elif any(perception.contains('Dooder')) and dooder.age >= 5:
             return 'Reproduce'
         else:
             return 'Consume'
