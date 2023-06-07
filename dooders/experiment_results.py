@@ -115,7 +115,7 @@ def probability_from_counts(count_list: list) -> float:
     return probability
 
 
-def reality_counts(inference_df: pd.DataFrame) -> dict:
+def get_reality_counts(inference_df: pd.DataFrame) -> dict:
     """ 
     Calculates the reality counts for each Dooder in the inference dataframe.
 
@@ -157,7 +157,7 @@ def probabilities(inference_df: pd.DataFrame) -> dict:
         A dictionary of the probabilities for each Dooder.
     """
 
-    reality_counts = reality_counts(inference_df)
+    reality_counts = get_reality_counts(inference_df)
 
     probabilities = {}
 
