@@ -90,6 +90,34 @@ def n_running_accuracy(inference_record: dict, n: int = 200) -> list:
     return accuracies
 
 
+def calculate_accuracies(inference_df: pd.DataFrame) -> dict:
+    """ 
+    Calculates the accuracies for each Dooder in the inference dataframe.
+    
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the accuracies for.
+        
+    Returns
+    -------
+    accuracy_results : dict
+        A dictionary of the accuracies for each Dooder.
+    """
+    accuracy_results = {}
+
+    grouped_df = inference_df.groupby('dooder')
+
+    for dooder, group in grouped_df:
+        results = [a for a in group['accurate'] if a is not None]
+        true_count = sum(results)
+        total_count = len(results)
+        percentage = (true_count / total_count) * 100 if total_count > 0 else 0.0
+        accuracy_results[dooder] = round(percentage, 2)
+        
+    return accuracy_results 
+
+
 def probability_from_counts(count_list: list) -> float:
     """ 
     Calculates the probability of a given list of reality counts by the comparison
