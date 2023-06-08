@@ -129,17 +129,29 @@ def get_reality_counts(inference_df: pd.DataFrame) -> dict:
     reality_counts : dict
         A dictionary of the reality counts for each Dooder.
     """
-    dooder_ids = set(inference_df['dooder'])
-
     reality_counts = {}
 
-    for dooder in dooder_ids:
-        filtered_df = inference_df[inference_df['dooder'] == dooder].head(5)
-        count = [len(x) for x in filtered_df['reality']]
-
+    for dooder, group in inference_df.groupby('dooder'):
+        filtered_df = group.head(5)
+        count = filtered_df['reality'].apply(len).tolist()
         reality_counts[dooder] = count
-
+        
     return reality_counts
+
+
+def near_hunger(inference_df: pd.DataFrame) -> dict:
+    """ 
+    Calculates the number of times each Dooder was near hunger in the inference dataframe.
+
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the number of times each Dooder was near hunger for.
+    """
+    
+    near_hunger_counts = inference_df[inference_df['hunger'] == 4].groupby('dooder').size().to_dict()
+    
+    return near_hunger_counts
 
 
 def probabilities(inference_df: pd.DataFrame) -> dict:
