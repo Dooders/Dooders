@@ -55,39 +55,25 @@ def running_accuracy(inference_record: dict) -> list:
     return accuracies
 
 
-def n_running_accuracy(inference_record: dict, n: int = 200) -> list:
-    """ 
-    Calculates the running accuracy of the inference record for the last n cycles.
+# def n_running_accuracy(inference_df: pd.DataFrame, n: int = 5) -> list:
+#     """ 
+#     """
+#     count_true = 0
+#     total = 0
+#     accuracies = []
 
-    Parameters
-    ----------
-    inference_record : dict
-        The inference record to calculate the running accuracy for.
-    n : int
-        The number of cycles to calculate the running accuracy for.
+#     for i, (_, value) in enumerate(inference_df):
+#         total += 1
+#         if value['accurate']:
+#             count_true += 1
+#         if i >= n:
+#             oldest_item = record_items[i - n]
+#             if oldest_item[1]['accurate']:
+#                 count_true -= 1
+#             total -= 1
+#         accuracies.append(count_true / total)
 
-    Returns
-    -------
-    accuracies : list
-        A list of the running accuracies for the last n cycles.
-    """
-    count_true = 0
-    total = 0
-    accuracies = []
-    record_items = list(inference_record.items())
-
-    for i, (_, value) in enumerate(record_items):
-        total += 1
-        if value['accurate']:
-            count_true += 1
-        if i >= n:
-            oldest_item = record_items[i - n]
-            if oldest_item[1]['accurate']:
-                count_true -= 1
-            total -= 1
-        accuracies.append(count_true / total)
-
-    return accuracies
+#     return accuracies
 
 
 def calculate_accuracies(inference_df: pd.DataFrame) -> dict:
