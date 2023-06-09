@@ -313,7 +313,7 @@ class Optimizer_Adam:
     __slots__ = ('learning_rate', 'current_learning_rate', 'decay', 'iterations', 'epsilon', 'beta_1', 'beta_2', 'cache')
 
     def __init__(self,
-                 learning_rate: float = 0.001,
+                 learning_rate: float = 0.01,
                  decay: float = 0.,
                  epsilon: float = 1e-7,
                  beta_1: float = 0.9,
