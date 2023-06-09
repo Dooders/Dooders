@@ -10,7 +10,7 @@ import numpy as np
 class Activation_ReLU:
     """ 
     ReLU activation
-    
+
     Methods
     -------
     forward(inputs, training)
@@ -33,7 +33,7 @@ class Activation_ReLU:
     def forward(self, inputs: np.ndarray, training: bool) -> None:
         """ 
         Forward pass
-        
+
         Parameters
         ----------
         inputs : array
@@ -49,7 +49,7 @@ class Activation_ReLU:
     def backward(self, dvalues: np.ndarray) -> None:
         """ 
         Backward pass
-        
+
         Parameters
         ----------
         dvalues : array
@@ -65,12 +65,12 @@ class Activation_ReLU:
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
         """ 
         Calculate predictions for outputs
-        
+
         Parameters
         ----------
         outputs : array
             Output values
-        
+
         Returns
         -------
         array
@@ -82,7 +82,7 @@ class Activation_ReLU:
 class Activation_Softmax:
     """ 
     Softmax activation
-    
+
     Methods
     -------
     forward(inputs, training)
@@ -91,7 +91,7 @@ class Activation_Softmax:
         Backward pass
     predictions(outputs)
         Calculate predictions for outputs
-        
+
     Attributes
     ----------
     inputs : array
@@ -105,7 +105,7 @@ class Activation_Softmax:
     def forward(self, inputs: np.ndarray, training: bool) -> None:
         """ 
         Forward pass
-        
+
         Parameters
         ----------
         inputs : array
@@ -129,7 +129,7 @@ class Activation_Softmax:
     def backward(self, dvalues: np.ndarray) -> None:
         """ 
         Backward pass
-        
+
         Parameters
         ----------
         dvalues : array
@@ -155,12 +155,12 @@ class Activation_Softmax:
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
         """ 
         Calculate predictions for outputs
-        
+
         Parameters
         ----------
         outputs : array
             Output values
-            
+
         Returns
         -------
         array
@@ -172,7 +172,7 @@ class Activation_Softmax:
 class Activation_Sigmoid:
     """ 
     Sigmoid activation
-    
+
     Methods
     -------
     forward(inputs, training)
@@ -195,7 +195,7 @@ class Activation_Sigmoid:
     def forward(self, inputs: np.ndarray, training: bool) -> None:
         """ 
         Forward pass
-        
+
         Parameters
         ----------
         inputs : array
@@ -228,7 +228,7 @@ class Activation_Sigmoid:
         ----------
         outputs : array
             Output values
-            
+
         Returns
         -------
         array
@@ -236,10 +236,11 @@ class Activation_Sigmoid:
         """
         return (outputs > 0.5) * 1
 
+
 class Activation_Linear:
     """ 
     Linear activation
-    
+
     Methods
     -------
     forward(inputs, training)
@@ -277,7 +278,7 @@ class Activation_Linear:
     def backward(self, dvalues: np.ndarray) -> None:
         """ 
         Backward pass
-        
+
         Parameters
         ----------
         dvalues : array
@@ -289,12 +290,165 @@ class Activation_Linear:
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
         """ 
         Calculate predictions for outputs
+
+        Parameters
+        ----------
+        outputs : array
+            Output values
+
+        Returns
+        -------
+        array
+            Predictions
+        """
+        return outputs
+
+
+class Activation_LeakyReLU:
+    """ 
+    Leaky ReLU activation
+
+    Methods
+    -------
+    forward(inputs, training)
+        Forward pass
+    backward(dvalues)
+        Backward pass
+    predictions(outputs)
+        Calculate predictions for outputs
+
+    Attributes
+    ----------
+    inputs : array
+        Input values
+    output : array
+        Output values
+    dinputs : array
+        Input gradients
+    """
+
+    def __init__(self, alpha: float = 0.01) -> None:
+        self.alpha = alpha
+
+    def forward(self, inputs: np.ndarray, training: bool) -> None:
+        """ 
+        Forward pass
+
+        Parameters
+        ----------
+        inputs : array
+            Input values
+        training : bool
+            True if training, False if testing
+        """
+        # Remember input values
+        self.inputs = inputs
+        # Calculate output values from inputs
+        self.output = np.maximum(self.alpha * inputs, inputs)
+
+    def backward(self, dvalues: np.ndarray) -> None:
+        """ 
+        Backward pass
+
+        Parameters
+        ----------
+        dvalues : array
+            Gradient of loss function
+        """
+        # Since we need to modify the original variable,
+        # let's make a copy of values first
+        self.dinputs = dvalues.copy()
+
+        # Zero gradient where input values were negative
+        self.dinputs[self.inputs <= 0] = self.alpha
+
+    def predictions(self, outputs: np.ndarray) -> np.ndarray:
+        """ 
+        Calculate predictions for outputs
+
+        Parameters
+        ----------
+        outputs : array
+            Output values
+
+        Returns
+        -------
+        array
+            Predictions
+        """
+        return outputs
+
+
+class Activation_ELU:
+    """
+    ELU activation
+    
+    Methods
+    -------
+    forward(inputs, training)
+        Forward pass
+    backward(dvalues)
+        Backward pass
+    predictions(outputs)
+        Calculate predictions for outputs
+    
+    Attributes
+    ----------
+    inputs : array
+        Input values
+    output : array
+        Output values
+    dinputs : array
+        Input gradients
+    alpha : float
+        ELU activation parameter
+    """
+    
+    def __init__(self, alpha=1.0):
+        self.alpha = alpha
+
+    def forward(self, inputs: np.ndarray, training: bool) -> None:
+        """
+        Forward pass
+        
+        Parameters
+        ----------
+        inputs : array
+            Input values
+        training : bool
+            True if training, False if testing
+        """
+        # Remember input values
+        self.inputs = inputs
+        
+        # Calculate output values from inputs
+        self.output = np.where(inputs > 0, inputs, self.alpha * (np.exp(inputs) - 1))
+
+    def backward(self, dvalues: np.ndarray) -> None:
+        """
+        Backward pass
+        
+        Parameters
+        ----------
+        dvalues : array
+            Gradient of loss function
+        """
+        # Since we need to modify the original variable,
+        # let's make a copy of values first
+        self.dinputs = dvalues.copy()
+        
+        # Calculate gradient
+        self.dinputs[self.inputs <= 0] = self.dinputs[self.inputs <= 0] * (self.alpha * np.exp(self.inputs[self.inputs <= 0]))
+
+    def predictions(self, outputs: np.ndarray) -> np.ndarray:
+        """
+        Calculate predictions for outputs
         
         Parameters
         ----------
         outputs : array
             Output values
-            
+        
         Returns
         -------
         array
