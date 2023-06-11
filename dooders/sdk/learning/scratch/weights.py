@@ -5,7 +5,7 @@ Functions for initializing weights
 import numpy as np
 
 
-def initialize_weights(n_inputs: int, n_neurons: int, weight_init: str) -> np.ndarray:
+def initialize_weights(n_inputs: int, n_neurons: int, weight_init: str = 'random') -> np.ndarray:
     """ 
     Initializes weights using the specified method.
     

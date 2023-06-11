@@ -5,6 +5,8 @@ https://nnfs.io/
 
 import numpy as np
 
+from dooders.sdk.learning.scratch.weights import initialize_weights
+
 
 class Layer_Dense:
     """ 
@@ -68,7 +70,7 @@ class Layer_Dense:
                  bias_regularizer_l1=0, bias_regularizer_l2=0,
                  frozen=False) -> None:
         # Initialize weights and biases
-        self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)
+        self.weights = initialize_weights(n_inputs, n_neurons, weight_init='random')
         self.biases = np.zeros((1, n_neurons))
         self.frozen = frozen
         # Set regularization strength
