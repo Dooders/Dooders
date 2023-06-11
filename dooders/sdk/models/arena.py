@@ -1,18 +1,25 @@
 """
 Arena Model
 -------------
-This module is responsible for the creation and management of Dooder objects within the environment.
+This module is responsible for the creation and management of Dooder objects 
+within the environment.
 
-The Dooder objects represent agents within the system and interact with the surrounding environment, known as the arena. 
-The concept of the agent-arena relationship is derived from the work of John Vervaeke, a prominent scholar who emphasizes 
-the dynamic interplay between agents and their environments.
+The Dooder objects represent agents within the system and interact with the 
+surrounding environment, known as the arena. The concept of the agent-arena 
+relationship is derived from the work of John Vervaeke, a prominent scholar 
+who emphasizes the dynamic interplay between agents and their environments.
 
-According to Vervaeke's theory, the agent and the environment continually influence and shape each other through a cyclical feedback loop. 
-As Dooder objects interact with the arena, they affect its state, while the arena, in turn, influences the behavior and characteristics of the Dooder objects. 
-This mutual shaping process highlights the intricate relationship between agents and their surrounding environment.
+According to Vervaeke's theory, the agent and the environment continually 
+influence and shape each other through a cyclical feedback loop. As Dooder 
+objects interact with the arena, they affect its state, while the arena, 
+in turn, influences the behavior and characteristics of the Dooder objects. 
+This mutual shaping process highlights the intricate relationship between 
+agents and their surrounding environment.
 
-By managing the creation and behavior of Dooder objects, this module facilitates the exploration and analysis of the agent-arena dynamics, 
-enabling further investigation into the complex interdependencies between agents and their environments.
+By managing the creation and behavior of Dooder objects, this module 
+facilitates the exploration and analysis of the agent-arena dynamics, 
+enabling further investigation into the complex interdependencies between 
+agents and their environments.
 """
 
 from typing import TYPE_CHECKING, Generator
@@ -300,7 +307,7 @@ class Arena:
         Returns the weights of the Arena for all active dooders
         """
         return [v.weights['Consume'] for v in self.active_dooders.values()]
-    
+
     @property
     def current_cycle(self) -> int:
         """
