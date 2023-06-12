@@ -56,7 +56,7 @@ def running_accuracy(inference_record: dict) -> list:
 
 
 # def n_running_accuracy(inference_df: pd.DataFrame, n: int = 5) -> list:
-#     """ 
+#     """
 #     """
 #     count_true = 0
 #     total = 0
@@ -79,12 +79,12 @@ def running_accuracy(inference_record: dict) -> list:
 def calculate_accuracies(inference_df: pd.DataFrame) -> dict:
     """ 
     Calculates the accuracies for each Dooder in the inference dataframe.
-    
+
     Parameters
     ----------
     inference_df : pd.DataFrame
         The inference dataframe to calculate the accuracies for.
-        
+
     Returns
     -------
     accuracy_results : dict
@@ -98,10 +98,11 @@ def calculate_accuracies(inference_df: pd.DataFrame) -> dict:
         results = [a for a in group['accurate'] if a is not None]
         true_count = sum(results)
         total_count = len(results)
-        percentage = (true_count / total_count) * 100 if total_count > 0 else 0.0
+        percentage = (true_count / total_count) * \
+            100 if total_count > 0 else 0.0
         accuracy_results[dooder] = round(percentage, 2)
-        
-    return accuracy_results 
+
+    return accuracy_results
 
 
 def probability_from_counts(count_list: list) -> float:
@@ -149,7 +150,7 @@ def get_reality_counts(inference_df: pd.DataFrame) -> dict:
         filtered_df = group.head(5)
         count = filtered_df['reality'].apply(len).tolist()
         reality_counts[dooder] = count
-        
+
     return reality_counts
 
 
@@ -162,9 +163,10 @@ def near_hunger(inference_df: pd.DataFrame) -> dict:
     inference_df : pd.DataFrame
         The inference dataframe to calculate the number of times each Dooder was near hunger for.
     """
-    
-    near_hunger_counts = inference_df[inference_df['hunger'] == 4].groupby('dooder').size().to_dict()
-    
+
+    near_hunger_counts = inference_df[inference_df['hunger'] == 4].groupby(
+        'dooder').size().to_dict()
+
     return near_hunger_counts
 
 
@@ -192,3 +194,84 @@ def probabilities(inference_df: pd.DataFrame) -> dict:
         probabilities[dooder] = result
 
     return probabilities
+
+
+def calculate_accuracy_from_list(value_list: list) -> float:
+    """ 
+    Calculates the accuracy from a list of values.
+
+    Parameters
+    ----------
+    value_list : list
+        A list of values to calculate the accuracy from.
+
+    Returns
+    -------
+    percentage : float
+        The accuracy of the list of values.
+    """
+    results = [a for a in value_list if a is not None]
+    true_count = sum(results)
+    total_count = len(results)
+    percentage = (true_count / total_count) * 100 if total_count > 0 else 0.0
+
+    return percentage
+
+
+def accuracy_over_cycles(inference_results: list) -> list:
+    """ 
+    Calculates the accuracy over cycles from a list of inference results.
+
+    Parameters
+    ----------
+    inference_results : list
+        A list of inference results to calculate the accuracy over cycles for.
+
+    Returns
+    -------
+    accuracy_list : list
+        A list of the accuracy over cycles.
+    """
+
+    accuracy_list = []
+
+    for i in range(len(inference_results)):
+        accuracy = calculate_accuracy_from_list(inference_results[:i+1])
+        accuracy_list.append(accuracy)
+
+    return accuracy_list
+
+
+def min_max_avg_per_cycle(inference_df: pd.DataFrame) -> list:
+    """
+    Calculates the min, max and average accuracy per cycle 
+    for each Dooder in the inference dataframe.
+
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the min, 
+        max and average accuracy per cycle for.
+
+    Returns
+    -------
+    cycle_tuples : list
+        A list of tuples containing the min, 
+        max and average accuracy per cycle for each Dooder.
+    """
+
+    all_results = []
+
+    for dooder, group in inference_df.groupby('dooder'):
+        inference_results = group['accurate'].to_list()
+        all_results.append(accuracy_over_cycles(inference_results))
+
+    cycle_tuples = []
+
+    for accuracies in zip(*all_results):
+        max_value = max(accuracies)
+        min_value = min(accuracies)
+        avg_value = sum(accuracies)/len(accuracies)
+        cycle_tuples.append((max_value, min_value, avg_value))
+
+    return cycle_tuples
