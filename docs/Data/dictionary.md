@@ -26,3 +26,9 @@
 'near_death_count', 
 'near_death_rate',
 'starting_probability'
+
+| Name | Type | Description |
+|------|------|-------------|
+|      |      |             |
+|      |      |             |
+|      |      |             |
