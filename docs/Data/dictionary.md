@@ -29,6 +29,6 @@
 
 | Name | Type | Description |
 |------|------|-------------|
-|      |      |             |
-|      |      |             |
-|      |      |             |
+| id    | str     |  unique Dooder identifier         |
+| number    | int     |  the order number Dooder was created in        |
+|  position    |  tuple    |    the last Dooder position         |
