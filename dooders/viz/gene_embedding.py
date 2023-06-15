@@ -1,6 +1,9 @@
 import plotly.express as px
 
 
+embedding_map = {0: 'EmbeddingA', 1: 'EmbeddingB', 2: 'EmbeddingC'}
+
+
 def gene_embedding(gene_embeddings_df, color_by='cycle', show_cbar=False) -> px.scatter:
     """ 
     Create a scatter plot of the gene embeddings.
