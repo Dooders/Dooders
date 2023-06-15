@@ -42,3 +42,7 @@ def gene_embedding(gene_embeddings_df, color_by='cycle', show_cbar=False) -> px.
             title=color_by))
 
     return fig
+
+
+# 1D, 2D, and 3D gene viz
+#! should I scale the values? or are thet already
