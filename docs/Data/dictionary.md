@@ -1,10 +1,7 @@
 # Data Dictionaries
 
 ## Dooder Dataframe
-'id', 
-'number', 
-'position', 
-'hunger', 
+
 'age', 
 'generation', 
 'birth',
@@ -31,4 +28,5 @@
 |:----:|:----:|-------------|
 | id    | str     |  Unique Dooder identifier         |
 | number    | int     |  Order number Dooder was created in        |
-|  position    |  tuple    |    Last position         |
+| position  |  tuple    |    Last position         |
+| hunger   |  int  |  The number of cycles without consuming energy  |
