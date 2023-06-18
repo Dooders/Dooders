@@ -1,6 +1,7 @@
 from collections import namedtuple
 from functools import reduce
 
+import numpy as np
 import pandas as pd
 
 
@@ -271,10 +272,7 @@ def decision_analysis(inference_df: pd.DataFrame) -> dict:
         decision_counts[dooder] = result.length
         
     return decision_counts
-        
 
-import pandas as pd
-import numpy as np
 
 def average_embedding_by_age(dooder_df: pd.DataFrame) -> list:
     """ 

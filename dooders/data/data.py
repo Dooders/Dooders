@@ -1,9 +1,12 @@
 import json
 
+import pandas as pd
+
 from dooders.data.dooder_dataframe import get_dooder_df
 from dooders.data.gene_embedding_dataframe import get_gene_embedding_df
 from dooders.data.inference_record_dataframe import get_inference_record_df
-from dooders.experiment_results import (calculate_accuracies, near_hunger,
+from dooders.experiment_results import (calculate_accuracies,
+                                        decision_analysis, near_hunger,
                                         probabilities)
 
 
@@ -67,3 +70,13 @@ class ExperimentData:
 
         accuracies = calculate_accuracies(self.inference_df)
         self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
+        self.decision_analysis()
+        
+        
+    def decision_analysis(self) -> None:
+        """ 
+        Post initialization transformation of the data
+        """
+        decision_counts = decision_analysis(self.inference_df)
+        self.dooder_df['longest_stuck_length'] = self.dooder_df['id'].map(decision_counts)
+        self.dooder_df['minimum_percent_stuck'] = self.dooder_df['longest_stuck_length']/self.dooder_df['age']

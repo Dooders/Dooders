@@ -3,6 +3,7 @@ import statistics
 import pandas as pd
 
 
+
 def get_dooder_df(experiment_results: dict) -> pd.DataFrame:
     """ 
     Returns a dataframe of all dooders in the experiment results.
@@ -152,3 +153,6 @@ def calculate_metrics(df: pd.DataFrame) -> pd.DataFrame:
     df['avg_last_opportunity'] = average_ending_opportunities
 
     return df
+
+    
+ 
