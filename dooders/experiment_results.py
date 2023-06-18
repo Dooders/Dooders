@@ -272,4 +272,36 @@ def decision_analysis(inference_df: pd.DataFrame) -> dict:
         
     return decision_counts
         
+
+import pandas as pd
+import numpy as np
+
+def average_embedding_by_age(dooder_df: pd.DataFrame) -> list:
+    """ 
+    Calculates the average embedding by age for each Dooder in the dooder dataframe.
     
+    Parameters
+    ----------
+    dooder_df : pd.DataFrame
+        The dooder dataframe to calculate the average embedding by age for.
+
+    Returns
+    -------
+    avg_embedding : list
+        A list of the average embedding by age for each Dooder.
+    """
+    age_dict = {k: [] for k in range(100)}
+
+    for _, dooder in dooder_df.iterrows():
+        embeddings = dooder['last_encoding']
+        age_dict[dooder['age'] - 1].append(embeddings)
+
+    avg_embedding = []
+
+    for age, embeddings in age_dict.items():
+        if embeddings:
+            embeddings_avg = np.mean(embeddings, axis=0)
+            embeddings_avg_rounded = [round(x, 5) for x in embeddings_avg]
+            avg_embedding.append(embeddings_avg_rounded)
+
+    return avg_embedding
