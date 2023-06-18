@@ -1,3 +1,4 @@
+from collections import namedtuple
 from functools import reduce
 
 import pandas as pd
@@ -202,3 +203,73 @@ def min_max_avg_per_cycle(inference_df: pd.DataFrame) -> list:
         cycle_tuples.append((max_value, min_value, avg_value))
 
     return cycle_tuples
+
+
+
+# Define a named tuple to store the result
+SequenceInfo = namedtuple("SequenceInfo", ["target_value", "value", "length", "start"])
+
+
+def find_longest_sequence(sequence_list: list, target_value: int) -> SequenceInfo:
+    """ 
+    Finds the longest sequence of a given target value in a list of values.
+    
+    Parameters
+    ----------
+    sequence_list : list
+        A list of values to find the longest sequence of a given target value in.
+    target_value : int
+        The target value to find the longest sequence of.
+    
+    Returns
+    -------
+    longest_sequence : SequenceInfo
+        A named tuple containing the target value, the value of the longest sequence,
+        the length of the longest sequence and the start index of the longest sequence.
+    """
+    if not sequence_list:
+        return SequenceInfo(target_value, None, 0, 0)
+
+    longest_sequence = SequenceInfo(target_value, None, 0, 0)
+    current_sequence = SequenceInfo(target_value, None, 0, 0)
+
+    for i, value in enumerate(sequence_list):
+        if value == current_sequence.value:
+            current_sequence = current_sequence._replace(length=current_sequence.length + 1)
+        else:
+            if current_sequence.length > longest_sequence.length:
+                longest_sequence = current_sequence
+
+            current_sequence = SequenceInfo(target_value, value, 1, i)
+
+    if current_sequence.length > longest_sequence.length:
+        longest_sequence = current_sequence
+
+    return longest_sequence
+
+
+def decision_analysis(inference_df: pd.DataFrame) -> dict:
+    """ 
+    Calculates the longest sequence of decisions for each Dooder in the inference dataframe.
+    
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the longest sequence of decisions for.
+
+    Returns
+    -------
+    decision_counts : dict
+        A dictionary of the longest sequence of decisions for each Dooder.
+    """
+
+    decision_counts = {}
+
+    for dooder, group in inference_df.groupby('dooder'):
+        decisions = [int(x) for x in group['decision']]
+        result = find_longest_sequence(decisions, dooder)
+        decision_counts[dooder] = result.length
+        
+    return decision_counts
+        
+    
