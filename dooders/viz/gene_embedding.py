@@ -8,26 +8,30 @@ from PIL.Image import LANCZOS
 embedding_map = {0: 'EmbeddingA', 1: 'EmbeddingB', 2: 'EmbeddingC'}
 
 
-def gene_embedding(gene_embeddings_df, color_by='cycle', show_cbar=False) -> px.scatter:
+def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = False) -> px.scatter:
     """ 
     Create a scatter plot of the gene embeddings.
 
     Parameters
     ----------
-    gene_embeddings_df : pd.DataFrame
-        A DataFrame containing the gene embeddings.
+    dooder_df : pd.DataFrame
+        The dooder dataframe.
     color_by : str
-        The column name to color the points by.
+        The column to color by.
     show_cbar : bool
         Whether to show the colorbar.
-
+        
     Returns
     -------
     fig : px.scatter
-        The scatter plot.
+        The scatter plot of a 2D embedding.
     """
+    temp_df = dooder_df.copy()[['last_encoding', color_by]]
+    temp_df['X'] = temp_df['last_encoding'].apply(lambda x: x[0])
+    temp_df['Y'] = temp_df['last_encoding'].apply(lambda x: x[1])
+    
     # Create the scatter plot
-    fig = px.scatter(gene_embeddings_df,
+    fig = px.scatter(temp_df,
                      x="X",
                      y="Y",
                      color=color_by,
@@ -51,6 +55,7 @@ def gene_embedding(gene_embeddings_df, color_by='cycle', show_cbar=False) -> px.
     return fig
 
 
+#! add color by and input is dooder_df
 def gene_embedding_1d(values: list, component: int = 0, padding: float = 0.02) -> go.Figure:
     """ 
     Create a 1D scatter plot of the gene embeddings.
