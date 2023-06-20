@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pygame
 
-from dooders.viz.grid import GridViz
+from dooders.charts.grid import GridViz
 
 
 def perception_state_grid(cycle_count: int,

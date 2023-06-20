@@ -2,7 +2,7 @@ from typing import List, Optional, Tuple
 
 import pygame
 
-from dooders.viz.grid import GridViz
+from dooders.charts.grid import GridViz
 
 Position = Tuple[int, int]
 
