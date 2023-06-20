@@ -1,7 +1,5 @@
 import json
 
-import pandas as pd
-
 from dooders.data.dooder_dataframe import get_dooder_df
 from dooders.data.gene_embedding_dataframe import get_gene_embedding_df
 from dooders.data.inference_record_dataframe import get_inference_record_df
@@ -56,26 +54,42 @@ class ExperimentData:
 
     def _transform(self) -> None:
         """ 
-        Post initialization transformation of the data
+        Run through the data transformation steps
+        """
+        #! separate into own core components
+        self.hunger_analysis()
+        self.probability_analysis()
+        self.accuracy_analysis()
+        self.decision_analysis()
+        
+    def accuracy_analysis(self) -> None:
+        """ 
+        Calculates the accuracy column
+        """
+        accuracies = calculate_accuracies(self.inference_df)
+        self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
+        
+    def probability_analysis(self) -> None:
+        """ 
+        Calculates the starting success probability column
+        """
+        probability_dict = probabilities(self.inference_df)
+        self.dooder_df['starting_success_probability'] = self.dooder_df['id'].map(
+            probability_dict)
+        
+    def hunger_analysis(self) -> None:
+        """ 
+        Calculates the near death count and near death rate columns
         """
         near_hunger_counts = near_hunger(self.inference_df)
         self.dooder_df['near_death_count'] = self.dooder_df['id'].map(
             near_hunger_counts)
         self.dooder_df['near_death_rate'] = self.dooder_df['near_death_count'] / \
             self.dooder_df['age']
-
-        probs = probabilities(self.inference_df)
-        self.dooder_df['starting_success_probability'] = self.dooder_df['id'].map(
-            probs)
-
-        accuracies = calculate_accuracies(self.inference_df)
-        self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
-        self.decision_analysis()
-        
         
     def decision_analysis(self) -> None:
         """ 
-        Post initialization transformation of the data
+        Calculates the longest stuck length and the minimum percent stuck columns
         """
         decision_counts = decision_analysis(self.inference_df)
         self.dooder_df['longest_stuck_length'] = self.dooder_df['id'].map(decision_counts)
