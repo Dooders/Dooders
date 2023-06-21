@@ -8,7 +8,7 @@ from PIL.Image import LANCZOS
 embedding_map = {0: 'EmbeddingA', 1: 'EmbeddingB', 2: 'EmbeddingC'}
 
 
-def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = False) -> px.scatter:
+def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -> px.scatter:
     """ 
     Create a scatter plot of the gene embeddings.
 
@@ -35,18 +35,19 @@ def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = False) 
                      x="X",
                      y="Y",
                      color=color_by,
+                     title="Gene Embedding",
                      color_continuous_scale="Viridis")
 
     # Remove axis titles
-    fig.update_xaxes(title=None)
-    fig.update_yaxes(title=None)
+    fig.update_xaxes(title='Feature-A')
+    fig.update_yaxes(title='Feature-B')
 
     # Remove tick labels
     fig.update_xaxes(showticklabels=False)
     fig.update_yaxes(showticklabels=False)
 
     # Remove the color legend
-    fig.update_layout(coloraxis_showscale=False)
+    fig.update_layout(coloraxis_showscale=True)
 
     if show_cbar:
         fig.update_layout(coloraxis_colorbar=dict(
