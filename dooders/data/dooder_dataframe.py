@@ -3,7 +3,6 @@ import statistics
 import pandas as pd
 
 
-
 def get_dooder_df(experiment_results: dict) -> pd.DataFrame:
     """ 
     Returns a dataframe of all dooders in the experiment results.
@@ -50,7 +49,7 @@ def process_dooder_df(dooder_df: pd.DataFrame) -> pd.DataFrame:
 
     result = (
         dooder_df
-        .pipe(age_category)
+        .pipe(experiment_result)
         .pipe(encoding_columns)
         .pipe(calculate_metrics)
     )
@@ -58,7 +57,7 @@ def process_dooder_df(dooder_df: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
-def age_category(df: pd.DataFrame, lower_threshold: int = 5, upper_threshold: int = 99) -> pd.DataFrame:
+def experiment_result(df: pd.DataFrame, lower_threshold: int = 5, upper_threshold: int = 99) -> pd.DataFrame:
     """ 
     Returns a dataframe of all dooders in the experiment results.
 
@@ -78,16 +77,16 @@ def age_category(df: pd.DataFrame, lower_threshold: int = 5, upper_threshold: in
     """
 
     # Categorize age
-    age_category = []
+    experiment_result = []
     for age in df['age']:
         if age <= lower_threshold:
-            age_category.append('DiedEarly')
+            experiment_result.append('FailedEarly')
         elif age > upper_threshold:
-            age_category.append('NeverDied')
+            experiment_result.append('Passed')
         else:
-            age_category.append('TheRest')
+            experiment_result.append('Failed')
 
-    df['age_category'] = age_category
+    df['experiment_result'] = experiment_result
 
     return df
 
