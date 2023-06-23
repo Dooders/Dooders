@@ -206,22 +206,22 @@ def min_max_avg_per_cycle(inference_df: pd.DataFrame) -> list:
     return cycle_tuples
 
 
-
 # Define a named tuple to store the result
-SequenceInfo = namedtuple("SequenceInfo", ["target_value", "value", "length", "start"])
+SequenceInfo = namedtuple(
+    "SequenceInfo", ["target_value", "value", "length", "start"])
 
 
 def find_longest_sequence(sequence_list: list, target_value: int) -> SequenceInfo:
     """ 
     Finds the longest sequence of a given target value in a list of values.
-    
+
     Parameters
     ----------
     sequence_list : list
         A list of values to find the longest sequence of a given target value in.
     target_value : int
         The target value to find the longest sequence of.
-    
+
     Returns
     -------
     longest_sequence : SequenceInfo
@@ -236,7 +236,8 @@ def find_longest_sequence(sequence_list: list, target_value: int) -> SequenceInf
 
     for i, value in enumerate(sequence_list):
         if value == current_sequence.value:
-            current_sequence = current_sequence._replace(length=current_sequence.length + 1)
+            current_sequence = current_sequence._replace(
+                length=current_sequence.length + 1)
         else:
             if current_sequence.length > longest_sequence.length:
                 longest_sequence = current_sequence
@@ -252,7 +253,7 @@ def find_longest_sequence(sequence_list: list, target_value: int) -> SequenceInf
 def decision_analysis(inference_df: pd.DataFrame) -> dict:
     """ 
     Calculates the longest sequence of decisions for each Dooder in the inference dataframe.
-    
+
     Parameters
     ----------
     inference_df : pd.DataFrame
@@ -270,14 +271,14 @@ def decision_analysis(inference_df: pd.DataFrame) -> dict:
         decisions = [int(x) for x in group['decision']]
         result = find_longest_sequence(decisions, dooder)
         decision_counts[dooder] = result.length
-        
+
     return decision_counts
 
 
 def average_embedding_by_age(dooder_df: pd.DataFrame) -> list:
     """ 
     Calculates the average embedding by age for each Dooder in the dooder dataframe.
-    
+
     Parameters
     ----------
     dooder_df : pd.DataFrame
