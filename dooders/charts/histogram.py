@@ -3,6 +3,19 @@ import plotly.graph_objects as go
 
 
 def death_age_by_cycle(dooder_df: pd.DataFrame) -> go.Figure:
+    """ 
+    Creates a histogram of the age of death by cycle.
+    
+    Parameters
+    ----------
+    dooder_df : pd.DataFrame
+        The DataFrame containing the information about the dooders.
+
+    Returns
+    -------
+    figure : go.Figure
+        The histogram of the age of death by cycle.
+    """
 
     ages = list(dooder_df['age'])
 
