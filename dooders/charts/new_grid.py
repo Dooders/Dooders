@@ -11,10 +11,10 @@ cell_radius = 20  # Adjusted cell radius
 
 
 class ImageObject(BaseModel):
-    grid_size: int = grid_size
-    cell_size: int = cell_size
-    padding: int = padding
-    cell_radius: int = cell_radius
+    grid_size: int = 3
+    cell_size: int = 200
+    padding: int = 20
+    cell_radius: int = 20
     image: Any
 
 
