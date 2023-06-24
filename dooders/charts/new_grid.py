@@ -70,7 +70,7 @@ def base_grid(grid_size: int = grid_size,
 
 def add_mask_to_cells(base_image: ImageObject,
                       mask_positions: list,
-                      mask_color_name: str = 'black') -> Image:
+                      mask_color_name: str = 'black') -> Image.Image:
     """
     Add semi-transparent black mask to specific grid cells.
 
@@ -115,5 +115,28 @@ def add_mask_to_cells(base_image: ImageObject,
         # Draw the rounded rectangle with the mask color
         draw.rounded_rectangle(
             [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=base_image.cell_radius)
+
+    return image
+
+
+def add_title(image: ImageObject, title: str) -> Image.Image:
+    """
+    Add a title above the image.
+
+    Parameters
+    ----------
+    image : Image
+        The base grid image.
+    title : str
+        The title to be added to the image.
+
+    Returns
+    -------
+    Image
+        The image with the title added above the image.
+    """
+    image = image.image.copy()
+    draw = ImageDraw.Draw(image)
+    draw.text((image.width // 2, 0), title, fill='black', anchor='ms')
 
     return image
