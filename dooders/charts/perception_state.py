@@ -41,7 +41,8 @@ def validate_position(position: str) -> Position:
 def visualize_perception_state(cycle_count: int,
                                filename: str = 'perception_state_grid',
                                energy_positions: List[str] = [],
-                               decision: Optional[str] = None
+                               decision: Optional[str] = None,
+                               draw_agent: bool = True
                                ) -> None:
     """ 
     Creates a grid visualization of the agent's perception state.
@@ -75,7 +76,9 @@ def visualize_perception_state(cycle_count: int,
             energy_position = validate_position(position)
             grid.draw_energy(energy_position)
 
-    grid.draw_agent((1, 1))
+    if draw_agent:
+        grid.draw_agent((1, 1))
+        
     grid.draw_cycle_counter(cycle_count + 1)
     pygame.display.flip()
     pygame.image.save(grid.screen, f'{filename}.png')
