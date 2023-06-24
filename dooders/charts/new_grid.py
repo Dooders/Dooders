@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 
 from PIL import Image, ImageColor, ImageDraw
 from pydantic import BaseModel
@@ -119,7 +119,7 @@ def add_mask_to_cells(base_image: ImageObject,
     return image
 
 
-def add_title(image: ImageObject, title: str) -> Image.Image:
+def add_title(image: ImageObject, title: str) -> ImageObject:
     """
     Add a title above the image.
 
@@ -135,8 +135,37 @@ def add_title(image: ImageObject, title: str) -> Image.Image:
     Image
         The image with the title added above the image.
     """
-    image = image.image.copy()
-    draw = ImageDraw.Draw(image)
-    draw.text((image.width // 2, 0), title, fill='black', anchor='ms')
+    draw = ImageDraw.Draw(image.image)
+    draw.text((image.image.width // 2, 0), title, fill='black', anchor='ms')
 
     return image
+
+
+def horizontal_composition(image_list: List[ImageObject]) -> Image.Image:
+    """  
+    Compose all the images in a list horizontally into a single image
+
+    Parameters
+    ----------
+    image_list : List[Image]
+        List of images to be composed horizontally
+
+    Returns
+    -------
+    Image
+        The composed image
+    """
+
+    # Get the width and height of the images
+    widths, heights = zip(*(i.image.size for i in image_list))
+
+    # Create a new image with the width of all the images and the height of the tallest image
+    new_image = Image.new('RGB', (sum(widths), max(heights)))
+
+    # Paste each image into the new image
+    x_offset = 0
+    for image in image_list:
+        new_image.paste(image.image, (x_offset, 0))
+        x_offset += image.image.size[0]
+
+    return new_image
