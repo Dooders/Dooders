@@ -19,7 +19,11 @@ class BaseReport:
     
     def compile_report(self):
         pass
-        
+    
+    
+death_age_by_cycle(dooder_df)
+gene_embedding(dooder_df, color_by='age')
+starting_success_probability(dooder_df)
 
 
 def histogram_component():
