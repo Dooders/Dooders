@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from PIL import Image, ImageColor, ImageDraw
+from PIL import Image, ImageColor, ImageDraw, ImageFont
 from pydantic import BaseModel
 
 # Define the dimensions of the grid and cells
@@ -89,8 +89,8 @@ def add_mask_to_cells(base_image: ImageObject,
         The image with the black mask added to the specified cells.
     """
     # Create a copy of the base image to avoid modifying the original image
-    image = base_image.image.copy()
-    draw = ImageDraw.Draw(image)
+    # image = base_image.image.copy()
+    draw = ImageDraw.Draw(base_image.image)
 
     # Define the mask color with transparency (semi-transparent black)
     mask_color = ImageColor.getrgb(mask_color_name) + (128,)
@@ -116,29 +116,49 @@ def add_mask_to_cells(base_image: ImageObject,
         draw.rounded_rectangle(
             [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=base_image.cell_radius)
 
-    return image
+    return base_image
 
 
-def add_title(image: ImageObject, title: str) -> ImageObject:
+def add_text(image, title: str):
     """
     Add a title above the image.
 
     Parameters
     ----------
-    image : Image
-        The base grid image.
+    image : ImageObject
+        The base image object.
     title : str
-        The title to be added to the image.
+        The title to be added above the image.
 
     Returns
     -------
-    Image
-        The image with the title added above the image.
+    ImageObject
+        The image object with the title added above.
     """
-    draw = ImageDraw.Draw(image.image)
-    draw.text((image.image.width // 2, 0), title, fill='black', anchor='ms')
+    # Create a copy of the original image object
+    new_image = image.image.copy()
 
-    return image
+    # Set the font size and font type
+    font_size = 75
+    font = ImageFont.truetype('Roboto-Bold.ttf', font_size)
+
+    # Calculate the required width and height for the new image
+    text_width, text_height = font.getsize(title)
+    new_width = max(new_image.width, text_width)
+    new_height = new_image.height + text_height
+
+    # Create a new image with the updated size
+    combined_image = Image.new('RGB', (new_width, new_height), color='white')
+
+    # Paste the original image below the title
+    combined_image.paste(new_image, (0, text_height))
+
+    # Draw the text on the combined image with an offset
+    draw = ImageDraw.Draw(combined_image)
+    title_offset = 20  # Specify the desired offset in pixels
+    draw.text((title_offset, 0), title, fill='black', font=font)
+
+    return combined_image
 
 
 def horizontal_composition(image_list: List[ImageObject]) -> Image.Image:
@@ -157,7 +177,7 @@ def horizontal_composition(image_list: List[ImageObject]) -> Image.Image:
     """
 
     # Get the width and height of the images
-    widths, heights = zip(*(i.image.size for i in image_list))
+    widths, heights = zip(*(image.size for image in image_list))
 
     # Create a new image with the width of all the images and the height of the tallest image
     new_image = Image.new('RGB', (sum(widths), max(heights)))
@@ -165,7 +185,7 @@ def horizontal_composition(image_list: List[ImageObject]) -> Image.Image:
     # Paste each image into the new image
     x_offset = 0
     for image in image_list:
-        new_image.paste(image.image, (x_offset, 0))
-        x_offset += image.image.size[0]
+        new_image.paste(image, (x_offset, 0))
+        x_offset += image.size[0]
 
     return new_image
