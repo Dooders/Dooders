@@ -1,4 +1,5 @@
-# Base report class
+from dooders.data.data import ExperimentData
+
 
 BASE_REPORT = ['histogram_component', 
                'probability_histogram_component', 
@@ -13,6 +14,10 @@ class BaseReport:
     
     def __init__(self, experiment_name: str) -> None:
         self.experiment_name = experiment_name
+        self.data = ExperimentData(experiment_name)
+        self.embedding_df = self.data.embedding_df
+        self.dooder_df = self.data.dooder_df
+        self.inference_df = self.data.inference_df
         
     def render(self):
         pass
