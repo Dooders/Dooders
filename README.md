@@ -67,7 +67,7 @@ For more details, see the [Quick Start guide](docs/QuickStart.md).
 | Reproduction model                                                                            | Design a function to combine the Genetic models of two Dooders                                                                                               |
 | Continuous time                                                                               | Switch from step based, to continuous time. Brings on tons of potential issues                                                                               |
 | Performance & Efficiency                                                                      | Right now I'm focused on function and composition but that will quickly hit the performance wall if I don't optimize at some point                           |
-| Simulation parameters                                                                         | Make it so simulation strategies and parameters can be changed easily                                                                                        |
+
 | Senses model                                                                                  | Right now a Dooder has no way to aquire information that isn't directly fed to it. A senses model allows a Dooder to aquire information from the environment |
   
 ### Footnotes
