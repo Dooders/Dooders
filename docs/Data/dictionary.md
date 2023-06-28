@@ -29,3 +29,10 @@
 |   near_death_count    |  int  | Number of times Dooder was near death                       |
 |    near_death_rate    | float | Rate of near death experiences                              |
 | starting_probability  | float | Starting probability Dooder was going to live               |
+
+
+## Inference Record Dataframe
+
+
+## Gene Embeddings Dataframe
+
