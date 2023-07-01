@@ -30,14 +30,27 @@
 |    near_death_rate    | float | Rate of near death experiences                              |
 | starting_probability  | float | Starting probability Dooder was going to live               |
 
-
 ## Inference Record Dataframe
 
-|         Name          | Type  | Description                                                 |
-| :-------------------: | :---: | ----------------------------------------------------------- |
-
+|     Name      | Type  | Description                                  |
+| :-----------: | :---: | -------------------------------------------- |
+|    action     |  str  | Action Dooder took                           |
+|    hunger     |  int  | Hunger level of Dooder                       |
+|   position    | tuple | Position Dooder was in                       |
+|  perception   | list  | Perception array indicating target existence |
+|   decision    |  str  | Decision Dooder made                         |
+|    reality    | list  | List of positions with the target object     |
+| inferred_goal |  str  | Inferred goal for the cycle                  |
+|   accurate    | bool  | Whether the inference was accurate           |
+|     cycle     |  int  | Cycle number the inference was made          |
+|    dooder     |  str  | Dooder identifier                            |
 
 ## Gene Embeddings Dataframe
 
-|         Name          | Type  | Description                                                 |
-| :-------------------: | :---: | ----------------------------------------------------------- |
+| Name  | Type  | Description                    |
+| :---: | :---: | ------------------------------ |
+|  id   |  str  | Unique Dooder identifier       |
+| cycle |  int  | Cycle number for the embedding |
+|   X   | float | Feature-A                      |
+|   Y   | float | Feature-B                      |
+|   Z   | float | Feature-C                      |
