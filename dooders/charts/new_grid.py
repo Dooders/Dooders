@@ -69,11 +69,11 @@ class Grid:
                     [(x1, y1), (x2, y2)], fill=bg_color, outline=None, radius=self.cell_radius)
 
         return image
-    
-    def shade_cell(self, position: Tuple[int,int], opacity=1.0, color='black'):
+
+    def shade_cell(self, position: Tuple[int, int], opacity=1.0, color='black'):
         """ 
         Add semi-transparent black mask to specific grid cells.
-        
+
         Parameters
         ----------
         position : Tuple[int,int]
@@ -82,7 +82,7 @@ class Grid:
             The opacity of the mask.
         color : str
             The color of the mask.
-        
+
         Returns
         -------
         Image
@@ -107,57 +107,6 @@ class Grid:
 
         return self.image
 
-
-    # def shade_cells(self,
-    #                 mask_positions: list,
-    #                 mask_color_name: str = 'black') -> Image.Image:
-    #     """
-    #     Add semi-transparent black mask to specific grid cells.
-
-    #     Parameters
-    #     ----------
-    #     base_image : Image
-    #         The base grid image.
-    #     mask_positions : list
-    #         List of positions (integers) of cells to be masked.
-    #     mask_color_name : str
-    #         The color name of the mask.
-
-    #     Returns
-    #     -------
-    #     Image
-    #         The image with the black mask added to the specified cells.
-    #     """
-    #     # Create a copy of the base image to avoid modifying the original image
-    #     # image = base_image.image.copy()
-    #     draw = ImageDraw.Draw(self.image)
-
-    #     # Define the mask color with transparency (semi-transparent black)
-    #     mask_color = ImageColor.getrgb(mask_color_name) + (128,)
-
-    #     # Draw the mask on the specified cells
-    #     for position in mask_positions:
-    #         if position < 1 or position > self.grid_size**2:
-    #             continue
-
-    #         # Calculate the row and column based on the position
-    #         row = (position - 1) // self.grid_size
-    #         col = (position - 1) % self.grid_size
-
-    #         # Calculate the top-left and bottom-right coordinates of the cell
-    #         x1 = self.padding + col * \
-    #             (self.cell_size + self.padding)
-    #         y1 = self.padding + row * \
-    #             (self.cell_size + self.padding)
-    #         x2 = x1 + self.cell_size
-    #         y2 = y1 + self.cell_size
-
-    #         # Draw the rounded rectangle with the mask color
-    #         draw.rounded_rectangle(
-    #             [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
-
-    #     return self.image
-    
     def shade_cells(self,
                     positions: List[Union[int, Tuple[int, int]]],
                     mask_color_name: str = 'black') -> Image.Image:
@@ -226,11 +175,10 @@ class Grid:
             mask_color = ImageColor.getrgb(mask_color_name) + (opacity,)
 
             # Draw the rounded rectangle with the mask color
-            draw.rounded_rectangle([(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
+            draw.rounded_rectangle(
+                [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
 
         return self.image
-
-
 
     def add_text(self, title: str) -> Image.Image:
         """
