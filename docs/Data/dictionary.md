@@ -2,6 +2,8 @@
 
 ## Dooder Dataframe
 
+Dooder-level dataframe from experiment results where each row is an individual Dooder.  
+
 |         Name          | Type  | Description                                                 |
 | :-------------------: | :---: | ----------------------------------------------------------- |
 |          id           |  str  | Unique Dooder identifier                                    |
@@ -32,6 +34,8 @@
 
 ## Inference Record Dataframe
 
+Dataframe for the inferences made at each cycle. Each row is an individual Dooder's per cycle inference record.  
+
 |     Name      | Type  | Description                                  |
 | :-----------: | :---: | -------------------------------------------- |
 |    action     |  str  | Action Dooder took                           |
@@ -46,6 +50,8 @@
 |    dooder     |  str  | Dooder identifier                            |
 
 ## Gene Embeddings Dataframe
+
+Gene embedding dataframe that is a record of each Dooder's embedding at different cycles.  
 
 | Name  | Type  | Description                    |
 | :---: | :---: | ------------------------------ |
