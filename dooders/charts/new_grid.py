@@ -70,7 +70,8 @@ class Grid:
 
         return image
 
-    def shade_cell(image: Image.Image, 
+    def shade_cell(self,
+                   image: Image.Image, 
                    position: Tuple[int, int], 
                    color: str = 'black', 
                    opacity: float = 1.0) -> Image.Image:
@@ -101,14 +102,14 @@ class Grid:
         mask_color = ImageColor.getrgb(color) + (int(255*opacity),)
 
         # Calculate the top-left and bottom-right coordinates of the cell
-        x1 = padding + position[0] * (cell_size + padding)
-        y1 = padding + position[1] * (cell_size + padding)
-        x2 = x1 + cell_size
-        y2 = y1 + cell_size
+        x1 = self.padding + position[0] * (self.cell_size + self.padding)
+        y1 = self.padding + position[1] * (self.cell_size + self.padding)
+        x2 = x1 + self.cell_size
+        y2 = y1 + self.cell_size
 
         # Draw the rounded rectangle with the mask color
         draw.rounded_rectangle(
-            [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=cell_radius)
+            [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
         
         result = Image.alpha_composite(image.convert("RGBA"), overlay)
 
