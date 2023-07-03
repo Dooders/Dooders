@@ -70,42 +70,49 @@ class Grid:
 
         return image
 
-    def shade_cell(self, position: Tuple[int, int], opacity=1.0, color='black'):
+    def shade_cell(image: Image.Image, 
+                   position: Tuple[int, int], 
+                   color: str = 'black', 
+                   opacity: float = 1.0) -> Image.Image:
         """ 
-        Add semi-transparent black mask to specific grid cells.
-
+        Add a semi-transparent mask to a specific grid cell.
+        
         Parameters
-        ----------
-        position : Tuple[int,int]
-            The position of the cell to be shaded.
+        ----------  
+        image : Image
+            The base image object.
+        position : Tuple[int, int]
+            The position (x, y) of the cell to be masked.
+        color : str
+            The color name of the mask.
         opacity : float
             The opacity of the mask.
-        color : str
-            The color of the mask.
 
         Returns
         -------
         Image
-            The image with the shaded cell
+            The image with the shaded cell.
         """
-        # Create a copy of the base image to avoid modifying the original image
-        self.image = self.image.copy()
-        draw = ImageDraw.Draw(self.image)
+        
+        overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
+        draw = ImageDraw.Draw(overlay)
 
         # Define the mask color with transparency (semi-transparent black)
         mask_color = ImageColor.getrgb(color) + (int(255*opacity),)
 
         # Calculate the top-left and bottom-right coordinates of the cell
-        x1 = self.padding + position[0] * (self.cell_size + self.padding)
-        y1 = self.padding + position[1] * (self.cell_size + self.padding)
-        x2 = x1 + self.cell_size
-        y2 = y1 + self.cell_size
+        x1 = padding + position[0] * (cell_size + padding)
+        y1 = padding + position[1] * (cell_size + padding)
+        x2 = x1 + cell_size
+        y2 = y1 + cell_size
 
         # Draw the rounded rectangle with the mask color
         draw.rounded_rectangle(
-            [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
+            [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=cell_radius)
+        
+        result = Image.alpha_composite(image.convert("RGBA"), overlay)
 
-        return self.image
+        return result
 
     def shade_cells(self,
                     positions: List[Union[int, Tuple[int, int]]],
