@@ -71,13 +71,13 @@ class Grid:
         return image
 
     def shade_cell(self,
-                   image: Image.Image, 
-                   position: Tuple[int, int], 
-                   color: str = 'black', 
+                   image: Image.Image,
+                   position: Tuple[int, int],
+                   color: str = 'black',
                    opacity: float = 1.0) -> Image.Image:
         """ 
         Add a semi-transparent mask to a specific grid cell.
-        
+
         Parameters
         ----------  
         image : Image
@@ -94,7 +94,7 @@ class Grid:
         Image
             The image with the shaded cell.
         """
-        
+
         overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
         draw = ImageDraw.Draw(overlay)
 
@@ -110,7 +110,7 @@ class Grid:
         # Draw the rounded rectangle with the mask color
         draw.rounded_rectangle(
             [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
-        
+
         result = Image.alpha_composite(image.convert("RGBA"), overlay)
 
         return result
