@@ -76,7 +76,8 @@ class ExperimentData:
         """
         stuck_streaks = stuck_streak_counts(self.inference_df)
         self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(stuck_streaks)
-        self.dooder_df['stuck'] = self.dooder_df['stuck_streak_count'] >= 5
+        self.dooder_df['was_stuck'] = self.dooder_df['longest_stuck_length'] >= 5
+        self.dooder_df['ended_stuck'] = self.dooder_df['stuck_streak_count'] >= 5
         
     def probability_analysis(self) -> None:
         """ 
