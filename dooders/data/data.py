@@ -65,6 +65,9 @@ class ExperimentData:
     def accuracy_analysis(self) -> None:
         """ 
         Calculates the accuracy column
+        
+        Creates the following columns:
+        - accuracy
         """
         accuracies = calculate_accuracies(self.inference_df)
         self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
@@ -72,6 +75,9 @@ class ExperimentData:
     def probability_analysis(self) -> None:
         """ 
         Calculates the starting success probability column
+        
+        Creates the following columns:
+        - starting_success_probability
         """
         probability_dict = probabilities(self.inference_df)
         self.dooder_df['starting_success_probability'] = self.dooder_df['id'].map(
@@ -80,6 +86,10 @@ class ExperimentData:
     def hunger_analysis(self) -> None:
         """ 
         Calculates the near death count and near death rate columns
+        
+        Creates the following columns:
+        - near_death_count
+        - near_death_rate
         """
         near_hunger_counts = near_hunger(self.inference_df)
         self.dooder_df['near_death_count'] = self.dooder_df['id'].map(
