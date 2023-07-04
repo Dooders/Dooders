@@ -5,7 +5,7 @@ from dooders.data.gene_embedding_dataframe import get_gene_embedding_df
 from dooders.data.inference_record_dataframe import get_inference_record_df
 from dooders.experiment_results import (calculate_accuracies,
                                         decision_analysis, near_hunger,
-                                        probabilities)
+                                        probabilities, stuck_streak_counts)
 
 
 class ExperimentData:
@@ -61,6 +61,7 @@ class ExperimentData:
         self.probability_analysis()
         self.accuracy_analysis()
         self.decision_analysis()
+        self.stuck_streak_analysis()
         
     def accuracy_analysis(self) -> None:
         """ 
@@ -68,6 +69,14 @@ class ExperimentData:
         """
         accuracies = calculate_accuracies(self.inference_df)
         self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
+        
+    def stuck_streak_analysis(self) -> None:
+        """ 
+        Calculates the stuck streak column
+        """
+        stuck_streaks = stuck_streak_counts(self.inference_df)
+        self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(stuck_streaks)
+        self.dooder_df['stuck'] = self.dooder_df['stuck_streak_count'] >= 5
         
     def probability_analysis(self) -> None:
         """ 
