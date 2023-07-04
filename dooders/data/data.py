@@ -61,7 +61,6 @@ class ExperimentData:
         self.probability_analysis()
         self.accuracy_analysis()
         self.decision_analysis()
-        self.stuck_streak_analysis()
 
     def accuracy_analysis(self) -> None:
         """ 
@@ -69,16 +68,6 @@ class ExperimentData:
         """
         accuracies = calculate_accuracies(self.inference_df)
         self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
-
-    def stuck_streak_analysis(self) -> None:
-        """ 
-        Calculates the stuck streak column
-        """
-        stuck_streaks = stuck_streak_counts(self.inference_df)
-        self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(
-            stuck_streaks)
-        self.dooder_df['was_stuck'] = self.dooder_df['longest_stuck_length'] >= 5
-        self.dooder_df['ended_stuck'] = self.dooder_df['stuck_streak_count'] >= 5
 
     def probability_analysis(self) -> None:
         """ 
@@ -100,10 +89,24 @@ class ExperimentData:
 
     def decision_analysis(self) -> None:
         """ 
-        Calculates the longest stuck length and the minimum percent stuck columns
+        Analyzes the decision making of the dooders
+        
+        Creates the following columns:
+        - longest_stuck_length
+        - minimum_percent_stuck
+        - stuck_streak_count
+        - was_stuck
+        - ended_stuck
         """
         decision_counts = decision_analysis(self.inference_df)
         self.dooder_df['longest_stuck_length'] = self.dooder_df['id'].map(
             decision_counts)
         self.dooder_df['minimum_percent_stuck'] = self.dooder_df['longest_stuck_length'] / \
             self.dooder_df['age']
+            
+        # stuck streak analysis    
+        stuck_streaks = stuck_streak_counts(self.inference_df)
+        self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(
+            stuck_streaks)
+        self.dooder_df['was_stuck'] = self.dooder_df['longest_stuck_length'] >= 5
+        self.dooder_df['ended_stuck'] = self.dooder_df['stuck_streak_count'] >= 5
