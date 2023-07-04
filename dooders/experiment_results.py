@@ -1,5 +1,6 @@
 from collections import namedtuple
 from functools import reduce
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -304,3 +305,53 @@ def average_embedding_by_age(dooder_df: pd.DataFrame) -> list:
             avg_embedding.append(embeddings_avg_rounded)
 
     return avg_embedding
+
+
+def stuck_streak_count(decision_list: List[str]) -> int:
+    """ 
+    Calculates the stuck streak count for a list of decisions.
+
+    Parameters
+    ----------
+    decision_list : list
+        A list of decisions to calculate the stuck streak count for.
+
+    Returns
+    -------
+    streak_count : int
+        The stuck streak count for the list of decisions.
+    """
+    streak_count = 1
+    last_value = decision_list[-1]
+
+    for decision in reversed(decision_list[:-1]):
+        if decision == last_value:
+            streak_count += 1
+        else:
+            break
+
+    return streak_count
+
+
+def stuck_streak_counts(inference_df: pd.DataFrame) -> dict:
+    """ 
+    Calculates the stuck streak counts for each Dooder in the inference dataframe.
+
+    Parameters
+    ----------
+    inference_df : pd.DataFrame
+        The inference dataframe to calculate the stuck streak counts for.
+
+    Returns
+    -------
+    streak_counts : dict
+        A dictionary of the stuck streak counts for each Dooder.
+    """
+    streak_counts = {}
+
+    for dooder, group in inference_df.groupby('dooder'):
+        decisions = [int(x) for x in group['decision']]
+        result = stuck_streak_count(decisions)
+        streak_counts[dooder] = result
+
+    return streak_counts
