@@ -62,23 +62,24 @@ class ExperimentData:
         self.accuracy_analysis()
         self.decision_analysis()
         self.stuck_streak_analysis()
-        
+
     def accuracy_analysis(self) -> None:
         """ 
         Calculates the accuracy column
         """
         accuracies = calculate_accuracies(self.inference_df)
         self.dooder_df['accuracy'] = self.dooder_df['id'].map(accuracies)
-        
+
     def stuck_streak_analysis(self) -> None:
         """ 
         Calculates the stuck streak column
         """
         stuck_streaks = stuck_streak_counts(self.inference_df)
-        self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(stuck_streaks)
+        self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(
+            stuck_streaks)
         self.dooder_df['was_stuck'] = self.dooder_df['longest_stuck_length'] >= 5
         self.dooder_df['ended_stuck'] = self.dooder_df['stuck_streak_count'] >= 5
-        
+
     def probability_analysis(self) -> None:
         """ 
         Calculates the starting success probability column
@@ -86,7 +87,7 @@ class ExperimentData:
         probability_dict = probabilities(self.inference_df)
         self.dooder_df['starting_success_probability'] = self.dooder_df['id'].map(
             probability_dict)
-        
+
     def hunger_analysis(self) -> None:
         """ 
         Calculates the near death count and near death rate columns
@@ -96,11 +97,13 @@ class ExperimentData:
             near_hunger_counts)
         self.dooder_df['near_death_rate'] = self.dooder_df['near_death_count'] / \
             self.dooder_df['age']
-        
+
     def decision_analysis(self) -> None:
         """ 
         Calculates the longest stuck length and the minimum percent stuck columns
         """
         decision_counts = decision_analysis(self.inference_df)
-        self.dooder_df['longest_stuck_length'] = self.dooder_df['id'].map(decision_counts)
-        self.dooder_df['minimum_percent_stuck'] = self.dooder_df['longest_stuck_length']/self.dooder_df['age']
+        self.dooder_df['longest_stuck_length'] = self.dooder_df['id'].map(
+            decision_counts)
+        self.dooder_df['minimum_percent_stuck'] = self.dooder_df['longest_stuck_length'] / \
+            self.dooder_df['age']
