@@ -5,6 +5,29 @@ import imageio
 from dooders.charts.new_grid import Grid
 
 
+def convert_to_positions(move_history: List[int], grid_size: int) -> List[Tuple[int, int]]:
+    """ 
+    Converts a list of moves to a list of positions.
+
+    Parameters
+    ----------
+    move_history : List[int]
+        The list of moves.
+
+    Returns
+    -------
+    List[Tuple[int, int]]
+        The list of positions.
+    """
+    positions = []
+    for move in move_history:
+        row = move // grid_size
+        col = move % grid_size
+        positions.append((row, col))
+
+    return positions
+
+
 def get_opacity(count: int) -> float:
     """ 
     Returns the opacity of the cell based on the number of times it has been visited.
