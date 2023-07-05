@@ -56,7 +56,7 @@ def get_opacity(count: int) -> float:
 
 def animate_move_history(positions: List[Tuple[int, int]],
                          filename: str = 'move_history.gif',
-                         fps: int = 3) -> None:
+                         fps: int = 5) -> None:
     """ 
     Creates an animated gif of the move history.
 
@@ -86,6 +86,7 @@ def animate_move_history(positions: List[Tuple[int, int]],
                 image, positions[i-1], opacity=opacity, color='black')
         new_image = grid.shade_cell(
             image, positions[i], opacity=1.0, color='green')
+        new_image = grid.add_text(new_image, f"Cycle #{i}")
         image_list.append(new_image.copy())
 
     imageio.mimsave(filename, image_list, fps=fps)

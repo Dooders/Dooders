@@ -188,7 +188,7 @@ class Grid:
 
         return self.image
 
-    def add_text(self, title: str) -> Image.Image:
+    def add_text(self, image: Image.Image, title: str) -> Image.Image:
         """
         Add a title above the image.
 
@@ -204,8 +204,6 @@ class Grid:
         ImageObject
             The image object with the title added above.
         """
-        # Create a copy of the original image object
-        new_image = self.image.copy()
 
         # Set the font size and font type
         font_size = 50
@@ -213,15 +211,15 @@ class Grid:
 
         # Calculate the required width and height for the new image
         text_width, text_height = font.getsize(title)
-        new_width = max(new_image.width, text_width)
-        new_height = new_image.height + text_height
+        new_width = max(image.width, text_width)
+        new_height = image.height + text_height
 
         # Create a new image with the updated size
         combined_image = Image.new(
             'RGB', (new_width, new_height), color='white')
 
         # Paste the original image below the title
-        combined_image.paste(new_image, (0, text_height))
+        combined_image.paste(image, (0, text_height))
 
         # Draw the text on the combined image with an offset
         draw = ImageDraw.Draw(combined_image)
