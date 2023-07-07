@@ -20,7 +20,7 @@ def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -
         The column to color by.
     show_cbar : bool
         Whether to show the colorbar.
-        
+
     Returns
     -------
     fig : px.scatter
@@ -29,7 +29,7 @@ def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -
     temp_df = dooder_df.copy()[['last_encoding', color_by]]
     temp_df['X'] = temp_df['last_encoding'].apply(lambda x: x[0])
     temp_df['Y'] = temp_df['last_encoding'].apply(lambda x: x[1])
-    
+
     # Create the scatter plot
     fig = px.scatter(temp_df,
                      x="X",

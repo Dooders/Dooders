@@ -1,13 +1,12 @@
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
-
+import plotly.graph_objects as go
 
 
 def death_age_by_cycle(dooder_df: pd.DataFrame) -> go.Figure:
     """ 
     Creates a histogram of the age of death by cycle.
-    
+
     Parameters
     ----------
     dooder_df : pd.DataFrame
@@ -46,10 +45,11 @@ def death_age_by_cycle(dooder_df: pd.DataFrame) -> go.Figure:
 
     return figure
 
+
 def starting_success_probability(dooder_df: pd.DataFrame) -> go.Figure:
     """ 
     Creates a histogram of the success probability of the dooders.
-    
+
     Parameters
     ----------
     dooder_df : pd.DataFrame
@@ -61,7 +61,8 @@ def starting_success_probability(dooder_df: pd.DataFrame) -> go.Figure:
         The histogram of the success probability of the dooders.
     """
 
-    fig = px.histogram(dooder_df, x="starting_success_probability", color='experiment_result')
+    fig = px.histogram(
+        dooder_df, x="starting_success_probability", color='experiment_result')
 
     # Update title
     fig.update_layout(title="Histogram of Starting Success Probability")
@@ -71,5 +72,5 @@ def starting_success_probability(dooder_df: pd.DataFrame) -> go.Figure:
 
     # Update y-axis label
     fig.update_yaxes(title="Dooder Count")
-    
+
     return fig

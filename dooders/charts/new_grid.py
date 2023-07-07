@@ -1,4 +1,4 @@
-from typing import Any, List, Tuple, Union
+from typing import List, Tuple, Union
 
 from PIL import Image, ImageColor, ImageDraw, ImageFont
 

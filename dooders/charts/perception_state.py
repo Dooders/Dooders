@@ -18,6 +18,7 @@ POSITION_MAP = {
     '8': (2, 2)
 }
 
+
 def validate_position(position: str) -> Position:
     """
     Validate the position and return the mapped value.
@@ -68,7 +69,8 @@ def visualize_perception_state(cycle_count: int,
 
     if decision:
         decision_position = validate_position(decision)
-        decision_color = (0, 255, 0) if decision in energy_positions else (255, 0, 0)
+        decision_color = (
+            0, 255, 0) if decision in energy_positions else (255, 0, 0)
         grid.fill_space(decision_position, decision_color)
 
     if energy_positions:
@@ -78,7 +80,7 @@ def visualize_perception_state(cycle_count: int,
 
     if draw_agent:
         grid.draw_agent((1, 1))
-        
+
     grid.draw_cycle_counter(cycle_count + 1)
     pygame.display.flip()
     pygame.image.save(grid.screen, f'{filename}.png')
