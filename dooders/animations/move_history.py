@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import imageio
 
-from dooders.charts.new_grid import Grid
+from dooders.charts.grid import Grid
 
 
 def convert_to_positions(move_history: List[int], grid_size: int) -> List[Tuple[int, int]]:

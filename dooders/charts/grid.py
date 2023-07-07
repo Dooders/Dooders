@@ -1,497 +1,258 @@
-""" 
-Class to create and return a default pygame rendered grid of LxW dimensions
-"""
+from typing import List, Tuple, Union
 
-import math
-import sys
+from PIL import Image, ImageColor, ImageDraw, ImageFont
 
-import imageio
-import pygame
-from pydantic import BaseModel
-
-
-class DefaultSettings(BaseModel):
-    Length: int = 10
-    Width: int = 10
-    CellSize: int = 50
-    CellPadding: int = 5
-    Padding: int = 10
-    CounterPadding: int = 30
-    FontColor: tuple = (255, 255, 255)
-    BackgroundColor: tuple = (211, 211, 211)
-    AgentColor: tuple = (29, 48, 36)
-    EnergyColor: tuple = (0, 0, 139)
-    TrailColor: tuple = (132, 150, 139)
-    ChosenColor: tuple = (0, 255, 0)
-    ChosenAlpha: int = 128
+# Define the dimensions of the grid and cells
+grid_size = 3
+cell_size = 200  # Increased cell size
+padding = 20  # Increased padding
+cell_radius = 20  # Adjusted cell radius
 
 
-class GridViz:
-    """ 
-    Class to create and return a default pygame rendered grid of LxW dimensions
+class Grid:
 
-    Parameters
-    ----------
-    L : int
-        Length of the grid
-    W : int
-        Width of the grid
-    caption : str
-        Caption of the pygame window
+    def __init__(self,
+                 grid_size: int = grid_size,
+                 cell_size: int = cell_size,
+                 padding: int = padding,
+                 cell_radius: int = cell_radius):
 
-    Attributes
-    ----------
-    L : int
-        Length of the grid
-    W : int
-        Width of the grid
-    grid_size : int
-        Length of the grid
-    cell_size : int
-        Size of each cell in the grid
-    cell_padding : int
-        Padding between each cell in the grid
-    padding : int
-        Padding of the grid
-    counter_padding : int
-        Padding of the counter
-    caption : str
-        Caption of the pygame window
-    screen_width : int
-        Width of the pygame window
-    screen_height : int
-        Height of the pygame window
-    screen : pygame.Surface
-        Pygame surface of the pygame window
-    clock : pygame.time.Clock
-        Pygame clock
-    clockfont : pygame.font.Font
-        Pygame font
-    font : pygame.font.Font
-        Pygame font
+        self.grid_size = grid_size
+        self.cell_size = cell_size
+        self.padding = padding
+        self.cell_radius = cell_radius
+        self.image = self._base_grid()
 
-    Methods
-    -------
-    draw_grid()
-        Draws the grid
-    draw_agent(pos, color, text_color=(255, 255, 255), text=None)
-        Draws an agent in the grid
-    draw_counter(counter)
-        Draws the counter
-    draw()
-        Draws the grid and the counter
-    save_image(filename)
-        Saves the current state of the grid as an image
-    save_gif(filename, fps=10)
-        Saves the current state of the grid as a gif
-    """
-
-    def __init__(self, L: int, W: int, caption: str = "Grid Animation",
-                 save: bool = False, trail: bool = False,
-                 settings: DefaultSettings = None) -> None:
-        self.settings = settings or DefaultSettings()
-        self._initialize_default_settings()
-        self.L = L
-        self.W = W
-        self.grid_size = L
-        self.save = save
-        self.trail = trail
-        self.caption = caption
-        self.screen_width = self.grid_size * self.cell_size + \
-            self.cell_padding * (self.grid_size - 1) + 2 * self.padding
-        self.screen_height = self.grid_size * self.cell_size + self.cell_padding * \
-            (self.grid_size - 1) + 2 * self.padding + self.counter_padding
-
-    def _initialize_default_settings(self):
-        self.cell_size = self.settings.CellSize
-        self.cell_padding = self.settings.CellPadding
-        self.padding = self.settings.Padding
-        self.counter_padding = self.settings.CounterPadding
-        self.agent_color = self.settings.AgentColor
-        self.energy_color = self.settings.EnergyColor
-        self.trail_color = self.settings.TrailColor
-        self.chosen_color = self.settings.ChosenColor
-        self.chosen_alpha = self.settings.ChosenAlpha
-
-    def setup(self):
-        pygame.init()
-
-        self.screen = pygame.display.set_mode(
-            (self.screen_width, self.screen_height))
-        pygame.display.set_caption(self.caption)
-
-        self.clock = pygame.time.Clock()
-        self.clockfont = pygame.font.Font(None, 24)
-        
-    def draw_text(self, pos, text, color=(255, 255, 255)):
-        """ 
-        Draws text on the grid
+    def _base_grid(self) -> Image:
+        """
+        Base grid graphic
 
         Parameters
         ----------
-        text : str
-            The text to draw
-        pos : tuple
-            Position on the grid
-        color : tuple
-            Color of the text
+        grid_size : int
+            The number of cells in the grid.
+        cell_size : int
+            The size of each cell in the grid.
+        padding : int
+            The padding between each cell.
+        cell_radius : int
+            The radius of the cell's rounded corners.
+
+        Returns
+        -------
+        Image
+            The base grid image.
         """
-        # Create a font object.
-        font = pygame.font.Font(None, 24)
 
-        # Render the text. 
-        text_surface = font.render(str(text), True, color)
+        # Calculate the total size of the grid visualization
+        self.viz_size = (self.cell_size * self.grid_size) + \
+            (self.padding * (self.grid_size + 1))
 
-        # Get the position to draw the text
-        x, y = pos
-        rect = pygame.Rect(
-            self.padding + x * (self.cell_size + self.cell_padding),
-            self.padding + self.counter_padding + y *
-            (self.cell_size + self.cell_padding),
-            self.cell_size,
-            self.cell_size,
-        )
+        # Create a new white image with the desired size
+        image = Image.new("RGBA", (self.viz_size, self.viz_size), "white")
+        draw = ImageDraw.Draw(image)
 
-        # Calculate the center position of the cell
-        center_pos = (
-            rect.left + (rect.width - text_surface.get_width()) // 2,
-            rect.top + (rect.height - text_surface.get_height()) // 2
-        )
+        # Define the light grey background color
+        bg_color = (220, 220, 220, 255)
 
-        # Draw the text on the screen at the center position.
-        self.screen.blit(text_surface, center_pos)
+        # Draw the cells with rounded corners and the background color
+        for row in range(self.grid_size):
+            for col in range(self.grid_size):
+                # Calculate the top-left and bottom-right coordinates of the cell
+                x1 = self.padding + col * (self.cell_size + self.padding)
+                y1 = self.padding + row * (self.cell_size + self.padding)
+                x2 = x1 + self.cell_size
+                y2 = y1 + self.cell_size
 
+                # Draw the rounded rectangle with the background color
+                draw.rounded_rectangle(
+                    [(x1, y1), (x2, y2)], fill=bg_color, outline=None, radius=self.cell_radius)
 
-    def draw_border(self, color: tuple = (0, 0, 0), thickness: int = 2) -> None:
+        return image
+
+    def shade_cell(self,
+                   image: Image.Image,
+                   position: Tuple[int, int],
+                   color: str = 'black',
+                   opacity: float = 1.0) -> Image.Image:
+        """ 
+        Add a semi-transparent mask to a specific grid cell.
+
+        Parameters
+        ----------  
+        image : Image
+            The base image object.
+        position : Tuple[int, int]
+            The position (x, y) of the cell to be masked.
+        color : str
+            The color name of the mask.
+        opacity : float
+            The opacity of the mask.
+
+        Returns
+        -------
+        Image
+            The image with the shaded cell.
         """
-        Draws a border around the grid
+
+        overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
+        draw = ImageDraw.Draw(overlay)
+
+        # Define the mask color with transparency (semi-transparent black)
+        mask_color = ImageColor.getrgb(color) + (int(255*opacity),)
+
+        # Calculate the top-left and bottom-right coordinates of the cell
+        x1 = self.padding + position[0] * (self.cell_size + self.padding)
+        y1 = self.padding + position[1] * (self.cell_size + self.padding)
+        x2 = x1 + self.cell_size
+        y2 = y1 + self.cell_size
+
+        # Draw the rounded rectangle with the mask color
+        draw.rounded_rectangle(
+            [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
+
+        result = Image.alpha_composite(image.convert("RGBA"), overlay)
+
+        return result
+
+    def shade_cells(self,
+                    positions: List[Union[int, Tuple[int, int]]],
+                    mask_color_name: str = 'black') -> Image.Image:
+        """
+        Add semi-transparent masks to specific grid cells based on the count of positions.
 
         Parameters
         ----------
-        color : tuple
-            Color of the border
-        thickness : int
-            Thickness of the border
+        positions : List[Union[int, Tuple[int, int]]]
+            List of positions (integers or tuples (x, y)) of cells to be masked.
+        mask_color_name : str
+            The color name of the mask.
+
+        Returns
+        -------
+        Image
+            The image with the shaded cells based on the count of positions.
         """
-        border_rect = pygame.Rect(
-            self.padding - thickness,
-            self.padding + self.counter_padding - thickness,
-            self.grid_size * self.cell_size + self.cell_padding *
-            (self.grid_size - 1) + 2 * thickness,
-            self.grid_size * self.cell_size + self.cell_padding *
-            (self.grid_size - 1) + 2 * thickness,
-        )
-        pygame.draw.rect(self.screen, color, border_rect, thickness)
+        # Create a copy of the base image to avoid modifying the original image
+        self.image = self.image.copy()
+        draw = ImageDraw.Draw(self.image)
 
-    def draw_grid(self) -> None:
-        """ 
-        Draws the grid
+        # Create a dictionary to store the count of each position
+        position_counts = {}
+
+        # Count the occurrences of each position
+        for position in positions:
+            if isinstance(position, int):
+                position = (position,)
+            if len(position) != 2:
+                continue
+
+            if position not in position_counts:
+                position_counts[position] = 0
+            position_counts[position] += 1
+
+        # Calculate the maximum count to determine the shading opacity range
+        max_count = max(position_counts.values())
+
+        # Draw the mask on the specified cells based on the count
+        for position, count in position_counts.items():
+            if isinstance(position, int):
+                position = (position,)
+            if len(position) != 2:
+                continue
+
+            x, y = position
+
+            if x < 0 or x >= self.grid_size or y < 0 or y >= self.grid_size:
+                continue
+
+            # Calculate the row and column based on the position
+            row = y
+            col = x
+
+            # Calculate the top-left and bottom-right coordinates of the cell
+            x1 = self.padding + col * (self.cell_size + self.padding)
+            y1 = self.padding + row * (self.cell_size + self.padding)
+            x2 = x1 + self.cell_size
+            y2 = y1 + self.cell_size
+
+            # Calculate the opacity based on the count
+            opacity = int((count / max_count) * 255)
+
+            # Define the mask color with transparency
+            mask_color = ImageColor.getrgb(mask_color_name) + (opacity,)
+
+            # Draw the rounded rectangle with the mask color
+            draw.rounded_rectangle(
+                [(x1, y1), (x2, y2)], fill=mask_color, outline=None, radius=self.cell_radius)
+
+        return self.image
+
+    def add_text(self, image: Image.Image, title: str) -> Image.Image:
         """
-        font = pygame.font.Font(None, 16)
-        for y in range(self.grid_size):
-            for x in range(self.grid_size):
-                cell_number = y * self.grid_size + x
-                cell_number_text = font.render(
-                    str(cell_number + 1), True, self.settings.FontColor)
-
-                rect = pygame.Rect(
-                    self.padding + x * (self.cell_size + self.cell_padding),
-                    self.padding + self.counter_padding + y *
-                    (self.cell_size + self.cell_padding),
-                    self.cell_size,
-                    self.cell_size,
-                )
-                pygame.draw.rect(self.screen, self.settings.BackgroundColor,
-                                 rect, border_radius=5)
-
-                # Add cell number to the top left of the cell
-                cell_number_position = (
-                    self.padding + x * (self.cell_size +
-                                        self.cell_padding) + 5,
-                    self.padding + self.counter_padding + y *
-                    (self.cell_size + self.cell_padding) + 5
-                )
-                self.screen.blit(cell_number_text, cell_number_position)
-
-                # self.draw_border()
-
-    def draw_agent(self,
-                   pos: tuple,
-                   color: tuple = None,
-                   text_color: tuple = None,
-                   text: str = 'D'
-                   ) -> None:
-        """ 
-        Draws an agent in the grid
+        Add a title above the image.
 
         Parameters
         ----------
-        pos : tuple
-            Position of the agent
-        color : tuple
-            Color of the agent
-        text_color : tuple
-            Color of the text
-        text : str
-            Text to be displayed
+        image : ImageObject
+            The base image object.
+        title : str
+            The title to be added above the image.
+
+        Returns
+        -------
+        ImageObject
+            The image object with the title added above.
         """
-        color = color or self.agent_color
-        text_color = text_color or self.settings.FontColor
-        x, y = pos
-        rect = pygame.Rect(
-            self.padding + x * (self.cell_size +
-                                self.cell_padding) + self.cell_padding // 2,
-            self.padding + self.counter_padding + y *
-            (self.cell_size + self.cell_padding) + self.cell_padding // 2,
-            self.cell_size - self.cell_padding,
-            self.cell_size - self.cell_padding,
-        )
-        pygame.draw.rect(self.screen, color, rect, border_radius=5)
 
-        if text is not None:
-            self.font = pygame.font.Font("Roboto-Bold.ttf", 24)
-            self.letter = self.font.render(text, True, text_color)
-            self.letter_rect = self.letter.get_rect(center=rect.center)
-            self.screen.blit(self.letter, self.letter_rect)
+        # Set the font size and font type
+        font_size = 50
+        font = ImageFont.truetype('Roboto-Bold.ttf', font_size)
 
-    def draw_cycle_counter(self, cycles: int) -> None:
-        """ 
-        Draws the counter
+        # Calculate the required width and height for the new image
+        text_width, text_height = font.getsize(title)
+        new_width = max(image.width, text_width)
+        new_height = image.height + text_height
+
+        # Create a new image with the updated size
+        combined_image = Image.new(
+            'RGB', (new_width, new_height), color='white')
+
+        # Paste the original image below the title
+        combined_image.paste(image, (0, text_height))
+
+        # Draw the text on the combined image with an offset
+        draw = ImageDraw.Draw(combined_image)
+        title_offset = 20  # Specify the desired offset in pixels
+        draw.text((title_offset, 0), title, fill='black', font=font)
+
+        return combined_image
+
+    def horizontal_composition(image_list: List[Image.Image]) -> Image.Image:
+        """  
+        Compose all the images in a list horizontally into a single image
 
         Parameters
         ----------
-        counter : int
-            Counter to be displayed
-        """
-        text = self.font.render(f"Cycle: {cycles}", True, (51, 51, 51))
-        self.screen.blit(text, (self.padding, self.padding))
+        image_list : List[Image]
+            List of images to be composed horizontally
 
-    def draw_trail(self, visited_positions: list) -> None:
-        """ 
-        Draws the trail of visited cells in green
-
-        Parameters
-        ----------
-        visited_positions : list
-            List of visited positions
-        """
-        for pos in visited_positions:
-            self.draw_agent(pos, (132, 150, 139))
-
-    def draw_energy(self, pos: tuple, color: tuple = None) -> None:
-        """ 
-        Draws energy as a dark blue circle within the cell
-
-        Parameters
-        ----------
-        pos : tuple
-            Position on the grid
-        energy : int
-            Energy value
-        color : tuple
-            Color of the energy circle
-        """
-        color = color or self.energy_color
-        x, y = pos
-        circle_center = (
-            self.padding + x * (self.cell_size +
-                                self.cell_padding) + self.cell_size // 2,
-            self.padding + self.counter_padding + y *
-            (self.cell_size + self.cell_padding) + self.cell_size // 2,
-        )
-        radius = self.cell_size // 5
-        pygame.draw.circle(self.screen, color, circle_center, radius)
-
-    def fill_space(self, pos: tuple, color: tuple = None,
-                          alpha: int = 80) -> None:
-        """ 
-        Makes the chosen cell semi-transparent green
-
-        Parameters
-        ----------
-        pos : tuple
-            Position on the grid
-        color : tuple
-            Color of the semi-transparent cell
-        alpha : int
-            Transparency value (0 to 255)
-        """
-        color = color or self.chosen_color
-        alpha = alpha or self.chosen_alpha
-        x, y = pos
-
-        # Check if color values are in the correct range
-        if all(0 <= c <= 1 for c in color):
-            # If not, convert them
-            color = tuple(round(c * 255) for c in color)
-
-        rect = pygame.Rect(
-            self.padding + x * (self.cell_size + self.cell_padding),
-            self.padding + self.counter_padding + y *
-            (self.cell_size + self.cell_padding),
-            self.cell_size,
-            self.cell_size,
-        )
-        green_surface = pygame.Surface(
-            (self.cell_size, self.cell_size), pygame.SRCALPHA)
-        green_surface.fill((*color, alpha))
-        self.screen.blit(green_surface, rect.topleft)
-
-    
-    def render(self):
-        pass
-    
-    def animate(self, player_positions: list, energy_data: list,
-            chosen_positions: list) -> None:
-        """ 
-        Animates the agent moving through the grid, displays energy information, and indicates the chosen space
-
-        Parameters
-        ----------
-        player_positions : list
-            List of positions of the agent
-        energy_data : list
-            List of dictionaries containing energy information for each turn
-        chosen_positions : list
-            List of tuples containing the chosen positions for each turn
+        Returns
+        -------
+        Image
+            The composed image
         """
 
-        self.setup()
+        # Get the width and height of the images
+        widths, heights = zip(*(image.size for image in image_list))
 
-        current_position = 0
-        num_scenes = len(player_positions)
+        # Create a new image with the width of all the images and the height of the tallest image
+        new_image = Image.new('RGB', (sum(widths), max(heights)))
 
-        frames = []
+        # Paste each image into the new image
+        x_offset = 0
+        for image in image_list:
+            new_image.paste(image, (x_offset, 0))
+            x_offset += image.size[0]
 
-        for scene_idx in range(num_scenes):
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-            self.screen.fill((255, 255, 255))
-            self.draw_grid()
-
-            if self.trail:
-                # Draw the trail of visited cells in green
-                visited_positions = player_positions[:current_position]
-                self.draw_trail(visited_positions)
-
-            # Draw energy circles
-            energy_positions = energy_data[scene_idx]
-            for energy_pos in energy_positions:
-                self.draw_energy(energy_pos, (0, 0, 139))
-
-            chosen_color = self.chosen_color
-
-            if energy_positions:  # If there are energy objects on the grid
-                if chosen_positions[current_position] in energy_positions:
-                    chosen_color = self.chosen_color  # Green for energy object
-                else:
-                    chosen_color = (255, 0, 0)  # Red for no energy object
-
-            self.draw_chosen_space(chosen_positions[current_position], color=chosen_color)
-
-            self.draw_agent(
-                player_positions[current_position], (29, 48, 36), text="D")
-            current_position += 1
-
-            self.draw_cycle_counter(current_position)
-
-            if self.save:
-                # Capture the current frame and add it to the list of frames
-                frame = pygame.surfarray.array3d(self.screen)
-                frames.append(frame.swapaxes(0, 1))
-
-            pygame.display.flip()
-            self.clock.tick(3)
-
-        # Save the frames as an animated GIF
-        if self.save:
-            imageio.mimsave(f"{self.caption}.gif", frames, fps=3)
-
-        pygame.quit()
-
-    def collage(self, player_positions: list, energy_data: list,
-            chosen_positions: list, filename: str = "collage.png") -> None:
-        """ 
-        Creates a collage of scenes
-
-        Parameters
-        ----------
-        player_positions : list
-            List of positions of the agent
-        energy_data : list
-            List of lists containing tuples of energy positions for each turn
-        chosen_positions : list
-            List of tuples containing the chosen positions for each turn
-        filename : str
-            Output filename for the collage
-        """
-        self.setup()
-
-        num_scenes = len(player_positions)
-        collage_side = math.ceil(math.sqrt(num_scenes))
-
-        actual_rows = math.ceil(num_scenes / collage_side)
-
-        collage_width = collage_side * self.screen_width
-        collage_height = actual_rows * self.screen_height
-        
-
-        collage_surface = pygame.Surface((collage_width, collage_height))
-        collage_surface.fill((255, 255, 255))
-
-        for scene_idx in range(num_scenes):
-            self.screen.fill((255, 255, 255))
-            self.draw_grid()
-
-            # Check if the grid has any energy objects
-            has_energy_objects = any(energy_data[scene_idx])
-
-            # Draw chosen_positions
-            if not has_energy_objects or chosen_positions[scene_idx] in energy_data[scene_idx]:
-                self.draw_chosen_space(chosen_positions[scene_idx], color=(0, 255, 0), alpha=self.chosen_alpha)
-            else:
-                self.draw_chosen_space(chosen_positions[scene_idx], color=(255, 0, 0), alpha=self.chosen_alpha)
-
-            # Draw energy circles
-            energy_positions_real = energy_data[scene_idx]
-            for energy_pos in energy_positions_real:
-                self.draw_energy(energy_pos, (0, 0, 139))
-
-            if self.trail:
-                # Draw the trail of visited cells in green
-                visited_positions = player_positions[:scene_idx]
-                self.draw_trail(visited_positions)
-
-            self.draw_agent(
-                player_positions[scene_idx], (29, 48, 36), text="D")
-
-            self.draw_cycle_counter(scene_idx + 1)
-
-            row = scene_idx // collage_side
-            col = scene_idx % collage_side
-            collage_surface.blit(
-                self.screen, (col * self.screen_width, row * self.screen_height))
-
-        pygame.image.save(collage_surface, filename)
-        pygame.quit()
-
-    def render_map(self, filename: str = "map.png") -> None:
-        """ 
-        Renders the map
-
-        Parameters
-        ----------
-        filename : str
-            Output filename for the map
-        """
-        self.setup()
-
-        self.screen.fill((255, 255, 255))
-        self.draw_grid()
-
-        pygame.image.save(self.screen, filename)
-        pygame.quit()
-        
+        return new_image
