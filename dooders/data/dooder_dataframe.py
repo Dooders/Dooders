@@ -152,6 +152,3 @@ def calculate_metrics(df: pd.DataFrame) -> pd.DataFrame:
     df['avg_last_opportunity'] = average_ending_opportunities
 
     return df
-
-    
- 

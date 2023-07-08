@@ -33,5 +33,5 @@ def get_gene_embedding_df(experiment_results: dict) -> pd.DataFrame:
 
     columns = list(gene_embedding_records[0].keys())
     gene_embedding_df = pd.DataFrame(gene_embedding_records, columns=columns)
-    
+
     return gene_embedding_df

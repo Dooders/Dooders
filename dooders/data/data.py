@@ -56,7 +56,6 @@ class ExperimentData:
         """ 
         Run through the data transformation steps
         """
-        #! separate into own core components
         self.hunger_analysis()
         self.probability_analysis()
         self.accuracy_analysis()
@@ -65,7 +64,7 @@ class ExperimentData:
     def accuracy_analysis(self) -> None:
         """ 
         Calculates the accuracy column
-        
+
         Creates the following columns:
         - accuracy
         """
@@ -75,7 +74,7 @@ class ExperimentData:
     def probability_analysis(self) -> None:
         """ 
         Calculates the starting success probability column
-        
+
         Creates the following columns:
         - starting_success_probability
         """
@@ -86,7 +85,7 @@ class ExperimentData:
     def hunger_analysis(self) -> None:
         """ 
         Calculates the near death count and near death rate columns
-        
+
         Creates the following columns:
         - near_death_count
         - near_death_rate
@@ -100,7 +99,7 @@ class ExperimentData:
     def decision_analysis(self) -> None:
         """ 
         Analyzes the decision making of the dooders
-        
+
         Creates the following columns:
         - longest_stuck_length
         - minimum_percent_stuck
@@ -113,8 +112,8 @@ class ExperimentData:
             decision_counts)
         self.dooder_df['minimum_percent_stuck'] = self.dooder_df['longest_stuck_length'] / \
             self.dooder_df['age']
-            
-        # stuck streak analysis    
+
+        # stuck streak analysis
         stuck_streaks = stuck_streak_counts(self.inference_df)
         self.dooder_df['stuck_streak_count'] = self.dooder_df['id'].map(
             stuck_streaks)
