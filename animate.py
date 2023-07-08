@@ -1,5 +1,7 @@
 """ 
 Class to create and return a default pygame rendered grid of LxW dimensions
+
+#! Is this class still needed?
 """
 
 import math
