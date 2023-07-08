@@ -6,7 +6,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='Dooders',                           # should match the package folder
-    packages=setuptools.find_packages(exclude=['tests']),                     # should match the package folder
+    # should match the package folder
+    packages=setuptools.find_packages(exclude=['tests']),
     version='0.0.3',                                # important for updates
     license='MIT',                                  # should match your chosen license
     description='Testing installation of Package',
@@ -14,8 +15,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",  # README.md is of type 'markdown'
     author='Chris Mangum',
     author_email='csmangum@gmail.com',
-    url='https://github.com/csmangum/Dooders', 
-    install_requires=['pandas'],                  # list all packages that your package uses
+    url='https://github.com/csmangum/Dooders',
+    # list all packages that your package uses
+    install_requires=['pandas'],
     # keywords=["pypi", "mikes_toolbox", "tutorial"], #descriptive meta-data
     classifiers=[                                   # https://pypi.org/classifiers
         'Development Status :: 3 - Alpha',
@@ -27,6 +29,6 @@ setuptools.setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    
+
     download_url="https://github.com/csmangum/Dooders/archive/refs/tags/v0.3.0.tar.gz"
 )
