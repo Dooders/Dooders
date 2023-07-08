@@ -8,7 +8,6 @@ initializing the simulation, running the simulation, and displaying the results.
 
 import traceback
 from datetime import datetime
-from statistics import mean
 
 from tqdm import tqdm
 
