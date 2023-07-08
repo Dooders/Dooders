@@ -3,7 +3,7 @@ import json
 from dooders.data.dooder_dataframe import get_dooder_df
 from dooders.data.gene_embedding_dataframe import get_gene_embedding_df
 from dooders.data.inference_record_dataframe import get_inference_record_df
-from dooders.experiment_results import (calculate_accuracies,
+from dooders.data.experiment_results import (calculate_accuracies,
                                         decision_analysis, near_hunger,
                                         probabilities, stuck_streak_counts)
 

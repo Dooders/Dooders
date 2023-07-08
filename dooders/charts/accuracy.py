@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 
-from dooders.experiment_results import min_max_avg_per_cycle
+from dooders.data.experiment_results import min_max_avg_per_cycle
 
 
 def accuracy_range_by_cycle(inference_df: pd.DataFrame) -> go.Figure:

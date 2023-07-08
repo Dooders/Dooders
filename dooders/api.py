@@ -2,11 +2,11 @@
 
 import asyncio
 
+from experiment import Experiment, SessionManager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from experiment import Experiment, SessionManager
 from dooders.sdk.config import default_config
 from dooders.sdk.strategies import *
 
@@ -59,7 +59,7 @@ async def websocket_endpoint(websocket: WebSocket):
     Sends experiment data to the client every time the simulation finishes a step. 
     """
     await manager.connect(websocket)
-    
+
     try:
         experiment = Experiment(default_config)
         manager.add_experiment(experiment)
@@ -76,7 +76,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 await websocket.send_json(results['simulation'])
                 # snooze for 1 second
                 await asyncio.sleep(.1)
-                
+
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         print("Websocket disconnected")
