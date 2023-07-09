@@ -1,18 +1,19 @@
-from dooders.data.data import ExperimentData
-from IPython.display import display, Markdown
 import pandas as pd
+from IPython.display import Markdown, display
+
+from dooders.data.data import ExperimentData
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 
-BASE_REPORT = ['histogram_component', 
+BASE_REPORT = ['dooder_df_component', 
+               'embedding_df_component', 
+               'inference_df_component',
+               'histogram_component', 
                'probability_histogram_component', 
                'probability_box_component', 
-               'accuracy_range_component', 
-               'dooder_df_component', 
-               'embedding_df_component', 
-               'inference_df_component'
+               'accuracy_range_component'
                ]
 
 class BaseReport:
@@ -49,6 +50,7 @@ class BaseReport:
     def dooder_df_component(self):
         display(Markdown('## Dooder Dataframe'))
         display(self.dooder_df.head())
+        display(self.dooder_df.describe())
 
     def embedding_df_component(self):
         display(Markdown('## Embedding Dataframe'))
