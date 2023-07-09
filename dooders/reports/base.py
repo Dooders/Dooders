@@ -1,4 +1,9 @@
 from dooders.data.data import ExperimentData
+from IPython.display import display, Markdown
+import pandas as pd
+
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 
 
 BASE_REPORT = ['histogram_component', 
@@ -18,36 +23,37 @@ class BaseReport:
         self.embedding_df = self.data.embedding_df
         self.dooder_df = self.data.dooder_df
         self.inference_df = self.data.inference_df
+        self.compile_report()
         
     def render(self):
         pass
     
     def compile_report(self):
+        self.report = {}
+        for component in BASE_REPORT:
+            self.report[component] = getattr(
+                self, component)()
+
+    def histogram_component(self):
         pass
-    
-    
-death_age_by_cycle(dooder_df)
-gene_embedding(dooder_df, color_by='age')
-starting_success_probability(dooder_df)
 
+    def probability_histogram_component(self):
+        pass
 
-def histogram_component():
-    pass
+    def probability_box_component(self):
+        pass
 
-def probability_histogram_component():
-    pass
+    def accuracy_range_component(self):
+        pass
 
-def probability_box_component():
-    pass
+    def dooder_df_component(self):
+        display(Markdown('## Dooder Dataframe'))
+        display(self.dooder_df.head())
 
-def accuracy_range_component():
-    pass
+    def embedding_df_component(self):
+        display(Markdown('## Embedding Dataframe'))
+        display(self.embedding_df.head())
 
-def dooder_df_component():
-    pass
-
-def embedding_df_component():
-    pass
-
-def inference_df_component():
-    pass
+    def inference_df_component(self):
+        display(Markdown('## Inference Dataframe'))
+        display(self.inference_df.head())
