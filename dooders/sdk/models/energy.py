@@ -64,7 +64,7 @@ class Energy:
         self.position = position
         self.age = 0
         self.resources = resources
-        
+
     def __del__(self):
         self.resources = None
 

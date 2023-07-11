@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 class Genetics:
     """ 
-    
+    The genetics of a dooder.
     """
 
     genetic_profiles = []
@@ -15,10 +15,10 @@ class Genetics:
     def compile_genetics(cls, dooder: 'Dooder') -> dict:
         """ 
         Compile the genetics of a dooder.
-        
+
         Args:
             dooder: The dooder to compile the genetics for.
-        
+
         Returns:
             The compiled genetics.
         """

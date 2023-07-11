@@ -15,9 +15,9 @@ from dooders.sdk.base.base_time import BaseTime
 class Time(BaseTime):
     """ 
     Class manages the passage of time in the simulation. 
-    
+
     Each cycle all Dooder objects are stepped through.
-    
+
     Attributes
     ----------
     time : int
@@ -26,7 +26,7 @@ class Time(BaseTime):
         Dictionary of objects in the scheduler, with agent class names as keys.
     random : Random
         The random number generator used by the scheduler.
-        
+
     Methods
     -------
     add(object)
@@ -38,12 +38,12 @@ class Time(BaseTime):
     _step(object_class, shuffle)
         Step through the schedule for a given object class.
     """
-    
+
     __slots__ = ["time", "_objects", "random"]
 
     def __init__(self) -> None:
         self.random = random
-        self.time  = 0
+        self.time = 0
         self._objects = defaultdict(dict)
 
     def add(self, object: 'Agent') -> None:
