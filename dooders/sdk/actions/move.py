@@ -15,7 +15,7 @@ from dooders.sdk.utils.get_direction import get_direction
 def move(dooder) -> None:
     """ 
     Move the dooder to a new cell in the environment
-    
+
     Function will look for a policy in the settings that will determine
     where the dooder will move to. If the dooder is not able to move to
     the cell, the dooder's move count will not increase.
@@ -24,7 +24,7 @@ def move(dooder) -> None:
     ----------
     dooder : Dooder
         The dooder that is moving
-        
+
     Examples
     --------
     >>> dooder = Dooder((0, 0))
