@@ -64,6 +64,18 @@ class InternalModels(dict):
         for model in self.keys():
             self[model].inherit_weights(weights[model])
 
+    def save(self, path: str) -> None:
+        """ 
+        Save the internal models to a directory.
+
+        Parameters
+        ----------
+        path : str
+            The path to the directory to save the models to.
+        """
+        for model in self.keys():
+            self[model].save(f"{path}_{model}_weights")
+
     @property
     def weights(self) -> dict:
         """ 
