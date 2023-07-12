@@ -426,12 +426,12 @@ class SimpleNeuralNet:
         path : str
             The path to save the model
         """
-        self.model.save(path)
-        
+        np.save(path, np.array(self.weights, dtype=object))
+
     def save_weights(self, cycle_number: int) -> None:
         """ 
         Save the weights of the neural network from every dense layer
-        
+
         Parameters
         ----------
         cycle_number : int
@@ -448,7 +448,8 @@ class SimpleNeuralNet:
         weights_to_load : str
             The filename for the weights to load i.e. "model_xyz123_1_Movement"
         """
-        loaded_weights = np.load(f"recent/dooders/{weights_to_load}.npy", allow_pickle=True)
+        loaded_weights = np.load(
+            f"recent/dooders/{weights_to_load}.npy", allow_pickle=True)
         self.inherit_weights(loaded_weights)
 
     @property
@@ -478,5 +479,3 @@ class SimpleNeuralNet:
             if isinstance(layer, Layer_Dense):
                 weights.append(layer.weights)
         return weights
-
-

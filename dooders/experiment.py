@@ -5,6 +5,7 @@ from random import choices
 from typing import Dict, List
 
 from fastapi import WebSocket
+import numpy as np
 from tqdm import tqdm
 
 from dooders.sdk import strategies
@@ -150,12 +151,26 @@ class Experiment:
             self.results[i] = {}
             self.results[i]['summary'] = self.simulation.simulation_summary
             self.results[i]['state'] = self.simulation.state
+            self.save_passed_dooders(save_folder)
             del self.simulation
             pbar.update(1)
             experiment_count += 1
 
         pbar.close()
         self.save_experiment_results(save_folder)
+
+    def save_passed_dooders(self, save_folder: str) -> None:
+        """ 
+        Save the internal model weights of any Dooders that 
+        made it to the end of the simulation.
+        """
+        for dooder in self.get_objects('Dooder'):
+            if dooder.internal_models.weights:
+                # create dooder directory if it doesn't exist
+                if not os.path.exists(f"experiments/{save_folder}/dooders/"):
+                    os.makedirs(f"experiments/{save_folder}/dooders/")
+                dooder.internal_models.save(
+                    f"experiments/{save_folder}/dooders/{dooder.id}")
 
     def save_experiment_results(self, save_folder: str) -> None:
         """ 
