@@ -353,7 +353,7 @@ class SimpleNeuralNet:
         self.purpose = 'Movement'
         self.id = id
         self.model = Model()
-        self.model.add(Layer_Dense(9, 512, frozen=False))
+        self.model.add(Layer_Dense(9, 512, frozen=True))
         self.model.add(Activation_ReLU())
         self.model.add(Layer_Dense(512, 9))
         self.model.add(Activation_Softmax())

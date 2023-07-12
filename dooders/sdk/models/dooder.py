@@ -221,7 +221,7 @@ class Dooder(Agent):
         """
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
-        weights = self.weights['Consume'][0]
+        weights = self.weights['Consume'][1]
         embedding = self.gene_embedding.fit(weights)
         return embedding.singular_values_
 
