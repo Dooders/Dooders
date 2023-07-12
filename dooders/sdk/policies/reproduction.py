@@ -15,6 +15,33 @@ if TYPE_CHECKING:
     from dooders.sdk.models.dooder import Dooder
 
 
+def average(a_weights, b_weights):
+    merged_weights = {}
+    for i in range(len(a_weights)):
+        merged_weights.append((a_weights[i] + b_weights[i]) / 2)
+    return merged_weights
+
+def random(a_weights, b_weights):
+    merged_weights = {}
+    for i in range(len(a_weights)):
+        # Perform crossover at the gene level
+        geneA = a_weights[i]
+        geneB = b_weights[i]
+        
+        # Randomly select a gene from either parent
+        crossed_gene = random.choice([geneA, geneB])
+        
+        merged_weights.append(crossed_gene)
+
+    return merged_weights
+
+def crossover(a_weights, b_weights):
+    merged_weights = {}
+    for i in range(len(a_weights)):
+        merged_weights.append((a_weights[i] + b_weights[i]) / 2)
+    return merged_weights
+    
+
 @Core.register('policy')
 class AverageWeights(BasePolicy):
     """
