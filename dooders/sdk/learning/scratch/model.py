@@ -414,8 +414,8 @@ class SimpleNeuralNet:
         genetics : List[np.ndarray]
             The weights of the neural network
         """
-        self.model.layers[0].weights = genetics[0]
-        self.model.layers[2].weights = genetics[1]
+        self.model.layers[0].weights = genetics
+        # self.model.layers[2].weights = genetics[1]
 
     def save(self, path: str) -> None:
         """ 

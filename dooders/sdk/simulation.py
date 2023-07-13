@@ -138,7 +138,6 @@ class Simulation(Reality):
             desc=f"Simulation[{simulation_count}] Progress", total=max_cycles, disable=disable)
         self.starting_time = datetime.now()
         try:
-            self.setup()
 
             while self.stop_conditions():
                 self.step()
@@ -164,6 +163,7 @@ class Simulation(Reality):
         """
         self.__init__(self.settings)
         Information.reset()
+        self.setup()
 
     def stop(self) -> None:
         """
