@@ -14,7 +14,6 @@ from dooders.sdk.core import (Action, Condition, Policy, Settings, Strategy,
 from dooders.sdk.models.environment import Environment
 from dooders.sdk.simulation import Simulation
 
-
 #! need to simplify settings
 #! need easy way to "discover" existing settings
 
@@ -69,6 +68,8 @@ class Assemble:
             model_variables = settings_old['variables'][model_name]
             Strategy.compile(model, model_variables)
             cls._setup_model(simulation, model_name, model)
+            
+        simulation.setup()
 
         return simulation
 
