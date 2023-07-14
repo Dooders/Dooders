@@ -2,10 +2,9 @@ import ast
 import json
 import shutil
 from random import choices
-from typing import Dict, List
+from typing import Callable, Dict, List
 
 from fastapi import WebSocket
-import numpy as np
 from tqdm import tqdm
 
 from dooders.sdk import strategies
@@ -78,6 +77,7 @@ class Experiment:
         self.save_state = save_state
         self.batch = batch
         self.max_reset = max_reset
+        self.gene_pool = {}
 
     def create_simulation(self) -> None:
         """
@@ -131,7 +131,10 @@ class Experiment:
         with open("recent/state.json", "w") as f:
             json.dump(self.simulation.state, f)
 
-    def batch_simulate(self, n: int = 100, save_folder: str = 'recent/') -> None:
+    def batch_simulate(self,
+                       n: int = 100,
+                       save_folder: str = 'recent/',
+                       custom_logic: Callable = None) -> None:
         """ 
         Simulate n cycles.
 
@@ -141,12 +144,19 @@ class Experiment:
             The number of simulations to run.
         save_folder: str
             The folder to save the results in.
+        custom_logic: Callable
+            A function to run before each simulation. 
+            For any custom handling before each simulation.
         """
         experiment_count = 1
         pbar = tqdm(desc=f"Simulation[{experiment_count}] Progress", total=n)
         for i in range(n):
             self.simulation = self.create_simulation()
             self.simulation.auto_restart = False
+
+            if custom_logic:
+                custom_logic(self)
+
             self.simulation.run_simulation(batch=True)
             self.results[i] = {}
             self.results[i]['summary'] = self.simulation.simulation_summary
@@ -164,13 +174,18 @@ class Experiment:
         Save the internal model weights of any Dooders that 
         made it to the end of the simulation.
         """
+        setting = self.settings.get('GenePool')
+
         for dooder in self.get_objects('Dooder'):
             if dooder.internal_models.weights:
                 # create dooder directory if it doesn't exist
-                if not os.path.exists(f"experiments/{save_folder}/dooders/"):
-                    os.makedirs(f"experiments/{save_folder}/dooders/")
-                dooder.internal_models.save(
-                    f"experiments/{save_folder}/dooders/{dooder.id}")
+                if setting == 'save':
+                    if not os.path.exists(f"experiments/{save_folder}/dooders/"):
+                        os.makedirs(f"experiments/{save_folder}/dooders/")
+                    dooder.internal_models.save(
+                        f"experiments/{save_folder}/dooders/{dooder.id}")
+                elif setting == 'retain':
+                    self.gene_pool[dooder.id] = dooder.internal_models.weights
 
     def save_experiment_results(self, save_folder: str) -> None:
         """ 
