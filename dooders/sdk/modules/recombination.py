@@ -98,7 +98,7 @@ def crossover_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarra
     crossover_point = random.randint(0, len(a_weights))
     first_half = a_weights[:crossover_point]
     second_half = b_weights[crossover_point:]
-    new_weights = first_half + second_half
+    new_weights = np.concatenate((first_half, second_half), axis=0)
     return new_weights
 
 
