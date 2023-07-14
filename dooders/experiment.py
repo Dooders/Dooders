@@ -5,7 +5,6 @@ from random import choices
 from typing import Dict, List
 
 from fastapi import WebSocket
-import numpy as np
 from tqdm import tqdm
 
 from dooders.sdk import strategies
@@ -78,6 +77,7 @@ class Experiment:
         self.save_state = save_state
         self.batch = batch
         self.max_reset = max_reset
+        self.gene_pool = {}
 
     def create_simulation(self) -> None:
         """
@@ -164,13 +164,18 @@ class Experiment:
         Save the internal model weights of any Dooders that 
         made it to the end of the simulation.
         """
+        setting = self.settings.get('GenePool')
+
         for dooder in self.get_objects('Dooder'):
             if dooder.internal_models.weights:
                 # create dooder directory if it doesn't exist
-                if not os.path.exists(f"experiments/{save_folder}/dooders/"):
-                    os.makedirs(f"experiments/{save_folder}/dooders/")
-                dooder.internal_models.save(
-                    f"experiments/{save_folder}/dooders/{dooder.id}")
+                if setting == 'save':
+                    if not os.path.exists(f"experiments/{save_folder}/dooders/"):
+                        os.makedirs(f"experiments/{save_folder}/dooders/")
+                    dooder.internal_models.save(
+                        f"experiments/{save_folder}/dooders/{dooder.id}")
+                elif setting == 'retain':
+                    self.gene_pool[dooder.id] = dooder.internal_models.weights
 
     def save_experiment_results(self, save_folder: str) -> None:
         """ 
