@@ -1,6 +1,8 @@
 """
 The purpose of this module is to run recursive artificial selection (RAS) to mimic the process of natural selection in evolution
-to evaluate different designs. RAS is a type of genetic programming used ...
+to evaluate different designs. RAS is a type of genetic programming that takes the Dooders that make it to the end of the simulation
+and then are used as the genetic base of another simulation with a new group of Dooders. The Dooders that make it to the end of
+the simulation are comsidered 'fit' and a recombined with another fit Dooder.
 """
 
 import random
