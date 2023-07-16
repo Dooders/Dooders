@@ -1,14 +1,17 @@
 """
-The purpose of this module is to run recursive artificial selection (RAS) to mimic the process of natural selection in evolution
-to evaluate different designs. RAS is a type of genetic programming that takes the Dooders that make it to the end of the simulation
-and then are used as the genetic base of another simulation with a new group of Dooders. The Dooders that make it to the end of
-the simulation are comsidered 'fit' and a recombined with another fit Dooder.
+The purpose of this module is to run recursive artificial selection (RAS) to 
+mimic the process of natural selection in evolution to evaluate different designs. 
+RAS is a type of genetic programming that takes the Dooders that make it to the 
+end of the simulation and then are used as the genetic base of another simulation 
+with a new group of Dooders. The Dooders that make it to the end of
+the simulation are considered 'fit' and a recombined with another fit Dooder.
 """
 
 import random
 from typing import Tuple
 
 import numpy as np
+from pydantic import BaseModel
 from sklearn.decomposition import PCA
 
 from dooders.experiment import Experiment
@@ -17,12 +20,12 @@ from dooders.sdk.modules.recombination import recombine
 gene_embedding = PCA(n_components=3)
 
 
-class EmbeddingTemplate:
-    genetic
-    environment
+class EmbeddingTemplate(BaseModel):
+    genetic: np.ndarray
+    environment: np.ndarray
 
 
-def embeddings(weights: dict) -> list:
+def get_embeddings(gene_pool: dict) -> list:
     """ 
     Returns a list of the embeddings of the weights of each dooder in a gene pool
 
@@ -37,7 +40,7 @@ def embeddings(weights: dict) -> list:
         A list of the embeddings of the weights of each dooder in a gene pool
     """
     all_weights = []
-    for dooder in weights.values():
+    for dooder in gene_pool.values():
         weight = dooder['Consume'][0]
         embedding = gene_embedding.fit(weight)
         all_weights.append(embedding.singular_values_)
@@ -45,7 +48,7 @@ def embeddings(weights: dict) -> list:
     return all_weights
 
 
-def random_parents(gene_pool: dict) -> Tuple[tuple, tuple]:
+def select_parents(gene_pool: dict) -> Tuple[tuple, tuple]:
     """ 
     Returns two random dooders' weights from a directory of weight files
 
@@ -70,7 +73,7 @@ def random_parents(gene_pool: dict) -> Tuple[tuple, tuple]:
     return (parent_a, parent_a_weights), (parent_b, parent_b_weights)
 
 
-def produce_genes(gene_pool: dict, recombination_type: str = 'crossover') -> np.ndarray:
+def recombine_genes(gene_pool: dict, recombination_type: str = 'crossover') -> np.ndarray:
     """ 
     Produces a new set of genes from two random dooders' weights 
     from a provided gene pool
@@ -89,7 +92,7 @@ def produce_genes(gene_pool: dict, recombination_type: str = 'crossover') -> np.
         The new set of genes produced from the two random dooders' weights
     """
 
-    parent_a, parent_b = random_parents(gene_pool)
+    parent_a, parent_b = select_parents(gene_pool)
 
     parent_a_genes = parent_a[1][0]
     parent_b_genes = parent_b[1][0]
@@ -121,14 +124,14 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
     results = {'fit_dooder_counts': [],
                'generation_embeddings': [],
                'average_fit_accuracy': []
-              }
+               }
 
     def inherit_weights(experiment):
 
         if gene_pool == {}:
             pass
         else:
-            new_genes = produce_genes(gene_pool)
+            new_genes = recombine_genes(gene_pool)
             dooder = experiment.simulation.arena.get_dooder()
             dooder.internal_models['Consume'].inherit_weights(new_genes)
 
@@ -141,7 +144,7 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
                                   custom_logic=inherit_weights)
         gene_pool = experiment.gene_pool.copy()
         results['fit_dooder_counts'].append(len(experiment.gene_pool.keys()))
-        results['generation_embeddings'].append(embeddings(gene_pool))
+        results['generation_embeddings'].append(get_embeddings(gene_pool))
         del experiment
 
     return results
