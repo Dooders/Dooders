@@ -1,14 +1,23 @@
 """
-The purpose of this module is to run recursive artificial selection (RAS) to 
-mimic the process of natural selection in evolution to evaluate different designs. 
-RAS is a type of genetic programming that takes the Dooders that make it to the 
-end of the simulation and then are used as the genetic base of another simulation 
-with a new group of Dooders. The Dooders that make it to the end of
-the simulation are considered 'fit' and a recombined with another fit Dooder.
+This module implements Recursive Artificial Selection (RAS), a genetic 
+programming approach that emulates natural selection in order to evaluate and 
+evolve various designs. RAS operates by using surviving 'Dooders' from one 
+simulation as the genetic foundation for subsequent simulations involving a 
+new set of Dooders. Fit Dooders, those that successfully complete the simulation, 
+are considered for recombination with other fit Dooders.
+
+RAS leverages the principles of evolution to iteratively refine and optimize 
+designs. By recombining genetic material from successful Dooders, RAS aims to 
+enhance the overall fitness of the simulated population over time.
+
+The key objectives of this module are to facilitate the execution of RAS and 
+provide a framework for managing the genetic programming process. By employing 
+RAS, users can explore and evolve designs that exhibit desirable traits, leading 
+to improved solutions in a variety of domains.
 """
 
 import random
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 from pydantic import BaseModel
@@ -24,14 +33,25 @@ class EmbeddingTemplate(BaseModel):
     genetic: np.ndarray
     environment: np.ndarray
 
+    class Config:
+        arbitrary_types_allowed = True
 
-def get_embeddings(gene_pool: dict) -> list:
+
+DEFAULT_SETTINGS = {
+    'MaxCycles': 100,
+    'SimulationCount': 1000,
+    'RecombinationType': 'crossover',
+    'GenePool': 'retain',
+}
+
+
+def get_embeddings(gene_pool: dict) -> List[dict]:
     """ 
     Returns a list of the embeddings of the weights of each dooder in a gene pool
 
     Parameters
     ----------
-    weights : (dict)
+    gene_pool : (dict)
         A dictionary containing the dooder ids as keys and their weights as values
 
     Returns
@@ -41,9 +61,15 @@ def get_embeddings(gene_pool: dict) -> list:
     """
     all_weights = []
     for dooder in gene_pool.values():
-        weight = dooder['Consume'][0]
-        embedding = gene_embedding.fit(weight)
-        all_weights.append(embedding.singular_values_)
+        genetic_weights = dooder['Consume'][0]
+        environment_weights = dooder['Consume'][1]
+        genetic_embedding = gene_embedding.fit(
+            genetic_weights).singular_values_
+        environment_embedding = gene_embedding.fit(
+            environment_weights).singular_values_
+        embedding = EmbeddingTemplate(
+            genetic=genetic_embedding, environment=environment_embedding).dict()
+        all_weights.append(embedding)
 
     return all_weights
 
@@ -103,7 +129,7 @@ def recombine_genes(gene_pool: dict, recombination_type: str = 'crossover') -> n
     return np.array(new_genes)
 
 
-def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -> list:
+def recursive_artificial_selection(settings: dict = DEFAULT_SETTINGS, generations: int = 100) -> list:
     """ 
     Runs a recursive artificial selection experiment
 
@@ -122,8 +148,7 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
 
     gene_pool = {}
     results = {'fit_dooder_counts': [],
-               'generation_embeddings': [],
-               'average_fit_accuracy': []
+               'generation_embeddings': []
                }
 
     def inherit_weights(experiment):
@@ -131,14 +156,15 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
         if gene_pool == {}:
             pass
         else:
-            new_genes = recombine_genes(gene_pool)
+            new_genes = recombine_genes(
+                gene_pool, recombination_type=settings['RecombinationType'])
             dooder = experiment.simulation.arena.get_dooder()
             dooder.internal_models['Consume'].inherit_weights(new_genes)
 
-    for i in range(iterations):
+    for i in range(generations):
 
         experiment = Experiment(settings)
-        experiment.batch_simulate(1000,
+        experiment.batch_simulate(settings['SimulationCount'],
                                   i+1,
                                   'recursive_artificial_selection',
                                   custom_logic=inherit_weights)
