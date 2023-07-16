@@ -10,6 +10,11 @@ from dooders.sdk.modules.recombination import recombine
 gene_embedding = PCA(n_components=3)
 
 
+class EmbeddingTemplate:
+    genetic
+    environment
+
+
 def embeddings(weights: dict) -> list:
     """ 
     Returns a list of the embeddings of the weights of each dooder in a gene pool
@@ -106,7 +111,10 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
     """
 
     gene_pool = {}
-    results = []
+    results = {'fit_dooder_counts': [],
+               'generation_embeddings': [],
+               'average_fit_accuracy': []
+              }
 
     def inherit_weights(experiment):
 
@@ -125,7 +133,8 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
                                   'recursive_artificial_selection',
                                   custom_logic=inherit_weights)
         gene_pool = experiment.gene_pool.copy()
-        results.append(len(experiment.gene_pool.keys()))
+        results['fit_dooder_counts'].append(len(experiment.gene_pool.keys()))
+        results['generation_embeddings'].append(embeddings(gene_pool))
         del experiment
 
     return results
