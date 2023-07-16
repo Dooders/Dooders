@@ -61,7 +61,6 @@ def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -
     return fig
 
 
-#! add color by and input is dooder_df
 def gene_embedding_1d(values: list, component: int = 0, padding: float = 0.02) -> go.Figure:
     """ 
     Create a 1D scatter plot of the gene embeddings.
