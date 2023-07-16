@@ -26,9 +26,14 @@ def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -
     fig : px.scatter
         The scatter plot of a 2D embedding.
     """
-    temp_df = dooder_df.copy()[['last_encoding', color_by]]
-    temp_df['X'] = temp_df['last_encoding'].apply(lambda x: x[0])
-    temp_df['Y'] = temp_df['last_encoding'].apply(lambda x: x[1])
+
+    # If the dooder_df does not have X and Y columns, create them
+    if 'X' not in dooder_df.columns:
+        temp_df = dooder_df.copy()[['last_encoding', color_by]]
+        temp_df['X'] = temp_df['last_encoding'].apply(lambda x: x[0])
+        temp_df['Y'] = temp_df['last_encoding'].apply(lambda x: x[1])
+    else:
+        temp_df = dooder_df.copy()[['X', 'Y', color_by]]
 
     # Create the scatter plot
     fig = px.scatter(temp_df,
