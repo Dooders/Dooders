@@ -121,7 +121,7 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
 
         experiment = Experiment(settings)
         experiment.batch_simulate(1000,
-                                  i,
+                                  i+1,
                                   'recursive_artificial_selection',
                                   custom_logic=inherit_weights)
         gene_pool = experiment.gene_pool.copy()
