@@ -2,9 +2,35 @@ import random
 from typing import Tuple
 
 import numpy as np
+from sklearn.decomposition import PCA
 
 from dooders.experiment import Experiment
 from dooders.sdk.modules.recombination import recombine
+
+gene_embedding = PCA(n_components=3)
+
+
+def embeddings(weights: dict) -> list:
+    """ 
+    Returns a list of the embeddings of the weights of each dooder in a gene pool
+
+    Parameters
+    ----------
+    weights : (dict)
+        A dictionary containing the dooder ids as keys and their weights as values
+
+    Returns
+    -------
+    all_weights : (list)
+        A list of the embeddings of the weights of each dooder in a gene pool
+    """
+    all_weights = []
+    for dooder in weights.values():
+        weight = dooder['Consume'][0]
+        embedding = gene_embedding.fit(weight)
+        all_weights.append(embedding.singular_values_)
+
+    return all_weights
 
 
 def random_parents(gene_pool: dict) -> Tuple[tuple, tuple]:
@@ -95,6 +121,7 @@ def recursive_artificial_selection(settings: dict = {}, iterations: int = 100) -
 
         experiment = Experiment(settings)
         experiment.batch_simulate(1000,
+                                  i,
                                   'recursive_artificial_selection',
                                   custom_logic=inherit_weights)
         gene_pool = experiment.gene_pool.copy()
