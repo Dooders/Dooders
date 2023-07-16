@@ -9,12 +9,6 @@
 
 Dooders is a Python library to conduct *complex model-based simulations* for research in cognitive AI.[^1] Its primary purpose is to facilitate the exploration and analysis of advanced designs for Artificial Intelligence systems with cognitive capabilities.
 
-Unpacking some of the terminology: 
-
-* **Complex**: The library simulates not only a single system, but systems of systems.[^2]  
-* **Model-based**: A model is like a map, it's an imperfect and simplified representation of reality.
-* **Simulation**: An imitation of a system via models; executed to study the behavior.  
-
 Systems are collections of interacting and dynamic components. These can range from the complex ecological system of the Earth's environment, the chemical system of a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/), to even digital systems such as a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png).
 
 Systems are everywhere.[^3]  
