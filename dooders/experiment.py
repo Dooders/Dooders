@@ -133,6 +133,7 @@ class Experiment:
 
     def batch_simulate(self,
                        n: int = 100,
+                       experiment_count: int = 1,
                        save_folder: str = 'recent/',
                        custom_logic: Callable = None) -> None:
         """ 
@@ -148,8 +149,8 @@ class Experiment:
             A function to run before each simulation. 
             For any custom handling before each simulation.
         """
-        experiment_count = 1
-        pbar = tqdm(desc=f"Simulation[{experiment_count}] Progress", total=n)
+
+        pbar = tqdm(desc=f"Experiment[{experiment_count}] Progress", total=n)
         for i in range(n):
             self.simulation = self.create_simulation()
             self.simulation.auto_restart = False
@@ -164,7 +165,6 @@ class Experiment:
             self.save_passed_dooders(save_folder)
             del self.simulation
             pbar.update(1)
-            experiment_count += 1
 
         pbar.close()
         self.save_experiment_results(save_folder)
