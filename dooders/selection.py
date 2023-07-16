@@ -1,3 +1,8 @@
+"""
+The purpose of this module is to run recursive artificial selection (RAS) to mimic the process of natural selection in evolution
+to evaluate different designs. RAS is a type of genetic programming used ...
+"""
+
 import random
 from typing import Tuple
 
