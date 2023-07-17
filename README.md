@@ -7,13 +7,11 @@
   
 ## Overview
 
-Dooders is an open-source research project focused on the development of artificial intelligent agents in a simulated reality. The project aims to provide the conditions and mechanisms for cognitive agents to evolve and emerge in a digital environment.
+Dooders is an open-source research project focused on the development of artificial intelligent agents in a simulated reality. The project aims to enable the conditions and mechanisms for cognitive agents to evolve and emerge in a digital environment.
 
 A [Dooder](docs/Dooder.md) is an agent object in the simulation with an amount of causal control. It acts in the simulation only as long as it consumes [Energy](https://github.com/csmangum/Dooders/blob/main/docs/Energy.md).
 
 Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Dooders/blob/main/docs/Learning.md), get an overview of the [core components](https://github.com/csmangum/Dooders/blob/main/docs/Core.md) of the library, or read [why I started the project](https://github.com/csmangum/Dooders/blob/main/docs/Why.md).
-
-This project is a space where I can experiment, learn more about complexity theory and gain a deeper understanding of concepts like feedback loops, attractors, adaptation, etc.
 
 I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list). Including the results from my [first experiment](https://rememberization.substack.com/p/experiment-1-single-simulation).
 
