@@ -7,11 +7,7 @@
   
 ## Overview
 
-Dooders is a Python library to conduct *complex model-based simulations* for research in cognitive AI.[^1] Its primary purpose is to facilitate the exploration and analysis of advanced designs for Artificial Intelligence systems with cognitive capabilities.
-
-Systems are collections of interacting and dynamic components. These can range from the complex ecological system of the Earth's environment, the chemical system of a [reef tank](https://www.saltwateraquariumblog.com/9-most-important-reef-tank-aquarium-water-parameters/), to even digital systems such as a company's [internal network](https://online.visual-paradigm.com/servlet/editor-content/knowledge/network-diagram/what-is-network-diagram/sites/7/2020/03/network-diagram-example-internal-network-diagram.png).
-
-Systems are everywhere.[^3]  
+Dooders is an open-source research project focused on the development of artificial intelligent agents in a simulated reality. The project aims to provide the conditions and mechanisms for cognitive agents to evolve and emerge in a digital environment.
 
 A [Dooder](docs/Dooder.md) is an agent object in the simulation with an amount of causal control. It acts in the simulation only as long as it consumes [Energy](https://github.com/csmangum/Dooders/blob/main/docs/Energy.md).
 
@@ -50,10 +46,3 @@ experiment.experiment_summary()
  'AverageAge': 14}
 ```
 For more details, see the [Quick Start guide](docs/QuickStart.md).  
-
-  
-### Footnotes
-
-[^1]: [Here](https://towardsdatascience.com/the-rise-of-cognitive-ai-a29d2b724ccc) is a great reference outlining cognitive AI
-[^2]: Complex systems have a number of components with non-linear (random or unpredictable) relationships.  
-[^3]: A great book about complex systems is [Thinking in Systems](https://www.amazon.com/Thinking-Systems-Donella-H-Meadows/dp/1603580557/ref=nodl_?dplnkId=c7d91e2b-3d9e-4f2f-b62d-b83301ddb81d)
