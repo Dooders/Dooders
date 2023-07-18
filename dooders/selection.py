@@ -67,6 +67,7 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
     """
     gene_pool_embeddings = []
     for dooder in gene_pool.values():
+
         genetic_weights = dooder['Consume'][0]
         environment_weights = dooder['Consume'][1]
         genetic_embedding = GENE_EMBEDDING.fit(
@@ -127,16 +128,16 @@ def recombine_genes(gene_pool: Dict[str, dict], recombination_type: str = 'cross
     """
     parent_a, parent_b = select_parents(gene_pool)
     recombined_genes = recombine(
-        parent_a[1][0], parent_b[1][0], recombination_type=recombination_type)
+        parent_a[1], parent_b[1], recombination_type=recombination_type)
 
-    return np.array(recombined_genes)
+    return np.array(recombined_genes, dtype=object)
 
 
-def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS, 
+def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
                                    generations: int = 100) -> Dict[str, List]:
     """ 
     Runs a Recursive Artificial Selection (RAS) experiment.
-    
+
     Intended to evaluate the evolutionary potential of a design, RAS
     leverages the principles of evolution to iteratively refine and
     optimize designs, creating an enhanced generation of 'Dooders' based
@@ -177,6 +178,7 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
                                   custom_logic=inherit_weights)
         gene_pool = experiment.gene_pool.copy()
         experiment_results['fit_dooder_counts'].append(len(gene_pool))
-        experiment_results['generation_embeddings'].append(get_embeddings(gene_pool))
+        experiment_results['generation_embeddings'].append(
+            get_embeddings(gene_pool))
 
     return experiment_results
