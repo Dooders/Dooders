@@ -1,10 +1,6 @@
 import random
-from typing import TYPE_CHECKING
 
 import numpy as np
-
-if TYPE_CHECKING:
-    from dooders.sdk.models.dooder import Dooder
 
 
 def average_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
@@ -32,7 +28,7 @@ def average_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     new_weights = []
     for i in range(len(a_weights)):
         new_weights.append((a_weights[i] + b_weights[i]) / 2)
-    return new_weights
+    return np.array(new_weights)
 
 
 def random_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
@@ -69,7 +65,7 @@ def random_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
 
         new_weights.append(crossed_gene)
 
-    return new_weights
+    return np.array(new_weights)
 
 
 def crossover_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
@@ -130,14 +126,15 @@ def range_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
         random_weight = np.random.uniform(a_weights[i], b_weights[i])
         new_weights.append(random_weight)
 
-    return new_weights
+    return np.array(new_weights)
 
 
 RECOMBINATION_TYPES = {
     'average': average_weights,
     'random': random_weights,
     'crossover': crossover_weights,
-    'range': range_weights
+    'range': range_weights,
+    'none': lambda a, b: random.choice([a, b])
 }
 
 
@@ -146,6 +143,10 @@ def recombine(a_weights: np.ndarray,
               recombination_type: str = 'average') -> np.ndarray:
     """ 
     Recombines the weights of two Dooders to create a new set of weights
+
+    Options for recombination_type: 'average', 'random', 'crossover', 'range', 'none'
+    
+    none will randomly select either a or b
 
     Parameters
     ----------
@@ -159,4 +160,9 @@ def recombine(a_weights: np.ndarray,
     new_weights : (np.ndarray)
     """
 
-    return RECOMBINATION_TYPES[recombination_type](a_weights, b_weights)
+    recombined_weights = []
+    for a, b in zip(a_weights.tolist(), b_weights.tolist()):
+        recombined_weights.append(
+            RECOMBINATION_TYPES[recombination_type](a, b))
+
+    return recombined_weights
