@@ -10,7 +10,10 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=['tests']),
     version='0.0.3',                                # important for updates
     license='MIT',                                  # should match your chosen license
-    description='Testing installation of Package',
+    description="""Dooders is an open-source research project focused on the 
+    development of artificial intelligent agents in a simulated reality. 
+    The project aims to enable the conditions and mechanisms for cognitive 
+    agents to evolve and emerge in a digital environment.""",
     long_description=long_description,              # loads your README.md
     long_description_content_type="text/markdown",  # README.md is of type 'markdown'
     author='Chris Mangum',
