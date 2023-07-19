@@ -10,7 +10,9 @@ Welcome to Dooders's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   getting_started
+   dooders
+   SDK
 
 Indices and tables
 ==================
