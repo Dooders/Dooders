@@ -5,17 +5,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='Dooders',                           # should match the package folder
-    # should match the package folder
+    name='Dooders',                          
     packages=setuptools.find_packages(exclude=['tests']),
-    version='0.0.3',                                # important for updates
-    license='MIT',                                  # should match your chosen license
+    version='0.0.3',                                
+    license='MIT',                                 
     description="""Dooders is an open-source research project focused on the 
-    development of artificial intelligent agents in a simulated reality. 
-    The project aims to enable the conditions and mechanisms for cognitive 
-    agents to evolve and emerge in a digital environment.""",
-    long_description=long_description,              # loads your README.md
-    long_description_content_type="text/markdown",  # README.md is of type 'markdown'
+    development of artificial intelligent agents in a simulated reality.""",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='Chris Mangum',
     author_email='csmangum@gmail.com',
     url='https://github.com/csmangum/Dooders',
