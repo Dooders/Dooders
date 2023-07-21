@@ -1,14 +1,5 @@
 """
-This module implements Recursive Artificial Selection (RAS), a genetic 
-programming approach that emulates natural selection to evaluate and 
-evolve various designs. RAS leverages the principles of evolution to 
-iteratively refine and optimize designs, creating an enhanced generation 
-of 'Dooders' based on the success of previous simulations.
 
-The primary objectives of this module are to facilitate the execution 
-of RAS and provide a comprehensive framework for managing the genetic 
-programming process. This allows users to explore and evolve designs 
-that exhibit desirable traits, improving solutions in various domains.
 """
 
 import random
@@ -18,7 +9,6 @@ import numpy as np
 from pydantic import BaseModel
 from sklearn.decomposition import PCA
 
-from dooders.experiment import Experiment
 from dooders.sdk.modules.recombination import recombine
 
 # Global PCA instance for embedding
@@ -31,14 +21,6 @@ class EmbeddingTemplate(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-
-
-DEFAULT_SETTINGS = {
-    'MaxCycles': 100,
-    'SimulationCount': 1000,
-    'RecombinationType': 'crossover',
-    'GenePool': 'retain',
-}
 
 
 def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
@@ -131,54 +113,3 @@ def recombine_genes(gene_pool: Dict[str, dict], recombination_type: str = 'cross
         parent_a[1], parent_b[1], recombination_type=recombination_type)
 
     return np.array(recombined_genes, dtype=object)
-
-
-def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
-                                   generations: int = 100) -> Dict[str, List]:
-    """ 
-    Runs a Recursive Artificial Selection (RAS) experiment.
-
-    Intended to evaluate the evolutionary potential of a design, RAS
-    leverages the principles of evolution to iteratively refine and
-    optimize designs, creating an enhanced generation of 'Dooders' based
-    on the success of previous simulations.
-
-    Parameters
-    ----------
-    settings : dict, optional
-        The settings to use for the experiment (default is DEFAULT_SETTINGS).
-    generations : int, optional
-        The number of generations for the experiment (default is 100).
-
-    Returns
-    -------
-    dict
-        A dictionary containing the count of fit Dooders and the generation 
-        embeddings after each generation. Containing a list of the count of
-        fit Dooders and a list of the generation embeddings for each generation.
-    """
-    gene_pool = {}
-    experiment_results = {'fit_dooder_counts': [], 'generation_embeddings': []}
-
-    def inherit_weights(experiment: Experiment):
-        """ 
-        Inherit the weights of the Dooders in the gene pool.
-        """
-        if gene_pool:
-            new_genes = recombine_genes(
-                gene_pool, recombination_type=settings['RecombinationType'])
-            dooder = experiment.simulation.arena.get_dooder()
-            dooder.internal_models['Consume'].inherit_weights(new_genes)
-
-    for i in range(generations):
-        experiment = Experiment(settings)
-        experiment.batch_simulate(settings['SimulationCount'],
-                                  i+1,
-                                  'recursive_artificial_selection',
-                                  custom_logic=inherit_weights)
-        gene_pool = experiment.gene_pool.copy()
-        experiment_results['fit_dooder_counts'].append(len(gene_pool))
-        experiment_results['generation_embeddings'].append(
-            get_embeddings(gene_pool))
-
-    return experiment_results
