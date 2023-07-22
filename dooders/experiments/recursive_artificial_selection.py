@@ -58,7 +58,7 @@ def get_accuracies(results: Dict[str, List]) -> List[float]:
     inference_df = get_inference_record_df(results)
     accuracies = calculate_accuracies(inference_df)
 
-    return accuracies
+    return [accuracy for accuracy in accuracies.values()]
 
 
 def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
@@ -109,7 +109,7 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
         gene_pool = experiment.gene_pool.copy()
 
         experiment_results['accuracies'].append(
-            get_accuracies(experiment.results))
+            get_accuracies(experiment.experiment_results))
         experiment_results['fit_dooder_counts'].append(len(gene_pool))
         experiment_results['generation_embeddings'].append(
             get_embeddings(gene_pool))
