@@ -1,5 +1,6 @@
 """
-
+Selection module is used to select the most fit Dooders from a gene pool
+and recombine their weights to produce a new set of genes.
 """
 
 import random
