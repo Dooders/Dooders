@@ -122,7 +122,8 @@ class Experiment:
                        simulation_number: int = 100,
                        experiment_count: int = 1,
                        save_folder: str = 'recent/',
-                       custom_logic: Callable = None) -> None:
+                       custom_logic: Callable = None,
+                       save_result: bool = False) -> None:
         """ 
         Simulate n cycles.
 
@@ -158,7 +159,9 @@ class Experiment:
             pbar.update(1)
 
         pbar.close()
-        self.save_experiment_results(save_folder)
+
+        if save_result:
+            self.save_experiment_results(save_folder)
 
     def cleanup(self) -> None:
         """ 
