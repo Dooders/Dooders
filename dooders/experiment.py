@@ -1,11 +1,12 @@
 import json
 import shutil
-from typing import Callable
+from typing import Callable, List
 
 from tqdm import tqdm
 
 from dooders.sdk import strategies
 from dooders.sdk.actions import *
+from dooders.sdk.base.agent import Agent
 from dooders.sdk.core import Assemble
 from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
@@ -178,6 +179,23 @@ class Experiment:
                     shutil.rmtree(file_path)
             except Exception as e:
                 pass
+
+    def get_objects(self, object_type: str = 'Agent') -> List[Agent]:
+        """ 
+        Get all objects of a given type.
+        Returns all objects if no type is given.
+
+        Parameters
+        ----------
+        object_type: str
+            The type of object to get.
+
+        Returns
+        -------
+        List[Agent]
+            A list of objects of the given type.
+        """
+        return self.simulation.environment.get_objects(object_type)
 
     def _save_state(self) -> None:
         """ 
