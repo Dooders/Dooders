@@ -145,7 +145,7 @@ platform/node_modules/
 .vscode/tasks.json
 .vscode/launch.json
 recent/
-experiments/
+results/
 *.gif
 Roboto-Bold.ttf
 *.dat
