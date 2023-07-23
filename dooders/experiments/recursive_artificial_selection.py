@@ -51,6 +51,28 @@ def save_results(type: str, results: Dict[str, List], filename: str = 'results.j
 
     with open(f'results/ras/{type}/{filename}', 'w') as f:
         json.dump(results, f)
+        
+        
+def load_results(type: str, filename: str = 'results.json') -> Dict[str, List]:
+    """ 
+    Loads the results of the experiment from a JSON file.
+
+    Parameters
+    ----------
+    type : str
+        The type of experiment (the recombination type).
+    filename : str, optional
+        The name of the file to load the results from (default is 'results.json').
+
+    Returns
+    -------
+    dict
+        The results of the experiment.
+    """
+    with open(f'results/ras/{type}/{filename}', 'r') as f:
+        results = json.load(f)
+        
+    return results
 
 
 def get_accuracies(results: Dict[str, List]) -> List[float]:
