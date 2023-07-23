@@ -17,11 +17,8 @@ GENE_EMBEDDING = PCA(n_components=3)
 
 
 class EmbeddingTemplate(BaseModel):
-    genetic: np.ndarray
-    environment: np.ndarray
-
-    class Config:
-        arbitrary_types_allowed = True
+    genetic: List[float]
+    environment: List[float]
 
 
 def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
@@ -54,9 +51,9 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
         genetic_weights = dooder['Consume'][0]
         environment_weights = dooder['Consume'][1]
         genetic_embedding = GENE_EMBEDDING.fit(
-            genetic_weights).singular_values_
+            genetic_weights).singular_values_.tolist( )
         environment_embedding = GENE_EMBEDDING.fit(
-            environment_weights).singular_values_
+            environment_weights).singular_values_.tolist( )
         embedding = EmbeddingTemplate(
             genetic=genetic_embedding, environment=environment_embedding).dict()
         gene_pool_embeddings.append(embedding)
