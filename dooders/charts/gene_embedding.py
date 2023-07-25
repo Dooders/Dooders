@@ -8,7 +8,10 @@ from PIL.Image import LANCZOS
 embedding_map = {0: 'EmbeddingA', 1: 'EmbeddingB', 2: 'EmbeddingC'}
 
 
-def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -> px.scatter:
+def gene_embedding(dooder_df,
+                   color_by: str = 'cycle',
+                   show_cbar: bool = True,
+                   title: str = 'Gene Embedding') -> px.scatter:
     """ 
     Create a scatter plot of the gene embeddings.
 
@@ -40,7 +43,7 @@ def gene_embedding(dooder_df, color_by: str = 'cycle', show_cbar: bool = True) -
                      x="X",
                      y="Y",
                      color=color_by,
-                     title="Gene Embedding",
+                     title=title,
                      color_continuous_scale="Viridis")
 
     # Remove axis titles
