@@ -1,13 +1,20 @@
+import math
 import statistics
 from typing import Any, Dict
 
 import pandas as pd
 from IPython.display import Markdown, display
 
+from dooders.charts.evolution_speed import evolution_speed
 from dooders.charts.fit_count_and_accuracy import fit_count_and_accuracy
 from dooders.charts.gene_embedding import gene_embedding
+from dooders.charts.generation_spread import generation_spread
 
 recombination_types = ['crossover', 'average', 'random', 'range', 'none']
+
+
+def euclidean_distance(coord1, coord2):
+    return math.sqrt((coord2[0] - coord1[0])**2 + (coord2[1] - coord1[1])**2)
 
 
 def get_embedding_df(layer: str, results: Dict[str, Any]) -> pd.DataFrame:
@@ -39,15 +46,62 @@ def get_embedding_df(layer: str, results: Dict[str, Any]) -> pd.DataFrame:
     return df
 
 
+def evolution_distance(df: pd.DataFrame) -> float:
+    """ 
+    Calculates the distance between the first and last point in a dataframe
+    of centroids.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A dataframe of the centroids for a given layer and recombination type.
+
+    Returns
+    -------
+    float
+        The distance between the first and last point in a dataframe of centroids.
+    """
+    if not df.empty:
+        first_x, *_, last_x = df['X'].tolist()
+        first_y, *_, last_y = df['Y'].tolist()
+
+    return euclidean_distance((first_x, first_y), (last_x, last_y))
+
+
+def display_layer_results(layer: str, results: Dict[str, Any]) -> None:
+    """ 
+    Displays the results for a given layer.
+    
+    Including:
+    - Evolution distance
+    - Genetic embeddings
+    - Adaptive embeddings
+    - Generation spread
+    - Evolution speed
+
+    Parameters
+    ----------
+    layer : str
+        The layer to display the results for. Genetic or Adaptive.
+    results : Dict[str, Any]
+        The results of the recursive artificial selection experiment.
+    """
+    title = layer.capitalize()
+    display(Markdown('## ' + title + ' Embeddings'))
+    df = get_embedding_df(layer, results)
+    centroid_df = df.groupby('generation').mean().reset_index()
+    centroid_distance = evolution_distance(centroid_df)
+    display(Markdown(f'### Evolution distance: {centroid_distance}'))
+    gene_embedding(df)
+    gene_embedding(centroid_df, title=f'{title} Centroid')
+    generation_spread(df)
+    evolution_speed(centroid_df)
+
+
 def report(recombination_type: str, results: Dict[str, Any]) -> None:
     """ 
     Generates a report for the recursive artificial selection experiment.
-    
-    Including: 
-    - Count and accuracy plot
-    - Genetic embeddings
-    - Adaptive embeddings
-    
+
     Parameters
     ----------
     recombination_type : str
@@ -67,36 +121,7 @@ def report(recombination_type: str, results: Dict[str, Any]) -> None:
     fit_count_and_accuracy(dooder_counts, average_accuracies)
 
     # Display the genetic embeddings
-    display(Markdown('## Genetic Embeddings'))
-    genetic_df = get_embedding_df('genetic', results)
-    gene_embedding(genetic_df)
-    centroid_df = genetic_df.groupby('generation').mean().reset_index()
-    gene_embedding(centroid_df, title='Genetic Centroid')
+    display_layer_results('genetic', results)
 
     # Display the adaptive embeddings
-    display(Markdown('## Adaptive Embeddings'))
-    adaptive_df = get_embedding_df('adaptive', results)
-    gene_embedding(adaptive_df)
-    centroid_df = adaptive_df.groupby('generation').mean().reset_index()
-    gene_embedding(centroid_df, title='Adaptive Centroid')
-
-
-
-
-
-
-    # Count and accuracy plot
-
-    ### Genetic Embeddings ###
-    # Centroid and embedding plots (side by side?)
-    # Spread by generation plot
-    # Evolution speed by generation plot
-    # Overall distance metric (start to end)
-
-    ### Adaptive Embeddings ###
-    # Centroid and embedding plots (side by side?)
-    # Spread by generation plot
-    # Evolution speed by generation plot
-    # Overall distance metric (start to end)
-
-    # Then have a function for comparative analysis
+    display_layer_results('adaptive', results)
