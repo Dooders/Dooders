@@ -18,7 +18,7 @@ GENE_EMBEDDING = PCA(n_components=3)
 
 class EmbeddingTemplate(BaseModel):
     genetic: List[float]
-    environment: List[float]
+    adaptive: List[float]
 
 
 def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
@@ -37,25 +37,25 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
     -------
     gene_pool_embeddings : list
         A list of the embeddings of the weights of each Dooder in the gene pool.
-        Example: [{'genetic': [0.1, 0.2, 0.3], 'environment': [0.4, 0.5, 0.6]}]
+        Example: [{'genetic': [0.1, 0.2, 0.3], 'adaptive': [0.4, 0.5, 0.6]}]
 
     Example
     --------
     >>> gene_pool = {'dooder_1': {'Consume': [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]}}
     >>> get_embeddings(gene_pool)
-    [{'genetic': [0.1, 0.2, 0.3], 'environment': [0.4, 0.5, 0.6]}]
+    [{'genetic': [0.1, 0.2, 0.3], 'adaptive': [0.4, 0.5, 0.6]}]
     """
     gene_pool_embeddings = []
     for dooder in gene_pool.values():
 
         genetic_weights = dooder['Consume'][0]
-        environment_weights = dooder['Consume'][1]
+        adaptive_weights = dooder['Consume'][1]
         genetic_embedding = GENE_EMBEDDING.fit(
-            genetic_weights).singular_values_.tolist( )
-        environment_embedding = GENE_EMBEDDING.fit(
-            environment_weights).singular_values_.tolist( )
+            genetic_weights).singular_values_.tolist()
+        adaptive_embedding = GENE_EMBEDDING.fit(
+            adaptive_weights).singular_values_.tolist()
         embedding = EmbeddingTemplate(
-            genetic=genetic_embedding, environment=environment_embedding).dict()
+            genetic=genetic_embedding, adaptive=adaptive_embedding).dict()
         gene_pool_embeddings.append(embedding)
 
     return gene_pool_embeddings
