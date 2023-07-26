@@ -42,6 +42,7 @@ def get_embedding_df(layer: str, results: Dict[str, Any]) -> pd.DataFrame:
                       embeddings in enumerate(generation_list) for embedding in embeddings]
 
     df = pd.DataFrame(flattened_data, columns=['X', 'Y', 'Z', 'generation'])
+    df['generation'] = df['generation'].astype('str')
 
     return df
 
@@ -71,7 +72,7 @@ def evolution_distance(df: pd.DataFrame) -> float:
 def display_layer_results(layer: str, results: Dict[str, Any]) -> None:
     """ 
     Displays the results for a given layer.
-    
+
     Including:
     - Evolution distance
     - Genetic embeddings
@@ -92,8 +93,9 @@ def display_layer_results(layer: str, results: Dict[str, Any]) -> None:
     centroid_df = df.groupby('generation').mean().reset_index()
     centroid_distance = evolution_distance(centroid_df)
     display(Markdown(f'### Evolution distance: {centroid_distance}'))
-    gene_embedding(df)
-    gene_embedding(centroid_df, title=f'{title} Centroid')
+    gene_embedding(df, color_by='generation').show()
+    gene_embedding(
+        centroid_df, title=f'{title} Centroid', color_by='generation').show()
     generation_spread(df)
     evolution_speed(centroid_df)
 
@@ -124,4 +126,5 @@ def report(recombination_type: str, results: Dict[str, Any]) -> None:
     display_layer_results('genetic', results)
 
     # Display the adaptive embeddings
-    display_layer_results('adaptive', results)
+    #! change to adaptive
+    display_layer_results('environment', results)
