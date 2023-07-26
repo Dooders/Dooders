@@ -23,10 +23,10 @@ from dooders.selection import get_embeddings, recombine_genes
 
 DEFAULT_SETTINGS = {
     'MaxCycles': 100,
-    'SimulationCount': 1000,
+    'SimulationCount': 2000,
     'RecombinationType': 'crossover',
     'GenePool': 'retain',
-    'Generations': 10,
+    'Generations': 50,
 }
 
 
@@ -137,6 +137,10 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
             get_embeddings(gene_pool))
 
     return experiment_results
+
+
+def analyze_results(type: str, filename: str = 'results.json') -> None:
+    pass
 
 
 def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS) -> None:
