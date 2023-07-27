@@ -13,18 +13,18 @@ def generational_distance(df: pd.DataFrame) -> List[float]:
     """ 
     Calculates the distance between each generation (X, Y) and the previous
     generation.
-    
+
     Parameters
     ----------
     df : pd.DataFrame
         A dataframe of the embeddings for a given layer and recombination type.
-        
+
     Returns
     -------
     List[float]
         The distance between each generation (X, Y) and the other.
     """
-    
+
     # Calculate the distance between each generation (X, Y) and the other
     distances = []
     for i in range(len(df) - 1):
@@ -32,26 +32,27 @@ def generational_distance(df: pd.DataFrame) -> List[float]:
         next_coords = (df['X'][i + 1], df['Y'][i + 1])
         distance = euclidean_distance(current_coords, next_coords)
         distances.append(distance)
-        
+
     return distances
 
 
 def evolution_speed(df: pd.DataFrame):
     """ 
     Calculates the spread of a dataframe of centroids.
-    
+
     Parameters
     ----------
     df : pd.DataFrame
         A dataframe of the centroids for a given layer and recombination type.
     """
-    
+    df['generation'] = df['generation'].astype('int')
+    df = df.sort_values('generation')
+    df = df.reset_index()
     data = generational_distance(df)
-    
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=list(range(len(data))), y=list(
         data), mode='lines+markers'))
     fig.update_layout(title='Evolution Speed',
                       xaxis_title='Generation', yaxis_title='Distance')
-    
+
     fig.show()
