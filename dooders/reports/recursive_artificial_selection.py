@@ -24,7 +24,7 @@ def get_embedding_df(layer: str, results: Dict[str, Any]) -> pd.DataFrame:
     Parameters
     ----------
     layer : str
-        The layer to get the embeddings for. Genetic or Adaptive.
+        The layer to get the embeddings for. Static or Dynamic.
     results : Dict[str, Any]
         The results of the recursive artificial selection experiment.
 
@@ -75,15 +75,15 @@ def display_layer_results(layer: str, results: Dict[str, Any]) -> None:
 
     Including:
     - Evolution distance
-    - Genetic embeddings
-    - Adaptive embeddings
+    - Static layer embeddings
+    - Dynamic layer embeddings
     - Generation spread
     - Evolution speed
 
     Parameters
     ----------
     layer : str
-        The layer to display the results for. Genetic or Adaptive.
+        The layer to display the results for. Static or Dynamic.
     results : Dict[str, Any]
         The results of the recursive artificial selection experiment.
     """
@@ -107,7 +107,7 @@ def report(recombination_type: str, results: Dict[str, Any]) -> None:
     Parameters
     ----------
     recombination_type : str
-        The type of recombination used in the experiment. Genetic or Adaptive.
+        The type of recombination used in the experiment. Static or Dynamic.
     results : Dict[str, Any]
         The results of the recursive artificial selection experiment.
     """
@@ -122,9 +122,8 @@ def report(recombination_type: str, results: Dict[str, Any]) -> None:
     # Display the fit count and accuracy plot
     fit_count_and_accuracy(dooder_counts, average_accuracies)
 
-    # Display the genetic embeddings
-    display_layer_results('genetic', results)
+    # Display the static layer embeddings
+    display_layer_results('static', results)
 
-    # Display the adaptive embeddings
-    #! change to adaptive
-    display_layer_results('environment', results)
+    # Display the dynamic layer embeddings
+    display_layer_results('dynamic', results)
