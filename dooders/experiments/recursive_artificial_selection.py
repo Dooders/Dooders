@@ -19,6 +19,7 @@ from typing import Dict, List
 from dooders.data.experiment_results import calculate_accuracies
 from dooders.data.inference_record_dataframe import get_inference_record_df
 from dooders.experiment import Experiment
+from dooders.reports.recursive_artificial_selection import report
 from dooders.selection import get_embeddings, recombine_genes
 
 DEFAULT_SETTINGS = {
@@ -51,8 +52,8 @@ def save_results(type: str, results: Dict[str, List], filename: str = 'results.j
 
     with open(f'results/ras/{type}/{filename}', 'w') as f:
         json.dump(results, f)
-        
-        
+
+
 def load_results(type: str, filename: str = 'results.json') -> Dict[str, List]:
     """ 
     Loads the results of the experiment from a JSON file.
@@ -71,7 +72,7 @@ def load_results(type: str, filename: str = 'results.json') -> Dict[str, List]:
     """
     with open(f'results/ras/{type}/{filename}', 'r') as f:
         results = json.load(f)
-        
+
     return results
 
 
@@ -139,11 +140,9 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
     return experiment_results
 
 
-def analyze_results(type: str, filename: str = 'results.json') -> None:
-    pass
-
-
-def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS) -> None:
+def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
+                   show_report: bool = True,
+                   save_results: bool = True) -> None:
     """ 
     Runs a Recursive Artificial Selection (RAS) experiment for each recombination type.
 
@@ -153,16 +152,26 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS) -> None:
     ----------
     settings : dict, optional
         The settings to use for the experiment (default is DEFAULT_SETTINGS).
+    show_report : bool, optional
+        Whether or not to show the report for each experiment (default is True).
+    save_results : bool, optional
+        Whether or not to save the results of each experiment (default is True).
     """
 
     recombination_types = ['crossover', 'average', 'random', 'range', 'none']
 
     for type in recombination_types:
+        print(f'Starting {type} experiment...')
 
         settings['RecombinationType'] = type
         generations = settings['Generations']
 
         results = recursive_artificial_selection(settings, generations)
 
-        save_results(type, results)
+        if show_report:
+            report(type, results)
+
+        if save_results:
+            save_results(type, results)
+
         print(f'Finished {type} experiment.')
