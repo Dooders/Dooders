@@ -31,7 +31,7 @@ DEFAULT_SETTINGS = {
 }
 
 
-def save_results(type: str, results: Dict[str, List], filename: str = 'results.json') -> None:
+def save_experiment(type: str, results: Dict[str, List], filename: str = 'results.json') -> None:
     """ 
     Saves the results of the experiment to a JSON file.
 
@@ -172,6 +172,6 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
             report(type, results)
 
         if save_results:
-            save_results(type, results)
+            save_experiment(type, results)
 
         print(f'Finished {type} experiment.')
