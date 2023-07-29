@@ -3,7 +3,6 @@ Death Condition
 ---------------
 This condition is responsible for the tests required to 
 trigger a 'death' status
-
 """
 
 from typing import TYPE_CHECKING

@@ -39,15 +39,15 @@ def reproduce(dooderX) -> None:
     reproduction_policy = Settings.search('Reproduction')
 
     result, reason = Condition.check('reproduction', dooderX)
-   
+
     if result:
-        
+
         dooderY = dooderX.find_partner()
 
         if dooderY:
             genetics = Policy.execute(reproduction_policy, dooderX, dooderY)
             offspring = dooderX.simulation.arena._generate_dooder(
-                dooderX.position, tag = 'Offspring')
+                dooderX.position, tag='Offspring')
             offspring.internal_models.inherit_weights(genetics)
             offspring.get_gene_embedding()
             offspring.simulation.arena.place_dooder(
@@ -68,4 +68,5 @@ def reproduce(dooderX) -> None:
 
     else:
         message_reason = f"Reproduction failed: {reason}"
-        dooderX.log(granularity=2, message=message_reason, scope='Reproduction')
+        dooderX.log(granularity=2, message=message_reason,
+                    scope='Reproduction')

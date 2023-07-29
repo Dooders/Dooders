@@ -11,23 +11,24 @@ from dooders.sdk.core.core import Core
 if TYPE_CHECKING:
     from dooders.sdk import Simulation
 
+
 @Core.register('condition')
 class StopConditions:
-    
+
     _OPERATOR = 'any'
 
     @classmethod
     def max_cycle(cls, simulation: 'Simulation') -> bool:
         """ 
         Check if the maximum number of cycles has been reached.
-        
+
         The maximum number of cycles is defined in the simulation parameters.
-        
+
         Parameters
         ----------
         simulation : Simulation
             The simulation to check
-            
+
         Returns
         -------
         bool
@@ -40,12 +41,12 @@ class StopConditions:
     def simulation_running(cls, simulation: 'Simulation') -> bool:
         """ 
         Check if the simulation is still running.
-        
+
         Parameters
         ----------
         simulation : Simulation
             The simulation to check
-            
+
         Returns
         -------
         bool
@@ -58,12 +59,12 @@ class StopConditions:
     def dooder_count(cls, simulation: 'Simulation') -> bool:
         """ 
         Check if the number of dooders has reached zero.
-        
+
         Parameters
         ----------
         simulation : Simulation
             The simulation to check
-            
+
         Returns
         -------
         bool
