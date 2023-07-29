@@ -11,14 +11,11 @@ from pydantic import BaseModel
 from sklearn.decomposition import PCA
 
 from dooders.sdk.modules.recombination import recombine
+from dooders.sdk.utils.types import EmbeddingLayers
 
 # Global PCA instance for embedding
 GENE_EMBEDDING = PCA(n_components=3)
 
-
-class EmbeddingTemplate(BaseModel):
-    static: List[float]
-    dynamic: List[float]
 
 
 def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
@@ -54,7 +51,7 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
             static_weights).singular_values_.tolist()
         dynamic_weights = GENE_EMBEDDING.fit(
             dynamic_weights).singular_values_.tolist()
-        embedding = EmbeddingTemplate(
+        embedding = EmbeddingLayers(
             static=static_embedding, dynamic=dynamic_weights).dict()
         gene_pool_embeddings.append(embedding)
 
