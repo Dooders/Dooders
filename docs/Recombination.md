@@ -1,3 +1,7 @@
+# Recombination
+
+Different recombination methods to combine the neural network weights into a offspring's internal model weights.  
+
 ## Crossover
 
 Inspired by the genetic recombination process seen in nature, this technique selects a random crossover point within the layer weights of the two parent Dooders. We then construct the offspring's layer weights by combining the weights from parent #1 to the left of the crossover point and the weights from parent #2 to the right of the crossover point. This mimics the genetic shuffling observed during sexual reproduction, introducing variation into the offspring population.
