@@ -20,7 +20,7 @@ from dooders.data.experiment_results import calculate_accuracies
 from dooders.data.inference_record_dataframe import get_inference_record_df
 from dooders.experiment import Experiment
 from dooders.reports.recursive_artificial_selection import report
-from dooders.selection import get_embeddings, recombine_genes
+from dooders.sdk.modules.selection import get_embeddings, recombine_genes
 
 DEFAULT_SETTINGS = {
     'MaxCycles': 100,
