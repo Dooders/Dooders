@@ -74,7 +74,7 @@ def select_parents(gene_pool: Dict[str, dict]) -> Tuple[Tuple[str, np.ndarray], 
     Tuple[Tuple[str, np.ndarray], Tuple[str, np.ndarray]]
         A tuple containing two tuples, each containing a Dooder ID and their weights.
     """
-    parent_a_id, parent_b_id = random.sample(gene_pool.keys(), 2)
+    parent_a_id, parent_b_id = random.sample(list(gene_pool.keys()), 2)
     parent_a_weights = gene_pool[parent_a_id]['Consume']
     parent_b_weights = gene_pool[parent_b_id]['Consume']
 
