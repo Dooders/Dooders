@@ -6,7 +6,7 @@ Each object will have the ability to move around the environment and
 interact with other objects.
 """
 
-from typing import TYPE_CHECKING, Any, List
+from typing import TYPE_CHECKING, Any, List, Union
 
 import numpy as np
 from pydantic import BaseModel
@@ -34,7 +34,7 @@ class MainStats(BaseModel):
     age: int
     generation: int
     birth: int
-    death: int = None
+    death: Union[int, None] = None
     status: str
     reproduction_count: int
     move_count: int
