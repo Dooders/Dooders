@@ -118,10 +118,11 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
         Inherit the weights of the Dooders in the gene pool.
         """
         if gene_pool:
-            new_genes = recombine_genes(
-                gene_pool, recombination_type=settings['RecombinationType'])
-            dooder = experiment.simulation.arena.get_dooder()
-            dooder.internal_models['Consume'].inherit_weights(new_genes)
+            for dooder in experiment.simulation.arena.dooders():
+
+                new_genes = recombine_genes(
+                    gene_pool, recombination_type=settings['RecombinationType'])
+                dooder.internal_models['Consume'].inherit_weights(new_genes)
 
     for i in range(generations):
         experiment = Experiment(settings)
