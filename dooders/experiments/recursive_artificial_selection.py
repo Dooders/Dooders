@@ -31,7 +31,7 @@ DEFAULT_SETTINGS = {
 }
 
 
-def save_experiment(type: str, results: Dict[str, List], filename: str = 'results.json') -> None:
+def save_experiment(type: str, results: Dict[str, List], experiment_name: str) -> None:
     """ 
     Saves the results of the experiment to a JSON file.
 
@@ -41,16 +41,17 @@ def save_experiment(type: str, results: Dict[str, List], filename: str = 'result
         The type of experiment (the recombination type).
     results : dict
         The results of the experiment.
-    filename : str, optional
-        The name of the file to save the results to (default is 'results.json').
+    experiment_name : str
+        The name of the experiment. 
+        Directory will be created in the results folder.
     """
-    if not os.path.exists(f'results/ras/{type}'):
-        os.makedirs(f'results/ras/{type}')
+    if not os.path.exists(f'results/{experiment_name}'):
+        os.makedirs(f'results/{experiment_name}')
     else:
-        shutil.rmtree(f'results/ras/{type}')
-        os.makedirs(f'results/ras/{type}')
+        shutil.rmtree(f'results/{experiment_name}')
+        os.makedirs(f'results/{experiment_name}')
 
-    with open(f'results/ras/{type}/{filename}', 'w') as f:
+    with open(f'results/{experiment_name}/{type}.json', 'w') as f:
         json.dump(results, f)
 
 
@@ -142,6 +143,7 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
 
 
 def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
+                   experiment_name: str = 'recursive_artificial_selection',
                    show_report: bool = True,
                    save_results: bool = True) -> None:
     """ 
@@ -173,6 +175,6 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
             report(type, results)
 
         if save_results:
-            save_experiment(type, results)
+            save_experiment(type, results, experiment_name)
 
         print(f'Finished {type} experiment.')
