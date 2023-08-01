@@ -14,6 +14,7 @@ that exhibit desirable traits, improving solutions in various domains.
 import json
 import os
 from typing import Dict, List
+import time
 
 from dooders.data.experiment_results import calculate_accuracies
 from dooders.data.inference_record_dataframe import get_inference_record_df
@@ -137,7 +138,7 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
     recombination_types = ['crossover', 'average', 'random', 'range', 'none']
 
     for type in recombination_types:
-        print(f'Starting {type} experiment...')
+        print(f'Starting {type} experiment at {time.ctime()}\n')
 
         settings['RecombinationType'] = type
         generations = settings['Generations']
@@ -150,7 +151,7 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
         if save_results:
             save_experiment(type, results, experiment_name)
 
-        print(f'Finished {type} experiment.')
+        print(f'Finished {type} experiment. Ended at {time.ctime()}\n')
 
     if save_experiment:
         save_experiment('settings', settings, experiment_name)
