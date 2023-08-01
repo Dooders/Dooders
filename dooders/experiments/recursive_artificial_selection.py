@@ -13,8 +13,8 @@ that exhibit desirable traits, improving solutions in various domains.
 
 import json
 import os
-from typing import Dict, List
 import time
+from typing import Dict, List
 
 from dooders.data.experiment_results import calculate_accuracies
 from dooders.data.inference_record_dataframe import get_inference_record_df

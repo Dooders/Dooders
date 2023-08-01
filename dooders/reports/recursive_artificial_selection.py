@@ -152,10 +152,17 @@ def report(recombination_type: str,
     if results is None:
         raise ValueError(
             "Results dictionary is not provided, and experiment_name is not valid.")
+        
+    try:
+        with open(f'results/{experiment_name}/settings.json', 'r') as f:
+            settings = json.load(f)
+    except FileNotFoundError:
+        settings = None
 
     # Display the recombination type
     display(Markdown(f'# {recombination_type.capitalize()} Recombination'))
-
+    print(f"Settings: {settings}\n")
+    
     dooder_counts = results['fit_dooder_counts']
     average_accuracies = [statistics.mean(
         values) for values in results['accuracies']]
