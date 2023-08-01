@@ -13,7 +13,6 @@ that exhibit desirable traits, improving solutions in various domains.
 
 import json
 import os
-import shutil
 from typing import Dict, List
 
 from dooders.data.experiment_results import calculate_accuracies
@@ -50,28 +49,6 @@ def save_experiment(type: str, results: Dict[str, List], experiment_name: str) -
 
     with open(f'results/{experiment_name}/{type}.json', 'w') as f:
         json.dump(results, f)
-
-
-def load_results(type: str, filename: str = 'results.json') -> Dict[str, List]:
-    """ 
-    Loads the results of the experiment from a JSON file.
-
-    Parameters
-    ----------
-    type : str
-        The type of experiment (the recombination type).
-    filename : str, optional
-        The name of the file to load the results from (default is 'results.json').
-
-    Returns
-    -------
-    dict
-        The results of the experiment.
-    """
-    with open(f'results/ras/{type}/{filename}', 'r') as f:
-        results = json.load(f)
-
-    return results
 
 
 def get_accuracies(results: Dict[str, List]) -> List[float]:

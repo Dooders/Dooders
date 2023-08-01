@@ -1,6 +1,7 @@
+import json
 import math
 import statistics
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import pandas as pd
 from IPython.display import Markdown, display
@@ -100,7 +101,39 @@ def display_layer_results(layer: str, results: Dict[str, Any]) -> None:
     evolution_speed(centroid_df)
 
 
-def report(recombination_type: str, results: Dict[str, Any]) -> None:
+def load_results(type: str, experiment_name: str) -> Dict[str, Any]:
+    """ 
+    Loads the results of the experiment from a JSON file.
+
+    Parameters
+    ----------
+    type : str
+        Recombination type. i.e. crossover, average, random, range, none.
+    experiment_name : str
+        The name of the experiment to load the results from.
+
+    Returns
+    -------
+    Dict[str, Any]
+        The results of the experiment.
+    """
+    try:
+        with open(f'results/{experiment_name}/{type}.json', 'r') as f:
+            results = json.load(f)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"File '{type}.json' not found.")
+    except json.JSONDecodeError:
+        raise ValueError(f"Invalid JSON format in file '{type}.json'.")
+    except Exception as e:
+        raise RuntimeError(
+            f"Error loading results from file '{type}.json': {e}")
+
+    return results
+
+
+def report(recombination_type: str,
+           results: Dict[str, Any] = None,
+           experiment_name: Optional[str] = None) -> None:
     """ 
     Generates a report for the recursive artificial selection experiment.
 
@@ -108,9 +141,17 @@ def report(recombination_type: str, results: Dict[str, Any]) -> None:
     ----------
     recombination_type : str
         The type of recombination used in the experiment. Static or Dynamic.
-    results : Dict[str, Any]
+    results : Dict[str, Any], optional
         The results of the recursive artificial selection experiment.
+    experiment_name : str, optional
+        The name of the experiment to load the results from (default is None).
     """
+    if results is None and experiment_name:
+        results = load_results(recombination_type, experiment_name)
+
+    if results is None:
+        raise ValueError(
+            "Results dictionary is not provided, and experiment_name is not valid.")
 
     # Display the recombination type
     display(Markdown(f'# {recombination_type.capitalize()} Recombination'))
