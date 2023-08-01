@@ -24,7 +24,6 @@ from dooders.sdk.modules.selection import get_embeddings, recombine_genes
 DEFAULT_SETTINGS = {
     'MaxCycles': 100,
     'SimulationCount': 2000,
-    'RecombinationType': 'crossover',
     'GenePool': 'retain',
     'Generations': 50,
 }
@@ -152,3 +151,6 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
             save_experiment(type, results, experiment_name)
 
         print(f'Finished {type} experiment.')
+
+    if save_experiment:
+        save_experiment('settings', settings, experiment_name)
