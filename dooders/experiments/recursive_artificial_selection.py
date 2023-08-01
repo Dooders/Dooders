@@ -47,9 +47,6 @@ def save_experiment(type: str, results: Dict[str, List], experiment_name: str) -
     """
     if not os.path.exists(f'results/{experiment_name}'):
         os.makedirs(f'results/{experiment_name}')
-    else:
-        shutil.rmtree(f'results/{experiment_name}')
-        os.makedirs(f'results/{experiment_name}')
 
     with open(f'results/{experiment_name}/{type}.json', 'w') as f:
         json.dump(results, f)
