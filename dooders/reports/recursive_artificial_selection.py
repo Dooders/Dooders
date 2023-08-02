@@ -131,11 +131,11 @@ def load_results(type: str, experiment_name: str) -> Dict[str, Any]:
     return results
 
 
-def report(recombination_type: str,
-           results: Dict[str, Any] = None,
-           experiment_name: Optional[str] = None) -> None:
+def display_report(recombination_type: str = None,
+                   results: Dict[str, Any] = None,
+                   experiment_name: Optional[str] = None) -> None:
     """ 
-    Generates a report for the recursive artificial selection experiment.
+    Displays a report for the recursive artificial selection experiment.
 
     Parameters
     ----------
@@ -152,7 +152,7 @@ def report(recombination_type: str,
     if results is None:
         raise ValueError(
             "Results dictionary is not provided, and experiment_name is not valid.")
-        
+
     try:
         with open(f'results/{experiment_name}/settings.json', 'r') as f:
             settings = json.load(f)
@@ -162,7 +162,7 @@ def report(recombination_type: str,
     # Display the recombination type
     display(Markdown(f'# {recombination_type.capitalize()} Recombination'))
     print(f"Settings: {settings}\n")
-    
+
     dooder_counts = results['fit_dooder_counts']
     average_accuracies = [statistics.mean(
         values) for values in results['accuracies']]
@@ -175,3 +175,31 @@ def report(recombination_type: str,
 
     # Display the dynamic layer embeddings
     display_layer_results('dynamic', results)
+
+
+def report(recombination_type: str = None,
+           results: Dict[str, Any] = None,
+           experiment_name: Optional[str] = None) -> None:
+    """ 
+    Generates a report for the recursive artificial selection experiment.
+
+    If recombination_type is None, then a report is generated for
+    each recombination type.
+
+    Parameters
+    ----------
+    recombination_type : str, optional
+        The type of recombination used in the experiment. Static or Dynamic.
+    results : Dict[str, Any], optional
+        The results of the recursive artificial selection experiment.
+    experiment_name : str, optional
+        The name of the experiment to load the results from (default is None).
+    """
+
+    recombination_types = ['crossover', 'average', 'random', 'range', 'none']
+
+    if recombination_type is None:
+        for recombination_type in recombination_types:
+            display_report(recombination_type, results, experiment_name)
+    else:
+        display_report(recombination_type, results, experiment_name)
