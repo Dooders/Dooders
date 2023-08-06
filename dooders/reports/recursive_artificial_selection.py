@@ -14,7 +14,22 @@ from dooders.charts.generation_spread import generation_spread
 recombination_types = ['crossover', 'average', 'random', 'range', 'none']
 
 
-def euclidean_distance(coord1, coord2):
+def euclidean_distance(coord1: tuple, coord2: tuple) -> float:
+    """ 
+    Calculates the euclidean distance between two points.
+    
+    Parameters
+    ----------
+    coord1 : tuple
+        The first point.
+    coord2 : tuple
+        The second point.
+        
+    Returns
+    -------
+    float
+        The euclidean distance between two points.
+    """
     return math.sqrt((coord2[0] - coord1[0])**2 + (coord2[1] - coord1[1])**2)
 
 
