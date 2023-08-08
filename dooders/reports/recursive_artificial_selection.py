@@ -10,8 +10,7 @@ from dooders.charts.evolution_speed import evolution_speed
 from dooders.charts.fit_count_and_accuracy import fit_count_and_accuracy
 from dooders.charts.gene_embedding import gene_embedding
 from dooders.charts.generation_spread import generation_spread
-
-recombination_types = ['crossover', 'average', 'random', 'range', 'none']
+from dooders.sdk.modules.recombination import RECOMBINATION_TYPES
 
 
 def euclidean_distance(coord1: tuple, coord2: tuple) -> float:
@@ -123,7 +122,7 @@ def load_results(type: str, experiment_name: str) -> Dict[str, Any]:
     Parameters
     ----------
     type : str
-        Recombination type. i.e. crossover, average, random, range, none.
+        Recombination type. i.e. crossover, averaging, lottery, random_range, none.
     experiment_name : str
         The name of the experiment to load the results from.
 
@@ -211,7 +210,7 @@ def report(recombination_type: str = None,
         The name of the experiment to load the results from (default is None).
     """
 
-    recombination_types = ['crossover', 'average', 'random', 'range', 'none']
+    recombination_types = list(RECOMBINATION_TYPES.keys())
 
     if recombination_type is None:
         for recombination_type in recombination_types:

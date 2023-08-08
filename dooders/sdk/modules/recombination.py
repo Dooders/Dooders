@@ -6,10 +6,10 @@ offspring Dooder.
 
 The module currently supports five recombination types:
 
-- `average`: Computes the mean of the weights from the parent Dooders.
-- `random`: Randomly chooses weights from either parent Dooder.
+- `averaging`: Computes the mean of the weights from the parent Dooders.
+- `lottery`: Randomly chooses weights from either parent Dooder.
 - `crossover`: Selects a random crossover point and integrates the weights of both Dooders.
-- `range`: Randomly chooses weights within the range defined by the weights of the two parent Dooders.
+- `random_range`: Randomly chooses weights within the range defined by the weights of the two parent Dooders.
 - `none`: Randomly inherits all weights from one of the parent Dooders, with no recombination involved.
 """
 
@@ -18,7 +18,7 @@ import random
 import numpy as np
 
 
-def average_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
+def averaging_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     """
     Averages the weights of two Dooders to create a new set of weights
 
@@ -37,7 +37,7 @@ def average_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     --------
     >>> a_weights = np.array([1, 2, 3, 4, 5])
     >>> b_weights = np.array([6, 7, 8, 9, 10])
-    >>> average(a_weights, b_weights)
+    >>> averaging_weights(a_weights, b_weights)
     array([3.5, 4.5, 5.5, 6.5, 7.5])
     """
     new_weights = []
@@ -46,7 +46,7 @@ def average_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     return np.array(new_weights)
 
 
-def random_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
+def lottery_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     """
     Randomly selects weights between the range of the two Dooders
     to create a new set of weights
@@ -66,7 +66,7 @@ def random_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     --------
     >>> a_weights = np.array([1, 2, 3, 4, 5])
     >>> b_weights = np.array([6, 7, 8, 9, 10])
-    >>> random(a_weights, b_weights)
+    >>> random_weights(a_weights, b_weights)
     array([1, 7, 8, 4, 5])
     """
     new_weights = []
@@ -103,7 +103,7 @@ def crossover_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarra
     --------
     >>> a_weights = np.array([1, 2, 3, 4, 5])
     >>> b_weights = np.array([6, 7, 8, 9, 10])
-    >>> crossover(a_weights, b_weights) (crossover point = 3)
+    >>> crossover_weights(a_weights, b_weights) (crossover point = 3)
     array([1, 2, 3, 9, 10])
     """
     crossover_point = random.randint(0, len(a_weights))
@@ -113,7 +113,7 @@ def crossover_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarra
     return new_weights
 
 
-def range_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
+def random_range_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     """
     Randomly selects weights between the range of the two Dooders
     to create a new set of weights
@@ -133,7 +133,7 @@ def range_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
     --------
     >>> a_weights = np.array([1, 2, 3, 4, 5])
     >>> b_weights = np.array([6, 7, 8, 9, 10])
-    >>> range_weights(a_weights, b_weights)
+    >>> random_range_weights(a_weights, b_weights)
     array([3, 4, 4, 8, 9])
     """
     new_weights = []
@@ -143,41 +143,23 @@ def range_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
 
     return np.array(new_weights)
 
-# def average_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
-#     return (a_weights + b_weights) / 2
-
-
-# def random_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
-#     choices = np.stack([a_weights, b_weights])
-#     indices = np.random.randint(2, size=len(a_weights))
-#     return choices[indices, np.arange(len(a_weights))]
-
-
-# def crossover_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
-#     crossover_point = random.randint(0, len(a_weights))
-#     return np.concatenate((a_weights[:crossover_point], b_weights[crossover_point:]))
-
-
-# def range_weights(a_weights: np.ndarray, b_weights: np.ndarray) -> np.ndarray:
-#     return np.random.uniform(np.minimum(a_weights, b_weights), np.maximum(a_weights, b_weights))
-
 
 RECOMBINATION_TYPES = {
-    'average': average_weights,
-    'random': random_weights,
+    'averaging': averaging_weights,
+    'lottery': lottery_weights,
     'crossover': crossover_weights,
-    'range': range_weights,
+    'random_range': random_range_weights,
     'none': lambda a, b: random.choice([a, b])
 }
 
 
 def recombine(a_weights: np.ndarray,
               b_weights: np.ndarray,
-              recombination_type: str = 'average') -> np.ndarray:
+              recombination_type: str = 'averaging') -> np.ndarray:
     """ 
     Recombines the weights of two Dooders to create a new set of weights
 
-    Options for recombination_type: 'average', 'random', 'crossover', 'range', 'none'
+    Options for recombination_type: 'averaging', 'lottery', 'crossover', 'random_range', 'none'
 
     none will randomly select either a or b
 
@@ -195,7 +177,7 @@ def recombine(a_weights: np.ndarray,
 
     if recombination_type not in RECOMBINATION_TYPES:
         raise ValueError(f'Invalid recombination type {recombination_type}.'
-                         'Valid options are: "average", "random", "crossover", "range", "none"')
+                         'Valid options are: "averaging", "lottery", "crossover", "random_range", "none"')
 
     recombined_weights = []
     for a, b in zip(a_weights.tolist(), b_weights.tolist()):

@@ -20,6 +20,7 @@ from dooders.data.experiment_results import calculate_accuracies
 from dooders.data.inference_record_dataframe import get_inference_record_df
 from dooders.experiment import Experiment
 from dooders.reports.recursive_artificial_selection import report
+from dooders.sdk.modules.recombination import RECOMBINATION_TYPES
 from dooders.sdk.modules.selection import get_embeddings, recombine_genes
 
 DEFAULT_SETTINGS = {
@@ -135,7 +136,7 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
         Whether or not to save the results of each experiment (default is True).
     """
 
-    recombination_types = ['crossover', 'average', 'random', 'range', 'none']
+    recombination_types = list(RECOMBINATION_TYPES.keys())
 
     for type in recombination_types:
         print(f'Starting {type} experiment at {time.ctime()}\n')
