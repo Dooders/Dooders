@@ -1,5 +1,7 @@
 import json
 import math
+import os
+import shutil
 import statistics
 from typing import Any, Dict, Optional
 
@@ -16,14 +18,14 @@ from dooders.sdk.modules.recombination import RECOMBINATION_TYPES
 def euclidean_distance(coord1: tuple, coord2: tuple) -> float:
     """ 
     Calculates the euclidean distance between two points.
-    
+
     Parameters
     ----------
     coord1 : tuple
         The first point.
     coord2 : tuple
         The second point.
-        
+
     Returns
     -------
     float
@@ -84,7 +86,9 @@ def evolution_distance(df: pd.DataFrame) -> float:
     return euclidean_distance((first_x, first_y), (last_x, last_y))
 
 
-def display_layer_results(layer: str, results: Dict[str, Any]) -> None:
+def display_layer_results(layer: str, 
+                          results: Dict[str, Any],
+                          save_path: str) -> None:
     """ 
     Displays the results for a given layer.
 
@@ -147,7 +151,8 @@ def load_results(type: str, experiment_name: str) -> Dict[str, Any]:
 
 def display_report(recombination_type: str = None,
                    results: Dict[str, Any] = None,
-                   experiment_name: Optional[str] = None) -> None:
+                   experiment_name: Optional[str] = None,
+                   save_charts: bool = False) -> None:
     """ 
     Displays a report for the recursive artificial selection experiment.
 
@@ -173,6 +178,15 @@ def display_report(recombination_type: str = None,
     except FileNotFoundError:
         settings = None
 
+    if save_charts:
+        chart_path = f'results/{experiment_name}/charts'
+        save_path = f'{chart_path}/{recombination_type}_'
+        if os.path.exists(chart_path):
+            shutil.rmtree(chart_path)
+        os.makedirs(chart_path)
+    else:
+        save_path = None
+
     # Display the recombination type
     display(Markdown(f'# {recombination_type.capitalize()} Recombination'))
     print(f"Settings: {settings}\n")
@@ -182,18 +196,19 @@ def display_report(recombination_type: str = None,
         values) for values in results['accuracies']]
 
     # Display the fit count and accuracy plot
-    fit_count_and_accuracy(dooder_counts, average_accuracies)
+    fit_count_and_accuracy(dooder_counts, average_accuracies, save_path)
 
     # Display the static layer embeddings
-    display_layer_results('static', results)
+    display_layer_results('static', results, save_path)
 
     # Display the dynamic layer embeddings
-    display_layer_results('dynamic', results)
+    display_layer_results('dynamic', results, save_path)
 
 
 def report(recombination_type: str = None,
            results: Dict[str, Any] = None,
-           experiment_name: Optional[str] = None) -> None:
+           experiment_name: Optional[str] = None,
+           save_charts: bool = False) -> None:
     """ 
     Generates a report for the recursive artificial selection experiment.
 
@@ -214,6 +229,12 @@ def report(recombination_type: str = None,
 
     if recombination_type is None:
         for recombination_type in recombination_types:
-            display_report(recombination_type, results, experiment_name)
+            display_report(recombination_type,
+                           results,
+                           experiment_name,
+                           save_charts)
     else:
-        display_report(recombination_type, results, experiment_name)
+        display_report(recombination_type,
+                       results,
+                       experiment_name,
+                       save_charts)
