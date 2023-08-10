@@ -51,6 +51,9 @@ def get_embedding_df(layer: str, results: Dict[str, Any]) -> pd.DataFrame:
         A dataframe of the embeddings for a given layer and recombination type.
         Columns: X, Y, Z, generation
     """
+    
+    if layer not in ['dynamic', 'static']:
+        raise ValueError(f"Layer must be 'dynamic' or 'static', not '{layer}'.")
 
     generation_list = [[[list(v) for k, v in a.items() if k == layer]
                         for a in d] for d in results['generation_embeddings']]
