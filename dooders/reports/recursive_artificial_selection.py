@@ -86,7 +86,7 @@ def evolution_distance(df: pd.DataFrame) -> float:
     return euclidean_distance((first_x, first_y), (last_x, last_y))
 
 
-def display_layer_results(layer: str, 
+def display_layer_results(layer: str,
                           results: Dict[str, Any],
                           save_path: str) -> None:
     """ 
@@ -105,6 +105,8 @@ def display_layer_results(layer: str,
         The layer to display the results for. Static or Dynamic.
     results : Dict[str, Any]
         The results of the recursive artificial selection experiment.
+    save_path : str
+        The path to save the charts to. If None, the charts will not be saved.
     """
     title = layer.capitalize()
     display(Markdown('## ' + title + ' Embeddings'))
@@ -112,11 +114,11 @@ def display_layer_results(layer: str,
     centroid_df = df.groupby('generation').mean().reset_index()
     centroid_distance = evolution_distance(centroid_df)
     display(Markdown(f'### Evolution distance: {centroid_distance}'))
-    gene_embedding(df, color_by='generation').show()
+    gene_embedding(df, color_by='generation', save_path=save_path)
     gene_embedding(
-        centroid_df, title=f'{title} Centroid', color_by='generation').show()
-    generation_spread(df)
-    evolution_speed(centroid_df)
+        centroid_df, title=f'{title} Centroid', color_by='generation', save_path=save_path)
+    generation_spread(df, save_path=save_path)
+    evolution_speed(centroid_df, save_path=save_path)
 
 
 def load_results(type: str, experiment_name: str) -> Dict[str, Any]:
