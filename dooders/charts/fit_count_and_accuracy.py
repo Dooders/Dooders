@@ -3,14 +3,14 @@ from typing import List, Union
 import plotly.graph_objects as go
 
 
-def fit_count_and_accuracy(fit_dooder_count: List, 
+def fit_count_and_accuracy(fit_dooder_count: List,
                            avg_accuracies: List,
                            save_path: Union[str, None] = None) -> None:
     """
     Creates a dual-axis line chart comparing the count of fit Dooders 
     and the average accuracy of the Dooders in the gene pool after each 
     generation.
-    
+
     Parameters
     ----------
     fit_dooder_count : list
@@ -51,12 +51,19 @@ def fit_count_and_accuracy(fit_dooder_count: List,
         title='Fit Count and Average Accuracy',
         xaxis_title='Generation',
         showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        )
     )
 
     if save_path is not None:
-        fig.write_image(f'{save_path}fit_count_and_accuracy.png', 
+        fig.write_image(f'{save_path}fit_count_and_accuracy.png',
                         format='png',
                         scale=2,
                         engine='orca')
-    
+
     fig.show()
