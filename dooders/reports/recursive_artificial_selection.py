@@ -114,11 +114,22 @@ def display_layer_results(layer: str,
     centroid_df = df.groupby('generation').mean().reset_index()
     centroid_distance = evolution_distance(centroid_df)
     display(Markdown(f'### Evolution distance: {centroid_distance}'))
-    gene_embedding(df, color_by='generation', save_path=save_path)
-    gene_embedding(
-        centroid_df, title=f'{title} Centroid', color_by='generation', save_path=save_path)
-    generation_spread(df, save_path=save_path)
-    evolution_speed(centroid_df, save_path=save_path)
+
+    gene_embedding(df,
+                   color_by='generation',
+                   save_path=save_path,
+                   show_cbar=False,
+                   layer=layer)
+
+    gene_embedding(centroid_df,
+                   title=f'{title} Centroid',
+                   color_by='generation',
+                   save_path=save_path,
+                   show_cbar=False,
+                   layer=layer)
+
+    generation_spread(df, save_path=save_path, layer=layer)
+    evolution_speed(centroid_df, save_path=save_path, layer=layer)
 
 
 def load_results(type: str, experiment_name: str) -> Dict[str, Any]:

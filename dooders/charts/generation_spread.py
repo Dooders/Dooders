@@ -1,3 +1,5 @@
+from typing import Union
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -28,7 +30,9 @@ def avg_dist_to_centroid(df: pd.DataFrame) -> float:
     return distances.mean()
 
 
-def generation_spread(df: pd.DataFrame):
+def generation_spread(df: pd.DataFrame,
+                      save_path: Union[str, None] = None,
+                      layer: str = '') -> None:
     """ 
     Calculates the spread of a dataframe of centroids.
 
@@ -36,6 +40,11 @@ def generation_spread(df: pd.DataFrame):
     ----------
     df : pd.DataFrame
         A dataframe of the centroids for a given layer and recombination type.
+    save_path : Union[str, None], optional
+        The path to save the chart to. If None, the chart is not saved
+        (the default is None).
+    layer : str, optional
+        The layer to display the results for. Static or Dynamic.
     """
     df['generation'] = df['generation'].astype('int')
     grouped_df = df.groupby('generation')
@@ -46,5 +55,11 @@ def generation_spread(df: pd.DataFrame):
         data.values()), mode='lines+markers'))
     fig.update_layout(title='Average Distance from Centroid (Generation Spread)',
                       xaxis_title='Generation', yaxis_title='Average Distance')
+
+    if save_path:
+        fig.write_image(f'{save_path}_{layer}_generation_spread.png',
+                        format='png',
+                        scale=2,
+                        engine='orca')
 
     fig.show()

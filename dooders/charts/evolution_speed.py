@@ -36,7 +36,9 @@ def generational_distance(df: pd.DataFrame) -> List[float]:
     return distances
 
 
-def evolution_speed(df: pd.DataFrame):
+def evolution_speed(df: pd.DataFrame, 
+                    save_path: str = None, 
+                    layer: str = None) -> None:
     """ 
     Calculates the spread of a dataframe of centroids.
 
@@ -44,6 +46,10 @@ def evolution_speed(df: pd.DataFrame):
     ----------
     df : pd.DataFrame
         A dataframe of the centroids for a given layer and recombination type.
+    save_path : str, optional
+        The path to save the chart to. If None, the chart is not saved.
+    layer : str, optional
+        The layer to get the embeddings for. Static or Dynamic.
     """
     df['generation'] = df['generation'].astype('int')
     df = df.sort_values('generation')
@@ -54,5 +60,11 @@ def evolution_speed(df: pd.DataFrame):
         data), mode='lines+markers'))
     fig.update_layout(title='Evolution Speed',
                       xaxis_title='Generation', yaxis_title='Distance')
+    
+    if save_path:
+        fig.write_image(f'{save_path}_{layer}_evolution_speed.png',
+                        format='png',
+                        scale=2,
+                        engine='orca')
 
     fig.show()

@@ -1,4 +1,5 @@
 import io
+from typing import Union
 
 import plotly.express as px
 import plotly.graph_objects as go
@@ -11,7 +12,9 @@ embedding_map = {0: 'EmbeddingA', 1: 'EmbeddingB', 2: 'EmbeddingC'}
 def gene_embedding(dooder_df,
                    color_by: str = 'cycle',
                    show_cbar: bool = True,
-                   title: str = 'Gene Embedding') -> px.scatter:
+                   title: str = 'Gene Embedding',
+                   save_path: Union[str, None] = None,
+                   layer: Union[str, None] = None) -> px.scatter:
     """ 
     Create a scatter plot of the gene embeddings.
 
@@ -23,6 +26,12 @@ def gene_embedding(dooder_df,
         The column to color by.
     show_cbar : bool
         Whether to show the colorbar.
+    title : str
+        The title of the plot.
+    save_path : Union[str, None]
+        The path to save the plot to. If None, the plot is not saved.
+    layer : Union[str, None]
+        The layer the embeddings are from.
 
     Returns
     -------
@@ -61,7 +70,18 @@ def gene_embedding(dooder_df,
         fig.update_layout(coloraxis_colorbar=dict(
             title=color_by))
 
-    return fig
+    if save_path is not None:
+        if 'Centroid' in title:
+            final_save_path = f'{save_path}_{layer}_centroid_embedding.png'
+        else:
+            final_save_path = f'{save_path}_{layer}_gene_embedding.png'
+
+        fig.write_image(final_save_path,
+                        format='png',
+                        scale=2,
+                        engine='orca')
+
+    fig.show()
 
 
 def gene_embedding_1d(values: list, component: int = 0, padding: float = 0.02) -> go.Figure:
