@@ -21,4 +21,4 @@ class BasicStep(StepLogic):
     def act(dooder):
         dooder.do('move')
         dooder.do('consume')
-        dooder.do('reproduce')
+        # dooder.do('reproduce')
