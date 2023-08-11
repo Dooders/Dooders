@@ -2,7 +2,7 @@
 SeedCount:
   type: generation
   function: fixed_value
-  args: { "value": 1 }
+  args: { "value": 3 }
   description: ''
 SeedPlacement:
   type: placement
