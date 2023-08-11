@@ -64,7 +64,7 @@ def gene_embedding(dooder_df,
     fig.update_yaxes(showticklabels=False)
 
     # Remove the color legend
-    fig.update_layout(coloraxis_showscale=True)
+    fig.update_layout(showlegend=False)
 
     if show_cbar:
         fig.update_layout(coloraxis_colorbar=dict(
