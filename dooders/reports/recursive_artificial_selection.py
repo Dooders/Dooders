@@ -198,8 +198,9 @@ def display_report(recombination_type: str = None,
         chart_path = f'results/{experiment_name}/charts'
         save_path = f'{chart_path}/{recombination_type}_'
         if os.path.exists(chart_path):
-            shutil.rmtree(chart_path)
-        os.makedirs(chart_path)
+            pass
+        else:
+            os.makedirs(chart_path)
     else:
         save_path = None
 
