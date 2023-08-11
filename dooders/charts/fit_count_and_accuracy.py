@@ -31,10 +31,10 @@ def fit_count_and_accuracy(fit_dooder_count: List,
 
     # Add a bar chart for the second set of values
     fig.add_trace(go.Bar(x=generations, y=avg_accuracies,
-                  yaxis='y2', name='Bar Chart', opacity=0.4))
+                  yaxis='y2', name='Average Accuracy', opacity=0.4))
 
     fig.add_trace(go.Scatter(x=generations, y=fit_dooder_count,
-                  mode='lines+markers', name='Line Chart'))
+                  mode='lines+markers', name='Fit Dooders'))
 
     # Update layout for secondary y-axis
     fig.update_layout(
