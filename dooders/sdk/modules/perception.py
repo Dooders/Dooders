@@ -27,7 +27,7 @@ class Perception(list):
     ----------
     __mapping__: dict
         A mapping of Space indices to directions
-        
+
     Methods
     -------
     to_direction(Space: Location) -> str
@@ -36,7 +36,7 @@ class Perception(list):
         Check whether the perception contains a given object type
     fetch(object_type: str) -> list[object]
         Fetch all objects of a given type in the perception
-        
+
     Properties
     ----------
     Spaces: list
