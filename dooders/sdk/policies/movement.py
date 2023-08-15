@@ -118,14 +118,14 @@ class NeuralNetwork(BasePolicy):
 
     @classmethod
     def execute(cls, dooder: 'Dooder') -> tuple:
-        perception_array = dooder.perception
+        perception_spaces = dooder.perception
 
-        inferred_goal = cls.infer_goal(dooder, perception_array)
+        inferred_goal = cls.infer_goal(dooder, perception_spaces)
         primary_target = cls.base_goals[inferred_goal]
 
         # Check if the target is inside the Dooder's perception
         target_array = np.array(
-            [perception_array.contains(primary_target)], dtype='uint8')
+            [perception_spaces.contains(primary_target)], dtype='uint8')
 
         # Get model if it exists, else return an error
         model = dooder.internal_models.get(inferred_goal, None)
@@ -136,13 +136,13 @@ class NeuralNetwork(BasePolicy):
 
         # Predict where to move
         prediction = model.predict(target_array)
-        predicted_location = perception_array.coordinates[prediction]
+        predicted_location = perception_spaces.coordinates[prediction]
 
         # Learn from the reality
         # Note: Inference (prediction) happens before learning.
         # Learning happens after action is taken
         correct_choices = [location[0] for location in enumerate(
-            perception_array.contains(primary_target)) if location[1] == True]
+            perception_spaces.contains(primary_target)) if location[1] == True]
 
         model.learn(correct_choices)
 
