@@ -91,8 +91,11 @@ class Experiment:
             A simulation object. Through the Assembly class.
         """
         return Assemble.execute(self.settings)
+    
+    def _simulate(self, simulation_count: int = 1, restart: bool = False) -> None:
+        pass
 
-    def simulate(self, simulation_count: int = 1) -> None:
+    def simulate(self, simulation_count: int = 1, restart: bool = False) -> None:
         """ 
         Simulate a single cycle.
 
@@ -109,11 +112,12 @@ class Experiment:
             multiple simulations.
         """
         self.simulation = self.create_simulation()
-        restart = self.simulation.run_simulation(self.batch, simulation_count)
-        if restart and simulation_count < self.max_reset:
+        self.simulation.auto_restart = restart
+        simulate_again = self.simulation.run_simulation(self.batch, simulation_count)
+        if simulate_again and simulation_count < self.max_reset:
             self.cleanup()
             del self.simulation
-            self.simulate(simulation_count+1)
+            self.simulate(simulation_count+1, restart=restart)
 
         elif self.save_state:
             self._save_state()
@@ -167,21 +171,24 @@ class Experiment:
         """ 
         Remove all contents of the 'recent' directory
         """
+        try:
+            folder = 'recent/dooders/'
 
-        folder = 'recent/dooders/'
-
-        # iterate over all files in the folder
-        for filename in os.listdir(folder):
-            # construct full file path
-            file_path = os.path.join(folder, filename)
-            # remove the file
-            try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                pass
+            # iterate over all files in the folder
+            for filename in os.listdir(folder):
+                # construct full file path
+                file_path = os.path.join(folder, filename)
+                # remove the file
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    pass
+                
+        except FileNotFoundError:
+            pass
 
     def get_objects(self, object_type: str = 'Agent') -> List[Agent]:
         """ 
