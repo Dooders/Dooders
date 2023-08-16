@@ -5,7 +5,9 @@ A perception is a list of Spaces adjacent to a Dooder.
 """
 
 import random
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, List, Tuple, Union
+
+import numpy as np
 
 if TYPE_CHECKING:
     from dooders.sdk.modules.space import Space
@@ -105,6 +107,39 @@ class Perception(list):
                     result.append(contents)
 
         return result
+
+    def array(self, objects: Union[str, List[str]]) -> List[int]:
+        """ 
+        Get the perception as an array of integers that represent the objects 
+        in the perception. 1 = object is present, 0 = object is not present
+
+        Parameters
+        ----------
+        objects: str or list[str]
+            The object types to convert to
+
+        Returns
+        -------
+        array: list[int]
+            The perception as an array of objects
+
+        Examples
+        --------
+        # With a list of objects
+        >>> perception.array(['Dooder', 'Energy', 'Hazard'])
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+        # With a single object
+        >>> perception.array('Dooder')
+        [1, 0, 0, 0, 0, 0, 0, 0, 0]
+        """
+        if isinstance(objects, str):
+            objects = [objects]
+
+        perception_array = []
+        for object in objects:
+            perception_array = perception_array + self.contains(object)
+
+        return np.array([perception_array], dtype='uint8')
 
     @property
     def spaces(self) -> List['Space']:
