@@ -24,13 +24,6 @@ def move(dooder) -> None:
     ----------
     dooder : Dooder
         The dooder that is moving
-
-    Examples
-    --------
-    >>> dooder = Dooder((0, 0))
-    >>> Action.execute(dooder, 'move')
-    >>> dooder.position
-    (0, 1)
     """
     chosen_policy = Settings.search('Movement')
     destination = Policy.execute(chosen_policy, dooder)
