@@ -11,14 +11,15 @@ programming process. This allows users to explore and evolve designs
 that exhibit desirable traits, improving solutions in various domains.
 """
 
-import json
-import os
+# TODO: Experiment logging for information like number of fit dooders, time taken, etc.
+
 import time
 from typing import Dict, List
 
 from dooders.data.experiment_results import calculate_accuracies
 from dooders.data.inference_record_dataframe import get_inference_record_df
 from dooders.experiment import Experiment
+from dooders.experiments.base import save_experiment
 from dooders.reports.recursive_artificial_selection import report
 from dooders.sdk.modules.recombination import RECOMBINATION_TYPES
 from dooders.sdk.modules.selection import get_embeddings, recombine_genes
@@ -29,27 +30,6 @@ DEFAULT_SETTINGS = {
     'GenePool': 'retain',
     'Generations': 50,
 }
-
-
-def save_experiment(type: str, results: Dict[str, List], experiment_name: str) -> None:
-    """ 
-    Saves the results of the experiment to a JSON file.
-
-    Parameters
-    ----------
-    type : str
-        The type of experiment (the recombination type).
-    results : dict
-        The results of the experiment.
-    experiment_name : str
-        The name of the experiment. 
-        Directory will be created in the results folder.
-    """
-    if not os.path.exists(f'results/{experiment_name}'):
-        os.makedirs(f'results/{experiment_name}')
-
-    with open(f'results/{experiment_name}/{type}.json', 'w') as f:
-        json.dump(results, f)
 
 
 def get_accuracies(results: Dict[str, List]) -> List[float]:
@@ -137,7 +117,7 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
     """
 
     recombination_types = list(RECOMBINATION_TYPES.keys())
-    
+
     if save_experiment:
         save_experiment('settings', settings, experiment_name)
 
