@@ -137,6 +137,9 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
     """
 
     recombination_types = list(RECOMBINATION_TYPES.keys())
+    
+    if save_experiment:
+        save_experiment('settings', settings, experiment_name)
 
     for type in recombination_types:
         print(f'Starting {type} experiment at {time.ctime()}\n')
@@ -153,6 +156,3 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
             save_experiment(type, results, experiment_name)
 
         print(f'Finished {type} experiment. Ended at {time.ctime()}\n')
-
-    if save_experiment:
-        save_experiment('settings', settings, experiment_name)
