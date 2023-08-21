@@ -352,12 +352,12 @@ class SimpleNeuralNet:
         """
         self.id = id
         self.purpose = instructions['model_purpose']
-        
+
         for key in instructions:
             setattr(self, key, instructions[key])
-            
+
         self.build()
-        
+
     def build(self) -> None:
         self.model = Model()
         self.model.add(Layer_Dense(self.input_size, 512, frozen=True))
@@ -390,7 +390,12 @@ class SimpleNeuralNet:
         prediction = self.model.output_layer_activation.predictions(
             self.output)
 
-        return prediction[0]
+        if self.model_purpose == 'Senses':
+            return self.output
+        elif self.model_purpose == 'Decisions':
+            return prediction[0]
+        else:
+            return prediction[0]
 
     def learn(self, reality: list) -> None:
         """ 
