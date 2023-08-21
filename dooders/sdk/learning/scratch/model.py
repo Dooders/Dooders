@@ -346,16 +346,23 @@ class SimpleNeuralNet:
         Predict the class of the input data
     """
 
-    def __init__(self, id: str) -> None:
+    def __init__(self, id: str, instructions: dict) -> None:
         """ 
         Initialize the model
         """
-        self.purpose = 'Movement'
         self.id = id
+        self.purpose = instructions['model_purpose']
+        
+        for key in instructions:
+            setattr(self, key, instructions[key])
+            
+        self.build()
+        
+    def build(self) -> None:
         self.model = Model()
-        self.model.add(Layer_Dense(18, 512, frozen=True))
+        self.model.add(Layer_Dense(self.input_size, 512, frozen=True))
         self.model.add(Activation_ReLU())
-        self.model.add(Layer_Dense(512, 9))
+        self.model.add(Layer_Dense(512, self.output_size))
         self.model.add(Activation_Softmax())
         self.model.set(
             loss=Loss_CategoricalCrossentropy(),
