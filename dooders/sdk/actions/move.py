@@ -5,9 +5,9 @@ This module contains the actions that allow dooders
 to move around the environment.
 """
 
-from dooders.sdk.core import Policy
+# from dooders.sdk.core import Policy
 from dooders.sdk.core.core import Core
-from dooders.sdk.core.settings import Settings
+# from dooders.sdk.core.settings import Settings
 from dooders.sdk.utils.get_direction import get_direction
 
 
@@ -25,8 +25,11 @@ def move(dooder) -> None:
     dooder : Dooder
         The dooder that is moving
     """
-    chosen_policy = Settings.search('Movement')
-    destination = Policy.execute(chosen_policy, dooder)
+
+    destination = dooder.think()
+
+    # chosen_policy = Settings.search('Movement')
+    # destination = Policy.execute(chosen_policy, dooder)
 
     if destination == dooder.position:
         pass
@@ -35,6 +38,9 @@ def move(dooder) -> None:
         dooder.direction = get_direction(origin, destination)
         dooder.simulation.environment.move_object(dooder, destination)
         dooder.move_count += 1
-        dooder.log(
-            granularity=2, message=f"Moved {dooder.direction} from {origin} to {destination}", scope='Dooder')
+
+        dooder.log(granularity=2,
+                   message=f"Moved {dooder.direction} from {origin} to {destination}",
+                   scope='Dooder')
+
         dooder.position = destination

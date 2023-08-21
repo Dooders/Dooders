@@ -2,9 +2,16 @@
 InternalModels
 --------------
 The InternalModels class models a Dooder's learned behaviors.
+
+How the internal models are created at simulation start:
+...
 """
 
+from dooders.sdk.core.default_settings import default_settings
+from dooders.sdk.core.settings import Settings
 from dooders.sdk.learning.scratch.model import SimpleNeuralNet
+
+DEFAULT_SETTINGS = default_settings['internal_models']
 
 
 class InternalModels(dict):
@@ -35,11 +42,11 @@ class InternalModels(dict):
         Biases from the internal models.
     """
 
-    def __init__(self, model_list: list, id: str, *args, **kwargs) -> None:
-        self.build(model_list, id)
+    def __init__(self, id: str, model_dict: dict = DEFAULT_SETTINGS, *args, **kwargs) -> None:
+        self.build(id, model_dict)
         super(InternalModels, self).__init__(*args, **kwargs)
 
-    def build(self, model_list: list, id: str) -> None:
+    def build(self, id: str, model_dict: dict) -> None:
         """
         Build the internal models.
 
@@ -48,8 +55,9 @@ class InternalModels(dict):
         model_list : list
             A list of model names to use as keys for the dictionary.
         """
-        for model in model_list:
-            self[model] = SimpleNeuralNet(id)
+        for model_name in model_dict:
+            instructions = model_dict[model_name]
+            self[model_name] = SimpleNeuralNet(id, instructions)
 
     def inherit_weights(self, weights: dict) -> None:
         """ 

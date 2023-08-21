@@ -15,7 +15,9 @@ from dooders.sdk import steps
 from dooders.sdk.base.agent import Agent
 from dooders.sdk.core import Condition
 from dooders.sdk.core.action import Action
+from dooders.sdk.core.default_settings import default_settings
 from dooders.sdk.core.step import Step
+from dooders.sdk.models.senses import Senses
 from dooders.sdk.modules.internal_models import InternalModels
 from dooders.sdk.modules.perception import Perception
 
@@ -23,7 +25,7 @@ if TYPE_CHECKING:
     from dooders.sdk.base.reality import BaseSimulation
 
 
-MotivationList = ['Consume', 'Reproduce']
+MODEL_SETTINGS = default_settings['internal_models']
 
 
 class MainStats(BaseModel):
@@ -100,7 +102,7 @@ class Dooder(Agent):
         super().__init__(id, position, simulation)
         self.moore = True
         self.condensed_weight_list = list()
-        self.internal_models = InternalModels(MotivationList, self.id)
+        self.internal_models = InternalModels(self.id, MODEL_SETTINGS)
         self.log(granularity=1, message=f"Created", scope='Dooder')
 
     def __del__(self):
@@ -209,6 +211,44 @@ class Dooder(Agent):
 
         return None
 
+    def think(self):
+
+        # result_list = list()
+
+        # for attribute in Senses.__fields__:
+        #     model = self.internal_models[attribute]
+        #     object_name = getattr(Senses(), attribute)
+        #     perception_array = self.perception.array(object_name)
+
+        #     result = model.infer(perception_array)
+        #     result_list.append(result)
+
+        #     # model.learn(perception_array.True)
+        perception_spaces = self.perception
+        perception_array = perception_spaces.array('Energy')
+        model = self.internal_models['energy_detection']
+        move_destination = model.predict(perception_array)
+
+        correct_choices = [location[0] for location in enumerate(
+            perception_spaces.contains('Energy')) if location[1] == True]
+
+        model.learn(correct_choices)
+
+        inference_record = {'action': 'movement',
+                            'hunger': self.hunger,
+                            'position': self.position,
+                            'perception': [str(x) for x in perception_array[0]],
+                            'decision': str(move_destination),
+                            'reality': [str(choice) for choice in correct_choices],
+                            'inferred_goal': None,
+                            'accurate': move_destination in correct_choices if correct_choices else None}
+
+        self.inference_record[self.simulation.cycle_number] = inference_record
+
+        final_destination = perception_spaces.coordinates[move_destination]
+
+        return final_destination
+
     @property
     def get_encoded_weights(self) -> np.ndarray:
         """ 
@@ -221,7 +261,7 @@ class Dooder(Agent):
         """
         # PCA transform of internal model weights
         # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
-        weights = self.weights['Consume'][1]
+        weights = self.weights['energy_detection'][1]
         embedding = self.gene_embedding.fit(weights)
         return embedding.singular_values_
 
