@@ -10,7 +10,10 @@ simulation and models.
 """
 
 from dooders.sdk.core.core import _COMPONENTS
+from dooders.sdk.core.default_settings import default_settings
 from dooders.sdk.core.variables import Variables
+
+DEFAULT_SETTINGS = default_settings
 
 
 class Settings:
