@@ -34,13 +34,13 @@ default_settings = {
             'loss': 'mean_squared_error',
             'optimizer': 'adam',
         },
-        'movement_decision': {
+        'move_decision': {
             'model_purpose': 'Decisions',
             'model_type': 'NeuralNetwork',
             'input_source': ['energy_detection',
                              'dooder_detection',
                              'hazard_detection'],
-            'input_size': 27,
+            'input_size': 18,
             'output_destination': None,
             'output_size': 9,
             'activation': 'sigmoid',
