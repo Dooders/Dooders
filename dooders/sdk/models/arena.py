@@ -306,7 +306,7 @@ class Arena:
         """
         Returns the weights of the Arena for all active dooders
         """
-        return [v.weights['Consume'] for v in self.active_dooders.values()]
+        return [v.weights['energy_detection'] for v in self.active_dooders.values()]
 
     @property
     def current_cycle(self) -> int:

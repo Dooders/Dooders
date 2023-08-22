@@ -38,15 +38,15 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
 
     Example
     --------
-    >>> gene_pool = {'dooder_1': {'Consume': [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]}}
+    >>> gene_pool = {'dooder_1': {'energy_detection': [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]}}
     >>> get_embeddings(gene_pool)
     [{'static': [0.1, 0.2, 0.3], 'dynamic': [0.4, 0.5, 0.6]}]
     """
     gene_pool_embeddings = []
     for dooder in gene_pool.values():
 
-        static_weights = dooder['Consume'][0]
-        dynamic_weights = dooder['Consume'][1]
+        static_weights = dooder['energy_detection'][0]
+        dynamic_weights = dooder['energy_detection'][1]
         static_embedding = GENE_EMBEDDING.fit(
             static_weights).singular_values_.tolist()
         dynamic_weights = GENE_EMBEDDING.fit(
@@ -75,8 +75,8 @@ def select_parents(gene_pool: Dict[str, dict]) -> Tuple[Tuple[str, np.ndarray], 
         A tuple containing two tuples, each containing a Dooder ID and their weights.
     """
     parent_a_id, parent_b_id = random.sample(list(gene_pool.keys()), 2)
-    parent_a_weights = gene_pool[parent_a_id]['Consume']
-    parent_b_weights = gene_pool[parent_b_id]['Consume']
+    parent_a_weights = gene_pool[parent_a_id]['energy_detection']
+    parent_b_weights = gene_pool[parent_b_id]['energy_detection']
 
     return (parent_a_id, parent_a_weights), (parent_b_id, parent_b_weights)
 
