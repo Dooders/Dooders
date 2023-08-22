@@ -211,43 +211,65 @@ class Dooder(Agent):
 
         return None
 
-    def think(self):
+    def check_accuracy(self, output, reality) -> None:
 
-        # result_list = list()
+        if isinstance(output, np.ndarray):
+            decision = np.argmax(output, axis=1)
+        else:
+            decision = output
 
-        # for attribute in Senses.__fields__:
-        #     model = self.internal_models[attribute]
-        #     object_name = getattr(Senses(), attribute)
-        #     perception_array = self.perception.array(object_name)
+        if decision in reality:
+            return True
+        elif reality is None:
+            return None
+        else:
+            return False
 
-        #     result = model.infer(perception_array)
-        #     result_list.append(result)
+    def think(self, model_name: str, input_array: np.ndarray) -> np.ndarray:
+        """ 
+        Use cognitive models to think about the environment.
 
-        #     # model.learn(perception_array.True)
-        perception_spaces = self.perception
-        perception_array = perception_spaces.array('Energy')
-        model = self.internal_models['energy_detection']
-        move_destination = model.predict(perception_array)
+        Parameters
+        ----------
+        model_name: str
+            The name of the model to use.
+        input_array: np.ndarray
+            The input array for the model.
 
-        correct_choices = [location[0] for location in enumerate(
-            perception_spaces.contains('Energy')) if location[1] == True]
+        Returns
+        -------
+        output_array: np.ndarray
+            The output array of the model.
+        """
 
-        model.learn(correct_choices)
+        model = self.internal_models[model_name]
+        output_array = model.predict(input_array)
 
-        inference_record = {'action': 'movement',
+        if model.model_purpose == 'Decisions':
+            energy_perception = self.perception.array('Energy')
+            reality = [location[0]
+                       for location in enumerate(energy_perception[0]) if location[1] == 1]
+        else:
+            reality = [location[0]
+                       for location in enumerate(input_array[0]) if location[1] == 1]
+
+        model.learn(reality)
+
+        self.check_accuracy(output_array, reality)
+
+        inference_record = {'model_name': model_name,
                             'hunger': self.hunger,
                             'position': self.position,
-                            'perception': [str(x) for x in perception_array[0]],
-                            'decision': str(move_destination),
-                            'reality': [str(choice) for choice in correct_choices],
+                            'perception': [str(x) for x in input_array[0]],
+                            'output': str(output_array),
+                            'reality': [str(choice) for choice in reality],
                             'inferred_goal': None,
-                            'accurate': move_destination in correct_choices if correct_choices else None}
+                            'accurate': self.check_accuracy(output_array, reality),
+                            }
 
         self.inference_record[self.simulation.cycle_number] = inference_record
 
-        final_destination = perception_spaces.coordinates[move_destination]
-
-        return final_destination
+        return output_array
 
     @property
     def get_encoded_weights(self) -> np.ndarray:
@@ -260,7 +282,7 @@ class Dooder(Agent):
             The encoded weights of the dooder.
         """
         # PCA transform of internal model weights
-        # {model_name: condensed_weight_tuple} i.e. {'Consume': (1, 132, 103)}
+        # {model_name: condensed_weight_tuple} i.e. {'energy_detection': (1, 132, 103)}
         weights = self.weights['energy_detection'][1]
         embedding = self.gene_embedding.fit(weights)
         return embedding.singular_values_

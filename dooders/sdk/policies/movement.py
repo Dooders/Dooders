@@ -126,7 +126,8 @@ class NeuralNetwork(BasePolicy):
         # Check if the target is inside the Dooder's perception
         # target_array = np.array(
         #     [perception_spaces.contains(primary_target)], dtype='uint8')
-        target_array = perception_spaces.array(['Energy', 'Dooder']) #! Temporary
+        target_array = perception_spaces.array(
+            ['Energy', 'Dooder'])  # ! Temporary
 
         # Get model if it exists, else return an error
         model = dooder.internal_models.get(inferred_goal, None)
@@ -142,7 +143,6 @@ class NeuralNetwork(BasePolicy):
         # Learn from the reality
         # Note: Inference (prediction) happens before learning.
         # Learning happens after action is taken
-        #! need to fix this with the expanded perception array
         correct_choices = [location[0] for location in enumerate(
             perception_spaces.contains(primary_target)) if location[1] == True]
 
@@ -183,8 +183,8 @@ class NeuralNetwork(BasePolicy):
             The goal of the Dooder 'Consume' or 'Reproduce'
         """
         if dooder.hunger > 0:
-            return 'Consume'
+            return 'energy_detection'
         elif any(perception.contains('Dooder')) and dooder.age >= 5:
-            return 'Reproduce'
+            return 'dooder_detection'
         else:
-            return 'Consume'
+            return 'energy_detection'

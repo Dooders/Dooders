@@ -5,9 +5,8 @@ This module contains the actions that allow dooders
 to move around the environment.
 """
 
-# from dooders.sdk.core import Policy
 from dooders.sdk.core.core import Core
-# from dooders.sdk.core.settings import Settings
+from dooders.sdk.models.senses import Senses
 from dooders.sdk.utils.get_direction import get_direction
 
 
@@ -26,21 +25,29 @@ def move(dooder) -> None:
         The dooder that is moving
     """
 
-    destination = dooder.think()
+    sensory_array = Senses.gather(dooder)
+    
+    # print(f"Sensory Array: {sensory_array}")
 
-    # chosen_policy = Settings.search('Movement')
-    # destination = Policy.execute(chosen_policy, dooder)
+    destination = dooder.think('move_decision', sensory_array)
+    
+    # print(f"Destination: {destination}")
+    
+    coordinates = dooder.perception.coordinates[destination]
+    
+    # print(f'Coordinates: {coordinates}')
+    #! I'm not giving the model its full potential. Give the moved_decision the perception array too. It needs that information to make a decision.
 
-    if destination == dooder.position:
+    if coordinates == dooder.position:
         pass
     else:
         origin = dooder.position
-        dooder.direction = get_direction(origin, destination)
-        dooder.simulation.environment.move_object(dooder, destination)
+        dooder.direction = get_direction(origin, coordinates)
+        dooder.simulation.environment.move_object(dooder, coordinates)
         dooder.move_count += 1
 
         dooder.log(granularity=2,
-                   message=f"Moved {dooder.direction} from {origin} to {destination}",
+                   message=f"Moved {dooder.direction} from {origin} to {coordinates}",
                    scope='Dooder')
 
-        dooder.position = destination
+        dooder.position = coordinates

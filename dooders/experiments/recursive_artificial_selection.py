@@ -78,7 +78,8 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
 
                 new_genes = recombine_genes(
                     gene_pool, recombination_type=settings['RecombinationType'])
-                dooder.internal_models['Consume'].inherit_weights(new_genes)
+                dooder.internal_models['energy_detection'].inherit_weights(
+                    new_genes)
 
     for i in range(generations):
         experiment = Experiment(settings)
