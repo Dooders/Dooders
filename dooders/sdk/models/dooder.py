@@ -6,7 +6,7 @@ Each object will have the ability to move around the environment and
 interact with other objects.
 """
 
-from typing import TYPE_CHECKING, Any, List, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 import numpy as np
 from pydantic import BaseModel
@@ -26,6 +26,9 @@ if TYPE_CHECKING:
 
 
 MODEL_SETTINGS = default_settings['internal_models']
+
+
+GeneticCode = Dict[str, List[Any]]
 
 
 class MainStats(BaseModel):
@@ -165,7 +168,7 @@ class Dooder(Agent):
         4. Check if the dooder should die at the end of its step
 
         """
-        self.get_gene_embedding()
+        self.store_gene_embedding()
         self.age += 1
 
         if self.death_check():
@@ -180,7 +183,7 @@ class Dooder(Agent):
                          message="Terminated during cycle",
                          scope='Dooder')
 
-    def get_gene_embedding(self) -> None:
+    def store_gene_embedding(self) -> None:
         """ 
         Post step flow for a dooder.
 
@@ -189,9 +192,9 @@ class Dooder(Agent):
         1. Update encoded weights
         2. Update condensed weights
         """
-        encoded_weights_value = list(self.get_encoded_weights)
+        genetic_code_embeddings = list(self.genetic_code_embeddings)
         cycle_number = self.simulation.cycle_number
-        self.encoded_weights[cycle_number] = encoded_weights_value
+        self.encoded_weights[cycle_number] = genetic_code_embeddings
 
     def find_partner(self) -> 'Dooder':
         """
@@ -270,28 +273,25 @@ class Dooder(Agent):
         self.inference_record[self.simulation.cycle_number] = inference_record
 
         return output_array
+    
+    @property
+    def genetic_code_embeddings(self) -> 'GeneticCode':
+        
+        genetic_code = self.genetic_code
+        
+        for model in self.internal_models.keys():
+            weights = genetic_code[model][1] #! will do all layers
+            embedding = self.gene_embedding.fit(weights)
+            genetic_code[model][1] = embedding.singular_values_
+            
+        return genetic_code
 
     @property
-    def get_encoded_weights(self) -> np.ndarray:
+    def genetic_code(self) -> 'GeneticCode':
         """ 
-        Get the encoded weights of the dooder.
-
-        Returns
-        -------
-        encoded_weights: np.ndarray
-            The encoded weights of the dooder.
-        """
-        # PCA transform of internal model weights
-        # {model_name: condensed_weight_tuple} i.e. {'energy_detection': (1, 132, 103)}
-        weights = self.weights['energy_detection'][1]
-        embedding = self.gene_embedding.fit(weights)
-        return embedding.singular_values_
-
-    @property
-    def weights(self) -> dict:
-        """ 
-        Get the weights of the dooder.
-
+        Get the internal model weights as a dictionary of the dooder's 
+        internal model weights.
+        
         Returns
         -------
         weights: dict
@@ -374,5 +374,6 @@ class Dooder(Agent):
             The final state of the dooder.
         """
         state = self.state
-        state['final_state'] = self.weights['Consume'][0]
+        state['final_state'] = self.genetic_code['Consume'][0]
         return state
+    
