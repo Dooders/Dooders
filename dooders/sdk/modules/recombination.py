@@ -178,10 +178,19 @@ def recombine(a_weights: np.ndarray,
     if recombination_type not in RECOMBINATION_TYPES:
         raise ValueError(f'Invalid recombination type {recombination_type}.'
                          'Valid options are: "averaging", "lottery", "crossover", "random_range", "none"')
+        
+    recombined_model_weights = dict.fromkeys(a_weights.keys())
+    
+    for model in recombined_model_weights.keys():
+        
+        model_weights_a = a_weights[model]
+        model_weights_b = b_weights[model]
+    
+        recombined_weights = []
+        for a, b in zip(model_weights_a.tolist(), model_weights_b.tolist()):
+            recombined_weights.append(
+                RECOMBINATION_TYPES[recombination_type](a, b))
+            
+        recombined_model_weights[model] = recombined_weights
 
-    recombined_weights = []
-    for a, b in zip(a_weights.tolist(), b_weights.tolist()):
-        recombined_weights.append(
-            RECOMBINATION_TYPES[recombination_type](a, b))
-
-    return recombined_weights
+    return recombined_model_weights
