@@ -7,7 +7,6 @@ import random
 from typing import Dict, List, Tuple
 
 import numpy as np
-from pydantic import BaseModel
 from sklearn.decomposition import PCA
 
 from dooders.sdk.modules.recombination import recombine
@@ -15,7 +14,6 @@ from dooders.sdk.utils.types import EmbeddingLayers
 
 # Global PCA instance for embedding
 GENE_EMBEDDING = PCA(n_components=3)
-
 
 
 def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
@@ -75,18 +73,16 @@ def select_parents(gene_pool: Dict[str, dict]) -> Tuple[Tuple[str, np.ndarray], 
         A tuple containing two tuples, each containing a Dooder ID and their weights.
     """
     parent_a_id, parent_b_id = random.sample(list(gene_pool.keys()), 2)
-    parent_a_weights = gene_pool[parent_a_id]['energy_detection']
-    parent_b_weights = gene_pool[parent_b_id]['energy_detection']
+    parent_a_weights = gene_pool[parent_a_id]
+    parent_b_weights = gene_pool[parent_b_id]
 
     return (parent_a_id, parent_a_weights), (parent_b_id, parent_b_weights)
 
 
-def recombine_genes(gene_pool: Dict[str, dict], recombination_type: str = 'crossover') -> np.ndarray:
+def recombine_genes(gene_pool: Dict[str, dict], recombination_type: str = 'crossover') -> dict:
     """ 
     Produces a new set of genes from two random Dooders' weights 
     from a provided gene pool.
-
-    TODO: Add a "one-parent" option to allow for a single parent to be used for recombination.
 
     Current recombination types: 'crossover', 'random', 'range', 'average'
 
@@ -104,7 +100,8 @@ def recombine_genes(gene_pool: Dict[str, dict], recombination_type: str = 'cross
         from the provided gene pool.
     """
     parent_a, parent_b = select_parents(gene_pool)
+
     recombined_genes = recombine(
         parent_a[1], parent_b[1], recombination_type=recombination_type)
 
-    return np.array(recombined_genes, dtype=object)
+    return recombined_genes
