@@ -217,7 +217,7 @@ class Dooder(Agent):
     def check_accuracy(self, output, reality) -> None:
 
         if isinstance(output, np.ndarray):
-            decision = np.argmax(output, axis=1)
+            decision = np.argmax(output)
         else:
             decision = output
 
@@ -255,7 +255,7 @@ class Dooder(Agent):
         else:
             reality = [location[0]
                        for location in enumerate(input_array[0]) if location[1] == 1]
-
+  
         model.learn(reality)
 
         self.check_accuracy(output_array, reality)

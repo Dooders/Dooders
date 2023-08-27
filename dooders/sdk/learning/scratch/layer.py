@@ -12,7 +12,7 @@ class Layer_Dense:
     """ 
     A dense layer is just a layer which performs a dot product
     between input and weights, and then adds biases.
-    
+
     It also holds the weights and biases, as well as the
     derivatives of the weights and biases with respect to the
     loss function.
@@ -31,7 +31,7 @@ class Layer_Dense:
         L1 regularization strength. Defaults to 0.
     bias_regularizer_l2 : float
         L2 regularization strength. Defaults to 0.
-    
+
     Attributes
     ----------
     weights : 2darray
@@ -56,7 +56,7 @@ class Layer_Dense:
         Inputs to the layer.
     output : 2darray
         Output of the layer.
-    
+
     Methods
     -------
     forward(inputs, training)
@@ -70,7 +70,8 @@ class Layer_Dense:
                  bias_regularizer_l1=0, bias_regularizer_l2=0,
                  frozen=False) -> None:
         # Initialize weights and biases
-        self.weights = initialize_weights(n_inputs, n_neurons, weight_init='random')
+        self.weights = initialize_weights(
+            n_inputs, n_neurons, weight_init='random')
         self.biases = np.zeros((1, n_neurons))
         self.frozen = frozen
         # Set regularization strength
@@ -82,7 +83,7 @@ class Layer_Dense:
     def forward(self, inputs: np.ndarray, training: bool) -> None:
         """ 
         Performs a forward pass of the layer.
-        
+
         Parameters
         ----------
         inputs : 2darray
@@ -98,12 +99,13 @@ class Layer_Dense:
     def backward(self, dvalues: np.ndarray) -> None:
         """ 
         Performs a backward pass of the layer.
-        
+
         Parameters
         ----------
         dvalues : 2darray
             Derivative of the loss function with respect to the layer's output.
         """
+
         # Gradients on parameters
         self.dweights = np.dot(self.inputs.T, dvalues)
         self.dbiases = np.sum(dvalues, axis=0, keepdims=True)
@@ -131,15 +133,16 @@ class Layer_Dense:
         # Gradient on values
         self.dinputs = np.dot(dvalues, self.weights.T)
 
+
 class Layer_Dropout:
     """ 
     Dropout layer randomly sets a fraction of input values to zero.
-    
+
     Parameters
     ----------
     rate : float
         Fraction of the input values to be set to zero.
-    
+
     Attributes
     ----------
     rate : float
@@ -167,7 +170,7 @@ class Layer_Dropout:
     def forward(self, inputs: np.ndarray, training: bool) -> None:
         """ 
         Performs a forward pass of the layer.
-        
+
         Parameters
         ----------
         inputs : 2darray
@@ -192,7 +195,7 @@ class Layer_Dropout:
     def backward(self, dvalues: np.ndarray) -> None:
         """ 
         Performs a backward pass of the layer.
-        
+
         Parameters
         ----------
         dvalues : 2darray
@@ -201,15 +204,16 @@ class Layer_Dropout:
         # Gradient on values
         self.dinputs = dvalues * self.binary_mask
 
+
 class Layer_Input:
     """ 
     Input layer of a neural network.
-    
+
     Parameters
     ----------
     n_inputs : int
         Number of inputs to the layer.
-    
+
     Attributes
     ----------
     n_inputs : int
