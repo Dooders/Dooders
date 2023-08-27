@@ -20,7 +20,7 @@ class Senses:
     """
     SENSE_TYPES = {
     'energy_detection': 'Energy',
-    'dooder_detection': 'Dooder',
+    # 'dooder_detection': 'Dooder',
     # hazard_detection: 'Hazard',
     }
     
@@ -39,7 +39,6 @@ class Senses:
         list
             The sensory array from the dooder's perception
         """
-        
         sensory_array = list()
         for model_name in cls.SENSE_TYPES:
             object_name = cls.SENSE_TYPES[model_name]

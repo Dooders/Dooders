@@ -382,7 +382,7 @@ class Activation_LeakyReLU:
 class Activation_ELU:
     """
     ELU activation
-    
+
     Methods
     -------
     forward(inputs, training)
@@ -391,7 +391,7 @@ class Activation_ELU:
         Backward pass
     predictions(outputs)
         Calculate predictions for outputs
-    
+
     Attributes
     ----------
     inputs : array
@@ -403,14 +403,14 @@ class Activation_ELU:
     alpha : float
         ELU activation parameter
     """
-    
+
     def __init__(self, alpha=1.0):
         self.alpha = alpha
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
         """
         Forward pass
-        
+
         Parameters
         ----------
         inputs : array
@@ -420,14 +420,15 @@ class Activation_ELU:
         """
         # Remember input values
         self.inputs = inputs
-        
+
         # Calculate output values from inputs
-        self.output = np.where(inputs > 0, inputs, self.alpha * (np.exp(inputs) - 1))
+        self.output = np.where(
+            inputs > 0, inputs, self.alpha * (np.exp(inputs) - 1))
 
     def backward(self, dvalues: np.ndarray) -> None:
         """
         Backward pass
-        
+
         Parameters
         ----------
         dvalues : array
@@ -436,19 +437,20 @@ class Activation_ELU:
         # Since we need to modify the original variable,
         # let's make a copy of values first
         self.dinputs = dvalues.copy()
-        
+
         # Calculate gradient
-        self.dinputs[self.inputs <= 0] = self.dinputs[self.inputs <= 0] * (self.alpha * np.exp(self.inputs[self.inputs <= 0]))
+        self.dinputs[self.inputs <= 0] = self.dinputs[self.inputs <=
+                                                      0] * (self.alpha * np.exp(self.inputs[self.inputs <= 0]))
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
         """
         Calculate predictions for outputs
-        
+
         Parameters
         ----------
         outputs : array
             Output values
-        
+
         Returns
         -------
         array
