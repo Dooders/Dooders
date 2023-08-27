@@ -2,6 +2,7 @@
 default_settings = {
     'internal_models': {
         'energy_detection': {
+            'model_name': 'energy_detection',
             'model_purpose': 'Senses',
             'model_type': 'NeuralNetwork',
             'input_source': 'perception.array("Energy")',
@@ -13,6 +14,7 @@ default_settings = {
             'optimizer': 'adam',
         },
         'dooder_detection': {
+            'model_name': 'dooder_detection',
             'model_purpose': 'Senses',
             'model_type': 'NeuralNetwork',
             'input_source': 'perception.array("Dooder")',
@@ -24,6 +26,7 @@ default_settings = {
             'optimizer': 'adam',
         },
         'hazard_detection': {
+            'model_name': 'hazard_detection',
             'model_purpose': 'Senses',
             'model_type': 'NeuralNetwork',
             'input_source': 'perception.array("Hazard")',
@@ -35,15 +38,16 @@ default_settings = {
             'optimizer': 'adam',
         },
         'move_decision': {
+            'model_name': 'move_decision',
             'model_purpose': 'Decisions',
             'model_type': 'NeuralNetwork',
             'input_source': ['energy_detection',
                              'dooder_detection',
                              'hazard_detection'],
-            'input_size': 18,
+            'input_size': 9,
             'output_destination': None,
             'output_size': 9,
-            'activation': 'sigmoid',
+            'activation': 'softmax',
             'loss': 'mean_squared_error',
             'optimizer': 'adam',
         }
