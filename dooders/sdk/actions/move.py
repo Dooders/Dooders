@@ -5,6 +5,10 @@ This module contains the actions that allow dooders
 to move around the environment.
 """
 
+import random
+
+import numpy as np
+
 from dooders.sdk.core.core import Core
 from dooders.sdk.models.senses import Senses
 from dooders.sdk.utils.get_direction import get_direction
@@ -26,17 +30,18 @@ def move(dooder) -> None:
     """
 
     sensory_array = Senses.gather(dooder)
-    
-    # print(f"Sensory Array: {sensory_array}")
+    destination = sensory_array.argmax()
 
-    destination = dooder.think('move_decision', sensory_array)
-    
-    # print(f"Destination: {destination}")
-    
-    coordinates = dooder.perception.coordinates[destination]
-    
-    # print(f'Coordinates: {coordinates}')
-    #! I'm not giving the model its full potential. Give the moved_decision the perception array too. It needs that information to make a decision.
+    # destination = dooder.think('move_decision', sensory_array)
+
+    if isinstance(destination, np.int64):
+        final_destination = destination
+    elif isinstance(destination, (list, np.ndarray)) and len(destination) > 0:
+        final_destination = random.choice([d for d in destination if d != 0])
+    else:
+        raise ValueError(f"Destination {destination} is not valid")
+
+    coordinates = dooder.perception.coordinates[final_destination]
 
     if coordinates == dooder.position:
         pass
