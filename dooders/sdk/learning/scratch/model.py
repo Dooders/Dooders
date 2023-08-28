@@ -272,7 +272,6 @@ class Model:
         y : array
             Target data
         """
-
         # If softmax classifier
         if self.softmax_classifier_output is not None:
             # First call backward method
@@ -294,12 +293,10 @@ class Model:
                 layer.backward(layer.next.dinputs)
 
             return
-
         # First call backward method on the loss
         # this will set dinputs property that the last
         # layer will try to access shortly
         self.loss.backward(output, y)
-
         # Call backward method going through all the objects
         # in reversed order passing dinputs as a parameter
         for layer in reversed(self.layers):
@@ -346,6 +343,8 @@ class SimpleNeuralNet:
         Predict the class of the input data
     """
 
+    #! make better debugging in general to debug problems
+    #! make data types so I can better identify data in flight
     def __init__(self, id: str, instructions: dict) -> None:
         """ 
         Initialize the model
@@ -363,9 +362,11 @@ class SimpleNeuralNet:
         self.model.add(Layer_Dense(self.input_size, 512, frozen=True))
         self.model.add(Activation_ReLU())
         self.model.add(Layer_Dense(512, self.output_size))
+        # self.model.add(Activation_Sigmoid())
         self.model.add(Activation_Softmax())
         self.model.set(
             loss=Loss_CategoricalCrossentropy(),
+            # loss=Loss_BinaryCrossentropy(),
             optimizer=Optimizer_Adam(decay=5e-7),
             accuracy=Accuracy_Categorical()
         )
@@ -386,6 +387,7 @@ class SimpleNeuralNet:
             The class of the input data
         """
         self.input = input_array
+
         self.output = self.model.forward(input_array, training=False)
         prediction = self.model.output_layer_activation.predictions(
             self.output)
@@ -407,14 +409,17 @@ class SimpleNeuralNet:
             The reality (truth)
         """
         self.reality = reality
-        reality_array = np.array(self.reality, dtype='uint8')
+        reality_array = np.array(self.reality)
 
-        # Optimize parameters
-        self.model.backward(self.output, reality_array)
-        self.model.optimizer.pre_update_params()
-        for layer in self.model.trainable_layers:
-            self.model.optimizer.update_params(layer)
-        self.model.optimizer.post_update_params()
+        if len(reality_array) == 0:
+            pass  # nothing to learn
+        else:
+            # Optimize parameters
+            self.model.backward(self.output, reality_array)
+            self.model.optimizer.pre_update_params()
+            for layer in self.model.trainable_layers:
+                self.model.optimizer.update_params(layer)
+            self.model.optimizer.post_update_params()
 
     def inherit_weights(self, genetics: List[np.ndarray]) -> None:
         """ 
