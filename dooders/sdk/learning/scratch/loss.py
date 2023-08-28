@@ -302,21 +302,41 @@ class Loss_BinaryCrossentropy(Loss):
         y_true : np.ndarray
             Ground truth values
         """
-        # Number of samples
-        samples = len(dvalues)
-        # Number of outputs in every sample
-        # We'll use the first sample to count them
-        outputs = len(dvalues[0])
 
-        # Clip data to prevent division by 0
-        # Clip both sides to not drag mean towards any value
-        clipped_dvalues = np.clip(dvalues, 1e-7, 1 - 1e-7)
+        if len(y_true)>1:
+            for y in y_true:
+                samples = len(dvalues)
+                # Number of outputs in every sample
+                # We'll use the first sample to count them
+                outputs = len(dvalues[0])
 
-        # Calculate gradient
-        self.dinputs = -(y_true / clipped_dvalues -
-                         (1 - y_true) / (1 - clipped_dvalues)) / outputs
-        # Normalize gradient
-        self.dinputs = self.dinputs / samples
+                # Clip data to prevent division by 0
+                # Clip both sides to not drag mean towards any value
+                clipped_dvalues = np.clip(dvalues, 1e-7, 1 - 1e-7)
+
+                # Calculate gradient
+                self.dinputs = -(y / clipped_dvalues -
+                                    (1 - y) / (1 - clipped_dvalues)) / outputs
+                # Normalize gradient
+                self.dinputs = self.dinputs / samples
+        else:
+
+            
+            # Number of samples
+            samples = len(dvalues)
+            # Number of outputs in every sample
+            # We'll use the first sample to count them
+            outputs = len(dvalues[0])
+
+            # Clip data to prevent division by 0
+            # Clip both sides to not drag mean towards any value
+            clipped_dvalues = np.clip(dvalues, 1e-7, 1 - 1e-7)
+
+            # Calculate gradient
+            self.dinputs = -(y_true / clipped_dvalues -
+                            (1 - y_true) / (1 - clipped_dvalues)) / outputs
+            # Normalize gradient
+            self.dinputs = self.dinputs / samples
 
 
 class Loss_MeanSquaredError(Loss):
