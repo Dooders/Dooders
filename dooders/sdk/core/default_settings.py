@@ -9,8 +9,8 @@ default_settings = {
             'input_size': 9,
             'output_destination': 'movement_decision',
             'output_size': 9,
-            'activation': 'sigmoid',
-            'loss': 'mean_squared_error',
+            'activation_type': 'sigmoid',
+            'loss_type': 'binary_crossentropy',
             'optimizer': 'adam',
         },
         'dooder_detection': {
@@ -21,8 +21,8 @@ default_settings = {
             'input_size': 9,
             'output_destination': 'movement_decision',
             'output_size': 9,
-            'activation': 'sigmoid',
-            'loss': 'mean_squared_error',
+            'activation_type': 'sigmoid',
+            'loss_type': 'binary_crossentropy',
             'optimizer': 'adam',
         },
         'hazard_detection': {
@@ -33,8 +33,8 @@ default_settings = {
             'input_size': 9,
             'output_destination': 'movement_decision',
             'output_size': 9,
-            'activation': 'sigmoid',
-            'loss': 'mean_squared_error',
+            'activation_type': 'sigmoid',
+            'loss_type': 'binary_crossentropy',
             'optimizer': 'adam',
         },
         'move_decision': {
@@ -47,8 +47,8 @@ default_settings = {
             'input_size': 9,
             'output_destination': None,
             'output_size': 9,
-            'activation': 'softmax',
-            'loss': 'mean_squared_error',
+            'activation_type': 'softmax',
+            'loss_type': 'categorical_crossentropy',
             'optimizer': 'adam',
         }
     },

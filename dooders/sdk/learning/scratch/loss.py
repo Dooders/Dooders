@@ -198,7 +198,7 @@ class Loss_CategoricalCrossentropy(Loss):
         self.dinputs = self.dinputs / samples
 
 
-class Activation_Softmax_Loss_CategoricalCrossentropy():
+class Activation_Softmax_Loss_CategoricalCrossentropy(Loss):
     """ 
     Softmax classifier - combined Softmax activation
     and cross-entropy loss for faster backward step
@@ -303,7 +303,7 @@ class Loss_BinaryCrossentropy(Loss):
             Ground truth values
         """
 
-        if len(y_true)>1:
+        if len(y_true) > 1:
             for y in y_true:
                 samples = len(dvalues)
                 # Number of outputs in every sample
@@ -316,12 +316,11 @@ class Loss_BinaryCrossentropy(Loss):
 
                 # Calculate gradient
                 self.dinputs = -(y / clipped_dvalues -
-                                    (1 - y) / (1 - clipped_dvalues)) / outputs
+                                 (1 - y) / (1 - clipped_dvalues)) / outputs
                 # Normalize gradient
                 self.dinputs = self.dinputs / samples
         else:
 
-            
             # Number of samples
             samples = len(dvalues)
             # Number of outputs in every sample
@@ -334,7 +333,7 @@ class Loss_BinaryCrossentropy(Loss):
 
             # Calculate gradient
             self.dinputs = -(y_true / clipped_dvalues -
-                            (1 - y_true) / (1 - clipped_dvalues)) / outputs
+                             (1 - y_true) / (1 - clipped_dvalues)) / outputs
             # Normalize gradient
             self.dinputs = self.dinputs / samples
 
@@ -465,3 +464,11 @@ class Loss_MeanAbsoluteError(Loss):
         self.dinputs = np.sign(y_true - dvalues) / outputs
         # Normalize gradient
         self.dinputs = self.dinputs / samples
+
+
+LOSS = {
+    'binary_crossentropy': Loss_BinaryCrossentropy,
+    'categorical_crossentropy': Activation_Softmax_Loss_CategoricalCrossentropy,
+    'mean_squared_error': Loss_MeanSquaredError,
+    'mean_absolute_error': Loss_MeanAbsoluteError,
+}

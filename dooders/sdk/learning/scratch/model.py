@@ -7,10 +7,13 @@ import copy
 import pickle
 from typing import List
 
-from dooders.sdk.learning.scratch.activation import *
+from dooders.sdk.learning.scratch.activation import (ACTIVATIONS,
+                                                     Activation_Softmax)
 from dooders.sdk.learning.scratch.eval import *
 from dooders.sdk.learning.scratch.layer import *
-from dooders.sdk.learning.scratch.loss import *
+from dooders.sdk.learning.scratch.loss import (
+    LOSS, Activation_Softmax_Loss_CategoricalCrossentropy,
+    Loss_CategoricalCrossentropy)
 from dooders.sdk.learning.scratch.optimizer import *
 
 
@@ -360,13 +363,11 @@ class SimpleNeuralNet:
     def build(self) -> None:
         self.model = Model()
         self.model.add(Layer_Dense(self.input_size, 512, frozen=True))
-        self.model.add(Activation_ReLU())
+        self.model.add(ACTIVATIONS.get('relu')())
         self.model.add(Layer_Dense(512, self.output_size))
-        # self.model.add(Activation_Sigmoid())
-        self.model.add(Activation_Softmax())
+        self.model.add(ACTIVATIONS.get(self.activation_type)())
         self.model.set(
-            loss=Loss_CategoricalCrossentropy(),
-            # loss=Loss_BinaryCrossentropy(),
+            loss=LOSS.get(self.loss_type)(),
             optimizer=Optimizer_Adam(decay=5e-7),
             accuracy=Accuracy_Categorical()
         )
