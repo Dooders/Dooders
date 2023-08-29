@@ -458,3 +458,12 @@ class Activation_ELU:
             Predictions
         """
         return outputs
+
+ACTIVATIONS = {
+    "relu": Activation_ReLU,
+    "softmax": Activation_Softmax,
+    "sigmoid": Activation_Sigmoid,
+    "linear": Activation_Linear,
+    "leaky_relu": Activation_LeakyReLU,
+    "elu": Activation_ELU,
+}
