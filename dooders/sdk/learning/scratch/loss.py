@@ -145,7 +145,6 @@ class Loss_CategoricalCrossentropy(Loss):
         np.ndarray
             Loss
         """
-
         # Number of samples in a batch
         samples = len(y_pred)
 
@@ -466,9 +465,60 @@ class Loss_MeanAbsoluteError(Loss):
         self.dinputs = self.dinputs / samples
 
 
+class MultiLabelBinaryCrossEntropy(Loss):
+    def __init__(self):
+        self.loss = None
+        self.epsilon = 1e-15
+
+    def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> None:
+        """ 
+        Calculates the forward pass
+
+        Parameters
+        ----------
+        y_pred : np.ndarray
+            Predicted values
+        y_true : np.ndarray
+            Ground truth values
+        """
+        self.loss = -np.sum(y_true * np.log(y_pred) +
+                            (1 - y_true) * np.log(1 - y_pred))
+
+    def backward(self, y_pred: np.ndarray, y_true: np.ndarray) -> None:
+        """
+        Calculates the backward pass
+
+        Parameters
+        ----------
+        y_pred : np.ndarray
+            Predicted values
+        y_true : np.ndarray
+            Ground truth values
+        """
+
+        #! Do this part earlier
+        test_elements = np.arange(0, 9)
+        result = np.isin(test_elements, y_true)
+        #!
+
+        y_pred_clipped = np.clip(result, self.epsilon, 1 - self.epsilon)
+
+        self.forward(y_pred_clipped, result)
+
+        samples = y_pred.shape[0]
+
+        # Calculate the gradient
+        self.dinputs = -(result / y_pred_clipped -
+                         (1 - result) / (1 - y_pred_clipped))
+
+        # Normalize the gradient
+        self.dinputs = self.dinputs / samples
+
+
 LOSS = {
     'binary_crossentropy': Loss_BinaryCrossentropy,
     'categorical_crossentropy': Activation_Softmax_Loss_CategoricalCrossentropy,
     'mean_squared_error': Loss_MeanSquaredError,
     'mean_absolute_error': Loss_MeanAbsoluteError,
+    'multilabel_binary_crossentropy': MultiLabelBinaryCrossEntropy,
 }
