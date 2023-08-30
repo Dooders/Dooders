@@ -135,7 +135,6 @@ class Activation_Softmax:
         dvalues : array
             Gradient of loss function
         """
-        # print(f"Activation_Softmax.backward() dvalues: {dvalues}")
         # Create uninitialized array
         self.dinputs = np.empty_like(dvalues)
 
@@ -217,7 +216,6 @@ class Activation_Sigmoid:
         dvalues : array
             Gradient of loss function
         """
-        # print(f"Activation_Sigmoid.backward() dvalues: {dvalues}")
         # Derivative - calculates from output of the sigmoid function
         self.dinputs = dvalues * (1 - self.output) * self.output
 
@@ -458,6 +456,7 @@ class Activation_ELU:
             Predictions
         """
         return outputs
+
 
 ACTIVATIONS = {
     "relu": Activation_ReLU,
