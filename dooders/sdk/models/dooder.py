@@ -228,7 +228,9 @@ class Dooder(Agent):
         else:
             return False
 
-    def think(self, model_name: str, input_array: np.ndarray) -> np.ndarray:
+    def think(self, model_name: str, 
+              input_array: np.ndarray, 
+              reality_array: np.ndarray) -> np.ndarray:
         """ 
         Use cognitive models to think about the environment.
 
@@ -238,6 +240,8 @@ class Dooder(Agent):
             The name of the model to use.
         input_array: np.ndarray
             The input array for the model.
+        reality_array: np.ndarray
+            The reality array for the model that is used for learning.
 
         Returns
         -------
@@ -247,27 +251,17 @@ class Dooder(Agent):
 
         model = self.internal_models[model_name]
         output_array = model.predict(input_array)
-
-        if model.model_purpose == 'Decisions':
-            energy_perception = self.perception.array('Energy')
-            reality = [location[0]
-                       for location in enumerate(energy_perception[0]) if location[1] == 1]
-        else:
-            reality = [location[0]
-                       for location in enumerate(input_array[0]) if location[1] == 1]
   
-        model.learn(reality)
-
-        self.check_accuracy(output_array, reality)
+        model.learn(reality_array)
 
         inference_record = {'model_name': model_name,
                             'hunger': self.hunger,
                             'position': self.position,
                             'perception': [str(x) for x in input_array[0]],
                             'output': str(output_array),
-                            'reality': [str(choice) for choice in reality],
+                            'reality': [str(choice) for choice in reality_array],
                             'inferred_goal': None,
-                            'accurate': self.check_accuracy(output_array, reality),
+                            'accurate': self.check_accuracy(output_array, reality_array),
                             }
 
         self.inference_record[self.simulation.cycle_number] = inference_record

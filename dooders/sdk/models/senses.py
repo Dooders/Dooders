@@ -44,7 +44,8 @@ class Senses:
             object_name = cls.SENSE_TYPES[model_name]
             perception_array = dooder.perception.array(object_name)
 
-            result = dooder.think(model_name, perception_array)
+            result = dooder.think(
+                model_name, perception_array, perception_array)
 
             sensory_array.append(result)
 
