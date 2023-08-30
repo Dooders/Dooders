@@ -28,14 +28,14 @@ def move(dooder) -> None:
     dooder : Dooder
         The dooder that is moving
     """
-
+    reality_array = dooder.perception.array('Energy')
     sensory_array = Senses.gather(dooder)
-    destination = sensory_array.argmax()
-
-    # destination = dooder.think('move_decision', sensory_array)
+    destination = dooder.think('move_decision', sensory_array, reality_array)
 
     if isinstance(destination, np.int64):
         final_destination = destination
+    elif isinstance(destination, np.ndarray) and len(destination) > 0:
+        final_destination = destination.argmax()
     elif isinstance(destination, (list, np.ndarray)) and len(destination) > 0:
         final_destination = random.choice([d for d in destination if d != 0])
     else:

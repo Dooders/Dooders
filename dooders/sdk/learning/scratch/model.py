@@ -390,15 +390,10 @@ class SimpleNeuralNet:
         self.input = input_array
 
         self.output = self.model.forward(input_array, training=False)
-        prediction = self.model.output_layer_activation.predictions(
+        self.prediction = self.model.output_layer_activation.predictions(
             self.output)
 
-        if self.model_purpose == 'Senses':
-            return self.output
-        elif self.model_purpose == 'Decisions':
-            return prediction[0]
-        else:
-            return prediction[0]
+        return self.output
 
     def learn(self, reality: list) -> None:
         """ 

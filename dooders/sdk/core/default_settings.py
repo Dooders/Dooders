@@ -10,10 +10,7 @@ default_settings = {
             'output_destination': 'movement_decision',
             'output_size': 9,
             'activation_type': 'sigmoid',
-            # 'loss_type': 'binary_crossentropy',
             'loss_type': 'multilabel_binary_crossentropy',
-            # 'activation_type': 'softmax',
-            # 'loss_type': 'categorical_crossentropy',
             'optimizer': 'adam',
         },
         'dooder_detection': {
@@ -25,7 +22,7 @@ default_settings = {
             'output_destination': 'movement_decision',
             'output_size': 9,
             'activation_type': 'sigmoid',
-            'loss_type': 'binary_crossentropy',
+            'loss_type': 'multilabel_binary_crossentropy',
             'optimizer': 'adam',
         },
         'hazard_detection': {
@@ -37,7 +34,7 @@ default_settings = {
             'output_destination': 'movement_decision',
             'output_size': 9,
             'activation_type': 'sigmoid',
-            'loss_type': 'binary_crossentropy',
+            'loss_type': 'multilabel_binary_crossentropy',
             'optimizer': 'adam',
         },
         'move_decision': {
@@ -50,8 +47,10 @@ default_settings = {
             'input_size': 9,
             'output_destination': None,
             'output_size': 9,
-            'activation_type': 'softmax',
-            'loss_type': 'categorical_crossentropy',
+            # 'activation_type': 'softmax',
+            # 'loss_type': 'categorical_crossentropy',
+            'activation_type': 'sigmoid',
+            'loss_type': 'multilabel_binary_crossentropy',
             'optimizer': 'adam',
         }
     },
