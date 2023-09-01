@@ -11,7 +11,7 @@ EnergyPerCycle:
 MaxTotalEnergy:
   type: "generation"
   function: "normal_distribution"
-  args: { "min": 1, "max": 8 }
+  args: { "min": 3, "max": 8 }
   description: ''
 EnergyPlacement:
   type: "placement"
