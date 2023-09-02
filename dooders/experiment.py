@@ -91,7 +91,7 @@ class Experiment:
             A simulation object. Through the Assembly class.
         """
         return Assemble.execute(self.settings)
-    
+
     def _simulate(self, simulation_count: int = 1, restart: bool = False) -> None:
         pass
 
@@ -113,7 +113,8 @@ class Experiment:
         """
         self.simulation = self.create_simulation()
         self.simulation.auto_restart = restart
-        simulate_again = self.simulation.run_simulation(self.batch, simulation_count)
+        simulate_again = self.simulation.run_simulation(
+            self.batch, simulation_count)
         if simulate_again and simulation_count < self.max_reset:
             self.cleanup()
             del self.simulation
@@ -186,7 +187,7 @@ class Experiment:
                         shutil.rmtree(file_path)
                 except Exception as e:
                     pass
-                
+
         except FileNotFoundError:
             pass
 
