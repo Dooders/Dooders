@@ -22,6 +22,7 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
     gene pool.
 
     TODO: Add option to return centroids for the gene pool.
+    TODO: Add option to return the embeddings of all internal models instead of just one.
 
     Parameters
     ----------
@@ -42,9 +43,8 @@ def get_embeddings(gene_pool: Dict[str, dict]) -> List[Dict[str, np.ndarray]]:
     """
     gene_pool_embeddings = []
     for dooder in gene_pool.values():
-
-        static_weights = dooder['energy_detection'][0]
-        dynamic_weights = dooder['energy_detection'][1]
+        static_weights = dooder['move_decision'][0]
+        dynamic_weights = dooder['move_decision'][1]
         static_embedding = GENE_EMBEDDING.fit(
             static_weights).singular_values_.tolist()
         dynamic_weights = GENE_EMBEDDING.fit(
