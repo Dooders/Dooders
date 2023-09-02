@@ -20,6 +20,7 @@ from dooders.sdk.core.step import Step
 from dooders.sdk.models.senses import Senses
 from dooders.sdk.modules.internal_models import InternalModels
 from dooders.sdk.modules.perception import Perception
+from dooders.sdk.utils.loggers import log_performance
 
 if TYPE_CHECKING:
     from dooders.sdk.base.reality import BaseSimulation
@@ -228,6 +229,7 @@ class Dooder(Agent):
         else:
             return False
 
+    @log_performance()
     def think(self, model_name: str, 
               input_array: np.ndarray, 
               reality_array: np.ndarray) -> np.ndarray:
