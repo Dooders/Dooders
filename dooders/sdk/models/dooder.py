@@ -216,13 +216,14 @@ class Dooder(Agent):
         return None
 
     def check_accuracy(self, output, reality) -> None:
+  
+        decision = np.argmax(output)
+        
+        reality_positions = np.where(reality[0] == 1)[0].tolist()
 
-        if isinstance(output, np.ndarray):
-            decision = np.argmax(output)
-        else:
-            decision = output
-
-        if decision in reality:
+        if np.count_nonzero(reality) == 0:
+            return None
+        elif decision in reality_positions:
             return True
         elif reality is None:
             return None
