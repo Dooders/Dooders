@@ -1,14 +1,8 @@
-# Experiment logging
-# Simulation logging
-# Model logging
-
-
 import datetime
 from functools import wraps
 
 import structlog
 
-# Custom processor to capture log entries in a list
 log_entries = []
 
 
@@ -33,6 +27,11 @@ logger = structlog.get_logger()
 
 
 def log_performance():
+    """ 
+    Decorator to log performance of a model
+
+    TODO: Add running accuracy from internal model attribute
+    """
     def decorator(func):
         @wraps(func)
         def wrapper(instance, *args, **kwargs):
@@ -42,7 +41,6 @@ def log_performance():
             elapsed_time = end_time - start_time
 
             data = {
-                'simulation_id': instance.simulation.simulation_id,
                 'dooder_id': instance.id,
                 'cycle_number': instance.simulation.cycle_number,
                 'model_name': args[0],
@@ -50,7 +48,7 @@ def log_performance():
                 'output_array': result.tolist(),
                 'reality_array': args[2].tolist(),
                 'elapsed_time': elapsed_time.total_seconds(),
-                #! add running accuracies for each model. means models need a running accuracy attribute
+                'accurate': instance.check_accuracy(result, args[2])
             }
 
             logger.info("Thinking", **data)
