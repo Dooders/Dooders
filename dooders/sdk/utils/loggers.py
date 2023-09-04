@@ -3,11 +3,38 @@ from functools import wraps
 
 import structlog
 
-log_entries = []
+log_entries = {}
 
 
-def capture_to_list(logger, log_method, event_dict):
-    log_entries.append(event_dict)
+def capture_to_list(logger, log_method, event_dict) -> dict:
+    """ 
+    Capture log entries to a list
+
+    Parameters
+    ----------
+    logger : structlog.BoundLogger
+        The logger instance
+    log_method : str
+        The log method used
+    event_dict : dict
+        The event dictionary
+
+    Returns
+    -------
+    dict
+        The event dictionary
+    """
+
+    # Get the simulation_id from event_dict
+    simulation_id = event_dict.pop('simulation_id')
+
+    # Create an empty list if simulation_id doesn't exist in log_entries
+    if simulation_id not in log_entries:
+        log_entries[simulation_id] = []
+
+    # Append the event_dict to the list corresponding to simulation_id
+    log_entries[simulation_id].append(event_dict)
+
     return event_dict
 
 
@@ -41,6 +68,7 @@ def log_performance():
             elapsed_time = end_time - start_time
 
             data = {
+                'simulation_id': instance.simulation.simulation_id,
                 'dooder_id': instance.id,
                 'cycle_number': instance.simulation.cycle_number,
                 'model_name': args[0],

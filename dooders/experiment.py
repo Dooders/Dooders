@@ -1,6 +1,6 @@
 import json
 import shutil
-from typing import Callable, List
+from typing import Callable, List, Union
 
 from tqdm import tqdm
 
@@ -11,6 +11,7 @@ from dooders.sdk.core import Assemble
 from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
 from dooders.sdk.utils import ShortID
+from dooders.sdk.utils.loggers import log_entries
 
 
 class Experiment:
@@ -19,8 +20,17 @@ class Experiment:
 
     Parameters
     ----------
-    settings: dict
+    experiment_name: Union[str, None] = None
+        The name of the experiment. 
+        If None, the experiment will not be saved.
+    settings: dict = {}
         The settings of the experiment.
+    save_state: bool = False
+        Whether to save the state of the simulation.
+    max_reset: int = 5
+        The maximum number of times to reset the simulation.
+    batch: bool = False
+        Whether to run the simulation in batch mode.
 
     Attributes
     ----------
@@ -29,13 +39,13 @@ class Experiment:
     experiment_id: str
         The unique identifier for the experiment.
     settings: dict
-        The settings of the experiment.
+        See Parameters.
     save_state: bool
-        Whether to save the state of the simulation.
+        See Parameters.
     batch: bool
-        Whether to run the simulation in batch mode.
+        See Parameters.
     max_reset: int
-        The maximum number of times to reset the simulation.
+        See Parameters.
     gene_pool: dict
         The gene pool of the experiment.
     experiment_results: dict
@@ -45,32 +55,33 @@ class Experiment:
     -------
     create_simulation()
         Create a simulation.
-    simulate(simulation_count: int = 1)
+    simulate(simulation_count: int = 1, restart: bool = False)
         Simulate a single cycle.
-    batch_simulate(simulation_number: int = 100,
-                     experiment_count: int = 1,
-                        save_folder: str = 'recent/',
-                        custom_logic: Callable = None)
+    batch_simulate(simulation_number: int = 100, experiment_count: int = 1, custom_logic: Callable = None, save_result: bool = False)
         Simulate n cycles.
     cleanup()
-        Remove all contents of the 'recent' directory.
-    _save_state()
-        Save the state of the simulation into a json file.
-    save_passed_dooders(save_folder: str)
-        Save the internal model weights of any Dooders that
-        made it to the end of the simulation.
-    save_experiment_results(save_folder: str)
+        Remove all contents of the 'recent' directory
+    get_objects(object_type: str = 'Agent')
+        Get all objects of a given type.
+    save_object(object: Callable, filename: str)
+        Save an object into a json file.
+    save_logs()
+        Save the logs of the experiment into a json file.
+    save_passed_dooders()
+        Save the internal model weights of any Dooders that made it to the end 
+        of the simulation.
+    save_experiment_results()
         Save the results of the experiment into a json file.
     """
 
     experiment_results = {}
 
     def __init__(self,
+                 experiment_name: Union[str, None] = None,
                  settings: dict = {},
                  save_state: bool = False,
                  max_reset: int = 5,
                  batch: bool = False) -> None:
-
         self.seed = ShortID()
         self.experiment_id = self.seed.uuid()
         self.settings = settings
@@ -78,6 +89,7 @@ class Experiment:
         self.batch = batch
         self.max_reset = max_reset
         self.gene_pool = {}
+        self.save_folder = experiment_name
 
     def create_simulation(self) -> None:
         """
@@ -91,9 +103,6 @@ class Experiment:
             A simulation object. Through the Assembly class.
         """
         return Assemble.execute(self.settings)
-
-    def _simulate(self, simulation_count: int = 1, restart: bool = False) -> None:
-        pass
 
     def simulate(self, simulation_count: int = 1, restart: bool = False) -> None:
         """ 
@@ -126,7 +135,6 @@ class Experiment:
     def batch_simulate(self,
                        simulation_number: int = 100,
                        experiment_count: int = 1,
-                       save_folder: str = 'recent/',
                        custom_logic: Callable = None,
                        save_result: bool = False) -> None:
         """ 
@@ -139,11 +147,11 @@ class Experiment:
         experiment_count: int
             The number of the current experiment. Useful when running 
             multiple experiments.
-        save_folder: str
-            The folder to save the results in.
         custom_logic: Callable
             A function to run before each simulation. 
             For any custom handling before each simulation.
+        save_result: bool
+            Whether to save the results of the experiment. Including logs
         """
 
         pbar = tqdm(
@@ -159,14 +167,15 @@ class Experiment:
             self.experiment_results[number] = {}
             self.experiment_results[number]['summary'] = self.simulation.simulation_summary
             self.experiment_results[number]['state'] = self.simulation.state
-            self.save_passed_dooders(save_folder)
+            self.save_passed_dooders()
             del self.simulation
             pbar.update(1)
 
         pbar.close()
 
         if save_result:
-            self.save_experiment_results(save_folder)
+            self.save_experiment_results()
+            self.save_logs()
 
     def cleanup(self) -> None:
         """ 
@@ -208,37 +217,60 @@ class Experiment:
         """
         return self.simulation.environment.get_objects(object_type)
 
+    def save_object(self, object: Callable, filename: str) -> None:
+        """ 
+        Save an object into a json file.
+
+        Parameters
+        ----------
+        object: Callable
+            The object to save.
+        filename: str
+            The name of the file to save the object in.
+        """
+        if self.save_folder is not None:
+            save_path = f'experiments/{self.save_folder}/{filename}.json'
+
+            if not os.path.exists(f'experiments/{self.save_folder}/'):
+                os.makedirs(f'experiments/{self.save_folder}/')
+
+        with open(save_path, "w") as outfile:
+            json.dump(object, outfile)
+
+    def save_logs(self) -> None:
+        """ 
+        Save the logs of the experiment into a json file.
+        """
+        self.save_object(log_entries, 'learning_log')
+
     def _save_state(self) -> None:
         """ 
         Save the state of the simulation into a json file.
         """
-        with open("recent/state.json", "w") as f:
-            json.dump(self.simulation.state, f)
+        pass
 
-    def save_passed_dooders(self, save_folder: str) -> None:
+    def save_passed_dooders(self) -> None:
         """ 
         Save the internal model weights of any Dooders that 
         made it to the end of the simulation.
-
-        Parameters
-        ----------
-        save_folder: str
-            The folder to save the results in.
         """
-        setting = self.settings.get('GenePool')
 
-        for dooder in self.get_objects('Dooder'):
-            if dooder.internal_models.weights:
-                # create dooder directory if it doesn't exist
-                if setting == 'save':
-                    if not os.path.exists(f"experiments/{save_folder}/dooders/"):
-                        os.makedirs(f"experiments/{save_folder}/dooders/")
-                    dooder.internal_models.save(
-                        f"experiments/{save_folder}/dooders/{dooder.id}")
-                elif setting == 'retain':
-                    self.gene_pool[dooder.id] = dooder.internal_models.weights
+        if self.save_folder is not None:
+            setting = self.settings.get('GenePool')
 
-    def save_experiment_results(self, save_folder: str) -> None:
+            for dooder in self.get_objects('Dooder'):
+                if dooder.internal_models.weights:
+                    # create dooder directory if it doesn't exist
+                    if setting == 'save':
+                        if not os.path.exists(f"experiments/{self.save_folder}/dooders/"):
+                            os.makedirs(
+                                f"experiments/{self.save_folder}/dooders/")
+                        dooder.internal_models.save(
+                            f"experiments/{self.save_folder}/dooders/{dooder.id}")
+                    elif setting == 'retain':
+                        self.gene_pool[dooder.id] = dooder.internal_models.weights
+
+    def save_experiment_results(self) -> None:
         """ 
         Save the results of the experiment into a json file.
 
@@ -247,14 +279,5 @@ class Experiment:
         save_folder: str
             The folder to save the results in.
         """
-        if save_folder == 'recent/':
-            save_path = 'recent/experiment_results.json'
 
-        else:
-            save_path = f'experiments/{save_folder}/experiment_results.json'
-
-            if not os.path.exists(f'experiments/{save_folder}/'):
-                os.makedirs(f'experiments/{save_folder}/')
-
-        with open(save_path, "w") as outfile:
-            json.dump(self.experiment_results, outfile)
+        self.save_object(self.experiment_results, 'experiment_results')
