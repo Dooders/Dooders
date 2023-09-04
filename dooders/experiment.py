@@ -21,12 +21,12 @@ class Experiment:
     Parameters
     ----------
     experiment_name: Union[str, None] = None
-        The name of the experiment. 
+        The name of the experiment to save results. 
         If None, the experiment will not be saved.
     settings: dict = {}
-        The settings of the experiment.
+        Included settings to override defaults.
     save_state: bool = False
-        Whether to save the state of the simulation.
+        Whether to save experiment results.
     max_reset: int = 5
         The maximum number of times to reset the simulation.
     batch: bool = False
@@ -47,7 +47,8 @@ class Experiment:
     max_reset: int
         See Parameters.
     gene_pool: dict
-        The gene pool of the experiment.
+        The gene pool of the experiment. All fit Dooders will be saved after 
+        each simulation
     experiment_results: dict
         The results of the experiment.
 
@@ -59,8 +60,6 @@ class Experiment:
         Simulate a single cycle.
     batch_simulate(simulation_number: int = 100, experiment_count: int = 1, custom_logic: Callable = None, save_result: bool = False)
         Simulate n cycles.
-    cleanup()
-        Remove all contents of the 'recent' directory
     get_objects(object_type: str = 'Agent')
         Get all objects of a given type.
     save_object(object: Callable, filename: str)
@@ -72,6 +71,11 @@ class Experiment:
         of the simulation.
     save_experiment_results()
         Save the results of the experiment into a json file.
+
+    Properties
+    ----------
+    logs
+        Get the logs of the experiment.
     """
 
     experiment_results = {}
@@ -125,7 +129,6 @@ class Experiment:
         simulate_again = self.simulation.run_simulation(
             self.batch, simulation_count)
         if simulate_again and simulation_count < self.max_reset:
-            self.cleanup()
             del self.simulation
             self.simulate(simulation_count+1, restart=restart)
 
@@ -177,29 +180,6 @@ class Experiment:
             self.save_experiment_results()
             self.save_logs()
 
-    def cleanup(self) -> None:
-        """ 
-        Remove all contents of the 'recent' directory
-        """
-        try:
-            folder = 'recent/dooders/'
-
-            # iterate over all files in the folder
-            for filename in os.listdir(folder):
-                # construct full file path
-                file_path = os.path.join(folder, filename)
-                # remove the file
-                try:
-                    if os.path.isfile(file_path) or os.path.islink(file_path):
-                        os.unlink(file_path)
-                    elif os.path.isdir(file_path):
-                        shutil.rmtree(file_path)
-                except Exception as e:
-                    pass
-
-        except FileNotFoundError:
-            pass
-
     def get_objects(self, object_type: str = 'Agent') -> List[Agent]:
         """ 
         Get all objects of a given type.
@@ -241,7 +221,7 @@ class Experiment:
         """ 
         Save the logs of the experiment into a json file.
         """
-        self.save_object(log_entries, 'learning_log')
+        self.save_object(self.logs, 'learning_log')
 
     def _save_state(self) -> None:
         """ 
@@ -281,3 +261,15 @@ class Experiment:
         """
 
         self.save_object(self.experiment_results, 'experiment_results')
+
+    @property
+    def logs(self) -> dict:
+        """ 
+        Get the logs of the experiment.
+
+        Returns
+        -------
+        dict
+            The logs of the experiment.
+        """
+        return log_entries
