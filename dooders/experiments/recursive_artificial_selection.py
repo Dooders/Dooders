@@ -41,6 +41,7 @@ def get_accuracies(results: Dict[str, List]) -> List[float]:
 
 
 def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
+                                   experiment_name: str = 'recursive_artificial_selection',
                                    generations: int = 100) -> Dict[str, List]:
     """ 
     Runs a Recursive Artificial Selection (RAS) experiment.
@@ -78,14 +79,13 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
 
                 new_genes = recombine_genes(
                     gene_pool, recombination_type=settings['RecombinationType'])
-                
+
                 dooder.internal_models.inherit_weights(new_genes)
 
     for i in range(generations):
-        experiment = Experiment(settings)
+        experiment = Experiment(experiment_name, settings)
         experiment.batch_simulate(settings['SimulationCount'],
                                   i+1,
-                                  'recursive_artificial_selection',
                                   custom_logic=inherit_weights)
         gene_pool = experiment.gene_pool.copy()
 
@@ -98,8 +98,8 @@ def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
     return experiment_results
 
 
-def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
-                   experiment_name: str = 'recursive_artificial_selection',
+def run_experiment(experiment_name: str = 'recursive_artificial_selection',
+                   settings: Dict[str, str] = DEFAULT_SETTINGS,
                    show_report: bool = True,
                    save_results: bool = True) -> None:
     """ 
@@ -128,7 +128,8 @@ def run_experiment(settings: Dict[str, str] = DEFAULT_SETTINGS,
         settings['RecombinationType'] = type
         generations = settings['Generations']
 
-        results = recursive_artificial_selection(settings, generations)
+        results = recursive_artificial_selection(
+            settings, experiment_name, generations)
 
         if show_report:
             report(type, results)
