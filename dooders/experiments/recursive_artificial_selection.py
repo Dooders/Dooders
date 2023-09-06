@@ -40,6 +40,14 @@ def get_accuracies(results: Dict[str, List]) -> List[float]:
     return [accuracy for accuracy in accuracies.values()]
 
 
+def experiment_results(experiment):
+    return {
+        'fit_count': len(experiment.gene_pool),
+        'average_accuracy': sum(get_accuracies(experiment.experiment_results)) / len(experiment.experiment_results),
+        'elapsed_time': experiment.elapsed_time,
+    }
+
+
 def recursive_artificial_selection(settings: Dict[str, str] = DEFAULT_SETTINGS,
                                    experiment_name: str = 'recursive_artificial_selection',
                                    generations: int = 100) -> Dict[str, List]:

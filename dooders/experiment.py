@@ -1,5 +1,6 @@
 import json
 import shutil
+import time
 from typing import Callable, List, Union
 
 from tqdm import tqdm
@@ -124,6 +125,7 @@ class Experiment:
             The number of the current simulation. Useful when running
             multiple simulations.
         """
+        self.start_time = time.time()
         self.simulation = self.create_simulation()
         self.simulation.auto_restart = restart
         simulate_again = self.simulation.run_simulation(
@@ -134,6 +136,8 @@ class Experiment:
 
         elif self.save_state:
             self._save_state()
+
+        self.end_time = time.time()
 
     def batch_simulate(self,
                        simulation_number: int = 100,
@@ -156,7 +160,7 @@ class Experiment:
         save_result: bool
             Whether to save the results of the experiment. Including logs
         """
-
+        self.start_time = time.time()
         pbar = tqdm(
             desc=f"Experiment[{experiment_count}] Progress", total=simulation_number)
         for number in range(simulation_number):
@@ -179,6 +183,8 @@ class Experiment:
         if save_result:
             self.save_experiment_results()
             self.save_logs()
+
+        self.end_time = time.time()
 
     def get_objects(self, object_type: str = 'Agent') -> List[Agent]:
         """ 
@@ -273,3 +279,15 @@ class Experiment:
             The logs of the experiment.
         """
         return log_entries
+
+    @property
+    def elapsed_time(self) -> float:
+        """ 
+        Get the elapsed time of the experiment.
+
+        Returns
+        -------
+        float
+            The elapsed time of the experiment.
+        """
+        return self.end_time - self.start_time
