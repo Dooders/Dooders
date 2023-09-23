@@ -45,4 +45,4 @@ experiment.experiment_summary()
 ```
 For more details, see the [Quick Start guide](docs/QuickStart.md).  
 
-** Everything in this repository should be considered unfinished and a work-in-progress **
+**Everything in this repository should be considered unfinished and a work-in-progress**
