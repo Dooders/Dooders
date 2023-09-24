@@ -16,7 +16,7 @@ setuptools.setup(
     author_email='csmangum@gmail.com',
     url='https://github.com/csmangum/Dooders',
 
-    install_requires=['fastapi', 'numpy', 'pandas', 'pydantic', 'pytest', 'networkx'],
+    install_requires=['numpy', 'pandas', 'pydantic', 'pytest', 'networkx'],
     
     keywords= [
     "Artificial Intelligence",
