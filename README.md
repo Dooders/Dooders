@@ -16,6 +16,8 @@ Take a look on how a Dooder will [learn and act](https://github.com/csmangum/Doo
 I will also be documenting experiments in [substack](https://rememberization.substack.com/p/experiment-list). Including the results from my [first experiment](https://rememberization.substack.com/p/experiment-1-single-simulation).
 
 ***The code, content, and concepts will change over time as I explore different ideas.***  
+
+***Everything in this repository should be considered unfinished and a work-in-progress***
   
 ### How to use it
 
@@ -45,4 +47,4 @@ experiment.experiment_summary()
 ```
 For more details, see the [Quick Start guide](docs/QuickStart.md).  
 
-**Everything in this repository should be considered unfinished and a work-in-progress**
+
