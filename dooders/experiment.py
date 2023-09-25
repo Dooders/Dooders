@@ -1,5 +1,4 @@
 import json
-import shutil
 import time
 from typing import Callable, List, Union
 
@@ -50,8 +49,9 @@ class Experiment:
     gene_pool: dict
         The gene pool of the experiment. All fit Dooders will be saved after 
         each simulation
-    experiment_results: dict
-        The results of the experiment.
+    save_folder: str
+        The folder to save the experiment results in. It will be named after
+        the experiment name.
 
     Methods
     -------
