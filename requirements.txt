@@ -14,3 +14,4 @@ PyYAML==6.0.1
 scikit_learn==1.2.1
 scipy==1.10.0
 tqdm==4.64.1
+structlog==23.1.0
