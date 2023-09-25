@@ -1,9 +1,9 @@
-from sdk.core import Condition
+# from dooders.sdk.core import Condition
 
 
-@Condition.register('test')
-def test():
-    pass
+# @Condition.register('test')
+# def test():
+#     pass
 
 
 # def test_register():
