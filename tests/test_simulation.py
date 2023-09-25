@@ -2,7 +2,6 @@ import unittest
 from datetime import datetime
 from unittest.mock import Mock, patch
 
-# replace your_module with the actual module name
 from dooders.sdk.simulation import Simulation
 
 
@@ -91,3 +90,41 @@ class TestSimulation(unittest.TestCase):
         self.assertEqual(summary['TotalEnergy'], 30)  # 10 + 20
         self.assertIn('ConsumedEnergy', summary)
         self.assertEqual(summary['ConsumedEnergy'], 20)  # 5 + 15
+        
+    def test_generate_id(self):
+        id = self.simulation.generate_id()
+        self.assertIsInstance(id, str)
+    
+    def test_random_dooder(self):
+        self.simulation.arena = Mock(active_dooders=[1, 2, 3])
+        dooder = self.simulation.random_dooder()
+        self.assertIsInstance(dooder, Mock)
+
+    # def test_stop_conditions(self):
+    #     self.simulation.arena = Mock(active_dooders=[1, 2, 3])
+    #     self.simulation.time = Mock()
+    #     self.simulation.time.cycle_number = 10
+    #     self.assertTrue(self.simulation.stop_conditions())
+        
+    # def test_log(self):
+    #     with patch('dooders.sdk.simulation.logger') as mock_logger:
+    #         self.simulation.log(1, 'message', 'scope')
+    #         mock_logger.log.assert_called_once()
+
+    def test_state(self):
+        self.simulation.arena = Mock()
+        self.simulation.environment = Mock()
+        self.simulation.time = Mock()
+        self.simulation.time.time = 10
+        self.simulation.starting_time = datetime.now()
+        self.simulation.ending_time = datetime.now()
+        self.simulation.information = Mock()
+        state = self.simulation.state
+        self.assertIn('simulation_id', state)
+        self.assertIn('running', state)
+        self.assertIn('starting_time', state)
+        self.assertIn('ending_time', state)
+        self.assertIn('arena', state)
+        self.assertIn('environment', state)
+        self.assertIn('information', state)
+        
