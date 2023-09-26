@@ -100,17 +100,6 @@ class TestSimulation(unittest.TestCase):
         dooder = self.simulation.random_dooder()
         self.assertIsInstance(dooder, Mock)
 
-    # def test_stop_conditions(self):
-    #     self.simulation.arena = Mock(active_dooders=[1, 2, 3])
-    #     self.simulation.time = Mock()
-    #     self.simulation.time.cycle_number = 10
-    #     self.assertTrue(self.simulation.stop_conditions())
-        
-    # def test_log(self):
-    #     with patch('dooders.sdk.simulation.logger') as mock_logger:
-    #         self.simulation.log(1, 'message', 'scope')
-    #         mock_logger.log.assert_called_once()
-
     def test_state(self):
         self.simulation.arena = Mock()
         self.simulation.environment = Mock()
