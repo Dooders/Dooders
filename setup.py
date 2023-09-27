@@ -23,7 +23,7 @@ setuptools.setup(
                       "pandas",
                       "Pillow",
                       "plotly",
-                      "psycopg2",
+                      "psycopg2-binary",
                       "pydantic",
                       "pygame",
                       "pytest",
