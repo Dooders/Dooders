@@ -15,6 +15,7 @@ Variables will be set as a class attribute on the applicable model class.
 import os
 from typing import Dict
 from importlib import resources
+from pathlib import Path
 
 import yaml
 
@@ -51,22 +52,22 @@ class Variables:
         >>> variables
         {'model': [<sdk.utils.types.Variable object at 0x7f8b8c0b0a90>]}
         """
+        dir_path = resources.files('dooders.sdk') / 'variables'
 
-        with resources.path('dooders.sdk', 'variables') as dir_path:
-            for file in os.listdir(dir_path):
-                if file.endswith('.yml'):
-                    with open(os.path.join(dir_path, file)) as f:
-                        options = yaml.load(f, Loader=yaml.FullLoader)
-                        option_list = []
+        for file in dir_path.iterdir():
+            if file.suffix == '.yaml':
+                with open(os.path.join(dir_path, file)) as f:
+                    options = yaml.load(f, Loader=yaml.FullLoader)
+                    option_list = []
 
-                        for name, option in options.items():
-                            default = Setting(function=option['function'],
-                                                args=option['args'])
-                            variable = Variable(name=name,
-                                            default=default,
-                                            **option)
-                            
-                            option_list.append(variable)
-                    cls.variables[file.split('.')[0]] = option_list
+                    for name, option in options.items():
+                        default = Setting(function=option['function'],
+                                            args=option['args'])
+                        variable = Variable(name=name,
+                                        default=default,
+                                        **option)
+                        
+                        option_list.append(variable)
+                cls.variables[file.split('.')[0]] = option_list
 
         return cls.variables
