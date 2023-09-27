@@ -6,8 +6,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name='Dooders',
     packages=setuptools.find_packages(exclude=['tests']),
-    version='0.3.7',                                
-    license='MIT',                                 
+    version='0.3.7',
+    license='MIT',
     description="""Dooders is an open-source research project focused on the 
     development of artificial intelligent agents in a simulated reality.""",
     long_description=long_description,
@@ -15,7 +15,8 @@ setuptools.setup(
     author='Chris Mangum',
     author_email='csmangum@gmail.com',
     url='https://github.com/csmangum/Dooders',
-
+    package_data={'dooders.sdk': ['variables/*']},
+    include_package_data=True,
     install_requires=["fastapi",
                       "imageio",
                       "matplotlib",
@@ -32,10 +33,7 @@ setuptools.setup(
                       "scikit-learn",
                       "scipy",
                       "tqdm",
-                      "structlog",],
-
-
-
+                      "structlog", ],
     keywords=[
         "Artificial Intelligence",
         "Simulation",
@@ -62,7 +60,6 @@ setuptools.setup(
         "AI Evolution",
         "Complex Systems",
         "Life Simulation"],
-
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
