@@ -132,6 +132,8 @@ class Settings:
                 model_settings[variable.name] = settings.get(
                     variable.name, variable.default)
             final_settings[model] = model_settings
+            
+        print(final_settings)
 
         return final_settings
 
