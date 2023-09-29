@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name='Dooders',
     packages=setuptools.find_packages(exclude=['tests']),
-    version='0.4.2',
+    version='1.0.0',
     license='MIT',
     description="""Dooders is an open-source research project focused on the 
     development of artificial intelligent agents in a simulated reality.""",
