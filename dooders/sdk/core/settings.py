@@ -17,7 +17,7 @@ DEFAULT_SETTINGS = default_settings
 
 
 class Settings:
-    """ 
+    """
     Settings class to update defaults, if provided by the user.
 
     On initialization, the settings dictionary is updated with the
@@ -45,8 +45,8 @@ class Settings:
 
     @classmethod
     def compile(cls, settings: dict = {}) -> dict:
-        """ 
-        Compile a settings object from a dictionary 
+        """
+        Compile a settings object from a dictionary
 
         Parameters
         ----------
@@ -64,14 +64,14 @@ class Settings:
         >>>
         >>> Settings.compile({'max_steps': 100})
         """
-        cls.settings['variables'] = cls.update_variables(settings)
-        cls.settings['components'] = cls.update_components(settings)
+        cls.settings["variables"] = cls.update_variables(settings)
+        cls.settings["components"] = cls.update_components(settings)
 
         return cls.settings
 
     @classmethod
     def update_components(cls, settings: dict) -> dict:
-        """ 
+        """
         Update component settings
 
         Parameters
@@ -130,10 +130,9 @@ class Settings:
             model_settings = {}
             for variable in variables:
                 model_settings[variable.name] = settings.get(
-                    variable.name, variable.default)
+                    variable.name, variable.default
+                )
             final_settings[model] = model_settings
-            
-        print(final_settings)
 
         return final_settings
 
@@ -189,6 +188,6 @@ class Settings:
         >>> Settings.search('Movement')
         "NeuralNetwork"
         """
-        for setting in cls.settings['variables'].values():
+        for setting in cls.settings["variables"].values():
             if setting_name in setting.keys():
-                return setting[setting_name].args['value']
+                return setting[setting_name].args["value"]
