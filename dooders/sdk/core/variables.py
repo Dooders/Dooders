@@ -56,7 +56,7 @@ class Variables:
 
         for file in dir_path.iterdir():
             if file.suffix == ".yml":
-                with open(os.path.join(dir_path, file)) as f:
+                with open(os.path.join(dir_path, file), 'r') as f:
                     options = yaml.load(f, Loader=yaml.FullLoader)
                     option_list = []
 
@@ -67,7 +67,7 @@ class Variables:
                         variable = Variable(name=name, default=default, **option)
 
                         option_list.append(variable)
-                variable_name = str(file).split("/")[-1].split(".")[0]
+                variable_name = file.name.split(".")[0]
                 cls.variables[variable_name] = option_list
 
         return cls.variables
