@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name='Dooders',
     packages=setuptools.find_packages(exclude=['tests']),
-    version='0.4.0',
+    version='1.2.0',
     license='MIT',
     description="""Dooders is an open-source research project focused on the 
     development of artificial intelligent agents in a simulated reality.""",
@@ -15,7 +15,7 @@ setuptools.setup(
     author='Chris Mangum',
     author_email='csmangum@gmail.com',
     url='https://github.com/csmangum/Dooders',
-    package_data={'dooders.sdk': ['variables/*.yaml']},
+    package_data={'dooders.sdk': ['variables/*.yml']},
     include_package_data=True,
     install_requires=["fastapi",
                       "imageio",
