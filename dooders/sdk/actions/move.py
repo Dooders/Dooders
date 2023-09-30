@@ -30,7 +30,12 @@ def move(dooder) -> None:
     """
     reality_array = dooder.perception.array('Energy')
     sensory_array = Senses.gather(dooder)
-    destination = dooder.think('move_decision', sensory_array, reality_array)
+    fixed_array = np.where(sensory_array >= 0.5, 1, 0)
+    # print(f'Sensory Array: {sensory_array}')
+    # print(f'Fixed Array: {fixed_array}')
+    # print(f'Reality Array: {reality_array}')
+    # print('******************')
+    destination = dooder.think('move_decision', fixed_array, reality_array)
 
     if isinstance(destination, np.int64):
         final_destination = destination
