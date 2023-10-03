@@ -29,7 +29,7 @@ pip install dooders
 ## How to use it
 
 ```python
-from dooders import Experiment
+from dooders.experiment import Experiment
 
 experiment = Experiment()
 
