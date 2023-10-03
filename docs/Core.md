@@ -1,4 +1,4 @@
-# Core Components
+# SDK Core Components
 
 The core components serve as the foundation for the library and its capabilities. They are designed to be easily and quickly integrated and follow specific guidelines to provide a solid base for ongoing development and research.
 
