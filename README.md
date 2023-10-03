@@ -18,8 +18,15 @@ I will also be documenting experiments in [substack](https://rememberization.sub
 ***The code, content, and concepts will change over time as I explore different ideas.***  
 
 ***Everything in this repository should be considered unfinished and a work-in-progress***
+
+## Installation
+
+```python
+pip install dooders
+```
+
   
-### How to use it
+## How to use it
 
 ```python
 from dooders import Experiment
