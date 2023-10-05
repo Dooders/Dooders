@@ -26,7 +26,7 @@ pip install dooders
 ```
 
   
-## How to use it
+## Usage
 
 ```python
 from dooders.experiment import Experiment
