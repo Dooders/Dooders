@@ -5,7 +5,11 @@ This module contains the Core class, which is used to register plug-ins.
 """
 
 from abc import ABC
+import logging
+import os
 from typing import Callable, Dict, NamedTuple
+
+logger = logging.getLogger(__name__)
 
 
 class Component(NamedTuple):
@@ -25,10 +29,9 @@ _COMPONENTS: Dict[str, Dict[str, Dict[str, Component]]] = {}
 
 
 class Core(ABC):
-    """ 
-    Core class for the SDK.
-
-    This class is used to register plug-ins.
+    """
+    Base class to be inherited by core components to facilitate plug-in like usage
+    of sub-components.
 
     Attributes
     ----------
@@ -65,11 +68,13 @@ class Core(ABC):
     {'consume': <Component>}
     """
 
+    enable_logging = os.getenv("ENABLE_LOGGING", "False").lower() == "true"
+
     @classmethod
     def register(cls, component_name: str, *args, **kwargs) -> Callable:
-        """ 
+        """
         Register a collector in the registry.
-        
+
         Parameters
         ----------
         component_name: str
@@ -98,8 +103,14 @@ class Core(ABC):
                 function_name=function_name,
                 function=func,
                 description=description,
-                enabled=True
+                enabled=True,
             )
+
+            if cls.enable_logging:
+                # Log the registration of the plugin
+                logger.info(
+                    f"Registered plugin '{function_name}' in component '{component_name}'"
+                )
 
             return func
 
@@ -107,7 +118,7 @@ class Core(ABC):
 
     @classmethod
     def get_components(cls, component_name: str) -> Dict[str, Dict[str, Component]]:
-        """ 
+        """
         Get all components of a certain type.
 
         Parameters
@@ -131,8 +142,10 @@ class Core(ABC):
         return _COMPONENTS[component_name]
 
     @classmethod
-    def get_component(csl, component_name: str, function_name: str) -> Dict[str, Component]:
-        """ 
+    def get_component(
+        csl, component_name: str, function_name: str
+    ) -> Dict[str, Component]:
+        """
         Get a component of a certain type.
 
         Parameters
@@ -156,4 +169,8 @@ class Core(ABC):
         >>> Core.get_component('actions', 'consume')
         {'consume': <Component>}
         """
-        return _COMPONENTS[component_name][function_name]
+        try:
+            component_dict = _COMPONENTS[component_name]
+            return component_dict[function_name]
+        except KeyError as e:
+            raise KeyError(f"Component not found: {e}") from None
