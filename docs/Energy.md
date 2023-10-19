@@ -13,13 +13,17 @@ A Dooder must utilize energy to avoid equilibrium, which is a terminal state (i.
 ### Simple Energy: 
 Energy that is refreshed each cycle around the environment and can be consumed by all higher level energies.
 
+Equivalent to microbes and plant life
+
 * Consumed by Dooders and Complex Energy agents
 * Allocation is managed by the [Resources](https://github.com/csmangum/Dooders/blob/main/sdk/models/resources.py) class and executed by its [placement strategy](https://github.com/csmangum/Dooders/blob/main/sdk/strategies/placement.py) each cycle (random, fixed, etc.).
 * Worth 1 energy unit when consumed.
 * Has a limited lifespan based on Energy [settings](https://github.com/csmangum/Dooders/blob/main/sdk/variables/energy.yml), then it will remove itself from the environment.
 
-### Local Energy: 
+### Stored Energy: 
 Energy that is bound in the environment to a specific [Space](), in large but finite quantities.
+
+Equivalent to fossil fuel or coal
 
 Also more difficult to extract this type of energy, but allows for large extractions over time
 
@@ -27,6 +31,8 @@ Also more difficult to extract this type of energy, but allows for large extract
 
 ### Complex Energy: 
 Energy with a limited ability to interact and learn that serves as an intermediary level where it consumes Simple Energy, but also can be consumed. This will give it predator-prey relationship with the Dooder agent.
+
+Equivalent to animals that act more complex than simple energy
 
 Will be able to observe the evolution of this agent as well.
 How it adapts to the Dooder dynamic.
