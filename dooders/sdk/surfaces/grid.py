@@ -19,6 +19,8 @@ Coordinate = Tuple[X, Y]
 class Grid:
     """
     A rectangular grid of Spaces.
+    #! generate by parameters or a map which is a txt file with string representations for sprites
+    #! better explanations
 
     Parameters
     ----------
