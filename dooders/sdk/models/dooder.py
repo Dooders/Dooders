@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from dooders.sdk.base.reality import BaseSimulation
 
 
-MODEL_SETTINGS = default_settings['internal_models']
+MODEL_SETTINGS = default_settings["internal_models"]
 
 
 GeneticCode = Dict[str, List[Any]]
@@ -36,6 +36,7 @@ class MainStats(BaseModel):
     id: str
     number: int
     position: tuple
+    rotation: int
     hunger: int
     age: int
     generation: int
@@ -51,13 +52,13 @@ class MainStats(BaseModel):
 
 
 class Dooder(Agent):
-    """ 
+    """
     Primary Dooder class
 
     Parameters
     ----------
     id: str
-        Unique ID for the object. 
+        Unique ID for the object.
         Created by the simulation object
     position: tuple
         Position of the object.
@@ -102,12 +103,12 @@ class Dooder(Agent):
         The Dooder's perception.
     """
 
-    def __init__(self, id: str, position: tuple, simulation: 'BaseSimulation') -> None:
+    def __init__(self, id: str, position: tuple, simulation: "BaseSimulation") -> None:
         super().__init__(id, position, simulation)
         self.moore = True
         self.condensed_weight_list = list()
         self.internal_models = InternalModels(self.id, MODEL_SETTINGS)
-        self.log(granularity=1, message=f"Created", scope='Dooder')
+        self.log(granularity=1, message=f"Created", scope="Dooder")
 
     def __del__(self):
         self.condensed_weight_list = list()
@@ -115,7 +116,7 @@ class Dooder(Agent):
         self.simulation = None
 
     def do(self, action: str) -> None:
-        """ 
+        """
         Dooder action flow
 
         Parameters
@@ -125,29 +126,29 @@ class Dooder(Agent):
         """
         Action.execute(self, action)
 
-    def die(self, reason: str = 'Unknown') -> None:
+    def die(self, reason: str = "Unknown") -> None:
         """
-        Removing a dooder from the simulation, 
+        Removing a dooder from the simulation,
         with a given reason
 
         Parameters
         ----------
         reason: str
-            The reason for the death. 
+            The reason for the death.
             For example: starvation, old age, etc.
         """
         self.simulation.arena.terminate_dooder(self)
-        self.status = 'Terminated'
+        self.status = "Terminated"
         self.death = self.simulation.cycle_number
         message = f"Died from {reason}"
-        self.log(granularity=1, message=message, scope='Dooder')
+        self.log(granularity=1, message=message, scope="Dooder")
 
     def death_check(self) -> None:
         """
         Checking if the dooder should be dead,
         based on conditions of current state
         """
-        result, reason = Condition.check('death', self)
+        result, reason = Condition.check("death", self)
 
         if result:
             self.die(reason)
@@ -173,19 +174,17 @@ class Dooder(Agent):
         self.age += 1
 
         if self.death_check():
-            self.log(granularity=1,
-                     message="Terminated between cycles",
-                     scope='Dooder')
+            self.log(granularity=1, message="Terminated between cycles", scope="Dooder")
         else:
-            Step.forward('BasicStep', self)
+            Step.forward("BasicStep", self)
 
             if self.death_check():
-                self.log(granularity=1,
-                         message="Terminated during cycle",
-                         scope='Dooder')
+                self.log(
+                    granularity=1, message="Terminated during cycle", scope="Dooder"
+                )
 
     def store_gene_embedding(self) -> None:
-        """ 
+        """
         Post step flow for a dooder.
 
         Process
@@ -197,7 +196,7 @@ class Dooder(Agent):
         cycle_number = self.simulation.cycle_number
         self.encoded_weights[cycle_number] = genetic_code_embeddings
 
-    def find_partner(self) -> 'Dooder':
+    def find_partner(self) -> "Dooder":
         """
         Find another Dooder from current position.
 
@@ -206,8 +205,7 @@ class Dooder(Agent):
         partner: Dooder
             A Dooder object, if found.
         """
-        near_dooders = self.simulation.environment.contents(
-            self.position)
+        near_dooders = self.simulation.environment.contents(self.position)
 
         for object in near_dooders:
             if isinstance(object, Dooder) and object.id != self.id:
@@ -216,9 +214,8 @@ class Dooder(Agent):
         return None
 
     def check_accuracy(self, output, reality) -> None:
-  
         decision = np.argmax(output)
-        
+
         reality_positions = np.where(reality[0] == 1)[0].tolist()
 
         if np.count_nonzero(reality) == 0:
@@ -231,10 +228,10 @@ class Dooder(Agent):
             return False
 
     @log_performance()
-    def think(self, model_name: str, 
-              input_array: np.ndarray, 
-              reality_array: np.ndarray) -> np.ndarray:
-        """ 
+    def think(
+        self, model_name: str, input_array: np.ndarray, reality_array: np.ndarray
+    ) -> np.ndarray:
+        """
         Use cognitive models to think about the environment.
 
         Parameters
@@ -254,41 +251,41 @@ class Dooder(Agent):
 
         model = self.internal_models[model_name]
         output_array = model.predict(input_array)
-  
+
         model.learn(reality_array)
 
-        inference_record = {'model_name': model_name,
-                            'hunger': self.hunger,
-                            'position': self.position,
-                            'perception': [str(x) for x in input_array[0]],
-                            'output': str(output_array),
-                            'reality': [str(choice) for choice in reality_array],
-                            'inferred_goal': None,
-                            'accurate': self.check_accuracy(output_array, reality_array),
-                            }
+        inference_record = {
+            "model_name": model_name,
+            "hunger": self.hunger,
+            "position": self.position,
+            "perception": [str(x) for x in input_array[0]],
+            "output": str(output_array),
+            "reality": [str(choice) for choice in reality_array],
+            "inferred_goal": None,
+            "accurate": self.check_accuracy(output_array, reality_array),
+        }
 
         self.inference_record[self.simulation.cycle_number] = inference_record
 
         return output_array
-    
+
     @property
-    def genetic_code_embeddings(self) -> 'GeneticCode':
-        
+    def genetic_code_embeddings(self) -> "GeneticCode":
         genetic_code = self.genetic_code
-        
+
         for model in self.internal_models.keys():
-            weights = genetic_code[model][1] #! will do all layers
+            weights = genetic_code[model][1]  #! will do all layers
             embedding = self.gene_embedding.fit(weights)
             genetic_code[model][1] = embedding.singular_values_
-            
+
         return genetic_code
 
     @property
-    def genetic_code(self) -> 'GeneticCode':
-        """ 
-        Get the internal model weights as a dictionary of the dooder's 
+    def genetic_code(self) -> "GeneticCode":
+        """
+        Get the internal model weights as a dictionary of the dooder's
         internal model weights.
-        
+
         Returns
         -------
         weights: dict
@@ -298,7 +295,7 @@ class Dooder(Agent):
 
     @property
     def history(self) -> list:
-        """ 
+        """
         Return the dooder's history.
 
         Returns
@@ -308,22 +305,22 @@ class Dooder(Agent):
         """
         logs = []
         for log in self.simulation.load_log():
-            if log.get('UniqueID') == self.id:
+            if log.get("UniqueID") == self.id:
                 logs.append(log)
         return logs
 
     @property
-    def stats(self) -> 'MainStats':
+    def stats(self) -> "MainStats":
         """
         The base stats of the dooder.
 
         Returns
         -------
-        stats: dict 
+        stats: dict
             A dictionary of the dooder's main stats.
-            for example: 
-            {'id': '1234', 'position': (0,0), 'hunger': 0, 
-            'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0, 
+            for example:
+            {'id': '1234', 'position': (0,0), 'hunger': 0,
+            'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0,
             'move_count': 0, 'energy_consumed': 0}
         """
         stats = {}
@@ -333,7 +330,7 @@ class Dooder(Agent):
         return MainStats(**stats)
 
     @property
-    def perception(self) -> 'Perception':
+    def perception(self) -> "Perception":
         """
         Return a list of the dooder's perception locations.
 
@@ -348,7 +345,7 @@ class Dooder(Agent):
 
     @property
     def state(self) -> dict:
-        """ 
+        """
         Return the state of the dooder.
 
         Returns
@@ -357,12 +354,12 @@ class Dooder(Agent):
             The state of the dooder.
         """
         state = self.stats.dict()
-        state['encoded_weights'] = self.encoded_weights
+        state["encoded_weights"] = self.encoded_weights
         return state
 
     @property
     def final_state(self):
-        """ 
+        """
         Return the final state of the dooder.
 
         Returns
@@ -371,6 +368,5 @@ class Dooder(Agent):
             The final state of the dooder.
         """
         state = self.state
-        state['final_state'] = self.genetic_code['Consume'][0]
+        state["final_state"] = self.genetic_code["Consume"][0]
         return state
-    
