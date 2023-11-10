@@ -7,6 +7,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from typing import Any, Dict, Iterator, List, Sequence, Tuple, Union, cast
 
+from dooders.sdk.modules.space import Space
+
 X = int
 Y = int
 Coordinate = Tuple[X, Y]
@@ -70,6 +72,9 @@ class Graph:
         """
         G = nx.grid_2d_graph(self.height, self.width)
 
+        for node in G.nodes():
+            G.nodes[node]["space"] = Space(self.width, self.height)
+
         if self.torus:
             for x in range(self.height):
                 G.add_edge((x, 0), (x, self.width - 1))
@@ -77,7 +82,7 @@ class Graph:
                 G.add_edge((0, y), (self.height - 1, y))
 
         # Label nodes with integers instead of (x, y) coordinates
-        relabel_dict = {(x, y): y * dim + x for x, y in G.nodes()}
+        relabel_dict = {(x, y): y * self.width + x for x, y in G.nodes()}
         G = nx.relabel_nodes(G, relabel_dict)
 
         return G
@@ -101,6 +106,23 @@ class Graph:
         """
         return y * self.width + x
 
+    def add(self, object: object, coordinate: Coordinate) -> None:
+        """
+        Adds an object to the graph and updates the object index.
+
+        Parameters
+        ----------
+        object: object
+            The object to add.
+        coordinate: Coordinate
+            The coordinate to add the object to.
+        """
+        node_label = self.coordinate_to_node_label(*coordinate)
+        node = self._graph.nodes[node_label]
+        node.space.add(object)
+        self._object_index[object.name] = coordinate
+        object.position = coordinate
+
     def get_neighbors(self, node_label: int) -> List[int]:
         """
         Returns the neighbors of a node.
@@ -121,8 +143,8 @@ class Graph:
 
 
 # Draw the graph with updated position mapping
-dim = 10
-pos = {(x + y * 10): (x, dim - 1 - y) for x in range(dim) for y in range(dim)}
-G = nx.grid_2d_graph(dim, dim)
-nx.draw(G, pos, with_labels=True, node_size=400, node_color="lightblue")
-plt.show()
+# dim = 10
+# pos = {(x + y * 10): (x, dim - 1 - y) for x in range(dim) for y in range(dim)}
+# G = nx.grid_2d_graph(dim, dim)
+# nx.draw(G, pos, with_labels=True, node_size=400, node_color="lightblue")
+# plt.show()
