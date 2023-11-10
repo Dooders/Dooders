@@ -34,6 +34,21 @@ class Grid:
             The width of the grid.
         height: int, default: 10
             The height of the grid.
+            
+    Attributes
+    ----------
+    torus: bool
+        See settings.
+    width: int
+        See settings.
+    height: int
+        See settings.
+    _grid: List[List[GridRow]]
+        A list of lists of Spaces.
+    _object_index: Dict[str, Coordinate]
+        A dictionary of object ids and their coordinates.
+    _nearby_cache: Dict[Coordinate, Dict[int, List[Coordinate]]]
+        A dictionary of cached nearby coordinates.
 
     Methods
     -------
