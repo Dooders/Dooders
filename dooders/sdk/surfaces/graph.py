@@ -3,6 +3,7 @@ Space: Graph
 ------------
 """
 
+from functools import singledispatchmethod
 import networkx as nx
 import matplotlib.pyplot as plt
 from typing import Any, Dict, Iterator, List, Sequence, Tuple, Union, cast
@@ -120,8 +121,146 @@ class Graph:
         node_label = self.coordinate_to_node_label(*coordinate)
         node = self._graph.nodes[node_label]
         node.space.add(object)
-        self._object_index[object.name] = coordinate
+        self._object_index[object.id] = coordinate
         object.position = coordinate
+
+    @singledispatchmethod
+    def remove(self, type: Union[object, str]) -> None:
+        raise NotImplementedError(
+            "You must pass either an object or an object id to remove."
+        )
+
+    @remove.register
+    def _(self, object: object) -> None:
+        """
+        Removes an object from the graph and updates the object index.
+
+        Parameters
+        ----------
+        object: object
+            The object to remove.
+        """
+        node_label = self.coordinate_to_node_label(*object.position)
+        node = self._graph.nodes[node_label]
+        node.space.remove(object)
+        self._object_index.pop(object.id)
+
+    @remove.register
+    def _(self, object_id: str) -> None:
+        """
+        Removes an object from the graph and updates the object index.
+
+        Parameters
+        ----------
+        object_id: str
+            The object id to remove.
+        """
+        coordinate = self._object_index[object_id]
+        node_label = self.coordinate_to_node_label(*coordinate)
+        node = self._graph.nodes[node_label]
+        node.space.remove(object_id)
+        self._object_index.pop(object_id)
+
+    def coordinates(self) -> Iterator[Coordinate]:
+        """
+        Return an iterator over all coordinates in the grid.
+
+        Returns
+        -------
+        Iterator[Coordinate]
+            An iterator over all coordinates in the grid.
+            Example: [(0, 0), (0, 1), (0, 2), (0, 3)]
+
+        Example
+        -------
+        for coordinate in grid.coordinates():
+            print(coordinate)
+        >>> (0, 0)
+        >>> (0, 1)
+        >>> (0, 2)
+        """
+        for node in self._graph.nodes:
+            yield self._graph.nodes[node]["space"].coordinate
+
+    def spaces(self) -> Iterator[Space]:
+        """
+        Return an iterator over all spaces in the grid.
+
+        Returns
+        -------
+        Iterator[Space]
+            An iterator over all spaces in the grid.
+            Example: [Space(0, 0), Space(0, 1), Space(0, 2), Space(0, 3)]
+
+        Example
+        -------
+        for space in grid.spaces():
+            print(space)
+        >>> Space(0, 0)
+        >>> Space(0, 1)
+        >>> Space(0, 2)
+        """
+        for node in self._graph.nodes:
+            yield self._graph.nodes[node]["space"]
+
+    @singledispatchmethod
+    def contents(self, object_type: str = None) -> Iterator[Any]:
+        """
+        Return an iterator over all contents in the grid.
+
+        With no arguments, it will return all contents.
+        Include an object type to return only that type of object.
+
+        Parameters
+        ----------
+        type: Any, optional
+            The type of contents to return. Defaults to all.
+            object types include 'Dooder', 'Energy', etc.
+
+        Returns
+        -------
+        Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Energy>]
+            An iterator over all contents in the grid.
+
+        Example
+        -------
+        for object in grid.contents():
+            print(object)
+        >>> <Dooder>
+        >>> <Energy>
+        >>> <Dooder>
+        """
+        for space in self.spaces():
+            for object in space.contents():
+                if object_type is None or isinstance(object, object_type):
+                    yield object
+
+    @contents.register
+    def _(self, position: tuple) -> Iterator[Any]:
+        """
+        Return an iterator over all contents in a Space on the grid.
+
+        Parameters
+        ----------
+        position: Coordinate, (int, int)
+            The position to get the contents from.
+
+        Returns
+        -------
+        Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Energy>]
+            An iterator over all contents in a Space on the grid.
+
+        Example
+        -------
+        for object in grid.contents((0, 0)):
+            print(object)
+        >>> <Dooder>
+        >>> <Energy>
+        >>> <Dooder>
+        """
+        node_label = self.coordinate_to_node_label(*position)
+        for object in self._graph.nodes[node_label]["space"].contents():
+            yield object
 
     def get_neighbors(self, node_label: int) -> List[int]:
         """
@@ -138,13 +277,4 @@ class Graph:
             A list of neighbor nodes.
         """
         neighbor_nodes = list(self._graph.neighbors(node_label))
-        print(f"Neighbors of node {node_label}: {neighbor_nodes}")
         return neighbor_nodes
-
-
-# Draw the graph with updated position mapping
-# dim = 10
-# pos = {(x + y * 10): (x, dim - 1 - y) for x in range(dim) for y in range(dim)}
-# G = nx.grid_2d_graph(dim, dim)
-# nx.draw(G, pos, with_labels=True, node_size=400, node_color="lightblue")
-# plt.show()
