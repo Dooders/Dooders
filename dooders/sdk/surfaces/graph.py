@@ -17,7 +17,8 @@ Coordinate = Tuple[X, Y]
 
 class Graph:
     """
-    A graph is a collection of nodes (vertices) along with identified pairs of nodes (called edges, links, etc).
+    A graph is a collection of nodes (vertices) along with identified pairs of
+    nodes (called edges, links, etc).
 
     Parameters
     ----------
@@ -47,10 +48,40 @@ class Graph:
 
     Methods
     -------
-    create_grid_graph()
+    _build()
         Creates a grid graph.
-    get_neighbors(node_number)
+    coordinate_to_node_label(x, y)
+        Converts a coordinate to a node label.
+    add(object, coordinate)
+        Adds an object to the graph and updates the object index.
+    remove(object)
+        Removes an object from the graph and updates the object index.
+    coordinates()
+        Return an iterator over all coordinates in the grid.
+    spaces()
+        Return an iterator over all spaces in the grid.
+    contents(type=None)
+        Return an iterator over all contents in the grid.
+    contents(position)
+        Return an iterator over all contents in a Space on the grid.
+    out_of_bounds(position)
+        Returns True if the position is out of bounds.
+    nearby_spaces(position)
+        Return an iterator over all nearby spaces in the grid.
+    get_neighbors(node_label)
         Returns the neighbors of a node.
+    __iter__()
+        Return an iterator over all spaces in the grid.
+    __getitem__(value: int)
+        Return the space at the given index.
+    __getitem__(value: Coordinate)
+        Return the space at the given coordinate.
+    __getitem__(value: list)
+        Return the spaces at the given indices.
+    __getitem__(value: str)
+        Return the space at the given object id.
+    state()
+        Return the state of the graph.
     """
 
     _graph: nx.Graph
@@ -262,6 +293,49 @@ class Graph:
         for object in self._graph.nodes[node_label]["space"].contents():
             yield object
 
+    def out_of_bounds(self, position: Coordinate) -> bool:
+        """
+        Returns True if the position is out of bounds.
+
+        Parameters
+        ----------
+        position: Coordinate, (int, int)
+            The position to check.
+
+        Returns
+        -------
+        out_of_bounds: bool
+            True if the position is out of bounds.
+        """
+        x, y = position
+        return x < 0 or x >= self.width or y < 0 or y >= self.height
+
+    def nearby_spaces(self, position: Coordinate) -> Iterator[Space]:
+        """
+        Return an iterator over all nearby spaces in the grid.
+
+        Parameters
+        ----------
+        position: Coordinate, (int, int)
+            The position to get the contents from.
+
+        Returns
+        -------
+        Iterator[Space], [<Space>, <Space>, <Space>, <Space>]
+            An iterator over all nearby spaces in the grid.
+
+        Example
+        -------
+        for space in grid.nearby_spaces((0, 0)):
+            print(space)
+        >>> <Space>
+        >>> <Space>
+        >>> <Space>
+        """
+        node_label = self.coordinate_to_node_label(*position)
+        for neighbor in self._graph.neighbors(node_label):
+            yield self._graph.nodes[neighbor]["space"]
+
     def get_neighbors(self, node_label: int) -> List[int]:
         """
         Returns the neighbors of a node.
@@ -278,3 +352,114 @@ class Graph:
         """
         neighbor_nodes = list(self._graph.neighbors(node_label))
         return neighbor_nodes
+
+    def __iter__(self) -> Iterator[Space]:
+        """
+        Return an iterator over all spaces in the grid.
+
+        Returns
+        -------
+        Iterator[Space]
+            An iterator over all spaces in the grid.
+            Example: [Space(0, 0), Space(0, 1), Space(0, 2), Space(0, 3)]
+
+        Example
+        -------
+        for space in grid:
+            print(space)
+        >>> Space(0, 0)
+        >>> Space(0, 1)
+        >>> Space(0, 2)
+        """
+        return self.spaces()
+
+    @singledispatchmethod
+    def __getitem__(self, value) -> Any:
+        raise NotImplementedError(f"Type {type(value)} is unsupported")
+
+    @__getitem__.register
+    def _(self, value: int) -> Space:
+        """
+        Return the space at the given index.
+
+        Parameters
+        ----------
+        value: int
+            The index of the space.
+
+        Returns
+        -------
+        space: Space
+            The space at the given index.
+        """
+        return self._graph.nodes[value]["space"]
+
+    @__getitem__.register
+    def _(self, value: Coordinate) -> Space:
+        """
+        Return the space at the given coordinate.
+
+        Parameters
+        ----------
+        value: Coordinate, (int, int)
+            The coordinate of the space.
+
+        Returns
+        -------
+        space: Space
+            The space at the given coordinate.
+        """
+        node_label = self.coordinate_to_node_label(*value)
+        return self._graph.nodes[node_label]["space"]
+
+    @__getitem__.register
+    def _(self, value: list) -> List[Space]:
+        """
+        Return the spaces at the given indices.
+
+        Parameters
+        ----------
+        value: List[int]
+            The indices of the spaces.
+
+        Returns
+        -------
+        spaces: List[Space]
+            The spaces at the given indices.
+        """
+        return [self._graph.nodes[node_label]["space"] for node_label in value]
+
+    @__getitem__.register
+    def _(self, value: str) -> Space:
+        """
+        Return the space at the given object id.
+
+        Parameters
+        ----------
+        value: str
+            The object id of the space.
+
+        Returns
+        -------
+        space: Space
+            The space at the given object id.
+        """
+        coordinate = self._object_index[value]
+        node_label = self.coordinate_to_node_label(*coordinate)
+        return self._graph.nodes[node_label]["space"]
+
+    def state(self) -> Dict:
+        """
+        Return the state of the graph.
+
+        Returns
+        -------
+        state: Dict
+            The state of the graph.
+        """
+        return {
+            "width": self.width,
+            "height": self.height,
+            "torus": self.torus,
+            # 'spaces': {f'{space.x}-{space.y}': space.state for space in self.spaces()} # This takes up too much space
+        }
