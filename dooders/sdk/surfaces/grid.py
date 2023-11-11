@@ -34,7 +34,7 @@ class Grid:
             The width of the grid.
         height: int, default: 10
             The height of the grid.
-            
+
     Attributes
     ----------
     torus: bool
@@ -53,7 +53,7 @@ class Grid:
     Methods
     -------
     add(object: object, coordinate: Coordinate) -> None
-        Add an object to a space on the grid based 
+        Add an object to a space on the grid based
         on the provided coordinate.
     remove(object: object) -> None
         Remove an object from the grid.
@@ -80,14 +80,15 @@ class Grid:
     --------
     sdk.core.Space: A space on the grid.
     """
+
     _grid: List[List[GridRow]]
     _object_index: Dict[str, Coordinate]
     _nearby_cache: Dict[Coordinate, Dict[int, List[Coordinate]]]
 
     def __init__(self, settings: dict) -> None:
-        self.torus = settings.get('torus', True)
-        self.width = settings.get('width', 10)
-        self.height = settings.get('height', 10)
+        self.torus = settings.get("torus", True)
+        self.width = settings.get("width", 10)
+        self.height = settings.get("height", 10)
 
         self._grid = []
         self._object_index = {}
@@ -115,7 +116,7 @@ class Grid:
         object: object, Dooder, Energy, etc.
             The object to add to the grid.
         coordinate: Coordinate, (int, int)
-            Where to place the object. 
+            Where to place the object.
 
         Example
         -------
@@ -142,7 +143,7 @@ class Grid:
         Parameters
         ----------
         type: Union[object, str]
-            The object or id of the object to remove. 
+            The object or id of the object to remove.
             It will also be removed from the object index.
 
         Example
@@ -151,7 +152,8 @@ class Grid:
         grid.remove(dooder.id)
         """
         raise NotImplementedError(
-            "You must pass either an object or an object id to remove.")
+            "You must pass either an object or an object id to remove."
+        )
 
     @remove.register
     def _(self, object: object) -> None:
@@ -161,7 +163,7 @@ class Grid:
         Parameters
         ----------
         object: object, Dooder, Energy, etc.
-            The object to remove. 
+            The object to remove.
             It will also be removed from the object index.
 
         Example
@@ -183,7 +185,7 @@ class Grid:
         Parameters
         ----------
         object_id: str
-            The id of the object to remove. 
+            The id of the object to remove.
             It will also be removed from the object index.
 
         Example
@@ -255,7 +257,7 @@ class Grid:
         Returns
         -------
         Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Energy>]
-            An iterator over all contents in the grid. 
+            An iterator over all contents in the grid.
 
         Example
         -------
@@ -306,7 +308,7 @@ class Grid:
         position: Coordinate,
         moore: bool = True,
         include_center: bool = True,
-        radius: int = 1
+        radius: int = 1,
     ) -> Iterator[Space]:
         """
         Return an iterator of Spaces nearby a given position.
@@ -316,10 +318,10 @@ class Grid:
         position: Coordinate, (int, int)
             The position to get the nearby spaces from.
         moore: bool, optional, default = True
-            A boolean indicating if the perception 
+            A boolean indicating if the perception
             should be Moore or Von Neumann.
         include_center: bool, optional, default = True
-            A boolean indicating if the center position 
+            A boolean indicating if the center position
             should be included in the perception.
         radius: int, default = 1
             The radius of the perception
@@ -337,8 +339,7 @@ class Grid:
         >>> <Space>
         >>> <Space>
         """
-        nearby = self.nearby_coordinates(
-            position, moore, include_center, radius)
+        nearby = self.nearby_coordinates(position, moore, include_center, radius)
         return [self._grid[pos[0]][pos[1]] for pos in nearby]
 
     def nearby_contents(
@@ -346,7 +347,7 @@ class Grid:
         position: Coordinate,
         moore: bool = True,
         include_center: bool = False,
-        radius: int = 1
+        radius: int = 1,
     ) -> Iterator[Any]:
         """
         Return an iterator of contents nearby a given position.
@@ -356,10 +357,10 @@ class Grid:
         position: Coordinate, (int, int)
             The position to get the nearby contents from.
         moore: bool, optional, default = True
-            A boolean indicating if the perception 
+            A boolean indicating if the perception
             should be Moore or Von Neumann.
         include_center: bool, optional, default = False
-            A boolean indicating if the center position 
+            A boolean indicating if the center position
             should be included in the perception.
         radius: int, optional, default = 1
             The radius of the perception.
@@ -377,7 +378,8 @@ class Grid:
         >>> <Energy>
         """
         nearby_contents = self.nearby_coordinates(
-            position, moore, include_center, radius)
+            position, moore, include_center, radius
+        )
         return [self._grid[pos[0]][pos[1]].contents for pos in nearby_contents]
 
     def nearby_coordinates(
@@ -385,7 +387,7 @@ class Grid:
         position: Coordinate,
         moore: bool = True,
         include_center: bool = False,
-        radius: int = 1
+        radius: int = 1,
     ) -> Iterator[Coordinate]:
         """
         Return an iterator of coordinates nearby a given position.
@@ -395,10 +397,10 @@ class Grid:
         position: Coordinate, (int, int)
             The position to get the nearby coordinates from.
         moore: bool, optional, default = True
-            A boolean indicating if the perception 
+            A boolean indicating if the perception
             should be Moore or Von Neumann.
         include_center: bool, optional, default = False
-            A boolean indicating if the center position 
+            A boolean indicating if the center position
             should be included in the perception.
         radius: int, optional, default = 1
             The radius of the perception.
@@ -477,7 +479,7 @@ class Grid:
         position: Coordinate, (int, int)
             Coordinate tuple to check.
 
-        Returns 
+        Returns
         -------
         bool
             True if position is off the surface, False otherwise.
@@ -499,11 +501,11 @@ class Grid:
 
     @singledispatchmethod
     def __getitem__(self, value) -> Any:
-        raise NotImplementedError(f'Type {type(value)} is unsupported')
+        raise NotImplementedError(f"Type {type(value)} is unsupported")
 
     @__getitem__.register
     def _(self, value: int) -> GridRow:
-        """ 
+        """
         Return the row at the given index.
 
         Example
@@ -515,7 +517,7 @@ class Grid:
 
     @__getitem__.register
     def _(self, value: list) -> List[Space]:
-        """ 
+        """
         Return the Spaces at the given coordinates.
 
         Example
@@ -533,7 +535,7 @@ class Grid:
 
     @__getitem__.register
     def _(self, value: tuple) -> Space:
-        """ 
+        """
         Return the Space at the given coordinate.
 
         Example
@@ -547,7 +549,7 @@ class Grid:
 
     @__getitem__.register
     def _(self, value: str) -> Union[GridRow, List[Space], Space]:
-        """ 
+        """
         Return the row at the given index or the Space at the given coordinate.
 
         Example
@@ -556,12 +558,12 @@ class Grid:
         >>> [<GridRow>, <GridRow>, <GridRow>, <GridRow>]
         """
         index = cast(str, value)
-        if index == 'all':
+        if index == "all":
             return self._grid
         else:
             for space in self.spaces():
                 for objects in space.contents:
-                    return space.contents.get(index, 'No object found')
+                    return space.contents.get(index, "No object found")
 
     @property
     def state(self) -> Dict:
@@ -574,8 +576,8 @@ class Grid:
             The state of the grid.
         """
         return {
-            'width': self.width,
-            'height': self.height,
-            'torus': self.torus,
+            "width": self.width,
+            "height": self.height,
+            "torus": self.torus,
             # 'spaces': {f'{space.x}-{space.y}': space.state for space in self.spaces()} # This takes up too much space
         }
