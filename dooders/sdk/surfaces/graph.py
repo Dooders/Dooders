@@ -6,13 +6,14 @@ Space: Graph
 from functools import singledispatchmethod
 import networkx as nx
 import matplotlib.pyplot as plt
-from typing import Any, Dict, Iterator, List, Sequence, Tuple, Union, cast
+from typing import Any, Dict, Iterator, List, Union, NamedTuple
 
 from dooders.sdk.modules.space import Space
 
-X = int
-Y = int
-Coordinate = Tuple[X, Y]
+
+class Coordinate(NamedTuple):
+    X: int
+    Y: int
 
 
 class Graph:
