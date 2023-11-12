@@ -93,6 +93,7 @@ class Graph:
         self.height = settings.get("height", 10)
         self.width = settings.get("width", 10)
         self._graph = self._build()
+        self._object_index = {}
 
     def _build(self) -> nx.Graph:
         """
@@ -152,7 +153,7 @@ class Graph:
         """
         node_label = self.coordinate_to_node_label(*coordinate)
         node = self._graph.nodes[node_label]
-        node.space.add(object)
+        node["space"].add(object)
         self._object_index[object.id] = coordinate
         object.position = coordinate
 
