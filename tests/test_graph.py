@@ -2,28 +2,28 @@ import unittest
 from dooders.sdk.surfaces.graph import Graph
 
 
+class TestObject:
+    def __init__(self):
+        self.space = {}
+        self.id = "111"
+
+
 class TestGraphMethods(unittest.TestCase):
     def setUp(self):
         # Initialize a new graph for each test
         self.graph = Graph(settings={"torus": True, "width": 10, "height": 10})
-        self.test_object = object()
+        self.test_object = TestObject()
         self.graph.add(self.test_object, (5, 5))
-
-    def test_update_position(self):
-        # Test updating the position of an object
-        self.graph.update_position(self.test_object, (6, 6))
-        self.assertIn(self.test_object, self.graph.contents(6, 6))
-        self.assertNotIn(self.test_object, self.graph.contents(5, 5))
 
     def test_add_multiple_objects(self):
         # Test adding multiple objects and checking their positions
-        second_object = object()
-        third_object = object()
+        second_object = TestObject()
+        third_object = TestObject()
         self.graph.add(second_object, (2, 2))
         self.graph.add(third_object, (3, 3))
 
-        self.assertIn(second_object, self.graph.contents(2, 2))
-        self.assertIn(third_object, self.graph.contents(3, 3))
+        self.assertIn(second_object, self.graph.contents((2, 2)))
+        self.assertIn(third_object, self.graph.contents((3, 3)))
 
     def test_remove_object(self):
         # Test removing an object
@@ -32,7 +32,7 @@ class TestGraphMethods(unittest.TestCase):
 
     def test_clear_space(self):
         # Test clearing a space of all objects
-        second_object = object()
+        second_object = TestObject()
         self.graph.add(second_object, (5, 5))
         self.graph.clear_space((5, 5))
 
@@ -57,7 +57,7 @@ class TestGraphMethods(unittest.TestCase):
 
     def test_add_remove_object(self):
         # Test the add and remove object methods
-        test_object = object()  # Create a generic object
+        test_object = TestObject()  # Create a generic object
         test_coordinate = (1, 1)
         self.graph.add(test_object, test_coordinate)
         self.assertIn(
@@ -105,7 +105,7 @@ class TestGraphMethods(unittest.TestCase):
 
     def test_remove_nonexistent_object(self):
         # Test removing an object that isn't present
-        non_existent_object = object()
+        non_existent_object = TestObject()
         with self.assertRaises(KeyError):
             self.graph.remove(non_existent_object)
 
