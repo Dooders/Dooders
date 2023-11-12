@@ -5,7 +5,6 @@ Space: Graph
 
 from functools import singledispatchmethod
 import networkx as nx
-import matplotlib.pyplot as plt
 from typing import Any, Dict, Iterator, List, Union, NamedTuple
 
 from dooders.sdk.modules.space import Space
@@ -121,7 +120,7 @@ class Graph:
 
         return G
 
-    def coordinate_to_node_label(self, x: "X", y: "Y") -> int:
+    def coordinate_to_node_label(self, x: int, y: int) -> int:
         """
         Converts a coordinate to a node label.
 
@@ -237,7 +236,7 @@ class Graph:
             yield self._graph.nodes[node]["space"]
 
     @singledispatchmethod
-    def contents(self, object_type: str = None) -> Iterator[Any]:
+    def contents(self, object_type: str = None):
         """
         Return an iterator over all contents in the grid.
 
@@ -269,7 +268,7 @@ class Graph:
                     yield object
 
     @contents.register
-    def _(self, position: tuple) -> Iterator[Any]:
+    def _(self, position: tuple):
         """
         Return an iterator over all contents in a Space on the grid.
 
@@ -294,6 +293,15 @@ class Graph:
         node_label = self.coordinate_to_node_label(*position)
         for object in self._graph.nodes[node_label]["space"].contents():
             yield object
+
+    @property
+    def contents(self):
+        contents = []
+        for space in self.spaces():
+            for object in space.contents:
+                contents.append(object)
+
+        return contents
 
     def out_of_bounds(self, position: Coordinate) -> bool:
         """
