@@ -5,7 +5,7 @@ Space: Graph
 
 from functools import singledispatchmethod
 import networkx as nx
-from typing import Any, Dict, Iterator, List, Union, NamedTuple
+from typing import Any, Dict, Iterator, List, Optional, Union, NamedTuple
 
 from dooders.sdk.modules.space import Space
 
@@ -236,7 +236,7 @@ class Graph:
             yield self._graph.nodes[node]["space"]
 
     @singledispatchmethod
-    def contents(self, object_type: str = None):
+    def contents(self, object_type: Optional[str] = None):
         """
         Return an iterator over all contents in the grid.
 
@@ -262,10 +262,17 @@ class Graph:
         >>> <Energy>
         >>> <Dooder>
         """
-        for space in self.spaces():
-            for object in space.contents():
-                if object_type is None or isinstance(object, object_type):
+        if object_type is None:
+            # Logic for no arguments
+            for space in self.spaces():
+                for object in space.contents():
                     yield object
+        else:
+            # Logic for when object_type is specified
+            for space in self.spaces():
+                for object in space.contents():
+                    if isinstance(object, object_type):
+                        yield object
 
     @contents.register
     def _(self, position: tuple):
@@ -294,14 +301,14 @@ class Graph:
         for object in self._graph.nodes[node_label]["space"].contents():
             yield object
 
-    @property
-    def contents(self):
-        contents = []
-        for space in self.spaces():
-            for object in space.contents:
-                contents.append(object)
+    # @property
+    # def contents(self):
+    #     contents = []
+    #     for space in self.spaces():
+    #         for object in space.contents:
+    #             contents.append(object)
 
-        return contents
+    #     return contents
 
     def out_of_bounds(self, position: Coordinate) -> bool:
         """
