@@ -15,7 +15,7 @@ from dooders.sdk.core.settings import Settings
 
 
 class Surface(Core):
-    """ 
+    """
     Surface class for the SDK. To be used inside the Environment class.
 
     This class is used to register surfaces and provide a schema for all surfaces.
@@ -40,7 +40,7 @@ class Surface(Core):
 
     @classmethod
     def build(cls, surface_type: str) -> object:
-        """ 
+        """
         Build a surface of a certain type.
 
         Parameters
@@ -67,12 +67,14 @@ class Surface(Core):
         >>> surface = Surface.build('grid')
         """
         try:
-            module = f'dooders.sdk.surfaces.{surface_type}'
+            module = f"dooders.sdk.surfaces.{surface_type}"
             chosen_surface = getattr(
-                importlib.import_module(module), surface_type.title())
-            settings = Settings.get('variables', surface_type)
-            final_settings = {k: v.args['value']
-                              for k, v in settings.items() if v is not None}
+                importlib.import_module(module), surface_type.title()
+            )
+            settings = Settings.get("variables", surface_type)
+            final_settings = {
+                k: v.args["value"] for k, v in settings.items() if v is not None
+            }
             return chosen_surface(final_settings)
         except AttributeError:
             raise ValueError(f"Invalid surface type '{surface_type}'")
