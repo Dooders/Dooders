@@ -1,0 +1,16 @@
+---
+torus:
+  type: "generation"
+  function: "fixed_value"
+  args: { "value": True }
+  description: ''
+height:
+  type: "generation"
+  function: "fixed_value"
+  args: { "value": 5 }
+  description: ''
+width:
+  type: "generation"
+  function: "fixed_value"
+  args: { "value": 5 }
+  description: ''
