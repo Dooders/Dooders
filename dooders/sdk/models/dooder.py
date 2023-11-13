@@ -248,7 +248,6 @@ class Dooder(Agent):
         output_array: np.ndarray
             The output array of the model.
         """
-
         model = self.internal_models[model_name]
         output_array = model.predict(input_array)
 
