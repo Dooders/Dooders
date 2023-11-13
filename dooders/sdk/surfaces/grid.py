@@ -269,7 +269,7 @@ class Grid:
         """
         for row in self._grid:
             for space in row:
-                for object in space.contents.values():
+                for object in space.contents:
                     if object_type is None:
                         yield object
                     if object.__class__.__name__ == object_type:
@@ -300,7 +300,7 @@ class Grid:
         """
         x, y = position
         space = self._grid[x][y]
-        for object in space.contents.values():
+        for object in space.contents:
             yield object
 
     def nearby_spaces(
@@ -563,7 +563,8 @@ class Grid:
         else:
             for space in self.spaces():
                 for objects in space.contents:
-                    return space.contents.get(index, "No object found")
+                    if objects.id == index:
+                        return space
 
     @property
     def state(self) -> Dict:
