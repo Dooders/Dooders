@@ -89,8 +89,8 @@ class Graph:
 
     def __init__(self, settings: dict = {}) -> None:
         self.torus = settings.get("torus", False)
-        self.height = settings.get("height", 10)
-        self.width = settings.get("width", 10)
+        self.height = settings.get("height", 5)
+        self.width = settings.get("width", 5)
         self._graph = self._build()
         self._object_index = {}
 
@@ -106,7 +106,7 @@ class Graph:
         G = nx.grid_2d_graph(self.height, self.width)
 
         for node in G.nodes():
-            G.nodes[node]["space"] = Space(self.width, self.height)
+            G.nodes[node]["space"] = Space(*node)
 
         if self.torus:
             for x in range(self.height):
@@ -134,8 +134,7 @@ class Graph:
         Returns
         -------
         node_label: int
-            The node label. Example: (0, 0) -> 0, (0, 1) -> 10,
-            (1, 0) -> 1, (1, 1) -> 11
+            The node label.
         """
         return y * self.width + x
 
@@ -212,7 +211,7 @@ class Graph:
         >>> (0, 2)
         """
         for node in self._graph.nodes:
-            yield self._graph.nodes[node]["space"].coordinate
+            yield self._graph.nodes[node]["space"].coordinates
 
     def spaces(self) -> Iterator[Space]:
         """
@@ -236,7 +235,7 @@ class Graph:
             yield self._graph.nodes[node]["space"]
 
     @singledispatchmethod
-    def contents(self, object_type: Optional[str] = None):
+    def contents(self, object_type: Union[str, None] = None):
         """
         Return an iterator over all contents in the grid.
 
@@ -265,13 +264,13 @@ class Graph:
         if object_type is None:
             # Logic for no arguments
             for space in self.spaces():
-                for object in space.contents():
+                for object in space.contents:
                     yield object
         else:
             # Logic for when object_type is specified
             for space in self.spaces():
-                for object in space.contents():
-                    if isinstance(object, object_type):
+                for object in space.contents:
+                    if object.__class__.__name__ == object_type:
                         yield object
 
     @contents.register
