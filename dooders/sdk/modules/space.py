@@ -15,7 +15,7 @@ from typing import Union
 
 
 class Space:
-    """ 
+    """
     Space object with a unique id and coordinates
 
     Parameters
@@ -71,12 +71,12 @@ class Space:
         self.x = x
         self.y = y
         self.coordinates = (x, y)
-        self.contents: dict = {}
-        self.status = 'empty'
+        self._contents: dict = {}
+        self.status = "empty"
 
     def add(self, object: object) -> None:
-        """ 
-        Add an object to the Space. 
+        """
+        Add an object to the Space.
         An object is added to the contents dictionary
 
         Parameters
@@ -91,11 +91,11 @@ class Space:
         >>> space.contents
         {'dooder_0': <sdk.objects.Dooder object at 0x000001E0F1B0F0A0>}
         """
-        self.contents[object.id] = object
-        self.status = 'occupied'
+        self._contents[object.id] = object
+        self.status = "occupied"
 
     def remove(self, object: Union[object, str]) -> None:
-        """ 
+        """
         Remove an object from the Space
 
         Parameters
@@ -115,16 +115,16 @@ class Space:
         """
 
         if type(object) == str:
-            self.contents.pop(object, None)
+            self._contents.pop(object, None)
         else:
-            self.contents.pop(object.id, None)
+            self._contents.pop(object.id, None)
 
-        if len(self.contents) == 0:
-            self.status = 'empty'
+        if len(self._contents) == 0:
+            self.status = "empty"
 
     def has(self, object_type: str, ignore: object = None) -> bool:
-        """ 
-        Return a boolean indicating if the Space contains 
+        """
+        Return a boolean indicating if the Space contains
         a specific object type
 
         Parameters
@@ -146,7 +146,7 @@ class Space:
         >>> space.has('Dooder')
         True
         """
-        for object in self.contents.values():
+        for object in self._contents.values():
             if object.__class__.__name__ == object_type:
                 if ignore.id == object.id:
                     pass
@@ -156,7 +156,7 @@ class Space:
 
     @property
     def count(self) -> int:
-        """ 
+        """
         Get the number of objects in the Space
 
         Returns
@@ -171,11 +171,11 @@ class Space:
         >>> space.count
         1
         """
-        return len(self.contents)
+        return len(self._contents)
 
     @property
     def random(self) -> object:
-        """ 
+        """
         Get a random object in the Space
 
         Returns
@@ -190,11 +190,11 @@ class Space:
         >>> space.random
         <sdk.objects.Dooder object at 0x000001E0F1B0F0A0>
         """
-        return random.choice(list(self.contents.values()))
+        return random.choice(list(self._contents.values()))
 
     @property
     def is_empty(self) -> bool:
-        """ 
+        """
         Return a boolean indicating if the Space is empty
 
         Returns
@@ -208,11 +208,11 @@ class Space:
         >>> space.is_empty
         True
         """
-        return self.status == 'empty'
+        return self.status == "empty"
 
     @property
     def is_occupied(self) -> bool:
-        """ 
+        """
         Return a boolean indicating if the Space is occupied
 
         Returns
@@ -227,17 +227,17 @@ class Space:
         >>> space.is_occupied
         True
         """
-        return self.status == 'occupied'
+        return self.status == "occupied"
 
     @property
     def contents_pattern(self) -> str:
-        """ 
+        """
         Return a string of the contents of the Space
 
         The pattern is a list of integers representing each possible content state.
 
         The first integer is the number of contents in the Space that is a dooder object.
-        The second integer is the number of contents in the Space that is an energy object.    
+        The second integer is the number of contents in the Space that is an energy object.
 
         So a total of 2 dooders and 1 energy would be 21.
         And, a total of 1 dooder and 2 energy would be 12.
@@ -257,20 +257,24 @@ class Space:
         '11'
         """
         first, second = 0, 0
-        for content in self.contents.values():
-            if content.name == 'Dooder':
+        for content in self._contents.values():
+            if content.name == "Dooder":
                 first += 1
-            elif content.name == 'Energy':
+            elif content.name == "Energy":
                 second += 1
         pattern = str(first) + str(second)
 
         return pattern
 
     @property
+    def contents(self) -> list:
+        return [content for content in self._contents.values()]
+
+    @property
     def state(self) -> str:
         return {
-            'status': self.status,
-            'contents_pattern': self.contents_pattern,
-            'object_count': self.count,
-            'contents': [content.id for content in self.contents.values()]
+            "status": self.status,
+            "contents_pattern": self.contents_pattern,
+            "object_count": self.count,
+            "contents": self.contents,
         }

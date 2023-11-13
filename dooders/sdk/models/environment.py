@@ -12,7 +12,7 @@ GridCell = List[Any]
 
 
 class Environment:
-    """ 
+    """
     Create a new Environment based on the Surface class.
 
     Methods
@@ -47,12 +47,12 @@ class Environment:
         self.settings = settings
 
     def _setup(self) -> None:
-        """ 
+        """
         Setup the environment.
         """
         self.surface = Surface.build(self.SurfaceType())
 
-    def place_object(self, object: 'Agent', position: tuple) -> None:
+    def place_object(self, object: "Agent", position: tuple) -> None:
         """
         Place an object at the provided position.
 
@@ -65,20 +65,20 @@ class Environment:
         """
         self.surface.add(object, position)
 
-    def remove_object(self, object: Union['Agent', str]) -> None:
+    def remove_object(self, object: Union["Agent", str]) -> None:
         """
         Remove an object from the surface object.
 
         Parameters
         ----------
         object: Union[Agent, str]
-            The object to remove. 
+            The object to remove.
             Either the object itself or the object's id.
         """
         self.surface.remove(object)
 
-    def move_object(self, object: 'Agent', location: tuple) -> None:
-        """ 
+    def move_object(self, object: "Agent", location: tuple) -> None:
+        """
         Move an object to a new location.
 
         Parameters
@@ -115,7 +115,7 @@ class Environment:
         Parameters
         ----------
         object_id: str
-            The id of the object. Based on a random short uuid assigned to 
+            The id of the object. Based on a random short uuid assigned to
             every object at its creation.
 
         Returns
@@ -125,8 +125,8 @@ class Environment:
         """
         return self.surface[object_id]
 
-    def get_object_count(self, object_type: str = 'Agent') -> int:
-        """ 
+    def get_object_count(self, object_type: str = "Agent") -> int:
+        """
         Get the number of objects of a given type.
 
         Parameters
@@ -174,7 +174,7 @@ class Environment:
 
     @property
     def state(self) -> dict:
-        """ 
+        """
         Get the state of the environment.
 
         Returns

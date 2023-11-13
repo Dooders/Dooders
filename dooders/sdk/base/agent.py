@@ -14,7 +14,8 @@ class BaseStats(BaseModel):
     birth: int = 0
     death: int = None
     position: tuple = None
-    status: str = 'Alive'
+    rotation: int = 0
+    status: str = "Alive"
     reproduction_count: int = 0
     move_count: int = 0
     energy_consumed: int = 0
@@ -25,7 +26,7 @@ class BaseStats(BaseModel):
 
 
 class Agent(ABC):
-    """ 
+    """
     Base Agent class
 
     Parameters
@@ -35,7 +36,7 @@ class Agent(ABC):
     position : tuple
         Position of the agent
     simulation : Simulation
-        Simulation object   
+        Simulation object
 
     Attributes
     ----------
@@ -44,7 +45,7 @@ class Agent(ABC):
     number : int
         Number of the agent
     age : int
-        Age of the agent    
+        Age of the agent
     generation : int
         Generation of the agent
     birth : int
@@ -85,11 +86,13 @@ class Agent(ABC):
     def __init__(self, id: int, position, simulation) -> None:
         self.simulation = simulation
 
-        for attribute in BaseStats(id=id,
-                                   position=position,
-                                   generation=(
-                                       simulation.cycle_number - 1) // 10 + 1,
-                                   birth=simulation.cycle_number):
+        for attribute in BaseStats(
+            id=id,
+            position=position,
+            rotation=0,
+            generation=(simulation.cycle_number - 1) // 10 + 1,
+            birth=simulation.cycle_number,
+        ):
             setattr(self, attribute[0], attribute[1])
 
     def __del__(self) -> None:
@@ -98,7 +101,7 @@ class Agent(ABC):
             setattr(self, attribute[0], None)
 
     def log(self, granularity: int, message: str, scope: str) -> None:
-        """ 
+        """
         Log a message to the information object
 
         Parameters
@@ -113,24 +116,24 @@ class Agent(ABC):
         cycle_number = self.simulation.time.time
 
         log_dict = {
-            'Scope': scope,
-            'UniqueID': self.id,
-            'CycleNumber': cycle_number,
-            'Granularity': granularity,
-            'Message': message
+            "Scope": scope,
+            "UniqueID": self.id,
+            "CycleNumber": cycle_number,
+            "Granularity": granularity,
+            "Message": message,
         }
 
-        final_message = str(log_dict).strip('{}')
+        final_message = str(log_dict).strip("{}")
 
         Information.log(final_message, granularity)
 
     @abstractmethod
     def step(self) -> None:
-        raise NotImplementedError('Agent.step() not implemented')
+        raise NotImplementedError("Agent.step() not implemented")
 
     @property
     def random(self) -> random.Random:
-        """  
+        """
         Returns
         -------
         random.Random
@@ -140,7 +143,7 @@ class Agent(ABC):
 
     @property
     def name(self) -> str:
-        """ 
+        """
         Returns
         -------
         str

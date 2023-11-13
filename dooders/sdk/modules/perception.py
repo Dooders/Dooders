@@ -25,11 +25,6 @@ class Perception(list):
     dooder: Dooder
         The dooder to create the perception around
 
-    Attributes
-    ----------
-    __mapping__: dict
-        A mapping of Space indices to directions
-
     Methods
     -------
     to_direction(Space: Location) -> str
@@ -48,23 +43,10 @@ class Perception(list):
     random: Location
         A random Space in the perception
     """
-    __mapping__ = {0: 'NW', 1: 'N', 2: 'NE', 3: 'W',
-                   4: '-', 5: 'E', 6: 'SW', 7: 'S', 8: 'SE'}
 
     def __init__(self, spaces: list, dooder: object) -> None:
         self.dooder = dooder
         super().__init__(spaces)
-
-    def to_direction(self, space: 'Space') -> str:
-        """ 
-        Convert the direction of a Space in the perception
-
-        Parameters
-        ----------
-        Space: Location
-            The Space to find the direction of
-        """
-        return self.__mapping__[space]
 
     def contains(self, object_type: str) -> List[bool]:
         """ 
@@ -176,3 +158,7 @@ class Perception(list):
             A random Space in the perception
         """
         return random.choice(self)
+
+class CardinalPerception(Perception):
+    
+    

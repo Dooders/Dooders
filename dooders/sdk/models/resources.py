@@ -17,27 +17,28 @@ if TYPE_CHECKING:
 
 
 class Attributes(BaseModel):
-    """ 
+    """
     Data model for the Resources class attributes.
     """
+
     allocated_energy: int = 0
     dissipated_energy: int = 0
     consumed_energy: int = 0
 
 
 class Resources:
-    """ 
+    """
     Class manages Energy objects in the simulation.
     They are generated and placed based on the selected strategy.
 
-    The class also keeps track of the total number of allocated, dissipated, and 
-    consumed energy for each cycle. (The Information class will have historical 
+    The class also keeps track of the total number of allocated, dissipated, and
+    consumed energy for each cycle. (The Information class will have historical
     data for the above stats. The counts are reset after each cycle.)
 
     Parameters
     ----------
     simulation : Simulation object
-        The simulation object that contains the environment, agents, 
+        The simulation object that contains the environment, agents,
         and other models.
 
     Attributes
@@ -66,12 +67,12 @@ class Resources:
 
     available_resources = {}
 
-    def __init__(self, simulation: 'Simulation', settings) -> None:
+    def __init__(self, simulation: "Simulation", settings) -> None:
         self.simulation = simulation
         self.settings = settings
 
     def _setup(self) -> None:
-        """ 
+        """
         Sets up the Resources class.
 
         The method will allocate resources based on the strategy.
@@ -79,7 +80,7 @@ class Resources:
         self.reset()
 
     def allocate_resources(self) -> None:
-        """ 
+        """
         Allocates resources based on the provided strategy.
 
         The method will generate a new Energy object and place it in the
@@ -96,14 +97,14 @@ class Resources:
 
     def create_energy(self, location):
         unique_id = self.simulation.generate_id()
-        settings = Settings.get('variables')['energy']
+        settings = Settings.get("variables")["energy"]
         energy = Energy(unique_id, location, self)
         Strategy.compile(energy, settings)
 
         return energy
 
     def step(self) -> None:
-        """ 
+        """
         Performs a step in the simulation.
 
         Process
@@ -125,18 +126,18 @@ class Resources:
         self.allocate_resources()
 
     def reset(self):
-        """ 
+        """
         Collects the data from the simulation.
 
-        Takes the current total and subtracts the previous total to get 
-        the difference. That will be to incremental change since the 
+        Takes the current total and subtracts the previous total to get
+        the difference. That will be to incremental change since the
         previous cycle
         """
         for attribute in Attributes():
             setattr(self, attribute[0], attribute[1])
 
-    def remove(self, resource: 'Energy') -> None:
-        """ 
+    def remove(self, resource: "Energy") -> None:
+        """
         Consumes the given resource.
 
         Parameters
@@ -149,7 +150,7 @@ class Resources:
         del resource
 
     def log(self, granularity: int, message: str, scope: str) -> None:
-        """ 
+        """
         Logs the given message.
 
         Parameters
@@ -159,14 +160,14 @@ class Resources:
             be logged less frequently.
         message : str
             The message to log.
-        scope : str 
+        scope : str
             The scope of the message.
         """
         self.simulation.log(granularity, message, scope)
 
     @property
     def average_energy_age(self) -> int:
-        """ 
+        """
         Returns the average age of the available energy.
 
         Returns
@@ -175,12 +176,16 @@ class Resources:
             The average age of the available energy.
         """
         try:
-            return round(sum([energy.age for energy in self.available_resources.values()]) / len(self.available_resources), 3)
+            return round(
+                sum([energy.age for energy in self.available_resources.values()])
+                / len(self.available_resources),
+                3,
+            )
         except ZeroDivisionError:
             return 0
 
     def collect(self):
-        """ 
+        """
         Returns the data to be collected.
 
         Returns
@@ -189,8 +194,8 @@ class Resources:
             The data to be collected.
         """
         return {
-            'available_energy': len(self.available_resources),
-            'allocated_energy': self.allocated_energy,
-            'consumed_energy': self.consumed_energy,
-            'average_energy_age': self.average_energy_age,
+            "available_energy": len(self.available_resources),
+            "allocated_energy": self.allocated_energy,
+            "consumed_energy": self.consumed_energy,
+            "average_energy_age": self.average_energy_age,
         }
