@@ -7,18 +7,19 @@ import copy
 import pickle
 from typing import List
 
-from dooders.sdk.learning.scratch.activation import (ACTIVATIONS,
-                                                     Activation_Softmax)
+from dooders.sdk.learning.scratch.activation import ACTIVATIONS, Activation_Softmax
 from dooders.sdk.learning.scratch.eval import *
 from dooders.sdk.learning.scratch.layer import *
 from dooders.sdk.learning.scratch.loss import (
-    LOSS, Activation_Softmax_Loss_CategoricalCrossentropy,
-    Loss_CategoricalCrossentropy)
+    LOSS,
+    Activation_Softmax_Loss_CategoricalCrossentropy,
+    Loss_CategoricalCrossentropy,
+)
 from dooders.sdk.learning.scratch.optimizer import *
 
 
 class Model:
-    """ 
+    """
     Model class for neural networks
 
     Attributes
@@ -69,7 +70,7 @@ class Model:
         self.softmax_classifier_output = None
 
     def add(self, layer: object) -> None:
-        """ 
+        """
         Add objects to the model
 
         Parameters
@@ -80,7 +81,7 @@ class Model:
         self.layers.append(layer)
 
     def set(self, *, loss: object, optimizer: object, accuracy: object) -> None:
-        """ 
+        """
         Set loss, optimizer and accuracy
 
         """
@@ -89,7 +90,7 @@ class Model:
         self.accuracy = accuracy
 
     def finalize(self) -> None:
-        """ 
+        """
         Finalize the model
         """
 
@@ -104,23 +105,22 @@ class Model:
 
         # Iterate the objects
         for i in range(layer_count):
-
             # If it's the first layer,
             # the previous layer object is the input layer
             if i == 0:
                 self.layers[i].prev = self.input_layer
-                self.layers[i].next = self.layers[i+1]
+                self.layers[i].next = self.layers[i + 1]
 
             # All layers except for the first and the last
             elif i < layer_count - 1:
-                self.layers[i].prev = self.layers[i-1]
-                self.layers[i].next = self.layers[i+1]
+                self.layers[i].prev = self.layers[i - 1]
+                self.layers[i].next = self.layers[i + 1]
 
             # The last layer - the next object is the loss
             # Also let's save aside the reference to the last object
             # whose output is the model's output
             else:
-                self.layers[i].prev = self.layers[i-1]
+                self.layers[i].prev = self.layers[i - 1]
                 self.layers[i].next = self.loss
                 self.output_layer_activation = self.layers[i]
 
@@ -129,34 +129,36 @@ class Model:
             # add it to the list of trainable layers
             # We don't need to check for biases -
             # checking for weights is enough
-            if hasattr(self.layers[i], 'weights') and self.layers[i].frozen == False:
+            if hasattr(self.layers[i], "weights") and self.layers[i].frozen == False:
                 self.trainable_layers.append(self.layers[i])
 
         # Update loss object with trainable layers
-        self.loss.remember_trainable_layers(
-            self.trainable_layers
-        )
+        self.loss.remember_trainable_layers(self.trainable_layers)
 
         # If output activation is Softmax and
         # loss function is Categorical Cross-Entropy
         # create an object of combined activation
         # and loss function containing
         # faster gradient calculation
-        if isinstance(self.layers[-1], Activation_Softmax) and \
-           isinstance(self.loss, Loss_CategoricalCrossentropy):
+        if isinstance(self.layers[-1], Activation_Softmax) and isinstance(
+            self.loss, Loss_CategoricalCrossentropy
+        ):
             # Create an object of combined activation
             # and loss functions
-            self.softmax_classifier_output = \
+            self.softmax_classifier_output = (
                 Activation_Softmax_Loss_CategoricalCrossentropy()
+            )
 
-    def train(self,
-              X: np.ndarray,
-              y: np.ndarray,
-              *,
-              epochs: int = 1,
-              print_every: int = 1,
-              validation_data: tuple = None) -> None:
-        """ 
+    def train(
+        self,
+        X: np.ndarray,
+        y: np.ndarray,
+        *,
+        epochs: int = 1,
+        print_every: int = 1,
+        validation_data: tuple = None,
+    ) -> None:
+        """
         Train the model
 
         Parameters
@@ -177,20 +179,18 @@ class Model:
         self.accuracy.init(y)
 
         # Main training loop
-        for epoch in range(1, epochs+1):
-
+        for epoch in range(1, epochs + 1):
             # Perform the forward pass
             output = self.forward(X, training=True)
 
             # Calculate loss
-            data_loss, regularization_loss = \
-                self.loss.calculate(output, y,
-                                    include_regularization=True)
+            data_loss, regularization_loss = self.loss.calculate(
+                output, y, include_regularization=True
+            )
             loss = data_loss + regularization_loss
 
             # Get predictions and calculate an accuracy
-            predictions = self.output_layer_activation.predictions(
-                output)
+            predictions = self.output_layer_activation.predictions(output)
             accuracy = self.accuracy.calculate(predictions, y)
 
             # Perform backward pass
@@ -204,16 +204,17 @@ class Model:
 
             # Print a summary
             if not epoch % print_every:
-                print(f'epoch: {epoch}, ' +
-                      f'acc: {accuracy:.3f}, ' +
-                      f'loss: {loss:.3f} (' +
-                      f'data_loss: {data_loss:.3f}, ' +
-                      f'reg_loss: {regularization_loss:.3f}), ' +
-                      f'lr: {self.optimizer.current_learning_rate}')
+                print(
+                    f"epoch: {epoch}, "
+                    + f"acc: {accuracy:.3f}, "
+                    + f"loss: {loss:.3f} ("
+                    + f"data_loss: {data_loss:.3f}, "
+                    + f"reg_loss: {regularization_loss:.3f}), "
+                    + f"lr: {self.optimizer.current_learning_rate}"
+                )
 
         # If there is the validation data
         if validation_data is not None:
-
             # For better readability
             X_val, y_val = validation_data
 
@@ -224,17 +225,14 @@ class Model:
             loss = self.loss.calculate(output, y_val)
 
             # Get predictions and calculate an accuracy
-            predictions = self.output_layer_activation.predictions(
-                output)
+            predictions = self.output_layer_activation.predictions(output)
             accuracy = self.accuracy.calculate(predictions, y_val)
 
             # Print a summary
-            print(f'validation, ' +
-                  f'acc: {accuracy:.3f}, ' +
-                  f'loss: {loss:.3f}')
+            print(f"validation, " + f"acc: {accuracy:.3f}, " + f"loss: {loss:.3f}")
 
     def forward(self, X: np.ndarray, training: bool) -> np.ndarray:
-        """ 
+        """
         Performs forward pass
 
         Parameters
@@ -265,7 +263,7 @@ class Model:
         return layer.output
 
     def backward(self, output: np.ndarray, y: np.ndarray) -> None:
-        """ 
+        """
         Performs backward pass
 
         Parameters
@@ -286,8 +284,7 @@ class Model:
             # which is Softmax activation
             # as we used combined activation/loss
             # object, let's set dinputs in this object
-            self.layers[-1].dinputs = \
-                self.softmax_classifier_output.dinputs
+            self.layers[-1].dinputs = self.softmax_classifier_output.dinputs
 
             # Call backward method going through
             # all the objects but last
@@ -307,7 +304,6 @@ class Model:
 
     # Saves the model
     def save(self, path):
-
         # Make a deep copy of current model instance
         model = copy.deepcopy(self)
 
@@ -317,22 +313,21 @@ class Model:
 
         # Remove data from the input layer
         # and gradients from the loss object
-        model.input_layer.__dict__.pop('output', None)
-        model.loss.__dict__.pop('dinputs', None)
+        model.input_layer.__dict__.pop("output", None)
+        model.loss.__dict__.pop("dinputs", None)
 
         # For each layer remove inputs, output and dinputs properties
         for layer in model.layers:
-            for property in ['inputs', 'output', 'dinputs',
-                             'dweights', 'dbiases']:
+            for property in ["inputs", "output", "dinputs", "dweights", "dbiases"]:
                 layer.__dict__.pop(property, None)
 
         # Open a file in the binary-write mode and save the model
-        with open(path, 'wb') as f:
+        with open(path, "wb") as f:
             pickle.dump(model, f)
 
 
 class SimpleNeuralNet:
-    """ 
+    """
     A simple neural network with 2 hidden layers
 
     Attributes
@@ -349,32 +344,37 @@ class SimpleNeuralNet:
     #! make better debugging in general to debug problems
     #! make data types so I can better identify data in flight
     def __init__(self, id: str, instructions: dict) -> None:
-        """ 
+        """
         Initialize the model
         """
         self.id = id
-        self.purpose = instructions['model_purpose']
+        self.purpose = instructions["model_purpose"]
+        self.built = False
 
         for key in instructions:
             setattr(self, key, instructions[key])
 
         self.build()
 
-    def build(self) -> None:
+    def build(self, input_size: int = None) -> None:
+        #! Maybe build this the first time learn is called, it will check if the model is build, else build. That way the input size can be set based on the incoming data size
+        if input_size is None:
+            input_size = self.input_size
+        
         self.model = Model()
-        self.model.add(Layer_Dense(self.input_size, 512, frozen=True))
-        self.model.add(ACTIVATIONS.get('relu')())
+        self.model.add(Layer_Dense(input_size, 512, frozen=True))
+        self.model.add(ACTIVATIONS.get("relu")())
         self.model.add(Layer_Dense(512, self.output_size))
         self.model.add(ACTIVATIONS.get(self.activation_type)())
         self.model.set(
             loss=LOSS.get(self.loss_type)(),
             optimizer=Optimizer_Adam(decay=5e-7),
-            accuracy=Accuracy_Categorical()
+            accuracy=Accuracy_Categorical(),
         )
         self.model.finalize()
 
     def predict(self, input_array: np.ndarray) -> int:
-        """ 
+        """
         Predict the class of the input data
 
         Parameters
@@ -387,16 +387,20 @@ class SimpleNeuralNet:
         int
             The class of the input data
         """
+        if not self.built:
+            input_size = len(input_array[0])
+            self.build(input_size)
+            self.built = True
+            
         self.input = input_array
 
         self.output = self.model.forward(input_array, training=False)
-        self.prediction = self.model.output_layer_activation.predictions(
-            self.output)
+        self.prediction = self.model.output_layer_activation.predictions(self.output)
 
         return self.output
 
     def learn(self, reality: list) -> None:
-        """ 
+        """
         Learn from the reality
 
         Parameters
@@ -418,7 +422,7 @@ class SimpleNeuralNet:
             self.model.optimizer.post_update_params()
 
     def inherit_weights(self, genetics: List[np.ndarray]) -> None:
-        """ 
+        """
         Update the weights based on provided derived genetics
         from parent Dooders
 
@@ -431,7 +435,7 @@ class SimpleNeuralNet:
         self.model.layers[2].weights = genetics[1]
 
     def save(self, path: str) -> None:
-        """ 
+        """
         Save the model
 
         Parameters
@@ -442,7 +446,7 @@ class SimpleNeuralNet:
         np.save(path, np.array(self.weights, dtype=object))
 
     def save_weights(self, cycle_number: int) -> None:
-        """ 
+        """
         Save the weights of the neural network from every dense layer
 
         Parameters
@@ -453,7 +457,7 @@ class SimpleNeuralNet:
         np.save(file_name, np.array(self.weights, dtype=object))
 
     def load_weights(self, weights_to_load: str) -> None:
-        """ 
+        """
         Load the model
 
         Parameters
@@ -462,12 +466,13 @@ class SimpleNeuralNet:
             The filename for the weights to load i.e. "model_xyz123_1_Movement"
         """
         loaded_weights = np.load(
-            f"recent/dooders/{weights_to_load}.npy", allow_pickle=True)
+            f"recent/dooders/{weights_to_load}.npy", allow_pickle=True
+        )
         self.inherit_weights(loaded_weights)
 
     @property
     def layers(self) -> list:
-        """ 
+        """
         Get the layers of the neural network
 
         Returns
@@ -479,7 +484,7 @@ class SimpleNeuralNet:
 
     @property
     def weights(self) -> np.ndarray:
-        """ 
+        """
         Get the weights of the neural network from every dense layer
 
         Returns
