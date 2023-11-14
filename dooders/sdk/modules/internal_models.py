@@ -11,11 +11,11 @@ from dooders.sdk.core.default_settings import default_settings
 from dooders.sdk.core.settings import Settings
 from dooders.sdk.learning.scratch.model import SimpleNeuralNet
 
-DEFAULT_SETTINGS = default_settings['internal_models']
+DEFAULT_SETTINGS = default_settings["internal_models"]
 
 
 class InternalModels(dict):
-    """ 
+    """
     Works like a normal dictionary but with a method to easily replace
     the weights of the internal models.
 
@@ -42,7 +42,9 @@ class InternalModels(dict):
         Biases from the internal models.
     """
 
-    def __init__(self, id: str, model_dict: dict = DEFAULT_SETTINGS, *args, **kwargs) -> None:
+    def __init__(
+        self, id: str, model_dict: dict = DEFAULT_SETTINGS, *args, **kwargs
+    ) -> None:
         self.build(id, model_dict)
         super(InternalModels, self).__init__(*args, **kwargs)
 
@@ -60,8 +62,8 @@ class InternalModels(dict):
             self[model_name] = SimpleNeuralNet(id, instructions)
 
     def inherit_weights(self, weights: dict) -> None:
-        """ 
-        Take a dictionary of weights and inherit them 
+        """
+        Take a dictionary of weights and inherit them
         into the internal models.
 
         Parameters
@@ -73,7 +75,7 @@ class InternalModels(dict):
             self[model].inherit_weights(weights[model])
 
     def save(self, path: str) -> None:
-        """ 
+        """
         Save the internal models to a directory.
 
         Parameters
@@ -86,7 +88,7 @@ class InternalModels(dict):
 
     @property
     def weights(self) -> dict:
-        """ 
+        """
         Dictionary of weights from the internal models.
 
         Returns
@@ -103,7 +105,7 @@ class InternalModels(dict):
 
     @property
     def biases(self) -> dict:
-        """ 
+        """
         Biases from the internal models.
 
         Returns
