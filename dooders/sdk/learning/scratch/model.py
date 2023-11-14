@@ -356,15 +356,27 @@ class SimpleNeuralNet:
 
         self.build()
 
-    def build(self, input_size: int = None) -> None:
-        #! Maybe build this the first time learn is called, it will check if the model is build, else build. That way the input size can be set based on the incoming data size
+    def build(self, input_size: int = None, output_size: int = None) -> None:
+        """
+        Build the model
+
+        Parameters
+        ----------
+        input_size : int
+            The size of the input data
+        output_size : int
+            The size of the output data
+        """
         if input_size is None:
             input_size = self.input_size
-        
+
+        if output_size is None:
+            output_size = self.output_size
+
         self.model = Model()
         self.model.add(Layer_Dense(input_size, 512, frozen=True))
         self.model.add(ACTIVATIONS.get("relu")())
-        self.model.add(Layer_Dense(512, self.output_size))
+        self.model.add(Layer_Dense(512, output_size))
         self.model.add(ACTIVATIONS.get(self.activation_type)())
         self.model.set(
             loss=LOSS.get(self.loss_type)(),
@@ -391,7 +403,7 @@ class SimpleNeuralNet:
             input_size = len(input_array[0])
             self.build(input_size)
             self.built = True
-            
+
         self.input = input_array
 
         self.output = self.model.forward(input_array, training=False)
