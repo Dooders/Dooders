@@ -160,5 +160,6 @@ class Perception(list):
         return random.choice(self)
 
 class CardinalPerception(Perception):
+    pass
     
     
