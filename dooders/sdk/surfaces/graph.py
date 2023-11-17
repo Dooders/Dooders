@@ -173,7 +173,7 @@ class Graph:
         """
         node_label = self.coordinate_to_node_label(*object.position)
         node = self._graph.nodes[node_label]
-        node['space'].remove(object)
+        node["space"].remove(object)
         self._object_index.pop(object.id)
 
     @remove.register
@@ -297,7 +297,7 @@ class Graph:
         >>> <Dooder>
         """
         node_label = self.coordinate_to_node_label(*position)
-        for object in self._graph.nodes[node_label]["space"].contents():
+        for object in self._graph.nodes[node_label]["space"].contents:
             yield object
 
     # @property
