@@ -551,7 +551,7 @@ class MazeSprites(Spritesheet):
         Rotates the provided sprite by a specified angle.
     """
 
-    def __init__(self, mazefile: str, rotfile: str) -> None:
+    def __init__(self) -> None:
         """
         Calls the initialization method of the parent Spritesheet class.
 
@@ -567,6 +567,8 @@ class MazeSprites(Spritesheet):
         rotfile : str
             The name of the file to read the rotation data from.
         """
+        mazefile = "dooders/game/assets/maze1.txt"
+        rotfile = "dooders/game/assets/maze1_rotation.txt"
         Spritesheet.__init__(self)
         self.data = self.read_maze_file(mazefile)
         self.rotdata = self.read_maze_file(rotfile)
