@@ -9,7 +9,7 @@ from dooders.sdk.learning.scratch.weights import initialize_weights
 
 
 class Layer_Dense:
-    """ 
+    """
     A dense layer is just a layer which performs a dot product
     between input and weights, and then adds biases.
 
@@ -65,13 +65,18 @@ class Layer_Dense:
         Performs a backward pass of the layer.
     """
 
-    def __init__(self, n_inputs, n_neurons,
-                 weight_regularizer_l1=0, weight_regularizer_l2=0,
-                 bias_regularizer_l1=0, bias_regularizer_l2=0,
-                 frozen=False) -> None:
+    def __init__(
+        self,
+        n_inputs,
+        n_neurons,
+        weight_regularizer_l1=0,
+        weight_regularizer_l2=0,
+        bias_regularizer_l1=0,
+        bias_regularizer_l2=0,
+        frozen=False,
+    ) -> None:
         # Initialize weights and biases
-        self.weights = initialize_weights(
-            n_inputs, n_neurons, weight_init='random')
+        self.weights = initialize_weights(n_inputs, n_neurons, weight_init="random")
         self.biases = np.zeros((1, n_neurons))
         self.frozen = frozen
         # Set regularization strength
@@ -81,7 +86,7 @@ class Layer_Dense:
         self.bias_regularizer_l2 = bias_regularizer_l2
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Performs a forward pass of the layer.
 
         Parameters
@@ -97,7 +102,7 @@ class Layer_Dense:
         self.output = np.dot(inputs, self.weights) + self.biases
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Performs a backward pass of the layer.
 
         Parameters
@@ -118,8 +123,7 @@ class Layer_Dense:
             self.dweights += self.weight_regularizer_l1 * dL1
         # L2 on weights
         if self.weight_regularizer_l2 > 0:
-            self.dweights += 2 * self.weight_regularizer_l2 * \
-                self.weights
+            self.dweights += 2 * self.weight_regularizer_l2 * self.weights
         # L1 on biases
         if self.bias_regularizer_l1 > 0:
             dL1 = np.ones_like(self.biases)
@@ -127,15 +131,14 @@ class Layer_Dense:
             self.dbiases += self.bias_regularizer_l1 * dL1
         # L2 on biases
         if self.bias_regularizer_l2 > 0:
-            self.dbiases += 2 * self.bias_regularizer_l2 * \
-                self.biases
+            self.dbiases += 2 * self.bias_regularizer_l2 * self.biases
 
         # Gradient on values
         self.dinputs = np.dot(dvalues, self.weights.T)
 
 
 class Layer_Dropout:
-    """ 
+    """
     Dropout layer randomly sets a fraction of input values to zero.
 
     Parameters
@@ -168,7 +171,7 @@ class Layer_Dropout:
         self.rate = 1 - rate
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Performs a forward pass of the layer.
 
         Parameters
@@ -187,13 +190,14 @@ class Layer_Dropout:
             return
 
         # Generate and save scaled mask
-        self.binary_mask = np.random.binomial(1, self.rate,
-                                              size=inputs.shape) / self.rate
+        self.binary_mask = (
+            np.random.binomial(1, self.rate, size=inputs.shape) / self.rate
+        )
         # Apply mask to output values
         self.output = inputs * self.binary_mask
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Performs a backward pass of the layer.
 
         Parameters
@@ -206,7 +210,7 @@ class Layer_Dropout:
 
 
 class Layer_Input:
-    """ 
+    """
     Input layer of a neural network.
 
     Parameters
@@ -230,7 +234,7 @@ class Layer_Input:
     """
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Performs a forward pass of the layer.
 
         Parameters
