@@ -6,6 +6,7 @@ Space: Graph
 from functools import singledispatchmethod
 import networkx as nx
 from typing import Any, Dict, Iterator, List, Optional, Union, NamedTuple
+import matplotlib.pyplot as plt
 
 from dooders.sdk.modules.space import Space
 
@@ -103,7 +104,7 @@ class Graph:
         G: nx.Graph
             A grid graph based on the settings (torus, width, height)
         """
-        G = nx.grid_2d_graph(self.height, self.width)
+        G = nx.grid_2d_graph(self.width, self.height)
 
         for node in G.nodes():
             G.nodes[node]["space"] = Space(*node)
@@ -119,6 +120,32 @@ class Graph:
         G = nx.relabel_nodes(G, relabel_dict)
 
         return G
+
+    def view(self):
+        """
+        Creates a view of the grid.
+
+        Returns
+        -------
+        view: nx.Graph
+            A view of the grid.
+        """
+        plt.figure(figsize=(15, 15))
+        pos = {
+            self.coordinate_to_node_label(x, y): (x, self.height - 1 - y)
+            for x in range(self.width)
+            for y in range(self.height)
+        }
+        nx.draw(
+            self._graph,
+            pos,
+            with_labels=True,
+            node_size=450,
+            font_size=8,
+            font_color="white",
+            node_color="green",
+        )
+        plt.show()
 
     def coordinate_to_node_label(self, x: int, y: int) -> int:
         """
@@ -137,6 +164,24 @@ class Graph:
             The node label.
         """
         return y * self.width + x
+
+    def node_label_to_coordinate(self, node_label: int) -> Coordinate:
+        """
+        Converts a node label to a coordinate.
+
+        Parameters
+        ----------
+        node_label: int
+            The node label.
+
+        Returns
+        -------
+        coordinate: Coordinate
+            The coordinate.
+        """
+        x = node_label % self.width
+        y = node_label // self.width
+        return Coordinate(x, y)
 
     def add(self, object: object, coordinate: Coordinate) -> None:
         """
@@ -463,6 +508,17 @@ class Graph:
         coordinate = self._object_index[value]
         node_label = self.coordinate_to_node_label(*coordinate)
         return self._graph.nodes[node_label]["space"]
+
+    def draw(self, **kwargs) -> None:
+        """
+        Draw the graph.
+
+        Parameters
+        ----------
+        kwargs: dict
+            A dictionary of keyword arguments to pass to nx.draw.
+        """
+        nx.draw(self._graph, **kwargs)
 
     def state(self) -> Dict:
         """
