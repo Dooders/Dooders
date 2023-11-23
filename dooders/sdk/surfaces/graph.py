@@ -397,6 +397,26 @@ class Graph:
         for neighbor in self._graph.neighbors(node_label):
             yield self._graph.nodes[neighbor]["space"]
 
+    def get_neighbor_spaces(self, node_label: int) -> List[Space]:
+        """
+        Returns the neighbor spaces of a node.
+
+        Parameters
+        ----------
+        node_label: int
+            The node label.
+
+        Returns
+        -------
+        neighbor_spaces: List[Space]
+            A list of neighbor spaces.
+        """
+        neighbor_nodes = list(self._graph.neighbors(node_label))
+        neighbor_spaces = [
+            self._graph.nodes[node_label]["space"] for node_label in neighbor_nodes
+        ]
+        return neighbor_spaces
+
     def get_neighbors(self, node_label: int) -> List[int]:
         """
         Returns the neighbors of a node.
