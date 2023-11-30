@@ -95,6 +95,10 @@ class Graph:
         self._graph = self._build()
         self._object_index = {}
 
+        for setting in settings:
+            if setting not in ["torus", "height", "width"]:
+                setattr(self, setting, settings[setting])
+
     def _build(self) -> nx.Graph:
         """
         Creates a grid graph.
