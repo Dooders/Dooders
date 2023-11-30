@@ -151,3 +151,6 @@ Roboto-Bold.ttf
 *.dat
 *.npy
 *.png
+
+experiment_results.json
+learning_log.json

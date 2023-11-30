@@ -8,7 +8,7 @@ import numpy as np
 
 # ReLU activation
 class Activation_ReLU:
-    """ 
+    """
     ReLU activation
 
     Methods
@@ -31,7 +31,7 @@ class Activation_ReLU:
     """
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Forward pass
 
         Parameters
@@ -47,7 +47,7 @@ class Activation_ReLU:
         self.output = np.maximum(0, inputs)
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Backward pass
 
         Parameters
@@ -63,7 +63,7 @@ class Activation_ReLU:
         self.dinputs[self.inputs <= 0] = 0
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculate predictions for outputs
 
         Parameters
@@ -80,7 +80,7 @@ class Activation_ReLU:
 
 
 class Activation_Softmax:
-    """ 
+    """
     Softmax activation
 
     Methods
@@ -103,7 +103,7 @@ class Activation_Softmax:
     """
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Forward pass
 
         Parameters
@@ -117,17 +117,15 @@ class Activation_Softmax:
         self.inputs = inputs
 
         # Get unnormalized probabilities
-        exp_values = np.exp(inputs - np.max(inputs, axis=1,
-                                            keepdims=True))
+        exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
 
         # Normalize them for each sample
-        probabilities = exp_values / np.sum(exp_values, axis=1,
-                                            keepdims=True)
+        probabilities = exp_values / np.sum(exp_values, axis=1, keepdims=True)
 
         self.output = probabilities
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Backward pass
 
         Parameters
@@ -139,20 +137,21 @@ class Activation_Softmax:
         self.dinputs = np.empty_like(dvalues)
 
         # Enumerate outputs and gradients
-        for index, (single_output, single_dvalues) in \
-                enumerate(zip(self.output, dvalues)):
+        for index, (single_output, single_dvalues) in enumerate(
+            zip(self.output, dvalues)
+        ):
             # Flatten output array
             single_output = single_output.reshape(-1, 1)
             # Calculate Jacobian matrix of the output
-            jacobian_matrix = np.diagflat(single_output) - \
-                np.dot(single_output, single_output.T)
+            jacobian_matrix = np.diagflat(single_output) - np.dot(
+                single_output, single_output.T
+            )
             # Calculate sample-wise gradient
             # and add it to the array of sample gradients
-            self.dinputs[index] = np.dot(jacobian_matrix,
-                                         single_dvalues)
+            self.dinputs[index] = np.dot(jacobian_matrix, single_dvalues)
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculate predictions for outputs
 
         Parameters
@@ -169,7 +168,7 @@ class Activation_Softmax:
 
 
 class Activation_Sigmoid:
-    """ 
+    """
     Sigmoid activation
 
     Methods
@@ -192,7 +191,7 @@ class Activation_Sigmoid:
     """
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Forward pass
 
         Parameters
@@ -208,7 +207,7 @@ class Activation_Sigmoid:
         self.output = 1 / (1 + np.exp(-inputs))
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Backward pass
 
         Parameters
@@ -220,7 +219,7 @@ class Activation_Sigmoid:
         self.dinputs = dvalues * (1 - self.output) * self.output
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculate predictions for outputs
 
         Parameters
@@ -237,7 +236,7 @@ class Activation_Sigmoid:
 
 
 class Activation_Linear:
-    """ 
+    """
     Linear activation
 
     Methods
@@ -260,7 +259,7 @@ class Activation_Linear:
     """
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Forward pass
 
         Parameters
@@ -275,7 +274,7 @@ class Activation_Linear:
         self.output = inputs
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Backward pass
 
         Parameters
@@ -287,7 +286,7 @@ class Activation_Linear:
         self.dinputs = dvalues.copy()
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculate predictions for outputs
 
         Parameters
@@ -304,7 +303,7 @@ class Activation_Linear:
 
 
 class Activation_LeakyReLU:
-    """ 
+    """
     Leaky ReLU activation
 
     Methods
@@ -330,7 +329,7 @@ class Activation_LeakyReLU:
         self.alpha = alpha
 
     def forward(self, inputs: np.ndarray, training: bool) -> None:
-        """ 
+        """
         Forward pass
 
         Parameters
@@ -346,7 +345,7 @@ class Activation_LeakyReLU:
         self.output = np.maximum(self.alpha * inputs, inputs)
 
     def backward(self, dvalues: np.ndarray) -> None:
-        """ 
+        """
         Backward pass
 
         Parameters
@@ -362,7 +361,7 @@ class Activation_LeakyReLU:
         self.dinputs[self.inputs <= 0] = self.alpha
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculate predictions for outputs
 
         Parameters
@@ -421,8 +420,7 @@ class Activation_ELU:
         self.inputs = inputs
 
         # Calculate output values from inputs
-        self.output = np.where(
-            inputs > 0, inputs, self.alpha * (np.exp(inputs) - 1))
+        self.output = np.where(inputs > 0, inputs, self.alpha * (np.exp(inputs) - 1))
 
     def backward(self, dvalues: np.ndarray) -> None:
         """
@@ -438,8 +436,9 @@ class Activation_ELU:
         self.dinputs = dvalues.copy()
 
         # Calculate gradient
-        self.dinputs[self.inputs <= 0] = self.dinputs[self.inputs <=
-                                                      0] * (self.alpha * np.exp(self.inputs[self.inputs <= 0]))
+        self.dinputs[self.inputs <= 0] = self.dinputs[self.inputs <= 0] * (
+            self.alpha * np.exp(self.inputs[self.inputs <= 0])
+        )
 
     def predictions(self, outputs: np.ndarray) -> np.ndarray:
         """

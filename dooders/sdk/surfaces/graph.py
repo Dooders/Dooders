@@ -6,6 +6,7 @@ Space: Graph
 from functools import singledispatchmethod
 import networkx as nx
 from typing import Any, Dict, Iterator, List, Optional, Union, NamedTuple
+import matplotlib.pyplot as plt
 
 from dooders.sdk.modules.space import Space
 
@@ -94,6 +95,10 @@ class Graph:
         self._graph = self._build()
         self._object_index = {}
 
+        for setting in settings:
+            if setting not in ["torus", "height", "width"]:
+                setattr(self, setting, settings[setting])
+
     def _build(self) -> nx.Graph:
         """
         Creates a grid graph.
@@ -103,7 +108,7 @@ class Graph:
         G: nx.Graph
             A grid graph based on the settings (torus, width, height)
         """
-        G = nx.grid_2d_graph(self.height, self.width)
+        G = nx.grid_2d_graph(self.width, self.height)
 
         for node in G.nodes():
             G.nodes[node]["space"] = Space(*node)
@@ -119,6 +124,32 @@ class Graph:
         G = nx.relabel_nodes(G, relabel_dict)
 
         return G
+
+    def view(self):
+        """
+        Creates a view of the grid.
+
+        Returns
+        -------
+        view: nx.Graph
+            A view of the grid.
+        """
+        plt.figure(figsize=(15, 15))
+        pos = {
+            self.coordinate_to_node_label(x, y): (x, self.height - 1 - y)
+            for x in range(self.width)
+            for y in range(self.height)
+        }
+        nx.draw(
+            self._graph,
+            pos,
+            with_labels=True,
+            node_size=450,
+            font_size=8,
+            font_color="white",
+            node_color="green",
+        )
+        plt.show()
 
     def coordinate_to_node_label(self, x: int, y: int) -> int:
         """
@@ -137,6 +168,24 @@ class Graph:
             The node label.
         """
         return y * self.width + x
+
+    def node_label_to_coordinate(self, node_label: int) -> Coordinate:
+        """
+        Converts a node label to a coordinate.
+
+        Parameters
+        ----------
+        node_label: int
+            The node label.
+
+        Returns
+        -------
+        coordinate: Coordinate
+            The coordinate.
+        """
+        x = node_label % self.width
+        y = node_label // self.width
+        return Coordinate(x, y)
 
     def add(self, object: object, coordinate: Coordinate) -> None:
         """
@@ -173,7 +222,7 @@ class Graph:
         """
         node_label = self.coordinate_to_node_label(*object.position)
         node = self._graph.nodes[node_label]
-        node['space'].remove(object)
+        node["space"].remove(object)
         self._object_index.pop(object.id)
 
     @remove.register
@@ -297,7 +346,7 @@ class Graph:
         >>> <Dooder>
         """
         node_label = self.coordinate_to_node_label(*position)
-        for object in self._graph.nodes[node_label]["space"].contents():
+        for object in self._graph.nodes[node_label]["space"].contents:
             yield object
 
     # @property
@@ -351,6 +400,26 @@ class Graph:
         node_label = self.coordinate_to_node_label(*position)
         for neighbor in self._graph.neighbors(node_label):
             yield self._graph.nodes[neighbor]["space"]
+
+    def get_neighbor_spaces(self, node_label: int) -> List[Space]:
+        """
+        Returns the neighbor spaces of a node.
+
+        Parameters
+        ----------
+        node_label: int
+            The node label.
+
+        Returns
+        -------
+        neighbor_spaces: List[Space]
+            A list of neighbor spaces.
+        """
+        neighbor_nodes = list(self._graph.neighbors(node_label))
+        neighbor_spaces = [
+            self._graph.nodes[node_label]["space"] for node_label in neighbor_nodes
+        ]
+        return neighbor_spaces
 
     def get_neighbors(self, node_label: int) -> List[int]:
         """
@@ -463,6 +532,17 @@ class Graph:
         coordinate = self._object_index[value]
         node_label = self.coordinate_to_node_label(*coordinate)
         return self._graph.nodes[node_label]["space"]
+
+    def draw(self, **kwargs) -> None:
+        """
+        Draw the graph.
+
+        Parameters
+        ----------
+        kwargs: dict
+            A dictionary of keyword arguments to pass to nx.draw.
+        """
+        nx.draw(self._graph, **kwargs)
 
     def state(self) -> Dict:
         """

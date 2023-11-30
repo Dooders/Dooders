@@ -2,5 +2,5 @@
 SurfaceType:
   type: "generation"
   function: "fixed_value"
-  args: { "value": "grid" }
+  args: { "value": "graph" }
   description: ''

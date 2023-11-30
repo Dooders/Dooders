@@ -7,7 +7,7 @@ import numpy as np
 
 
 class Loss:
-    """ 
+    """
     Loss base class
 
     Methods
@@ -27,7 +27,7 @@ class Loss:
     """
 
     def regularization_loss(self) -> float:
-        """ 
+        """
         Calculates the regularization loss
 
         Returns
@@ -42,35 +42,36 @@ class Loss:
         # Calculate regularization loss
         # iterate all trainable layers
         for layer in self.trainable_layers:
-
             # L1 regularization - weights
             # calculate only when factor greater than 0
             if layer.weight_regularizer_l1 > 0:
-                regularization_loss += layer.weight_regularizer_l1 * \
-                    np.sum(np.abs(layer.weights))
+                regularization_loss += layer.weight_regularizer_l1 * np.sum(
+                    np.abs(layer.weights)
+                )
 
             # L2 regularization - weights
             if layer.weight_regularizer_l2 > 0:
-                regularization_loss += layer.weight_regularizer_l2 * \
-                    np.sum(layer.weights *
-                           layer.weights)
+                regularization_loss += layer.weight_regularizer_l2 * np.sum(
+                    layer.weights * layer.weights
+                )
 
             # L1 regularization - biases
             # calculate only when factor greater than 0
             if layer.bias_regularizer_l1 > 0:
-                regularization_loss += layer.bias_regularizer_l1 * \
-                    np.sum(np.abs(layer.biases))
+                regularization_loss += layer.bias_regularizer_l1 * np.sum(
+                    np.abs(layer.biases)
+                )
 
             # L2 regularization - biases
             if layer.bias_regularizer_l2 > 0:
-                regularization_loss += layer.bias_regularizer_l2 * \
-                    np.sum(layer.biases *
-                           layer.biases)
+                regularization_loss += layer.bias_regularizer_l2 * np.sum(
+                    layer.biases * layer.biases
+                )
 
         return regularization_loss
 
     def remember_trainable_layers(self, trainable_layers: list) -> None:
-        """ 
+        """
         Remembers the trainable layers
 
         Parameters
@@ -80,12 +81,10 @@ class Loss:
         """
         self.trainable_layers = trainable_layers
 
-    def calculate(self,
-                  output: np.ndarray,
-                  y: np.ndarray,
-                  *,
-                  include_regularization: bool = False) -> float:
-        """ 
+    def calculate(
+        self, output: np.ndarray, y: np.ndarray, *, include_regularization: bool = False
+    ) -> float:
+        """
         Calculates the data and regularization losses
         given model output and ground truth values
 
@@ -113,7 +112,7 @@ class Loss:
 
 
 class Loss_CategoricalCrossentropy(Loss):
-    """ 
+    """
     Categorical cross-entropy loss
 
     Methods
@@ -130,7 +129,7 @@ class Loss_CategoricalCrossentropy(Loss):
     """
 
     def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculates the forward pass
 
         Parameters
@@ -155,24 +154,18 @@ class Loss_CategoricalCrossentropy(Loss):
         # Probabilities for target values -
         # only if categorical labels
         if len(y_true.shape) == 1:
-            correct_confidences = y_pred_clipped[
-                range(samples),
-                y_true
-            ]
+            correct_confidences = y_pred_clipped[range(samples), y_true]
 
         # Mask values - only for one-hot encoded labels
         elif len(y_true.shape) == 2:
-            correct_confidences = np.sum(
-                y_pred_clipped * y_true,
-                axis=1
-            )
+            correct_confidences = np.sum(y_pred_clipped * y_true, axis=1)
 
         # Losses
         negative_log_likelihoods = -np.log(correct_confidences)
         return negative_log_likelihoods
 
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
-        """ 
+        """
         Calculates the backward pass
 
         Parameters
@@ -198,7 +191,7 @@ class Loss_CategoricalCrossentropy(Loss):
 
 
 class Activation_Softmax_Loss_CategoricalCrossentropy(Loss):
-    """ 
+    """
     Softmax classifier - combined Softmax activation
     and cross-entropy loss for faster backward step
 
@@ -218,7 +211,7 @@ class Activation_Softmax_Loss_CategoricalCrossentropy(Loss):
     """
 
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
-        """ 
+        """
         Calculates the backward pass
 
         Parameters
@@ -246,7 +239,7 @@ class Activation_Softmax_Loss_CategoricalCrossentropy(Loss):
 
 
 class Loss_BinaryCrossentropy(Loss):
-    """ 
+    """
     Binary cross-entropy loss
 
     Methods
@@ -263,7 +256,7 @@ class Loss_BinaryCrossentropy(Loss):
     """
 
     def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculates the forward pass
 
         Parameters
@@ -283,15 +276,16 @@ class Loss_BinaryCrossentropy(Loss):
         y_pred_clipped = np.clip(y_pred, 1e-7, 1 - 1e-7)
 
         # Calculate sample-wise loss
-        sample_losses = -(y_true * np.log(y_pred_clipped) +
-                          (1 - y_true) * np.log(1 - y_pred_clipped))
+        sample_losses = -(
+            y_true * np.log(y_pred_clipped) + (1 - y_true) * np.log(1 - y_pred_clipped)
+        )
         sample_losses = np.mean(sample_losses, axis=-1)
 
         # Return losses
         return sample_losses
 
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
-        """ 
+        """
         Calculates the backward pass
 
         Parameters
@@ -314,12 +308,12 @@ class Loss_BinaryCrossentropy(Loss):
                 clipped_dvalues = np.clip(dvalues, 1e-7, 1 - 1e-7)
 
                 # Calculate gradient
-                self.dinputs = -(y / clipped_dvalues -
-                                 (1 - y) / (1 - clipped_dvalues)) / outputs
+                self.dinputs = (
+                    -(y / clipped_dvalues - (1 - y) / (1 - clipped_dvalues)) / outputs
+                )
                 # Normalize gradient
                 self.dinputs = self.dinputs / samples
         else:
-
             # Number of samples
             samples = len(dvalues)
             # Number of outputs in every sample
@@ -331,14 +325,16 @@ class Loss_BinaryCrossentropy(Loss):
             clipped_dvalues = np.clip(dvalues, 1e-7, 1 - 1e-7)
 
             # Calculate gradient
-            self.dinputs = -(y_true / clipped_dvalues -
-                             (1 - y_true) / (1 - clipped_dvalues)) / outputs
+            self.dinputs = (
+                -(y_true / clipped_dvalues - (1 - y_true) / (1 - clipped_dvalues))
+                / outputs
+            )
             # Normalize gradient
             self.dinputs = self.dinputs / samples
 
 
 class Loss_MeanSquaredError(Loss):
-    """ 
+    """
     L2 loss (mean squared error)
 
     Methods
@@ -355,7 +351,7 @@ class Loss_MeanSquaredError(Loss):
     """
 
     def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculates the forward pass
 
         Parameters
@@ -372,13 +368,13 @@ class Loss_MeanSquaredError(Loss):
         """
 
         # Calculate loss
-        sample_losses = np.mean((y_true - y_pred)**2, axis=-1)
+        sample_losses = np.mean((y_true - y_pred) ** 2, axis=-1)
 
         # Return losses
         return sample_losses
 
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
-        """ 
+        """
         Calculates the backward pass
 
         Parameters
@@ -402,7 +398,7 @@ class Loss_MeanSquaredError(Loss):
 
 
 class Loss_MeanAbsoluteError(Loss):
-    """ 
+    """
     L1 loss (mean absolute error)
 
     Methods
@@ -419,7 +415,7 @@ class Loss_MeanAbsoluteError(Loss):
     """
 
     def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-        """ 
+        """
         Calculates the forward pass
 
         Parameters
@@ -442,7 +438,7 @@ class Loss_MeanAbsoluteError(Loss):
         return sample_losses
 
     def backward(self, dvalues: np.ndarray, y_true: np.ndarray) -> None:
-        """ 
+        """
         Calculates the backward pass
 
         Parameters
@@ -471,7 +467,7 @@ class MultiLabelBinaryCrossEntropy(Loss):
         self.epsilon = 1e-15
 
     def forward(self, y_pred: np.ndarray, y_true: np.ndarray) -> None:
-        """ 
+        """
         Calculates the forward pass
 
         Parameters
@@ -481,8 +477,7 @@ class MultiLabelBinaryCrossEntropy(Loss):
         y_true : np.ndarray
             Ground truth values
         """
-        self.loss = -np.sum(y_true * np.log(y_pred) +
-                            (1 - y_true) * np.log(1 - y_pred))
+        self.loss = -np.sum(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
 
     def backward(self, y_pred: np.ndarray, y_true: np.ndarray) -> None:
         """
@@ -497,7 +492,7 @@ class MultiLabelBinaryCrossEntropy(Loss):
         """
 
         #! Do this part earlier
-        test_elements = np.arange(0, 9)
+        test_elements = np.arange(0, y_pred.shape[1])
         result = np.isin(test_elements, y_true)
         #!
 
@@ -508,17 +503,16 @@ class MultiLabelBinaryCrossEntropy(Loss):
         samples = y_pred.shape[0]
 
         # Calculate the gradient
-        self.dinputs = -(result / y_pred_clipped -
-                         (1 - result) / (1 - y_pred_clipped))
+        self.dinputs = -(result / y_pred_clipped - (1 - result) / (1 - y_pred_clipped))
 
         # Normalize the gradient
         self.dinputs = self.dinputs / samples
 
 
 LOSS = {
-    'binary_crossentropy': Loss_BinaryCrossentropy,
-    'categorical_crossentropy': Activation_Softmax_Loss_CategoricalCrossentropy,
-    'mean_squared_error': Loss_MeanSquaredError,
-    'mean_absolute_error': Loss_MeanAbsoluteError,
-    'multilabel_binary_crossentropy': MultiLabelBinaryCrossEntropy,
+    "binary_crossentropy": Loss_BinaryCrossentropy,
+    "categorical_crossentropy": Activation_Softmax_Loss_CategoricalCrossentropy,
+    "mean_squared_error": Loss_MeanSquaredError,
+    "mean_absolute_error": Loss_MeanAbsoluteError,
+    "multilabel_binary_crossentropy": MultiLabelBinaryCrossEntropy,
 }
