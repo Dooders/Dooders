@@ -15,6 +15,8 @@ from dooders.game.sprites import LifeSprites
 from dooders.game.sprites import MazeSprites
 from dooders.game.maze import MazeData
 
+from dooders.sdk.surfaces.graph import Graph
+
 
 class GameController:
     """
@@ -61,7 +63,7 @@ class GameController:
     -------
     set_background()
         Sets the background image
-    start_game()
+    load_game()
         Starts the game
     update()
         Updates the game state
@@ -79,7 +81,7 @@ class GameController:
         Hides the entities
     next_level()
         Starts the next level
-    restart_game()
+    reload_game()
         Restarts the game
     reset_level()
         Resets the current level
@@ -130,7 +132,7 @@ class GameController:
         self.flashBG = False
         self.background = self.background_norm
 
-    def start_game(self) -> None:
+    def load_game(self) -> None:
         """
         Loads the maze for the current level, sets up the maze sprites, nodes,
         Pacman, pellets, and ghosts. It also configures the starting positions
@@ -154,37 +156,44 @@ class GameController:
             "assets/" + self.mazedata.obj.name + ".txt",
             "assets/" + self.mazedata.obj.name + "_rotation.txt",
         )
+        map_data = self.mazesprites.data
+        grid_height = len(map_data)
+        grid_width = len(map_data[0])
+
+        self.graph = Graph(
+            {"height": grid_height, "width": grid_width, "map": map_data}
+        )
         self.set_background()
-        self.nodes = NodeGroup("assets/" + self.mazedata.obj.name + ".txt")
+        # self.nodes = NodeGroup("assets/" + self.mazedata.obj.name + ".txt")
         self.mazedata.obj.set_portal_pairs(self.nodes)
         self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan(
             self.nodes.get_node_from_tiles(*self.mazedata.obj.pacmanStart)
         )
         self.pellets = PelletGroup("assets/" + self.mazedata.obj.name + ".txt")
-        self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
+        # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
 
-        self.ghosts.pinky.set_start_node(
-            self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
-        )
-        self.ghosts.inky.set_start_node(
-            self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(0, 3))
-        )
-        self.ghosts.clyde.set_start_node(
-            self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(4, 3))
-        )
-        self.ghosts.set_spawn_node(
-            self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
-        )
-        self.ghosts.blinky.set_start_node(
-            self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 0))
-        )
+        # self.ghosts.pinky.set_start_node(
+        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
+        # )
+        # self.ghosts.inky.set_start_node(
+        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(0, 3))
+        # )
+        # self.ghosts.clyde.set_start_node(
+        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(4, 3))
+        # )
+        # self.ghosts.set_spawn_node(
+        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
+        # )
+        # self.ghosts.blinky.set_start_node(
+        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 0))
+        # )
 
-        self.nodes.deny_home_access(self.pacman)
-        self.nodes.deny_home_access_list(self.ghosts)
-        self.ghosts.inky.startNode.deny_access(RIGHT, self.ghosts.inky)
-        self.ghosts.clyde.startNode.deny_access(LEFT, self.ghosts.clyde)
-        self.mazedata.obj.deny_ghosts_access(self.ghosts, self.nodes)
+        # self.nodes.deny_home_access(self.pacman)
+        # self.nodes.deny_home_access_list(self.ghosts)
+        # self.ghosts.inky.startNode.deny_access(RIGHT, self.ghosts.inky)
+        # self.ghosts.clyde.startNode.deny_access(LEFT, self.ghosts.clyde)
+        # self.mazedata.obj.deny_ghosts_access(self.ghosts, self.nodes)
 
     def update(self) -> None:
         """
@@ -278,7 +287,7 @@ class GameController:
         pellet = self.pacman.eat_pellets(self.pellets.pellet_List)
         if pellet:
             self.pellets.numEaten += 1
-            self.update_score(pellet.points)
+            # self.update_score(pellet.points)
             if self.pellets.numEaten == 30:
                 self.ghosts.inky.startNode.allow_access(RIGHT, self.ghosts.inky)
             if self.pellets.numEaten == 70:
@@ -327,7 +336,7 @@ class GameController:
                         self.ghosts.hide()
                         if self.lives <= 0:
                             self.textgroup.show_text(GAMEOVERTXT)
-                            self.pause.set_pause(pause_time=3, func=self.restart_game)
+                            self.pause.set_pause(pause_time=3, func=self.reload_game)
                         else:
                             self.pause.set_pause(pause_time=3, func=self.reset_level)
 
@@ -384,10 +393,10 @@ class GameController:
         self.show_entities()
         self.level += 1
         self.pause.paused = True
-        self.start_game()
+        self.load_game()
         self.textgroup.update_level(self.level)
 
-    def restart_game(self) -> None:
+    def reload_game(self) -> None:
         """
         Restarts the game from the beginning.
         """
@@ -395,7 +404,7 @@ class GameController:
         self.level = 0
         self.pause.paused = True
         self.fruit = None
-        self.start_game()
+        self.load_game()
         self.score = 0
         self.textgroup.update_score(self.score)
         self.textgroup.update_level(self.level)
