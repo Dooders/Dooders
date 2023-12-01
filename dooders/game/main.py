@@ -1,3 +1,4 @@
+import time
 import pygame
 from pygame.locals import *
 from dooders.game.constants import *
@@ -152,10 +153,7 @@ class GameController:
         11. Set up the ghost access
         """
         self.mazedata.load_maze(self.level)
-        self.mazesprites = MazeSprites(
-            "assets/" + self.mazedata.obj.name + ".txt",
-            "assets/" + self.mazedata.obj.name + "_rotation.txt",
-        )
+        self.mazesprites = MazeSprites()
         map_data = self.mazesprites.data
         grid_height = len(map_data)
         grid_width = len(map_data[0])
@@ -165,12 +163,10 @@ class GameController:
         )
         self.set_background()
         # self.nodes = NodeGroup("assets/" + self.mazedata.obj.name + ".txt")
-        self.mazedata.obj.set_portal_pairs(self.nodes)
-        self.mazedata.obj.connect_home_nodes(self.nodes)
-        self.pacman = PacMan(
-            self.nodes.get_node_from_tiles(*self.mazedata.obj.pacmanStart)
-        )
-        self.pellets = PelletGroup("assets/" + self.mazedata.obj.name + ".txt")
+        # self.mazedata.obj.set_portal_pairs(self.nodes)
+        # self.mazedata.obj.connect_home_nodes(self.nodes)
+        self.pacman = PacMan()
+        self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
         # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
 
         # self.ghosts.pinky.set_start_node(
@@ -214,22 +210,22 @@ class GameController:
         """
         dt = self.clock.tick(30) / 1000.0
         self.dt = dt
-        self.textgroup.update(dt)
+        # self.textgroup.update(dt)
         self.pellets.update(dt)
 
         # Update ghosts, fruit, and check for pellet events
-        if not self.pause.paused:
-            self.ghosts.update(self)
-            if self.fruit is not None:
-                self.fruit.update(self)
-            self.check_pellet_events()
-            self.check_ghost_events()
-            self.check_fruit_events()
+        # if not self.pause.paused:
+        #     self.ghosts.update(self)
+        #     if self.fruit is not None:
+        #         self.fruit.update(self)
+        #     self.check_pellet_events()
+        #     self.check_ghost_events()
+        #     self.check_fruit_events()
 
         # Play when pacman is alive and not paused
         if self.pacman.alive:
-            if not self.pause.paused:
-                self.pacman.update(self)
+            # if not self.pause.paused:
+            self.pacman.update(self)
         else:
             self.pacman.update(self)
 
@@ -244,14 +240,16 @@ class GameController:
                     self.background = self.background_norm
 
         # Update pause
-        afterPauseMethod = self.pause.update(dt)
-        if afterPauseMethod is not None:
-            afterPauseMethod()
+        # afterPauseMethod = self.pause.update(dt)
+        # if afterPauseMethod is not None:
+        #     afterPauseMethod()
 
         # Finish update and render
         self.check_events()
         if self.render_game:
             self.render()
+            
+        time.sleep(3)
 
     def check_events(self) -> None:
         """
@@ -451,23 +449,23 @@ class GameController:
         self.screen.blit(self.background, (0, 0))
         # self.nodes.render(self.screen) #! Why is this commented out?
         self.pellets.render(self.screen)
-        if self.fruit is not None:
-            self.fruit.render(self.screen)
+        # if self.fruit is not None:
+        #     self.fruit.render(self.screen)
         self.pacman.render(self.screen)
-        self.ghosts.render(self.screen)
-        self.textgroup.render(self.screen)
+        # self.ghosts.render(self.screen)
+        # self.textgroup.render(self.screen)
 
-        # Lifesprites
-        for i in range(len(self.lifesprites.images)):
-            x = self.lifesprites.images[i].get_width() * i
-            y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
-            self.screen.blit(self.lifesprites.images[i], (x, y))
+        # # Lifesprites
+        # for i in range(len(self.lifesprites.images)):
+        #     x = self.lifesprites.images[i].get_width() * i
+        #     y = SCREENHEIGHT - self.lifesprites.images[i].get_height()
+        #     self.screen.blit(self.lifesprites.images[i], (x, y))
 
-        # Fruit captured
-        for i in range(len(self.fruitCaptured)):
-            x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i + 1)
-            y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
-            self.screen.blit(self.fruitCaptured[i], (x, y))
+        # # Fruit captured
+        # for i in range(len(self.fruitCaptured)):
+        #     x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i + 1)
+        #     y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
+        #     self.screen.blit(self.fruitCaptured[i], (x, y))
 
         pygame.display.update()
 
