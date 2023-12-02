@@ -1,8 +1,9 @@
 from abc import ABC
 import pygame
-from dooders.game.vector import Vector2
 from dooders.game.constants import *
 import numpy as np
+
+from dooders.sdk.base.coordinate import Coordinate
 
 
 class Pellet(ABC):
@@ -16,7 +17,7 @@ class Pellet(ABC):
     ----------
     name : str
         Name of the pellet
-    position : Vector2
+    position : Coordinate
         Position of the pellet
     color : tuple
         Color of the pellet
@@ -59,7 +60,7 @@ class Pellet(ABC):
             Column index of the pellet
         """
         self.name = PELLET
-        self.position = Vector2(column * TILEWIDTH, row * TILEHEIGHT)
+        self.position = Coordinate(column * TILEWIDTH, row * TILEHEIGHT)
         self.color = WHITE
         self.radius = int(2 * TILEWIDTH / 16)
         self.collideRadius = 2 * TILEWIDTH / 16
@@ -79,7 +80,7 @@ class Pellet(ABC):
             Screen or surface on which the pellet is drawn
         """
         if self.visible:
-            adjust = Vector2(TILEWIDTH, TILEHEIGHT) / 2
+            adjust = Coordinate(TILEWIDTH, TILEHEIGHT) / 2
             p = self.position + adjust
             pygame.draw.circle(screen, self.color, p.as_int(), self.radius)
 
@@ -97,7 +98,7 @@ class PowerPellet(Pellet):
     ----------
     name : str
         Name of the pellet
-    position : Vector2
+    position : Coordinate
         Position of the pellet
     color : tuple
         Color of the pellet

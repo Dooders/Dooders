@@ -2,7 +2,7 @@ import pygame
 from dooders.game.entity import Entity
 from dooders.game.constants import *
 from dooders.game.sprites import FruitSprites
-from dooders.game.vector import Vector2
+from dooders.sdk.base.coordinate import Coordinate
 
 
 class Fruit(Entity):
@@ -78,7 +78,7 @@ class Fruit(Entity):
         self.points = 100 + level * 20
         # self.set_between_nodes(RIGHT)
         self.sprites = FruitSprites(self, level)
-        self.position = Vector2(8, 2)
+        self.position = Coordinate(8, 2)
 
     def update(self, game) -> None:
         """

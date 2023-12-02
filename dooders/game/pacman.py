@@ -1,19 +1,19 @@
-from random import random
+import random
 from typing import Union
 import pygame
 from pygame.locals import *
 from dooders.game.constants import *
 from dooders.game.entity import Entity
 from dooders.game.sprites import PacManSprites
-from dooders.game.vector import Vector2
+from dooders.sdk.base.coordinate import Coordinate
 
 
 MOVEMENTS = {
-    UP: Vector2(0, -TILEWIDTH),
-    DOWN: Vector2(0, TILEWIDTH),
-    LEFT: Vector2(-TILEWIDTH, 0),
-    RIGHT: Vector2(TILEWIDTH, 0),
-    STOP: Vector2(0, 0),
+    "UP": Coordinate(0, -TILEWIDTH),
+    "DOWN": Coordinate(0, TILEWIDTH),
+    "LEFT": Coordinate(-TILEWIDTH, 0),
+    "RIGHT": Coordinate(TILEWIDTH, 0),
+    "STOP": Coordinate(0, 0),
 }
 
 
@@ -59,11 +59,12 @@ class PacMan(Entity):
         Entity.__init__(self)
         self.name = PACMAN
         self.color = YELLOW
-        self.direction = LEFT
+        self.direction = "LEFT"
         # self.set_between_nodes(LEFT)  # PacMan starts between nodes 1 and 2
         self.alive = True
         self.sprites = PacManSprites(self)
-        self.position = Vector2(208, 416)
+        self.position = Coordinate(208, 416)
+        self.brain = FiniteStateMachine()
 
     def reset(self) -> None:
         """
@@ -100,18 +101,38 @@ class PacMan(Entity):
         dt = game.dt
         self.sprites.update(dt)
 
-        #! Logic here
         direction = self.logic(game)
         if direction is not None:
             self.move(game, direction)
             self.direction = direction
 
     def logic(self, game) -> None:
-        pass
+        new_position = self.brain.update(game, self)
+        new_direction = self.get_direction(new_position)
+
+        print(f"new_position: {new_position}, new_direction: {new_direction}")
+
+        return new_direction
+
+    def get_direction(self, new_position):
+        # Determine the direction based on the relative direction from the current position
+        current_position = self.position
+        if new_position is None:
+            return None
+        elif new_position[0] > current_position.x:
+            return "RIGHT"
+        elif new_position[0] < current_position.x:
+            return "LEFT"
+        elif new_position[1] > current_position.y:
+            return "DOWN"
+        elif new_position[1] < current_position.y:
+            return "UP"
+        else:
+            return None
 
     def move(self, game, direction) -> None:
+        print(f"pacman move: {direction}")
         self.position = self.position + MOVEMENTS[direction]
-        game.graph.update(self)
 
     def eat_pellets(self, pellet_List: list) -> Union[None, object]:
         """
@@ -179,13 +200,20 @@ class PacMan(Entity):
             return True
         return False
 
+    def render(self, screen):
+        # self.sprites.render(screen)
+        adjust = Coordinate(TILEWIDTH, TILEHEIGHT) / 2
+        p = self.position + adjust
+        print(f"pacman position: {p}")
+        pygame.draw.circle(screen, RED, p.as_int(), 3)
+
 
 class FiniteStateMachine:
     def __init__(self):
         self.state = "Search"
         self.environment = None
 
-    def update(self, game):
+    def update(self, game, agent):
         """
         While in the seek pellets state, Ms Pac-Man moves randomly up until it
         detects a pellet and then follows a pathfinding algorithm to eat as many
@@ -202,15 +230,12 @@ class FiniteStateMachine:
         States
         -------
         """
-        #! Add "Eat" state???
-        #! Attack vs Chase
-        dt = game.dt
-        self.sprites.update(dt)
-        self.position += self.directions[self.direction] * self.speed * dt
-        self.update_state()
-        self.action()
+        # self.update_state(game, agent)
+        new_position = self.update_direction(game, agent)
 
-    def update_state(self) -> None:
+        return new_position
+
+    def update_state(self, game, agent) -> None:
         """
         Update the PacMan's state based on the current game environment.
 
@@ -234,57 +259,70 @@ class FiniteStateMachine:
         """
 
         if self.state == "Search":
-            if self.power_pellet_nearby():
+            if self.power_pellet_nearby(game, agent):
                 self.state = "Chase"
-            elif self.non_vulnerable_ghost_nearby():
+            elif self.non_vulnerable_ghost_nearby(game, agent):
                 self.state = "Evade"
 
         elif self.state == "Chase":
-            if self.ate_power_pellet() and self.vulnerable_ghost_nearby():
+            if self.ate_power_pellet(game, agent) and self.vulnerable_ghost_nearby(
+                game, agent
+            ):
                 self.state = "Attack"
-            elif self.non_vulnerable_ghost_nearby():
+            elif self.non_vulnerable_ghost_nearby(game, agent):
                 self.state = "Evade"
 
         elif self.state == "Attack":
-            if not self.vulnerable_ghost_nearby() or self.ate_vulnerable_ghost():
+            if not self.vulnerable_ghost_nearby(
+                game, agent
+            ) or self.ate_vulnerable_ghost(game, agent):
                 self.state = "Search"
 
         elif self.state == "Evade":
-            if not self.non_vulnerable_ghost_nearby():
+            if not self.non_vulnerable_ghost_nearby(game, agent):
                 self.state = "Search"
-            elif self.power_pellet_nearby():
+            elif self.power_pellet_nearby(game, agent):
                 self.state = "Chase"
 
-    def search(self):
+    def update_direction(self, game, agent):
+        if self.state == "Search":
+            next_direction = self.search(game, agent)
+        elif self.state == "Chase":
+            pass
+        elif self.state == "Attack":
+            pass
+        elif self.state == "Evade":
+            pass
+
+        return next_direction
+
+    def search(self, game, agent):
         """
         Get the next direction to move in the search state.
 
         If no pellets are nearby, then move randomly.
         If a pellet is nearby, then move towards it.
         """
-        #! Just set the direction in this method
-        next_direction = None
+        neighbors = game.graph.get_neighbor_spaces(agent.position)
+        filtered_neighbors = [
+            neighbor
+            for neighbor in neighbors
+            if neighbor.tile_type in ["+", ".", "p", "P"]
+        ]
+        eligible_neighbors = [
+            neighbor
+            for neighbor in filtered_neighbors
+            if neighbor in ["+", "-", " ", ".", "p", "P"]
+        ]
 
-        if self.power_pellet_nearby():
-            next_direction = self.move_towards_power_pellet()
-        elif self.pellet_nearby():
-            next_direction = self.move_towards_nearest_pellet()
+        if filtered_neighbors:
+            random_space = random.choice(filtered_neighbors)
         else:
-            valid_directions = self.valid_directions()
-            next_direction = random.choice(valid_directions)
+            random_space = (
+                random.choice(eligible_neighbors) if eligible_neighbors else None
+            )
 
-        return next_direction
-
-    def action(self):
-        #! change method name to update_direction???
-        if self.state == "Search":
-            next_direction = self.search()
-        elif self.state == "Chase":
-            pass
-        elif self.state == "Attack":
-            pass
-        elif self.state == "Evade":
-            pass
+        return random_space.coordinates if random_space else None
 
     def pellet_nearby(self):
         """

@@ -1,8 +1,8 @@
 from abc import ABC
 import pygame
 from pygame.locals import *
-from dooders.game.vector import Vector2
 from dooders.game.constants import *
+from dooders.sdk.base.coordinate import Coordinate
 from random import randint
 
 
@@ -15,7 +15,7 @@ class Entity(ABC):
     name : str
         The name of the entity.
     directions : dict
-        A dictionary of directions, mapping direction constants to Vector2 objects.
+        A dictionary of directions, mapping direction constants to Coordinate objects.
     direction : int
         The current direction of the entity.
     speed : float
@@ -30,7 +30,7 @@ class Entity(ABC):
         Whether or not the entity is visible.
     disable_portal : bool
         Whether or not the entity can use portals.
-    goal : Vector2
+    goal : Coordinate
         The goal position of the entity.
     directionMethod : function
         The method used to determine the entity's direction.
@@ -40,7 +40,7 @@ class Entity(ABC):
         The starting node of the entity.
     target : Node
         The target node of the entity.
-    position : Vector2
+    position : Coordinate
         The position of the entity.
     image : pygame.Surface
         The image of the entity.
@@ -98,11 +98,11 @@ class Entity(ABC):
         """
         self.name = None
         self.directions = {
-            UP: Vector2(0, -1),
-            DOWN: Vector2(0, 1),
-            LEFT: Vector2(-1, 0),
-            RIGHT: Vector2(1, 0),
-            STOP: Vector2(),
+            UP: Coordinate(0, -1),
+            DOWN: Coordinate(0, 1),
+            LEFT: Coordinate(-1, 0),
+            RIGHT: Coordinate(1, 0),
+            STOP: Coordinate(),
         }
         self.direction = STOP
         self.set_speed(100)
@@ -113,7 +113,6 @@ class Entity(ABC):
         self.disable_portal = False
         self.goal = None
         self.directionMethod = self.random_direction
-        # self.set_start_node(node)
         self.image = None
 
     def set_position(self) -> None:
@@ -188,27 +187,6 @@ class Entity(ABC):
         """
         #! double check this
         return [x for x in self.node.neighbors if x is not None]
-
-    def get_new_target(self, direction: int) -> "Node":
-        """
-        Gets the new target node for the entity, based on the given direction.
-
-        For example, if the entity is moving up, the new target node will be the
-        node above the entity's current node.
-
-        Parameters
-        ----------
-        direction : int
-            The direction to check.
-
-        Returns
-        -------
-        Node
-            The new target node for the entity.
-        """
-        if self.valid_direction(direction):
-            return self.node.neighbors[direction]
-        return self.node
 
     def over_shot_target(self) -> bool:
         """
@@ -383,7 +361,7 @@ class Entity(ABC):
         """
         if self.visible:
             if self.image is not None:
-                adjust = Vector2(TILEWIDTH, TILEHEIGHT) / 2
+                adjust = Coordinate(TILEWIDTH, TILEHEIGHT) / 2
                 p = self.position - adjust
                 screen.blit(self.image, p.as_tuple())
             else:
