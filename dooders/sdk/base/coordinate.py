@@ -49,6 +49,9 @@ class Coordinate:
         left, etc.
     __str__() -> str
         Provides a string representation of the coordinate in the format <x, y>
+    __iter__() -> iter
+        Returns an iterator for the coordinate. For example, this allows the
+        coordinate to be unpacked into two variables using x, y = coordinate
     """
 
     EPSILON = 1e-9  # Threshold for approximate equality
@@ -261,3 +264,14 @@ class Coordinate:
             String representation of the coordinate
         """
         return f"<{self.x}, {self.y}>"
+
+    def __iter__(self) -> iter:
+        """
+        Returns an iterator for the coordinate.
+
+        Returns
+        -------
+        iter
+            Iterator for the coordinate
+        """
+        return iter((self.x, self.y))
