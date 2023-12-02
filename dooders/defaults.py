@@ -9,3 +9,6 @@ grid_height = 0
 grid_width = 10
 perception_input_size = 5
 perception_output_size = 5
+
+TILE_HEIGHT = 16
+TILE_WIDTH = 16
