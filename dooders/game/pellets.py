@@ -60,7 +60,7 @@ class Pellet(ABC):
             Column index of the pellet
         """
         self.name = PELLET
-        self.position = Coordinate(column * TILEWIDTH, row * TILEHEIGHT)
+        self.position = Coordinate(column, row)
         self.color = WHITE
         self.radius = int(2 * TILEWIDTH / 16)
         self.collideRadius = 2 * TILEWIDTH / 16
@@ -80,9 +80,9 @@ class Pellet(ABC):
             Screen or surface on which the pellet is drawn
         """
         if self.visible:
-            adjust = Coordinate(TILEWIDTH, TILEHEIGHT) / 2
-            p = self.position + adjust
-            pygame.draw.circle(screen, self.color, p.as_int(), self.radius)
+            x, y = self.position.as_pixel()
+            position = (x + TILEWIDTH / 2, y + TILEHEIGHT / 2)
+            pygame.draw.circle(screen, self.color, position, self.radius)
 
 
 class PowerPellet(Pellet):
