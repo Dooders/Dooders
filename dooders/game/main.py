@@ -215,12 +215,12 @@ class GameController:
 
         # Update ghosts, fruit, and check for pellet events
         # if not self.pause.paused:
-        #     self.ghosts.update(self)
-        #     if self.fruit is not None:
-        #         self.fruit.update(self)
-        #     self.check_pellet_events()
-        #     self.check_ghost_events()
-        #     self.check_fruit_events()
+        # self.ghosts.update(self)
+        # if self.fruit is not None:
+        #     self.fruit.update(self)
+        self.check_pellet_events()
+        # self.check_ghost_events()
+        # self.check_fruit_events()
 
         # Play when pacman is alive and not paused
         if self.pacman.alive:
@@ -248,8 +248,8 @@ class GameController:
         self.check_events()
         if self.render_game:
             self.render()
-            
-        time.sleep(3)
+
+        time.sleep(0.1)
 
     def check_events(self) -> None:
         """
