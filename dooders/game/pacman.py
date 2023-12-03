@@ -8,13 +8,13 @@ from dooders.game.sprites import PacManSprites
 from dooders.sdk.base.coordinate import Coordinate
 
 
-MOVEMENTS = {
-    "UP": Coordinate(0, -TILEWIDTH),
-    "DOWN": Coordinate(0, TILEWIDTH),
-    "LEFT": Coordinate(-TILEWIDTH, 0),
-    "RIGHT": Coordinate(TILEWIDTH, 0),
-    "STOP": Coordinate(0, 0),
-}
+# MOVEMENTS = {
+#     "UP": Coordinate(0, -TILEWIDTH),
+#     "DOWN": Coordinate(0, TILEWIDTH),
+#     "LEFT": Coordinate(-TILEWIDTH, 0),
+#     "RIGHT": Coordinate(TILEWIDTH, 0),
+#     "STOP": Coordinate(0, 0),
+# }
 
 
 class PacMan(Entity):
@@ -59,11 +59,9 @@ class PacMan(Entity):
         Entity.__init__(self)
         self.name = PACMAN
         self.color = YELLOW
-        self.direction = "LEFT"
-        # self.set_between_nodes(LEFT)  # PacMan starts between nodes 1 and 2
         self.alive = True
         self.sprites = PacManSprites(self)
-        self.position = Coordinate(208, 416)
+        self.position = Coordinate(13, 26)
         self.brain = FiniteStateMachine()
 
     def reset(self) -> None:
@@ -72,7 +70,6 @@ class PacMan(Entity):
         It also resets its sprites.
         """
         Entity.reset(self)
-        self.direction = LEFT
         self.set_between_nodes(LEFT)
         self.alive = True
         self.image = self.sprites.get_start_image()
@@ -83,7 +80,6 @@ class PacMan(Entity):
         Sets the Pac-Man's state to dead and stops its movement.
         """
         self.alive = False
-        self.direction = STOP
 
     def update(self, game) -> None:
         """
@@ -101,38 +97,17 @@ class PacMan(Entity):
         dt = game.dt
         self.sprites.update(dt)
 
-        direction = self.logic(game)
-        if direction is not None:
-            self.move(game, direction)
-            self.direction = direction
+        next_position = self.logic(game)
+        if next_position is not None:
+            self.move(game, next_position)
 
     def logic(self, game) -> None:
-        new_position = self.brain.update(game, self)
-        new_direction = self.get_direction(new_position)
+        next_position = self.brain.update(game, self)
 
-        print(f"new_position: {new_position}, new_direction: {new_direction}")
+        return next_position
 
-        return new_direction
-
-    def get_direction(self, new_position):
-        # Determine the direction based on the relative direction from the current position
-        current_position = self.position
-        if new_position is None:
-            return None
-        elif new_position[0] > current_position.x:
-            return "RIGHT"
-        elif new_position[0] < current_position.x:
-            return "LEFT"
-        elif new_position[1] > current_position.y:
-            return "DOWN"
-        elif new_position[1] < current_position.y:
-            return "UP"
-        else:
-            return None
-
-    def move(self, game, direction) -> None:
-        print(f"pacman move: {direction}")
-        self.position = self.position + MOVEMENTS[direction]
+    def move(self, game, coordinate: "Coordinate") -> None:
+        self.position = coordinate
 
     def eat_pellets(self, pellet_List: list) -> Union[None, object]:
         """
@@ -201,11 +176,13 @@ class PacMan(Entity):
         return False
 
     def render(self, screen):
-        # self.sprites.render(screen)
-        adjust = Coordinate(TILEWIDTH, TILEHEIGHT) / 2
-        p = self.position + adjust
-        print(f"pacman position: {p}")
-        pygame.draw.circle(screen, RED, p.as_int(), 3)
+        if self.visible:
+            if self.image is not None:
+                x, y = self.position.as_pixel()
+                position = (x - TILEWIDTH / 2, y - TILEHEIGHT / 2)
+                screen.blit(self.image, position)
+            else:
+                raise Exception("No image for PacMan")
 
 
 class FiniteStateMachine:
@@ -231,9 +208,9 @@ class FiniteStateMachine:
         -------
         """
         # self.update_state(game, agent)
-        new_position = self.update_direction(game, agent)
+        next_position = self.update_direction(game, agent)
 
-        return new_position
+        return next_position
 
     def update_state(self, game, agent) -> None:
         """
@@ -286,7 +263,7 @@ class FiniteStateMachine:
 
     def update_direction(self, game, agent):
         if self.state == "Search":
-            next_direction = self.search(game, agent)
+            next_position = self.search(game, agent)
         elif self.state == "Chase":
             pass
         elif self.state == "Attack":
@@ -294,7 +271,7 @@ class FiniteStateMachine:
         elif self.state == "Evade":
             pass
 
-        return next_direction
+        return next_position
 
     def search(self, game, agent):
         """
