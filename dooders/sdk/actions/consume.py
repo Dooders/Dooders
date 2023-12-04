@@ -9,9 +9,9 @@ from dooders.sdk.core.core import Core
 from dooders.sdk.models.energy import Energy
 
 
-@Core.register('action')
+@Core.register("action")
 def consume(dooder) -> None:
-    """ 
+    """
     Consume energy from the environment
 
     Function will look for energy in the cell that the dooder is in, and
@@ -29,17 +29,17 @@ def consume(dooder) -> None:
     >>> dooder.simulation.environment.add(Energy(), (0, 0))
     >>> Action.execute(dooder, 'consume')
     >>> dooder.energy
-    1
     """
     cell_contents = dooder.simulation.environment.contents(dooder.position)
-    energy = next(
-        (obj for obj in cell_contents if isinstance(obj, Energy)), None)
+
+    energy = next((obj for obj in cell_contents if isinstance(obj, Energy)), None)
 
     if energy:
         energy.consume()
         dooder.hunger = 0
         dooder.energy_consumed += 1
         dooder.log(
-            granularity=2, message=f"Consumed energy: {energy.id}", scope='Dooder')
+            granularity=2, message=f"Consumed energy: {energy.id}", scope="Dooder"
+        )
     else:
         dooder.hunger += 1
