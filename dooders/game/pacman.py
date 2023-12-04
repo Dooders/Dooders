@@ -150,11 +150,6 @@ class PacMan(Entity):
 
     def collide_check(self, other: "object") -> bool:
         """
-        A general collision detection method that checks if Pac-Man has collided
-        with another entity (like a ghost or pellet).
-
-        It calculates the distance between the two entities and checks if
-        it's less than or equal to the sum of their collision radii.
 
         Returns True if a collision is detected, False otherwise.
 
@@ -168,12 +163,7 @@ class PacMan(Entity):
         bool
             True if a collision is detected, False otherwise
         """
-        d = self.position - other.position
-        dSquared = d.magnitude_squared()
-        rSquared = (self.collideRadius + other.collideRadius) ** 2
-        if dSquared <= rSquared:
-            return True
-        return False
+        return self.position == other.position
 
     def render(self, screen):
         if self.visible:
@@ -280,20 +270,33 @@ class FiniteStateMachine:
         If no pellets are nearby, then move randomly.
         If a pellet is nearby, then move towards it.
         """
-        neighbors = game.graph.get_neighbor_spaces(agent.position)
-        filtered_neighbors = [
-            neighbor
-            for neighbor in neighbors
-            if neighbor.tile_type in ["+", ".", "p", "P"]
+        #! issue here where empty spot is getting picked when there are pellets nearby
+        #! need to fix the way pellets and pacman are added to space
+        neighbor_spaces = game.graph.get_neighbor_spaces(
+            agent.position
+        )  #! remove get from method name
+        pellets = [
+            space
+            for space in neighbor_spaces
+            if space.has("Pellet")
+            or space.has("PowerPellet")  #! allow to take list of objects
         ]
         eligible_neighbors = [
-            neighbor
-            for neighbor in filtered_neighbors
-            if neighbor in ["+", "-", " ", ".", "p", "P"]
+            space
+            for space in pellets
+            if space
+            in [
+                "+",
+                "-",
+                " ",
+                ".",
+                "p",
+                "P",
+            ]  #! add a "playable" attribute to space??? Pellets, empty spaces, and power pellets are playable. is_playable() method
         ]
 
-        if filtered_neighbors:
-            random_space = random.choice(filtered_neighbors)
+        if pellets:
+            random_space = random.choice(pellets)
         else:
             random_space = (
                 random.choice(eligible_neighbors) if eligible_neighbors else None
