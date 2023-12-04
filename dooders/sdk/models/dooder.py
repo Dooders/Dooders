@@ -13,6 +13,7 @@ from pydantic import BaseModel
 
 from dooders.sdk import steps
 from dooders.sdk.base.agent import Agent
+from dooders.sdk.base.coordinate import Coordinate
 from dooders.sdk.core import Condition
 from dooders.sdk.core.action import Action
 from dooders.sdk.core.default_settings import default_settings
@@ -33,9 +34,12 @@ GeneticCode = Dict[str, List[Any]]
 
 
 class MainStats(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
+
     id: str
     number: int
-    position: tuple
+    position: Coordinate
     rotation: int
     hunger: int
     age: int
