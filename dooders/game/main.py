@@ -166,7 +166,11 @@ class GameController:
         # self.mazedata.obj.set_portal_pairs(self.nodes)
         # self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan()
+        self.graph.add(self.pacman, self.pacman.position)
         self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
+        
+        for pellet in self.pellets.pellet_List:
+            self.graph.add(pellet, pellet.position)
         # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
 
         # self.ghosts.pinky.set_start_node(
