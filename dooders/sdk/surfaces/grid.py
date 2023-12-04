@@ -7,13 +7,14 @@ Rectangular grid of Spaces.
 import itertools
 from functools import singledispatchmethod
 from typing import Any, Dict, Iterator, List, Sequence, Tuple, Union, cast
+from dooders.sdk.base.coordinate import Coordinate
 
 from dooders.sdk.modules.space import Space
+
 
 GridRow = List[Space]
 X = int
 Y = int
-Coordinate = Tuple[X, Y]
 
 
 class Grid:
@@ -276,7 +277,7 @@ class Grid:
                         yield object
 
     @contents.register
-    def _(self, position: tuple) -> Iterator[Any]:
+    def _(self, position: "Coordinate") -> Iterator[Any]:
         """
         Return an iterator over all contents in a Space on the grid.
 
@@ -289,14 +290,6 @@ class Grid:
         -------
         Iterator[Any], [<Dooder>, <Energy>, <Dooder>, <Energy>]
             An iterator over all contents in a Space on the grid.
-
-        Example
-        -------
-        for object in grid.contents((0, 0)):
-            print(object)
-        >>> <Dooder>
-        >>> <Energy>
-        >>> <Dooder>
         """
         x, y = position
         space = self._grid[x][y]

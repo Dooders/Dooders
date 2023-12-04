@@ -13,6 +13,8 @@ contents (Energy, Agents, etc.)
 import random
 from typing import Union
 
+from dooders.sdk.base.coordinate import Coordinate
+
 
 class Space:
     """
@@ -70,7 +72,7 @@ class Space:
     def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
-        self.coordinates = (x, y)
+        self.coordinates = Coordinate(x, y)
         self._contents: dict = {}
         self.status = "empty"
 

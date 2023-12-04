@@ -98,9 +98,8 @@ class Graph:
         for setting in settings:
             if setting not in ["torus", "height", "width"]:
                 setattr(self, setting, settings[setting])
-                
-        if hasattr(self, "map"):
 
+        if hasattr(self, "map"):
             for space in self.spaces():
                 x, y = space.coordinates
                 tile_type = self.map[y][x]
@@ -422,7 +421,7 @@ class Graph:
         neighbor_spaces: List[Space]
             A list of neighbor spaces.
         """
-        node_label = self.coordinate_to_node_label(coordinate.x/16, coordinate.y/16)
+        node_label = self.coordinate_to_node_label(coordinate.x, coordinate.y)
         neighbor_nodes = list(self._graph.neighbors(node_label))
         neighbor_spaces = [
             self._graph.nodes[node_label]["space"] for node_label in neighbor_nodes

@@ -1,19 +1,23 @@
 import random
 from abc import ABC, abstractmethod
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from dooders.sdk.base.coordinate import Coordinate
 
 from dooders.sdk.models.information import Information
 
 
 class BaseStats(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
+
     id: str = None
     number: int = 0
     age: int = 0
     generation: int = 0
     birth: int = 0
     death: int = None
-    position: tuple = None
+    position: Coordinate = Coordinate(0, 0)
     rotation: int = 0
     status: str = "Alive"
     reproduction_count: int = 0

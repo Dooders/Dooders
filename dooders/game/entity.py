@@ -5,6 +5,8 @@ from dooders.game.constants import *
 from dooders.sdk.base.coordinate import Coordinate
 from random import randint
 
+from dooders.sdk.utils.short_id import ShortUUID as short_id
+
 
 class Entity(ABC):
     """
@@ -96,6 +98,8 @@ class Entity(ABC):
         node : Node
             The starting node of the entity.
         """
+        self.seed = short_id()
+        self.id = self.seed.uuid()
         self.name = None
         self.directions = {
             UP: Coordinate(0, -1),

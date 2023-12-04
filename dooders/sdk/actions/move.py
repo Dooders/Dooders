@@ -11,7 +11,6 @@ import numpy as np
 
 from dooders.sdk.core.core import Core
 from dooders.sdk.models.senses import Senses
-from dooders.sdk.utils.get_direction import get_direction
 
 
 @Core.register("action")
@@ -48,13 +47,13 @@ def move(dooder) -> None:
         pass
     else:
         origin = dooder.position
-        dooder.direction = get_direction(origin, coordinates)
+
         dooder.simulation.environment.move_object(dooder, coordinates)
         dooder.move_count += 1
 
         dooder.log(
             granularity=2,
-            message=f"Moved {dooder.direction} from {origin} to {coordinates}",
+            message=f"Moved from {origin} to {coordinates}",
             scope="Dooder",
         )
 

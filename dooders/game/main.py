@@ -166,7 +166,11 @@ class GameController:
         # self.mazedata.obj.set_portal_pairs(self.nodes)
         # self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan()
+        self.graph.add(self.pacman, self.pacman.position)
         self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
+        
+        for pellet in self.pellets.pellet_List:
+            self.graph.add(pellet, pellet.position)
         # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
 
         # self.ghosts.pinky.set_start_node(
@@ -215,12 +219,12 @@ class GameController:
 
         # Update ghosts, fruit, and check for pellet events
         # if not self.pause.paused:
-        #     self.ghosts.update(self)
-        #     if self.fruit is not None:
-        #         self.fruit.update(self)
-        #     self.check_pellet_events()
-        #     self.check_ghost_events()
-        #     self.check_fruit_events()
+        # self.ghosts.update(self)
+        # if self.fruit is not None:
+        #     self.fruit.update(self)
+        self.check_pellet_events()
+        # self.check_ghost_events()
+        # self.check_fruit_events()
 
         # Play when pacman is alive and not paused
         if self.pacman.alive:
@@ -248,8 +252,8 @@ class GameController:
         self.check_events()
         if self.render_game:
             self.render()
-            
-        time.sleep(3)
+
+        time.sleep(0.1)
 
     def check_events(self) -> None:
         """
