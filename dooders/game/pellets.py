@@ -1,12 +1,12 @@
-from abc import ABC
 import pygame
 from dooders.game.constants import *
 import numpy as np
+from dooders.game.entity import Entity
 
 from dooders.sdk.base.coordinate import Coordinate
 
 
-class Pellet(ABC):
+class Pellet(Entity):
     """
     This class provides a structured way to represent and manage a pellet in a game.
 
@@ -59,6 +59,7 @@ class Pellet(ABC):
         column : int
             Column index of the pellet
         """
+        Entity.__init__(self)
         self.name = PELLET
         self.position = Coordinate(column, row)
         self.color = WHITE
