@@ -275,3 +275,6 @@ class Coordinate:
             Iterator for the coordinate
         """
         return iter((self.x, self.y))
+
+    def __hash__(self):
+        return hash((self.x, self.y))
