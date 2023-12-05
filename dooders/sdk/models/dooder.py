@@ -260,7 +260,7 @@ class Dooder(Agent):
         inference_record = {
             "model_name": model_name,
             "hunger": self.hunger,
-            "position": self.position,
+            "position": str(self.position),
             "perception": [str(x) for x in input_array[0]],
             "output": str(output_array),
             "reality": [str(choice) for choice in reality_array],
@@ -328,9 +328,12 @@ class Dooder(Agent):
         """
         stats = {}
         for stat in MainStats.__fields__:
-            stats[stat] = getattr(self, stat)
+            if stat == "position":
+                stats[stat] = str(getattr(self, stat))
+            else:
+                stats[stat] = getattr(self, stat)
 
-        return MainStats(**stats)
+        return stats
 
     @property
     def perception(self) -> "Perception":
@@ -356,8 +359,9 @@ class Dooder(Agent):
         state: dict
             The state of the dooder.
         """
-        state = self.stats.dict()
+        state = self.stats
         state["encoded_weights"] = self.encoded_weights
+
         return state
 
     @property

@@ -46,14 +46,14 @@ class Arena:
     """
     Class manages Dooder objects in the simulation.
 
-    The class also keeps track of the total number of Dooders created and 
-    terminated for each cycle. (The Information class will have historical 
-    data for the above stats. The counts are reset after each cycle.) 
+    The class also keeps track of the total number of Dooders created and
+    terminated for each cycle. (The Information class will have historical
+    data for the above stats. The counts are reset after each cycle.)
 
     Parameters
     ----------
     simulation : Simulation object
-        The simulation object that contains the environment, agents, 
+        The simulation object that contains the environment, agents,
         and other models.
 
     Attributes
@@ -70,7 +70,7 @@ class Arena:
         Terminated Dooders IDs
     simulation: see ``Parameters`` section.
     seed : function
-        The function that generates the seed population to start 
+        The function that generates the seed population to start
         the simulation.
 
     Methods
@@ -110,7 +110,7 @@ class Arena:
 
     total_counter = 0
 
-    def __init__(self, simulation: 'BaseSimulation', settings) -> None:
+    def __init__(self, simulation: "BaseSimulation", settings) -> None:
         self.graph = nx.Graph()
         self.active_dooders = {}
         self.graveyard = {}
@@ -137,18 +137,18 @@ class Arena:
         """
         Generate seed population based on the selected strategy.
         """
-        self.initial_dooder_count = self.settings.get('SeedCount')
+        self.initial_dooder_count = self.settings.get("SeedCount")
 
         for position in self.SeedPlacement(self.initial_dooder_count):
             self.generate_dooder(position)
 
-    def _generate_dooder(self, position: tuple, tag: str = 'Seed') -> 'Dooder':
+    def _generate_dooder(self, position: tuple, tag: str = "Seed") -> "Dooder":
         """
         Generate a new dooder with a provided position
 
         Parameters
         ----------
-        position : tuple 
+        position : tuple
             position to place dooder, (x, y)
 
         Returns
@@ -156,8 +156,7 @@ class Arena:
         Dooder: dooder object
             Newly generated Dooder object
         """
-        dooder = Dooder(self.simulation.generate_id(),
-                        position, self.simulation)
+        dooder = Dooder(self.simulation.generate_id(), position, self.simulation)
         dooder.tag = tag
         dooder.gene_embedding = gene_embedding
 
@@ -174,10 +173,9 @@ class Arena:
         """
         dooder = self._generate_dooder(position)
         self.place_dooder(dooder, position)
-        dooder.log(granularity=1,
-                   message=f"Created {dooder.id}", scope='Dooder')
+        dooder.log(granularity=1, message=f"Created {dooder.id}", scope="Dooder")
 
-    def place_dooder(self, dooder: 'Dooder', position: tuple) -> None:
+    def place_dooder(self, dooder: "Dooder", position: tuple) -> None:
         """
         Place dooder in environment
 
@@ -186,7 +184,7 @@ class Arena:
 
         Parameters
         ----------
-        dooder : Dooder object 
+        dooder : Dooder object
         position : tuple
             position to place dooder, (x, y)
         """
@@ -201,7 +199,7 @@ class Arena:
         self.total_counter += 1
         dooder.number = self.total_counter
 
-    def terminate_dooder(self, dooder: 'Dooder') -> None:
+    def terminate_dooder(self, dooder: "Dooder") -> None:
         """
         Terminate dooder based on the unique id
         Removes from active_dooders, environment, and time
@@ -218,7 +216,7 @@ class Arena:
         self.dooders_died += 1
         del dooder
 
-    def get_dooder(self, dooder_id: str = None) -> 'Dooder':
+    def get_dooder(self, dooder_id: str = None) -> "Dooder":
         """
         Get dooder based on the unique id, if no id is provided, a random dooder
         will be selected from the active dooders. If no active dooders are
@@ -242,8 +240,8 @@ class Arena:
         else:
             return self.active_dooders[dooder_id]
 
-    def dooders(self) -> Generator['Dooder', None, None]:
-        """ 
+    def dooders(self) -> Generator["Dooder", None, None]:
+        """
         Generator that yields all active dooders
 
         Yields
@@ -263,14 +261,16 @@ class Arena:
             A dictionary of the dooders' attributes.
         """
         dooder_attributes = [
-            (dooder.age, dooder.hunger, dooder.energy_consumed) for dooder in self.dooders()]
+            (dooder.age, dooder.hunger, dooder.energy_consumed)
+            for dooder in self.dooders()
+        ]
         dooder_count = len(dooder_attributes)
 
         def median(data: list) -> float:
             data = sorted(data)
             n = len(data)
             mid = n // 2
-            return (data[mid] if n % 2 else (data[mid - 1] + data[mid]) / 2)
+            return data[mid] if n % 2 else (data[mid - 1] + data[mid]) / 2
 
         if dooder_count > 0:
             ages, hunger, energy_consumed = zip(*dooder_attributes)
@@ -278,18 +278,22 @@ class Arena:
             ages, hunger, energy_consumed = [], [], []
 
         return {
-            'active_dooder_count': self.active_dooder_count,
-            'terminated_dooder_count': self.dooders_died,
-            'created_dooder_count': self.dooders_created,
-            'average_dooder_hunger': round(sum(hunger) / dooder_count, 3) if hunger else 0,
-            'median_dooder_age': median(ages) if ages else 0,
-            'average_dooder_age': round(sum(ages) / dooder_count, 3) if ages else 0,
-            'average_energy_consumed': round(sum(energy_consumed) / dooder_count, 3) if energy_consumed else 0
+            "active_dooder_count": self.active_dooder_count,
+            "terminated_dooder_count": self.dooders_died,
+            "created_dooder_count": self.dooders_created,
+            "average_dooder_hunger": round(sum(hunger) / dooder_count, 3)
+            if hunger
+            else 0,
+            "median_dooder_age": median(ages) if ages else 0,
+            "average_dooder_age": round(sum(ages) / dooder_count, 3) if ages else 0,
+            "average_energy_consumed": round(sum(energy_consumed) / dooder_count, 3)
+            if energy_consumed
+            else 0,
         }
 
     @property
     def active_dooder_count(self) -> int:
-        """ 
+        """
         Returns the number of active dooders
         """
         return len(self.active_dooders)
@@ -299,7 +303,10 @@ class Arena:
         """
         Returns the state of the Arena of all active dooders
         """
-        return {**self.graveyard, **{k: v.state for k, v in self.active_dooders.items()}}
+        return {
+            **self.graveyard,
+            **{k: v.state for k, v in self.active_dooders.items()},
+        }
 
     @property
     def weights(self) -> dict:

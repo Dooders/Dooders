@@ -150,8 +150,9 @@ class Space:
         """
         for object in self._contents.values():
             if object.__class__.__name__ == object_type:
-                if ignore.id == object.id:
-                    pass
+                if ignore:
+                    if object.id == ignore.id:
+                        pass
                 else:
                     return True
         return False

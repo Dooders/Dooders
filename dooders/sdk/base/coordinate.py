@@ -263,7 +263,18 @@ class Coordinate:
         str
             String representation of the coordinate
         """
-        return f"<{self.x}, {self.y}>"
+        return str(f"[{self.x}, {self.y}]")
+
+    def __repr__(self) -> str:
+        """
+        Provides a string representation of the coordinate in the format <x, y>.
+
+        Returns
+        -------
+        str
+            String representation of the coordinate
+        """
+        return str(f"[{self.x}, {self.y}]")
 
     def __iter__(self) -> iter:
         """
