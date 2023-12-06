@@ -270,8 +270,7 @@ class FiniteStateMachine:
         If no pellets are nearby, then move randomly.
         If a pellet is nearby, then move towards it.
         """
-        #! issue here where empty spot is getting picked when there are pellets nearby
-        #! need to fix the way pellets and pacman are added to space
+        #! remove Pellet from space after eaten (or set as eaten)
         neighbor_spaces = game.graph.get_neighbor_spaces(
             agent.position
         )  #! remove get from method name
@@ -281,28 +280,20 @@ class FiniteStateMachine:
             if space.has("Pellet")
             or space.has("PowerPellet")  #! allow to take list of objects
         ]
+
         eligible_neighbors = [
             space
-            for space in pellets
-            if space
-            in [
-                "+",
-                "-",
-                " ",
-                ".",
-                "p",
-                "P",
-            ]  #! add a "playable" attribute to space??? Pellets, empty spaces, and power pellets are playable. is_playable() method
+            for space in neighbor_spaces
+            if space.playable and space not in pellets
         ]
 
-        if pellets:
+        if len(pellets) >= 1:
             random_space = random.choice(pellets)
-        else:
-            random_space = (
-                random.choice(eligible_neighbors) if eligible_neighbors else None
-            )
 
-        return random_space.coordinates if random_space else None
+        else:
+            random_space = random.choice(eligible_neighbors)
+
+        return random_space.coordinates
 
     def pellet_nearby(self):
         """
