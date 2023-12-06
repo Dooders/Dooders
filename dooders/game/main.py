@@ -18,6 +18,26 @@ from dooders.game.maze import MazeData
 
 from dooders.sdk.surfaces.graph import Graph
 
+map_legend = {
+    "playable": [".", "-", "+", "p", "P"],
+    "non-playable": [
+        "X",
+        "0",
+        "1",
+        "n",
+        "8",
+        "7",
+        "3",
+        "2",
+        "9",
+        "6",
+        "|",
+        "4",
+        "5",
+        "=",
+    ],
+}
+
 
 class GameController:
     """
@@ -154,13 +174,9 @@ class GameController:
         """
         self.mazedata.load_maze(self.level)
         self.mazesprites = MazeSprites()
-        map_data = self.mazesprites.data
-        grid_height = len(map_data)
-        grid_width = len(map_data[0])
 
-        self.graph = Graph(
-            {"height": grid_height, "width": grid_width, "map": map_data}
-        )
+        self.graph = self.setup_graph()
+
         self.set_background()
         # self.nodes = NodeGroup("assets/" + self.mazedata.obj.name + ".txt")
         # self.mazedata.obj.set_portal_pairs(self.nodes)
@@ -168,7 +184,7 @@ class GameController:
         self.pacman = PacMan()
         self.graph.add(self.pacman, self.pacman.position)
         self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
-        
+
         for pellet in self.pellets.pellet_List:
             self.graph.add(pellet, pellet.position)
         # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
@@ -194,6 +210,20 @@ class GameController:
         # self.ghosts.inky.startNode.deny_access(RIGHT, self.ghosts.inky)
         # self.ghosts.clyde.startNode.deny_access(LEFT, self.ghosts.clyde)
         # self.mazedata.obj.deny_ghosts_access(self.ghosts, self.nodes)
+
+    def setup_graph(self):
+        map_data = self.mazesprites.data
+        grid_height = len(map_data)
+        grid_width = len(map_data[0])
+        graph = Graph({"height": grid_height, "width": grid_width, "map": map_data})
+
+        for space in graph.spaces():
+            if space.tile_type in map_legend["playable"]:
+                space.playable = True
+            else:
+                space.playable = False
+
+        return graph
 
     def update(self) -> None:
         """
@@ -288,15 +318,16 @@ class GameController:
         """
         pellet = self.pacman.eat_pellets(self.pellets.pellet_List)
         if pellet:
+            self.graph.remove(pellet)
             self.pellets.numEaten += 1
             # self.update_score(pellet.points)
-            if self.pellets.numEaten == 30:
-                self.ghosts.inky.startNode.allow_access(RIGHT, self.ghosts.inky)
-            if self.pellets.numEaten == 70:
-                self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
+            # if self.pellets.numEaten == 30:
+            #     self.ghosts.inky.startNode.allow_access(RIGHT, self.ghosts.inky)
+            # if self.pellets.numEaten == 70:
+            #     self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
             self.pellets.pellet_List.remove(pellet)
-            if pellet.name == POWERPELLET:
-                self.ghosts.start_freight()
+            # if pellet.name == POWERPELLET:
+            #     self.ghosts.start_freight()
             if self.pellets.is_empty():
                 self.flashBG = True
                 self.hide_entities()
