@@ -236,9 +236,10 @@ class Coordinate:
     def relative_direction(self, other: "Coordinate") -> int:
         """
         Returns the relative direction of the other coordinate from this coordinate.
-        The relative direction is an integer from 0 to 7, where 0 is directly above,
-        1 is up and to the right, 2 is directly to the right, 6 is directly to the
-        left, etc.
+        UP = 1
+        DOWN = -1
+        LEFT = 2
+        RIGHT = -2
 
         Parameters
         ----------
@@ -250,9 +251,19 @@ class Coordinate:
         int
             Relative direction of the other coordinate from this coordinate
         """
-        return int(
-            (math.atan2(other.y - self.y, other.x - self.x) * 4 / math.pi + 8.5) % 8
-        )
+        #! Clean this up to be simpler
+        if self.x == other.x:
+            if self.y < other.y:
+                return -1
+            else:
+                return 1
+        elif self.y == other.y:
+            if self.x < other.x:
+                return -2
+            else:
+                return 2
+        else:
+            raise ValueError("Coordinates must be adjacent to get relative direction")
 
     def __str__(self) -> str:
         """
