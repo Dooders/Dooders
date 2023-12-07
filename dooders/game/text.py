@@ -109,7 +109,7 @@ class Text(ABC):
         self.lifespan = time
         self.label = None
         self.destroy = False
-        self.setup_font("assets/PressStart2P-Regular.ttf")
+        self.setup_font("dooders/game/assets/PressStart2P-Regular.ttf")
         self.create_label()
 
     def setup_font(self, font_path: str) -> None:
