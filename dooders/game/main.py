@@ -11,7 +11,7 @@ from dooders.game.pellets import PelletGroup
 from dooders.game.fruit import Fruit
 
 # from dooders.game.pauser import Pause
-# from dooders.game.text import TextGroup
+from dooders.game.text import TextGroup
 from dooders.game.sprites import LifeSprites
 from dooders.game.sprites import MazeSprites
 from dooders.game.maze import MazeData
@@ -126,7 +126,7 @@ class GameController:
         self.level = 0
         self.lives = 5
         self.score = 0
-        # self.textgroup = TextGroup()
+        self.textgroup = TextGroup()
         self.lifesprites = LifeSprites(self.lives)
         self.flashBG = False
         self.flashTime = 0.2
@@ -244,7 +244,7 @@ class GameController:
         """
         dt = self.clock.tick(30) / 1000.0
         self.dt = dt
-        # self.textgroup.update(dt)
+        self.textgroup.update(dt)
         self.pellets.update(dt)
 
         # Update ghosts, fruit, and check for pellet events
@@ -320,7 +320,7 @@ class GameController:
         if pellet:
             self.graph.remove(pellet)
             self.pellets.numEaten += 1
-            # self.update_score(pellet.points)
+            self.update_score(pellet.points)
             # if self.pellets.numEaten == 30:
             #     self.ghosts.inky.startNode.allow_access(RIGHT, self.ghosts.inky)
             # if self.pellets.numEaten == 70:
@@ -482,13 +482,12 @@ class GameController:
         9. The fruit captured sprites are rendered.
         """
         self.screen.blit(self.background, (0, 0))
-        # self.nodes.render(self.screen) #! Why is this commented out?
         self.pellets.render(self.screen)
         # if self.fruit is not None:
         #     self.fruit.render(self.screen)
         self.pacman.render(self.screen)
         # self.ghosts.render(self.screen)
-        # self.textgroup.render(self.screen)
+        self.textgroup.render(self.screen)
 
         # # Lifesprites
         # for i in range(len(self.lifesprites.images)):
