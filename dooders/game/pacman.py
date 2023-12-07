@@ -60,6 +60,7 @@ class PacMan(Entity):
         self.name = PACMAN
         self.color = YELLOW
         self.alive = True
+        self.direction = LEFT
         self.sprites = PacManSprites(self)
         self.position = Coordinate(13, 26)
         self.brain = FiniteStateMachine()
@@ -97,9 +98,11 @@ class PacMan(Entity):
         dt = game.dt
         self.sprites.update(dt)
 
+        current_position = self.position
         next_position = self.logic(game)
         if next_position is not None:
             self.move(game, next_position)
+            self.direction = current_position.relative_direction(next_position)
 
     def logic(self, game) -> None:
         next_position = self.brain.update(game, self)
