@@ -1,10 +1,10 @@
 import pygame
 from pygame.locals import *
 from dooders.sdk.base.coordinate import Coordinate
-from constants import *
-from entity import Entity
-from modes import ModeController
-from sprites import GhostSprites
+from dooders.game.constants import *
+from dooders.game.entity import Entity
+from dooders.game.modes import ModeController
+from dooders.game.sprites import GhostSprites
 
 from typing import TYPE_CHECKING
 
@@ -94,6 +94,7 @@ class Ghost(Entity):
         self.mode = ModeController(self)
         self.blinky = blinky
         self.homeNode = node
+        self.home = Coordinate()
 
     def reset(self) -> None:
         """
