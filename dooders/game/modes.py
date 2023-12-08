@@ -1,4 +1,4 @@
-from constants import *
+from dooders.game.constants import *
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
