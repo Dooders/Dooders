@@ -19,19 +19,17 @@ from dooders.game.maze import MazeData
 from dooders.sdk.surfaces.graph import Graph
 
 map_legend = {
-    "playable": [".", "-", "+", "p", "P"],
+    "playable": [".", "-", "+", "p", "P", "n", "|"],
     "non-playable": [
         "X",
         "0",
         "1",
-        "n",
         "8",
         "7",
         "3",
         "2",
         "9",
         "6",
-        "|",
         "4",
         "5",
         "=",
@@ -218,11 +216,20 @@ class GameController:
         grid_width = len(map_data[0])
         graph = Graph({"height": grid_height, "width": grid_width, "map": map_data})
 
+        nodes_to_remove = []
+
         for space in graph.spaces():
             if space.tile_type in map_legend["playable"]:
                 space.playable = True
             else:
-                space.playable = False
+                node_label = graph.coordinate_to_node_label(
+                    space.coordinates.x, space.coordinates.y
+                )
+                nodes_to_remove.append(node_label)
+
+        # Removing the nodes after iterating
+        for node_label in nodes_to_remove:
+            graph._graph.remove_node(node_label)
 
         return graph
 
