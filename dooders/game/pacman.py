@@ -7,15 +7,6 @@ from dooders.sdk.base.coordinate import Coordinate
 from dooders.game.models import FSM
 
 
-# MOVEMENTS = {
-#     "UP": Coordinate(0, -TILEWIDTH),
-#     "DOWN": Coordinate(0, TILEWIDTH),
-#     "LEFT": Coordinate(-TILEWIDTH, 0),
-#     "RIGHT": Coordinate(TILEWIDTH, 0),
-#     "STOP": Coordinate(0, 0),
-# }
-
-
 class PacMan(Entity):
     """
     PacMan class
@@ -61,7 +52,8 @@ class PacMan(Entity):
         self.alive = True
         self.direction = LEFT
         self.sprites = PacManSprites(self)
-        self.position = Coordinate(13, 26)
+        self.home = Coordinate(13, 26)
+        self.position = self.home
         self.brain = FSM()
 
     def reset(self) -> None:
