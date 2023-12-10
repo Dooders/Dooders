@@ -7,7 +7,7 @@ from dooders.game.pacman import PacMan
 # from nodes import NodeGroup
 from dooders.game.pellets import PelletGroup
 
-# from ghosts import GhostGroup
+from dooders.game.blinky import Blinky
 from dooders.game.fruit import Fruit
 
 # from dooders.game.pauser import Pause
@@ -182,6 +182,7 @@ class GameController:
         # self.mazedata.obj.set_portal_pairs(self.nodes)
         # self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan()
+        self.blinky = Blinky()
         self.graph.add(self.pacman, self.pacman.position)
         self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
 
@@ -246,6 +247,7 @@ class GameController:
         self.dt = dt
         self.textgroup.update(dt)
         self.pellets.update(dt)
+        self.blinky.update(self)
 
         # Update ghosts, fruit, and check for pellet events
         # if not self.pause.paused:
@@ -486,6 +488,7 @@ class GameController:
         # if self.fruit is not None:
         #     self.fruit.render(self.screen)
         self.pacman.render(self.screen)
+        self.blinky.render(self.screen)
         # self.ghosts.render(self.screen)
         self.textgroup.render(self.screen)
 
