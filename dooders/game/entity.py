@@ -365,9 +365,8 @@ class Entity(ABC):
         """
         if self.visible:
             if self.image is not None:
-                adjust = Coordinate(TILEWIDTH, TILEHEIGHT) / 2
-                p = self.position - adjust
-                screen.blit(self.image, p.as_tuple())
+                x, y = self.position.as_pixel()
+                position = (x - TILEWIDTH / 2, y - TILEHEIGHT / 2)
+                screen.blit(self.image, position)
             else:
-                p = self.position.as_int()
-                pygame.draw.circle(screen, self.color, p, self.radius)
+                raise Exception("No image for PacMan")
