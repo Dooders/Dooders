@@ -7,7 +7,7 @@ from dooders.game.pacman import PacMan
 # from nodes import NodeGroup
 from dooders.game.pellets import PelletGroup
 
-# from ghosts import GhostGroup
+from dooders.game.blinky import Blinky
 from dooders.game.fruit import Fruit
 
 # from dooders.game.pauser import Pause
@@ -19,19 +19,17 @@ from dooders.game.maze import MazeData
 from dooders.sdk.surfaces.graph import Graph
 
 map_legend = {
-    "playable": [".", "-", "+", "p", "P"],
+    "playable": [".", "-", "+", "p", "P", "n", "|"],
     "non-playable": [
         "X",
         "0",
         "1",
-        "n",
         "8",
         "7",
         "3",
         "2",
         "9",
         "6",
-        "|",
         "4",
         "5",
         "=",
@@ -182,6 +180,7 @@ class GameController:
         # self.mazedata.obj.set_portal_pairs(self.nodes)
         # self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan()
+        self.blinky = Blinky()
         self.graph.add(self.pacman, self.pacman.position)
         self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
 
@@ -217,11 +216,20 @@ class GameController:
         grid_width = len(map_data[0])
         graph = Graph({"height": grid_height, "width": grid_width, "map": map_data})
 
+        nodes_to_remove = []
+
         for space in graph.spaces():
             if space.tile_type in map_legend["playable"]:
                 space.playable = True
             else:
-                space.playable = False
+                node_label = graph.coordinate_to_node_label(
+                    space.coordinates.x, space.coordinates.y
+                )
+                nodes_to_remove.append(node_label)
+
+        # Removing the nodes after iterating
+        for node_label in nodes_to_remove:
+            graph._graph.remove_node(node_label)
 
         return graph
 
@@ -246,6 +254,7 @@ class GameController:
         self.dt = dt
         self.textgroup.update(dt)
         self.pellets.update(dt)
+        self.blinky.update(self)
 
         # Update ghosts, fruit, and check for pellet events
         # if not self.pause.paused:
@@ -486,6 +495,7 @@ class GameController:
         # if self.fruit is not None:
         #     self.fruit.render(self.screen)
         self.pacman.render(self.screen)
+        self.blinky.render(self.screen)
         # self.ghosts.render(self.screen)
         self.textgroup.render(self.screen)
 
