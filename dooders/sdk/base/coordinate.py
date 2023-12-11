@@ -160,6 +160,11 @@ class Coordinate:
         bool
             Whether the two coordinates are approximately equal or not
         """
+        if type(other) == tuple:
+            return (
+                math.sqrt((self.x - other[0]) ** 2 + (self.y - other[1]) ** 2)
+                < Coordinate.EPSILON
+            )
         return (
             math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
             < Coordinate.EPSILON
