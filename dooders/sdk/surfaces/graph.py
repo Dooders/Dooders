@@ -16,6 +16,13 @@ class Coordinate(NamedTuple):
     Y: int
 
 
+def heuristic(a, b):
+    """Manhattan distance on a grid."""
+    (x1, y1) = a
+    (x2, y2) = b
+    return abs(x1 - x2) + abs(y1 - y2)
+
+
 class Graph:
     """
     A graph is a collection of nodes (vertices) along with identified pairs of
@@ -209,6 +216,29 @@ class Graph:
         node["space"].add(object)
         self._object_index[object.id] = coordinate
         object.position = coordinate
+
+    def path_finding(self, start: Coordinate, end: Coordinate) -> List[Coordinate]:
+        """
+        Finds a path between two coordinates.
+
+        Parameters
+        ----------
+        start: Coordinate
+            The starting coordinate.
+        end: Coordinate
+            The ending coordinate.
+
+        Returns
+        -------
+        path: List[Coordinate]
+            The path between the two coordinates.
+        """
+        # start_node = self.coordinate_to_node_label(start.x, start.y)
+        # end_node = self.coordinate_to_node_label(end.x, end.y)
+        print(f'Start: {start}, End: {end}')
+        path = nx.astar_path(self._graph, start, end, heuristic)
+        path = [self.node_label_to_coordinate(node) for node in path]
+        return path
 
     @singledispatchmethod
     def remove(self, type: Union[object, str]) -> None:
