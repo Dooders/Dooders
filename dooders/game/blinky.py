@@ -23,9 +23,11 @@ class Blinky(Entity):
         self.color = RED
         self.alive = True
         self.sprites = GhostSprites(self)
-        self.home = Coordinate(13,14)
+        self.home = Coordinate(13, 14)
         self.position = self.home
         self.mode = ModeController(self)
+        self.path = []
+        self.waypoints = [113, 314, 113]
 
     def reset(self) -> None:
         """
@@ -59,12 +61,25 @@ class Blinky(Entity):
         """
         dt = game.dt
         self.sprites.update(dt)
+        self.next_move(game)
         # self.mode.update(dt)
         # if self.mode.current is SCATTER:
         #     self.scatter()
         # elif self.mode.current is CHASE:
         #     self.chase()
-        # Entity.update(self, game)
+        Entity.update(self, game)
+
+    def get_path(self, game) -> None:
+        if self.path == [] and self.waypoints != []:
+            next_waypoint = self.waypoints.pop(0)
+            self.path = game.graph.path_finding(self.position, next_waypoint)
+
+    def next_move(self, game) -> None:
+        self.get_path(game)
+        if self.path != []:
+            next_position = self.path.pop(0)
+            self.position = next_position
+            self.direction = self.position.relative_direction(next_position)
 
     def scatter(self) -> None:
         """

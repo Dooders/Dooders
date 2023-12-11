@@ -15,6 +15,7 @@ from dooders.game.text import TextGroup
 from dooders.game.sprites import LifeSprites
 from dooders.game.sprites import MazeSprites
 from dooders.game.maze import MazeData
+from dooders.sdk.base.coordinate import Coordinate
 
 from dooders.sdk.surfaces.graph import Graph
 
@@ -293,6 +294,11 @@ class GameController:
             self.render()
 
         time.sleep(0.1)
+
+    def path_finding(self, start: "Coordinate", end: "Coordinate") -> list:
+        path = self.graph.path_finding(start, end)
+
+        return path
 
     def check_events(self) -> None:
         """
