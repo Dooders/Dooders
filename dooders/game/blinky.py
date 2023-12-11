@@ -67,7 +67,7 @@ class Blinky(Entity):
         #     self.scatter()
         # elif self.mode.current is CHASE:
         #     self.chase()
-        Entity.update(self, game)
+        # Entity.update(self, game)
 
     def get_path(self, game) -> None:
         if self.path == [] and self.waypoints != []:
@@ -78,8 +78,9 @@ class Blinky(Entity):
         self.get_path(game)
         if self.path != []:
             next_position = self.path.pop(0)
-            self.position = next_position
-            self.direction = self.position.relative_direction(next_position)
+            new_position = Coordinate(next_position)
+            # self.direction = new_position.relative_direction(next_position)
+            self.position = new_position
 
     def scatter(self) -> None:
         """

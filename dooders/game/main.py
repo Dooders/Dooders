@@ -223,14 +223,11 @@ class GameController:
             if space.tile_type in map_legend["playable"]:
                 space.playable = True
             else:
-                node_label = graph.coordinate_to_node_label(
-                    space.coordinates.x, space.coordinates.y
-                )
-                nodes_to_remove.append(node_label)
+                nodes_to_remove.append(space.coordinates)
 
-        # Removing the nodes after iterating
-        for node_label in nodes_to_remove:
-            graph._graph.remove_node(node_label)
+        # Removing the nodes that are not playable
+        for node in nodes_to_remove:
+            graph._graph.remove_node(node)
 
         return graph
 
@@ -255,7 +252,7 @@ class GameController:
         self.dt = dt
         self.textgroup.update(dt)
         self.pellets.update(dt)
-        self.blinky.update(self)
+        # self.blinky.update(self)
 
         # Update ghosts, fruit, and check for pellet events
         # if not self.pause.paused:
