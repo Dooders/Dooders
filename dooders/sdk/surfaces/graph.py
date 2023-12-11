@@ -16,11 +16,12 @@ class Coordinate(NamedTuple):
     Y: int
 
 
-def heuristic(a, b):
-    """Manhattan distance on a grid."""
-    (x1, y1) = a
-    (x2, y2) = b
-    return abs(x1 - x2) + abs(y1 - y2)
+# def heuristic(a, b):
+#     """Manhattan distance on a grid."""
+#     print(f'a: {a}, b: {b}')
+#     (x1, y1) = a
+#     (x2, y2) = b
+#     return abs(x1 - x2) + abs(y1 - y2)
 
 
 class Graph:
@@ -132,10 +133,6 @@ class Graph:
             for y in range(self.width):
                 G.add_edge((0, y), (self.height - 1, y))
 
-        # Label nodes with integers instead of (x, y) coordinates
-        relabel_dict = {(x, y): y * self.width + x for x, y in G.nodes()}
-        G = nx.relabel_nodes(G, relabel_dict)
-
         return G
 
     def view(self):
@@ -149,7 +146,7 @@ class Graph:
         """
         plt.figure(figsize=(15, 15))
         pos = {
-            self.coordinate_to_node_label(x, y): (x, self.height - 1 - y)
+            (x, y): (x, self.height - 1 - y)
             for x in range(self.width)
             for y in range(self.height)
         }
@@ -164,41 +161,11 @@ class Graph:
         )
         plt.show()
 
-    def coordinate_to_node_label(self, x: int, y: int) -> int:
-        """
-        Converts a coordinate to a node label.
-
-        Parameters
-        ----------
-        x: int
-            The x coordinate.
-        y: int
-            The y coordinate.
-
-        Returns
-        -------
-        node_label: int
-            The node label.
-        """
-        return y * self.width + x
-
-    def node_label_to_coordinate(self, node_label: int) -> Coordinate:
-        """
-        Converts a node label to a coordinate.
-
-        Parameters
-        ----------
-        node_label: int
-            The node label.
-
-        Returns
-        -------
-        coordinate: Coordinate
-            The coordinate.
-        """
-        x = node_label % self.width
-        y = node_label // self.width
-        return Coordinate(x, y)
+    def heuristic(self, a, b):
+        """Manhattan distance on a grid."""
+        (x1, y1) = a
+        (x2, y2) = b
+        return abs(x1 - x2) + abs(y1 - y2)
 
     def add(self, object: object, coordinate: Coordinate) -> None:
         """
@@ -211,8 +178,7 @@ class Graph:
         coordinate: Coordinate
             The coordinate to add the object to.
         """
-        node_label = self.coordinate_to_node_label(*coordinate)
-        node = self._graph.nodes[node_label]
+        node = self._graph.nodes[coordinate]
         node["space"].add(object)
         self._object_index[object.id] = coordinate
         object.position = coordinate
@@ -233,12 +199,7 @@ class Graph:
         path: List[Coordinate]
             The path between the two coordinates.
         """
-        # start_node = self.coordinate_to_node_label(start.x, start.y)
-        # end_node = self.coordinate_to_node_label(end.x, end.y)
-        print(f'Start: {start}, End: {end}')
-        path = nx.astar_path(self._graph, start, end, heuristic)
-        path = [self.node_label_to_coordinate(node) for node in path]
-        return path
+        return nx.astar_path(self._graph, start, end, self.heuristic)
 
     @singledispatchmethod
     def remove(self, type: Union[object, str]) -> None:
@@ -256,8 +217,7 @@ class Graph:
         object: object
             The object to remove.
         """
-        node_label = self.coordinate_to_node_label(*object.position)
-        node = self._graph.nodes[node_label]
+        node = self._graph.nodes[object.position]
         node["space"].remove(object)
         self._object_index.pop(object.id)
 
@@ -272,8 +232,7 @@ class Graph:
             The object id to remove.
         """
         coordinate = self._object_index[object_id]
-        node_label = self.coordinate_to_node_label(*coordinate)
-        node = self._graph.nodes[node_label]
+        node = self._graph.nodes[coordinate]
         node.space.remove(object_id)
         self._object_index.pop(object_id)
 
@@ -381,8 +340,7 @@ class Graph:
         >>> <Energy>
         >>> <Dooder>
         """
-        node_label = self.coordinate_to_node_label(*position)
-        for object in self._graph.nodes[node_label]["space"].contents:
+        for object in self._graph.nodes[position]["space"].contents:
             yield object
 
     # @property
@@ -433,11 +391,10 @@ class Graph:
         >>> <Space>
         >>> <Space>
         """
-        node_label = self.coordinate_to_node_label(*position)
-        for neighbor in self._graph.neighbors(node_label):
+        for neighbor in self._graph.neighbors(position):
             yield self._graph.nodes[neighbor]["space"]
 
-    def get_neighbor_spaces(self, coordinate) -> List[Space]:
+    def get_neighbor_spaces(self, coordinate: "Coordinate") -> List[Space]:
         """
         Returns the neighbor spaces of a node.
 
@@ -451,10 +408,9 @@ class Graph:
         neighbor_spaces: List[Space]
             A list of neighbor spaces.
         """
-        node_label = self.coordinate_to_node_label(coordinate.x, coordinate.y)
-        neighbor_nodes = list(self._graph.neighbors(node_label))
+        neighbor_nodes = list(self._graph.neighbors(coordinate))
         neighbor_spaces = [
-            self._graph.nodes[node_label]["space"] for node_label in neighbor_nodes
+            self._graph.nodes[coordinate]["space"] for coordinate in neighbor_nodes
         ]
         return neighbor_spaces
 
@@ -531,8 +487,7 @@ class Graph:
         space: Space
             The space at the given coordinate.
         """
-        node_label = self.coordinate_to_node_label(*value)
-        return self._graph.nodes[node_label]["space"]
+        return self._graph.nodes[value]["space"]
 
     @__getitem__.register
     def _(self, value: list) -> List[Space]:
@@ -567,8 +522,7 @@ class Graph:
             The space at the given object id.
         """
         coordinate = self._object_index[value]
-        node_label = self.coordinate_to_node_label(*coordinate)
-        return self._graph.nodes[node_label]["space"]
+        return self._graph.nodes[coordinate]["space"]
 
     def draw(self, **kwargs) -> None:
         """
