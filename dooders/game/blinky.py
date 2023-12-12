@@ -74,6 +74,14 @@ class Blinky(Entity):
             self.direction = self.position.relative_direction(next_position)
             self.position = next_position
 
+    def reset(self) -> None:
+        """
+        Resets the ghost's position and direction to its home.
+        """
+        self.position = self.home
+        self.direction = STOP
+        self.visible = True
+
     def render(self, screen) -> None:
         """
         Renders the ghost's sprites on the screen.
