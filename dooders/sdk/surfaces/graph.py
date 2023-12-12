@@ -154,8 +154,8 @@ class Graph:
             self._graph,
             pos,
             with_labels=True,
-            node_size=450,
-            font_size=8,
+            node_size=500,
+            font_size=5,
             font_color="white",
             node_color="green",
         )
@@ -199,7 +199,8 @@ class Graph:
         path: List[Coordinate]
             The path between the two coordinates.
         """
-        return nx.astar_path(self._graph, start, end, self.heuristic)
+        path = nx.astar_path(self._graph, start, end, self.heuristic)
+        return path[1:]
 
     @singledispatchmethod
     def remove(self, type: Union[object, str]) -> None:
