@@ -338,7 +338,7 @@ class Entity(ABC):
         """
         # self.set_start_node(self.startNode)
         self.direction = STOP
-        self.speed = 100
+        # self.speed = 100
         self.visible = True
 
     def set_speed(self, speed: float) -> None:
