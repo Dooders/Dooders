@@ -5,6 +5,7 @@ from pygame.locals import *
 from dooders.game.constants import *
 from dooders.game.entity import Entity
 from dooders.game.models import FSM
+from dooders.game.pellets import Pellet
 from dooders.game.sprites import PacManSprites
 from dooders.sdk.base.coordinate import Coordinate
 
@@ -64,7 +65,7 @@ class PacMan(Entity):
         It also resets its sprites.
         """
         Entity.reset(self)
-        self.set_between_nodes(LEFT)
+        self.position = self.home
         self.alive = True
         self.image = self.sprites.get_start_image()
         self.sprites.reset()
@@ -91,11 +92,12 @@ class PacMan(Entity):
         dt = game.dt
         self.sprites.update(dt)
 
-        current_position = self.position
-        next_position = self.logic(game)
-        if next_position is not None:
-            self.move(game, next_position)
-            self.direction = current_position.relative_direction(next_position)
+        if self.alive:
+            current_position = self.position
+            next_position = self.logic(game)
+            if next_position is not None:
+                self.move(game, next_position)
+                self.direction = current_position.relative_direction(next_position)
 
     def logic(self, game) -> None:
         next_position = self.brain.update(game, self)
@@ -160,6 +162,15 @@ class PacMan(Entity):
             True if a collision is detected, False otherwise
         """
         return self.position == other.position
+        # if isinstance(other, Pellet):
+        #     return self.position == other.position
+        # else:
+        #     d = self.position - other.position
+        #     dSquared = d.magnitude_squared()
+        #     rSquared = (self.collideRadius + other.collideRadius) ** 2
+        #     if dSquared <= rSquared:
+        #         return True
+        #     return False
 
     def render(self, screen):
         if self.visible:
