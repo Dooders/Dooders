@@ -1,5 +1,6 @@
-from dooders.game.constants import *
 from typing import TYPE_CHECKING
+
+from dooders.game.constants import *
 
 if TYPE_CHECKING:
     from entity import Entity

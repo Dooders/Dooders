@@ -1,10 +1,12 @@
 from typing import Union
+
 from pygame.locals import *
+
 from dooders.game.constants import *
 from dooders.game.entity import Entity
+from dooders.game.models import FSM
 from dooders.game.sprites import PacManSprites
 from dooders.sdk.base.coordinate import Coordinate
-from dooders.game.models import FSM
 
 
 class PacMan(Entity):

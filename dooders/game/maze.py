@@ -1,7 +1,8 @@
 from abc import ABC
+from typing import TYPE_CHECKING
+
 from dooders.game.constants import *
 
-from typing import TYPE_CHECKING
 
 class MazeBase(ABC):
     """
