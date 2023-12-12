@@ -252,7 +252,7 @@ class GameController:
         self.dt = dt
         self.textgroup.update(dt)
         self.pellets.update(dt)
-        # self.blinky.update(self)
+        self.blinky.update(self)
 
         # Update ghosts, fruit, and check for pellet events
         # if not self.pause.paused:
