@@ -27,124 +27,65 @@ class Blinky(Entity):
         self.position = self.home
         self.mode = ModeController(self)
         self.path = []
-        self.waypoints = [113, 314, 113]
-
-    def reset(self) -> None:
-        """
-        Calls the reset method of the parent class (Entity) to reset its attributes.
-
-        Resets specific attributes of the Ghost class, including points
-        and directionMethod.
-        """
-        Entity.reset(self)
-        self.points = 200
-        self.directionMethod = self.goal_direction
+        self.waypoints = [
+            (6, 17),
+            (6, 4),
+            (1, 4),
+            (1, 8),
+            (6, 8),
+            (6, 4),
+            (1, 4),
+            (1, 8),
+            (1, 8),
+        ]
 
     def update(self, game) -> None:
         """
-        Calls the update method of the parent class (Entity) to update the
-        ghost's position.
-
-        Calls the update method of the mode object to handle the ghost's behavior
-        based on its current mode (scatter, chase, etc.).
-
-        Depending on the current mode, it either calls the scatter method or
-        the chase method.
-
-        The Entity.update method is then called to update the ghost's position
-        based on its behavior.
+        Updates the ghost's position and direction based on the current mode.
 
         Parameters
         ----------
-        dt : int
-            The time increment.
+        game : GameController
+            The game controller object that the ghost is in.
         """
         dt = game.dt
+
         self.sprites.update(dt)
         self.next_move(game)
-        # self.mode.update(dt)
-        # if self.mode.current is SCATTER:
-        #     self.scatter()
-        # elif self.mode.current is CHASE:
-        #     self.chase()
-        # Entity.update(self, game)
 
-    def get_path(self, game) -> None:
-        if self.path == [] and self.waypoints != []:
-            next_waypoint = self.waypoints.pop(0)
-            self.path = game.graph.path_finding(self.position, next_waypoint)
+    def get_path(self, game, target) -> None:
+        self.path = game.graph.path_finding(self.position, target)
 
     def next_move(self, game) -> None:
-        self.get_path(game)
+        if self.path == [] and self.waypoints != []:
+            target = self.waypoints.pop(0)
+            self.get_path(game, target)
+
+        if self.waypoints == []:
+            target = game.pacman.position
+            self.get_path(game, target)
+
         if self.path != []:
             next_position = self.path.pop(0)
-            new_position = Coordinate(next_position)
-            # self.direction = new_position.relative_direction(next_position)
-            self.position = new_position
 
-    def scatter(self) -> None:
-        """
-        Sets the goal attribute to Coordinate()
-        """
-        self.goal = Coordinate()
+            if type(next_position) == tuple:
+                next_position = Coordinate(next_position[0], next_position[1])
+            self.direction = self.position.relative_direction(next_position)
+            self.position = next_position
 
-    def chase(self) -> None:
+    def render(self, screen) -> None:
         """
-        Sets the goal attribute to the position of the pacman entity,
-        indicating that the ghost is chasing the player.
-        """
-        self.goal = self.pacman.position
-
-    def spawn(self) -> None:
-        """
-        Sets the goal attribute to the position of a spawn node
-        """
-        self.goal = self.spawnNode.position
-
-    def set_spawn_node(self, space: "Space") -> None:
-        """
-        Sets the spawnNode attribute to a specific node where the ghost
-        should spawn.
+        Renders the ghost's sprites on the screen.
 
         Parameters
         ----------
-        node : Node
-            The node that the ghost should spawn at.
+        screen : pygame.Surface
+            The screen to render the sprites on.
         """
-        self.spawnNode = space
-
-    def start_spawn(self) -> None:
-        """
-        Sets the ghost's mode to spawn mode using the mode.set_spawn_mode() method.
-
-        If the current mode is spawn mode, it sets the ghost's speed,
-        direction method, and goal to appropriate values for spawning.
-        """
-        self.mode.set_spawn_mode()
-        if self.mode.current == SPAWN:
-            self.set_speed(150)
-            self.directionMethod = self.goal_direction
-            self.spawn()
-
-    def start_freight(self) -> None:
-        """
-        Sets the ghost's mode to freight mode using the mode.set_freight_mode() method.
-
-        If the current mode is freight mode, it sets the ghost's speed and direction
-        method for freight mode behavior.
-        """
-        self.mode.set_freight_mode()
-        if self.mode.current == FREIGHT:
-            self.set_speed(50)
-            self.directionMethod = self.random_direction
-
-    def normal_mode(self) -> None:
-        """
-        Resets the ghost to normal mode, setting its speed and direction method
-        accordingly.
-
-        It also denies access to a particular direction at the home node.
-        """
-        self.set_speed(100)
-        self.directionMethod = self.goal_direction
-        self.homeNode.deny_access(DOWN, self)
+        if self.visible:
+            if self.image is not None:
+                x, y = self.position.as_pixel()
+                position = (x - TILEWIDTH / 2, y - TILEHEIGHT / 2)
+                screen.blit(self.image, position)
+            else:
+                raise Exception("No image for Blinky Ghost")
