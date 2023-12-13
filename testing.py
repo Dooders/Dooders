@@ -1,6 +1,6 @@
-from dooders.game.main import GameController
+from dooders.game.game import Game
 
-game = GameController()
+game = Game()
 game.load_game()
 while True:
     game.update()
