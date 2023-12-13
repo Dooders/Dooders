@@ -1,22 +1,18 @@
 import time
+
 import pygame
 from pygame.locals import *
-from dooders.game.constants import *
-from dooders.game.pacman import PacMan
-
-# from nodes import NodeGroup
-from dooders.game.pellets import PelletGroup
 
 from dooders.game.blinky import Blinky
+from dooders.game.constants import *
 from dooders.game.fruit import Fruit
-
-# from dooders.game.pauser import Pause
-from dooders.game.text import TextGroup
-from dooders.game.sprites import LifeSprites
-from dooders.game.sprites import MazeSprites
 from dooders.game.maze import MazeData
+from dooders.game.pacman import PacMan
+from dooders.game.pauser import Pause
+from dooders.game.pellets import PelletGroup
+from dooders.game.sprites import LifeSprites, MazeSprites
+from dooders.game.text import TextGroup
 from dooders.sdk.base.coordinate import Coordinate
-
 from dooders.sdk.surfaces.graph import Graph
 
 map_legend = {
@@ -121,7 +117,7 @@ class GameController:
         self.background_flash = None
         self.clock = pygame.time.Clock()
         self.fruit = None
-        # self.pause = Pause(True)
+        self.pause = Pause(True)
         self.level = 0
         self.lives = 5
         self.score = 0
@@ -252,21 +248,21 @@ class GameController:
         self.dt = dt
         self.textgroup.update(dt)
         self.pellets.update(dt)
-        self.blinky.update(self)
 
         # Update ghosts, fruit, and check for pellet events
-        # if not self.pause.paused:
-        # self.ghosts.update(self)
-        # if self.fruit is not None:
-        #     self.fruit.update(self)
-        self.check_pellet_events()
-        # self.check_ghost_events()
+        if not self.pause.paused:
+            self.blinky.update(self)
+            # self.ghosts.update(self)
+            # if self.fruit is not None:
+            #     self.fruit.update(self)
+            self.check_pellet_events()
+        self.check_ghost_events()
         # self.check_fruit_events()
 
         # Play when pacman is alive and not paused
         if self.pacman.alive:
-            # if not self.pause.paused:
-            self.pacman.update(self)
+            if not self.pause.paused:
+                self.pacman.update(self)
         else:
             self.pacman.update(self)
 
@@ -281,9 +277,9 @@ class GameController:
                     self.background = self.background_norm
 
         # Update pause
-        # afterPauseMethod = self.pause.update(dt)
-        # if afterPauseMethod is not None:
-        #     afterPauseMethod()
+        afterPauseMethod = self.pause.update(dt)
+        if afterPauseMethod is not None:
+            afterPauseMethod()
 
         # Finish update and render
         self.check_events()
@@ -313,7 +309,7 @@ class GameController:
                         self.pause.set_pause(player_paused=True)
                         if not self.pause.paused:
                             self.textgroup.hide_text()
-                            self.show_entities()
+                            # self.show_entities()
                         else:
                             self.textgroup.show_text(PAUSETXT)
                             # self.hide_entities()
@@ -338,8 +334,8 @@ class GameController:
             # if self.pellets.numEaten == 70:
             #     self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
             self.pellets.pellet_List.remove(pellet)
-            # if pellet.name == POWERPELLET:
-            #     self.ghosts.start_freight()
+            if pellet.name == POWERPELLET:
+                self.blinky.start_freight()
             if self.pellets.is_empty():
                 self.flashBG = True
                 self.hide_entities()
@@ -355,35 +351,49 @@ class GameController:
         If Pacman collides with a ghost in any other mode, Pacman dies and the
             game is paused for 3 seconds before restarting the level.
         """
-        for ghost in self.ghosts:
-            if self.pacman.collide_ghost(ghost):
-                if ghost.mode.current is FREIGHT:
-                    self.pacman.visible = False
-                    ghost.visible = False
-                    self.update_score(ghost.points)
-                    self.textgroup.add_text(
-                        str(ghost.points),
-                        WHITE,
-                        ghost.position.x,
-                        ghost.position.y,
-                        8,
-                        time=1,
-                    )
-                    self.ghosts.update_points()
-                    self.pause.set_pause(pause_time=1, func=self.show_entities)
-                    ghost.start_spawn()
-                    self.nodes.allow_home_access(ghost)
-                elif ghost.mode.current is not SPAWN:
-                    if self.pacman.alive:
-                        self.lives -= 1
-                        self.lifesprites.remove_image()
-                        self.pacman.die()
-                        self.ghosts.hide()
-                        if self.lives <= 0:
-                            self.textgroup.show_text(GAMEOVERTXT)
-                            self.pause.set_pause(pause_time=3, func=self.reload_game)
-                        else:
-                            self.pause.set_pause(pause_time=3, func=self.reset_level)
+
+        if self.pacman.collide_ghost(self.blinky):
+            if self.pacman.alive:
+                self.lives -= 1
+                self.lifesprites.remove_image()
+                self.pacman.die()
+                self.blinky.visible = False
+
+                if self.lives <= 0:
+                    self.textgroup.show_text(GAMEOVERTXT)
+                    self.pause.set_pause(pause_time=3, func=self.reload_game)
+                else:
+                    self.pause.set_pause(pause_time=3, func=self.reset_level)
+
+        # for ghost in self.ghosts:
+        #     if self.pacman.collide_ghost(ghost):
+        #         if ghost.mode.current is FREIGHT:
+        #             self.pacman.visible = False
+        #             ghost.visible = False
+        #             self.update_score(ghost.points)
+        #             self.textgroup.add_text(
+        #                 str(ghost.points),
+        #                 WHITE,
+        #                 ghost.position.x,
+        #                 ghost.position.y,
+        #                 8,
+        #                 time=1,
+        #             )
+        #             self.ghosts.update_points()
+        #             self.pause.set_pause(pause_time=1, func=self.show_entities)
+        #             ghost.start_spawn()
+        #             self.nodes.allow_home_access(ghost)
+        #         elif ghost.mode.current is not SPAWN:
+        #             if self.pacman.alive:
+        #                 self.lives -= 1
+        #                 self.lifesprites.remove_image()
+        #                 self.pacman.die()
+        #                 self.ghosts.hide()
+        #                 if self.lives <= 0:
+        #                     self.textgroup.show_text(GAMEOVERTXT)
+        #                     self.pause.set_pause(pause_time=3, func=self.reload_game)
+        #                 else:
+        #                     self.pause.set_pause(pause_time=3, func=self.reset_level)
 
     def check_fruit_events(self) -> None:
         """
@@ -463,7 +473,7 @@ class GameController:
         """
         self.pause.paused = True
         self.pacman.reset()
-        self.ghosts.reset()
+        self.blinky.reset()
         self.fruit = None
         self.textgroup.show_text(READYTXT)
 

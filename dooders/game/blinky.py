@@ -1,12 +1,13 @@
+from typing import TYPE_CHECKING
+
 import pygame
 from pygame.locals import *
-from dooders.sdk.base.coordinate import Coordinate
+
 from dooders.game.constants import *
 from dooders.game.entity import Entity
 from dooders.game.modes import ModeController
 from dooders.game.sprites import GhostSprites
-
-from typing import TYPE_CHECKING
+from dooders.sdk.base.coordinate import Coordinate
 
 if TYPE_CHECKING:
     from game.pacman import PacMan
@@ -51,6 +52,7 @@ class Blinky(Entity):
         dt = game.dt
 
         self.sprites.update(dt)
+        self.mode.update(dt)
         self.next_move(game)
 
     def get_path(self, game, target) -> None:
@@ -72,6 +74,20 @@ class Blinky(Entity):
                 next_position = Coordinate(next_position[0], next_position[1])
             self.direction = self.position.relative_direction(next_position)
             self.position = next_position
+
+    def start_freight(self) -> None:
+        """
+        Starts the ghost's freight mode.
+        """
+        self.mode.set_freight_mode()
+
+    def reset(self) -> None:
+        """
+        Resets the ghost's position and direction to its home.
+        """
+        self.position = self.home
+        self.direction = STOP
+        self.visible = True
 
     def render(self, screen) -> None:
         """

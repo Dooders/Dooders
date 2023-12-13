@@ -1,10 +1,11 @@
 from abc import ABC
-import pygame
-from pygame.locals import *
-from dooders.game.constants import *
-from dooders.sdk.base.coordinate import Coordinate
 from random import randint
 
+import pygame
+from pygame.locals import *
+
+from dooders.game.constants import *
+from dooders.sdk.base.coordinate import Coordinate
 from dooders.sdk.utils.short_id import ShortUUID as short_id
 
 
@@ -337,7 +338,7 @@ class Entity(ABC):
         """
         # self.set_start_node(self.startNode)
         self.direction = STOP
-        self.speed = 100
+        # self.speed = 100
         self.visible = True
 
     def set_speed(self, speed: float) -> None:

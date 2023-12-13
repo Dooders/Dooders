@@ -174,6 +174,9 @@ class Coordinate:
         """
         Returns the squared magnitude of the coordinate.
 
+        Useful for collision detection, as it avoids the expensive square root
+        operation.
+
         Returns
         -------
         int

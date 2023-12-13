@@ -1,7 +1,9 @@
 from abc import ABC
+
 import pygame
-from dooders.sdk.base.coordinate import Coordinate
+
 from dooders.game.constants import *
+from dooders.sdk.base.coordinate import Coordinate
 
 
 class Text(ABC):

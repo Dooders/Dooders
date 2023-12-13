@@ -1,8 +1,8 @@
-import pygame
-from dooders.game.constants import *
 import numpy as np
-from dooders.game.entity import Entity
+import pygame
 
+from dooders.game.constants import *
+from dooders.game.entity import Entity
 from dooders.sdk.base.coordinate import Coordinate
 
 

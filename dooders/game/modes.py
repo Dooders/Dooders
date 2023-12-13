@@ -1,5 +1,6 @@
-from dooders.game.constants import *
 from typing import TYPE_CHECKING
+
+from dooders.game.constants import *
 
 if TYPE_CHECKING:
     from entity import Entity
@@ -173,7 +174,7 @@ class ModeController:
             self.timer += dt
             if self.timer >= self.time:
                 self.time = None
-                self.entity.normal_mode()
+                # self.entity.normal_mode()
                 self.current = self.mainmode.mode
         elif self.current in [SCATTER, CHASE]:
             self.current = self.mainmode.mode

@@ -1,15 +1,16 @@
-import pygame
-from dooders.game.constants import *
-import numpy as np
-from dooders.game.animation import Animator
+from abc import ABC
 from typing import TYPE_CHECKING
 
-from abc import ABC, abstractmethod
+import numpy as np
+import pygame
+
+from dooders.game.animation import Animator
+from dooders.game.constants import *
 
 if TYPE_CHECKING:
-    from pacman import PacMan
-    from ghosts import Ghost
     from fruit import Fruit
+    from ghosts import Ghost
+    from pacman import PacMan
 
 BASETILEWIDTH = 16  # The width of a tile in the sprite sheet
 BASETILEHEIGHT = 16  # The height of a tile in the sprite sheet

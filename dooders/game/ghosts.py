@@ -1,12 +1,13 @@
+from typing import TYPE_CHECKING
+
 import pygame
 from pygame.locals import *
-from dooders.sdk.base.coordinate import Coordinate
+
 from dooders.game.constants import *
 from dooders.game.entity import Entity
 from dooders.game.modes import ModeController
 from dooders.game.sprites import GhostSprites
-
-from typing import TYPE_CHECKING
+from dooders.sdk.base.coordinate import Coordinate
 
 if TYPE_CHECKING:
     from game.pacman import PacMan
