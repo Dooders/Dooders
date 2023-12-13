@@ -52,6 +52,7 @@ class Blinky(Entity):
         dt = game.dt
 
         self.sprites.update(dt)
+        self.mode.update(dt)
         self.next_move(game)
 
     def get_path(self, game, target) -> None:
@@ -73,6 +74,12 @@ class Blinky(Entity):
                 next_position = Coordinate(next_position[0], next_position[1])
             self.direction = self.position.relative_direction(next_position)
             self.position = next_position
+
+    def start_freight(self) -> None:
+        """
+        Starts the ghost's freight mode.
+        """
+        self.mode.set_freight_mode()
 
     def reset(self) -> None:
         """

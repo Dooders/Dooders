@@ -334,8 +334,8 @@ class GameController:
             # if self.pellets.numEaten == 70:
             #     self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
             self.pellets.pellet_List.remove(pellet)
-            # if pellet.name == POWERPELLET:
-            #     self.ghosts.start_freight()
+            if pellet.name == POWERPELLET:
+                self.blinky.start_freight()
             if self.pellets.is_empty():
                 self.flashBG = True
                 self.hide_entities()
