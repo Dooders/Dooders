@@ -58,6 +58,7 @@ class PacMan(Entity):
         self.home = Coordinate(13, 26)
         self.position = self.home
         self.brain = FSM()
+        self.previous_position = self.position
 
     def reset(self) -> None:
         """
@@ -93,11 +94,12 @@ class PacMan(Entity):
         self.sprites.update(dt)
 
         if self.alive:
-            current_position = self.position
+            current_position = self.position.copy()
             next_position = self.logic(game)
             if next_position is not None:
                 self.move(game, next_position)
                 self.direction = current_position.relative_direction(next_position)
+                self.previous_position = current_position
 
     def logic(self, game) -> None:
         next_position = self.brain.update(game, self)
@@ -161,16 +163,8 @@ class PacMan(Entity):
         bool
             True if a collision is detected, False otherwise
         """
-        return self.position == other.position
-        # if isinstance(other, Pellet):
-        #     return self.position == other.position
-        # else:
-        #     d = self.position - other.position
-        #     dSquared = d.magnitude_squared()
-        #     rSquared = (self.collideRadius + other.collideRadius) ** 2
-        #     if dSquared <= rSquared:
-        #         return True
-        #     return False
+        if self.position == other.position:
+            return True
 
     def render(self, screen):
         if self.visible:
