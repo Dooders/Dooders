@@ -180,7 +180,7 @@ class ModeController:
             self.current = self.mainmode.mode
 
         if self.current is SPAWN:
-            if self.entity.node == self.entity.spawnNode:
+            if self.entity.position == self.entity.spawn:
                 self.entity.normal_mode()
                 self.current = self.mainmode.mode
 
