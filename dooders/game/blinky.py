@@ -24,8 +24,8 @@ class Blinky(Entity):
         self.color = RED
         self.alive = True
         self.sprites = GhostSprites(self)
-        self.home = Coordinate(13, 14)
-        self.position = self.home
+        self.spawn = Coordinate(13, 14)
+        self.position = self.spawn
         self.mode = ModeController(self)
         self.path = []
         self.waypoints = [
@@ -55,17 +55,28 @@ class Blinky(Entity):
         self.mode.update(dt)
         self.next_move(game)
 
-    def get_path(self, game, target) -> None:
-        self.path = game.graph.path_finding(self.position, target)
+    def get_path(self, game) -> None:
+        self.path = game.graph.path_finding(self.position, self.target)
+
+    def move(self) -> None:
+        """
+        Moves the ghost to the next position in its path.
+        """
+        if self.path != []:
+            next_position = self.path.pop(0)
+            if type(next_position) == tuple:
+                next_position = Coordinate(next_position[0], next_position[1])
+            self.direction = self.position.relative_direction(next_position)
+            self.position = next_position
 
     def next_move(self, game) -> None:
         if self.path == [] and self.waypoints != []:
-            target = self.waypoints.pop(0)
-            self.get_path(game, target)
+            self.target = self.waypoints.pop(0)
+            self.get_path(game)
 
         if self.waypoints == []:
-            target = game.pacman.position
-            self.get_path(game, target)
+            self.target = game.pacman.position
+            self.get_path(game)
 
         if self.path != []:
             next_position = self.path.pop(0)
@@ -83,9 +94,9 @@ class Blinky(Entity):
 
     def reset(self) -> None:
         """
-        Resets the ghost's position and direction to its home.
+        Resets the ghost's position and direction to its spawn.
         """
-        self.position = self.home
+        self.position = self.spawn
         self.direction = STOP
         self.visible = True
 
