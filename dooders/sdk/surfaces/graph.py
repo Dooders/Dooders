@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 
 from dooders.sdk.modules.space import Space
 
+import random
+
 
 class Coordinate(NamedTuple):
     X: int
@@ -201,6 +203,18 @@ class Graph:
         """
         path = nx.astar_path(self._graph, start, end, self.heuristic)
         return path[1:]
+
+    def random(self):
+        """
+        Returns a random space.
+
+        Returns
+        -------
+        space: Space
+            A random space.
+        """
+        random_space = random.choice(list(self.spaces()))
+        return random_space.coordinates
 
     @singledispatchmethod
     def remove(self, type: Union[object, str]) -> None:
