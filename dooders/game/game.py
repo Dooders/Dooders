@@ -34,7 +34,7 @@ map_legend = {
 }
 
 
-class GameController:
+class Game:
     """
     Main game controller class.  This class is responsible for
     initializing the game, loading the data, and updating the game
