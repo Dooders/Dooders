@@ -57,8 +57,24 @@ class PacMan(Entity):
         self.sprites = PacManSprites(self)
         self.home = Coordinate(13, 26)
         self.position = self.home
-        self.brain = FSM()
+        self.state = FSM()
         self.previous_position = self.position
+        self.path = []
+        self.target = None
+
+    def get_path(self, game) -> None:
+        self.path = game.graph.path_finding(self.position, self.target)
+
+    def move(self) -> None:
+        """
+        Moves the ghost to the next position in its path.
+        """
+        if self.path != []:
+            next_position = self.path.pop(0)
+            if type(next_position) == tuple:
+                next_position = Coordinate(next_position[0], next_position[1])
+            self.direction = self.position.relative_direction(next_position)
+            self.position = next_position
 
     def reset(self) -> None:
         """
@@ -95,19 +111,13 @@ class PacMan(Entity):
 
         if self.alive:
             current_position = self.position.copy()
-            next_position = self.logic(game)
-            if next_position is not None:
-                self.move(game, next_position)
-                self.direction = current_position.relative_direction(next_position)
-                self.previous_position = current_position
+            self.target = self.state.update(game, self)
+            self.get_path(game)
+            self.move()
+            self.previous_position = current_position
 
-    def logic(self, game) -> None:
-        next_position = self.brain.update(game, self)
-
-        return next_position
-
-    def move(self, game, coordinate: "Coordinate") -> None:
-        self.position = coordinate
+    # def move(self, game, coordinate: "Coordinate") -> None:
+    #     self.position = coordinate
 
     def eat_pellets(self, pellet_List: list) -> Union[None, object]:
         """
