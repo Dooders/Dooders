@@ -412,19 +412,41 @@ class Game:
             elif self.fruit.destroy:
                 self.fruit = None
 
+    def search_pellet(self, start: "Coordinate") -> "Coordinate":
+        # Use BFS to find the closest pellet
+        visited = set()
+        queue = [start]
+
+        while queue:
+            node = queue.pop(0)
+            if node not in visited:
+                visited.add(node)
+
+                # Check if the node has a pellet
+                space = self.graph._graph.nodes[node].get("space")
+                if space and space.has("Pellet"):
+                    return space
+
+                # Add neighbors to the queue
+                for neighbor in self.graph._graph.neighbors(node):
+                    if neighbor not in visited:
+                        queue.append(neighbor)
+
+        return None  # Return None if no pellet is found
+
     def show_entities(self) -> None:
         """
         Shows the entities, like Pacman and the ghosts.
         """
         self.pacman.visible = True
-        self.ghosts.show()
+        self.blinky.visible = True
 
     def hide_entities(self) -> None:
         """
         Hides the entities, like Pacman and the ghosts.
         """
         self.pacman.visible = False
-        self.ghosts.hide()
+        self.blinky.visible = False
 
     def next_level(self) -> None:
         """
