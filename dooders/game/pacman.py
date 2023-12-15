@@ -54,15 +54,15 @@ class PacMan(Entity):
         self.color = YELLOW
         self.alive = True
         self.direction = LEFT
-        self.sprites = PacManSprites(self)
-        self.home = Coordinate(13, 26)
+        self.sprite = PacManSprites(self)
+        self.spawn = Coordinate(13, 26)
         self.position = self.home
         self.state = FSM()
         self.previous_position = self.position
         self.path = []
         self.target = None
 
-    def get_path(self, game) -> None:
+    def find_path(self, game) -> None:
         self.path = game.graph.path_finding(self.position, self.target)
 
     def move(self) -> None:
