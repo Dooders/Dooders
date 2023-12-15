@@ -107,19 +107,19 @@ class FiniteStateMachine:
             or space.has("PowerPellet")  #! allow to take list of objects
         ]
 
-        eligible_neighbors = [
-            space
-            for space in neighbor_spaces
-            if space.playable and space not in pellets
-        ]
+        # eligible_neighbors = [
+        #     space
+        #     for space in neighbor_spaces
+        #     if space.playable and space not in pellets
+        # ]
 
         if len(pellets) >= 1:
-            random_space = random.choice(pellets)
+            target = random.choice(pellets).coordinates
 
         else:
-            random_space = random.choice(eligible_neighbors)
+            target = game.search_pellet(agent.position).coordinates
 
-        return random_space.coordinates
+        return target
 
     def pellet_nearby(self):
         """
