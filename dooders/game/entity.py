@@ -9,7 +9,7 @@ from dooders.sdk.base.coordinate import Coordinate
 from dooders.sdk.utils.short_id import ShortUUID as short_id
 
 
-class Entity(ABC):
+class Entity(ABC): #! change to NPC
     """
     Abstract base class for all entities in the game.
 
@@ -99,8 +99,8 @@ class Entity(ABC):
         node : Node
             The starting node of the entity.
         """
-        self.seed = short_id()
-        self.id = self.seed.uuid()
+        self.seed = short_id() #! move to agent class outside of class
+        self.id = self.seed.uuid() #! make part of agent class
         self.name = None
         self.directions = {
             UP: Coordinate(0, -1),
@@ -108,19 +108,19 @@ class Entity(ABC):
             LEFT: Coordinate(-1, 0),
             RIGHT: Coordinate(1, 0),
             STOP: Coordinate(),
-        }
+        } #! remove?
         self.direction = STOP
-        self.set_speed(100)
-        self.radius = 10
-        self.collideRadius = 5
-        self.color = WHITE
+        self.set_speed(100) #! remove
+        self.radius = 10 #! remove?
+        self.collideRadius = 5 #! remove?
+        self.color = WHITE #! make into enum class
         self.visible = True
-        self.disable_portal = False
-        self.goal = None
-        self.directionMethod = self.random_direction
+        self.disable_portal = False #! remove?
+        self.goal = None #! remove
+        self.directionMethod = self.random_direction #! remove
         self.image = None
 
-    def set_position(self) -> None:
+    def set_position(self) -> None: #! remove
         """
         Sets the entity's position based on its current node's position.
         """
@@ -161,7 +161,7 @@ class Entity(ABC):
 
             self.set_position()
 
-    def valid_direction(self, direction: int) -> bool:
+    def valid_direction(self, direction: int) -> bool: #! remove
         """
         Checks if the entity can move in the given direction.
 
@@ -181,7 +181,7 @@ class Entity(ABC):
                     return True
         return False
 
-    def targets(self) -> list:
+    def targets(self) -> list: #! remove
         """
         Returns a list of target nodes for the entity.
 
@@ -193,7 +193,7 @@ class Entity(ABC):
         #! double check this
         return [x for x in self.node.neighbors if x is not None]
 
-    def over_shot_target(self) -> bool:
+    def over_shot_target(self) -> bool: #! remove
         """
         Checks if the entity has overshot its target node.
 
@@ -210,7 +210,7 @@ class Entity(ABC):
             return node2Self >= node2Target
         return False
 
-    def reverse_direction(self) -> None:
+    def reverse_direction(self) -> None: #! remove
         """
         Reverses the entity's direction.
         """
@@ -219,7 +219,7 @@ class Entity(ABC):
         self.node = self.target
         self.target = temp
 
-    def opposite_direction(self, direction: int) -> bool:
+    def opposite_direction(self, direction: int) -> bool: #! remove
         """
         Checks if the given direction is the opposite of the entity's current
         direction.
@@ -240,7 +240,7 @@ class Entity(ABC):
                 return True
         return False
 
-    def valid_directions(self) -> list:
+    def valid_directions(self) -> list: #! remove
         """
         Gets a list of valid directions for the entity.
 
@@ -264,7 +264,7 @@ class Entity(ABC):
             directions.append(self.direction * -1)
         return directions
 
-    def random_direction(self, directions: list) -> int:
+    def random_direction(self, directions: list) -> int: #! remove
         """
         Gets a random direction from the given list of directions.
 
@@ -280,7 +280,7 @@ class Entity(ABC):
         """
         return directions[randint(0, len(directions) - 1)]
 
-    def goal_direction(self, directions: list) -> int:
+    def goal_direction(self, directions: list) -> int: #! remove?
         """
         Gets the direction that is closest to the entity's goal.
 
@@ -341,7 +341,7 @@ class Entity(ABC):
         # self.speed = 100
         self.visible = True
 
-    def set_speed(self, speed: float) -> None:
+    def set_speed(self, speed: float) -> None: #! remove
         """
         Sets the entity's speed based on a given value.
 
