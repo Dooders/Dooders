@@ -1,6 +1,7 @@
 import math
 
 from dooders.defaults import TILE_HEIGHT, TILE_WIDTH
+from dooders.game.constants import Directions
 
 
 class Coordinate:
@@ -244,10 +245,7 @@ class Coordinate:
     def relative_direction(self, other: "Coordinate") -> int:
         """
         Returns the relative direction of the other coordinate from this coordinate.
-        UP = 1
-        DOWN = -1
-        LEFT = 2
-        RIGHT = -2
+        UP = 1, DOWN = -1, LEFT = 2, RIGHT = -2
 
         Parameters
         ----------
@@ -259,17 +257,16 @@ class Coordinate:
         int
             Relative direction of the other coordinate from this coordinate
         """
-        #! Clean this up to be simpler
         if self.x == other.x:
             if self.y < other.y:
-                return -1
+                return Directions.DOWN
             else:
-                return 1
+                return Directions.UP
         elif self.y == other.y:
             if self.x < other.x:
-                return -2
+                return Directions.RIGHT
             else:
-                return 2
+                return Directions.LEFT
         else:
             raise ValueError("Coordinates must be adjacent to get relative direction")
 
