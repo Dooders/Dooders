@@ -2,15 +2,15 @@ from typing import Union
 
 from pygame.locals import *
 
-from dooders.game.constants import *
-from dooders.game.entity import Entity
+from dooders.game.constants import Directions, PACMAN, TILEHEIGHT, TILEWIDTH, YELLOW
 from dooders.game.models import FSM
 from dooders.game.pellets import Pellet
 from dooders.game.sprites import PacManSprites
 from dooders.sdk.base.coordinate import Coordinate
+from dooders.game.npc import NPC
 
 
-class PacMan(Entity):
+class PacMan(NPC):
     """
     PacMan class
 
@@ -49,11 +49,11 @@ class PacMan(Entity):
     """
 
     def __init__(self) -> None:
-        Entity.__init__(self)
+        NPC.__init__(self)
         self.name = PACMAN
         self.color = YELLOW
         self.alive = True
-        self.direction = LEFT
+        self.direction = Directions.STOP
         self.sprites = PacManSprites(self)
         self.home = Coordinate(13, 26)
         self.position = self.home
@@ -81,7 +81,6 @@ class PacMan(Entity):
         Resets the Pac-Man to its initial state, facing left and alive.
         It also resets its sprites.
         """
-        Entity.reset(self)
         self.position = self.home
         self.alive = True
         self.image = self.sprites.get_start_image()
@@ -115,9 +114,6 @@ class PacMan(Entity):
             self.get_path(game)
             self.move()
             self.previous_position = current_position
-
-    # def move(self, game, coordinate: "Coordinate") -> None:
-    #     self.position = coordinate
 
     def eat_pellets(self, pellet_List: list) -> Union[None, object]:
         """
