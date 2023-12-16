@@ -148,10 +148,10 @@ class PacManSprites(Spritesheet):
         The Animator class (presumably defined elsewhere) seems to handle the
         sequence and timing of the animation frames.
         """
-        self.animations[LEFT] = Animator(((8, 0), (0, 0), (0, 2), (0, 0)))
-        self.animations[RIGHT] = Animator(((10, 0), (2, 0), (2, 2), (2, 0)))
-        self.animations[UP] = Animator(((10, 2), (6, 0), (6, 2), (6, 0)))
-        self.animations[DOWN] = Animator(((8, 2), (4, 0), (4, 2), (4, 0)))
+        self.animations["LEFT"] = Animator(((8, 0), (0, 0), (0, 2), (0, 0)))
+        self.animations["RIGHT"] = Animator(((10, 0), (2, 0), (2, 2), (2, 0)))
+        self.animations["UP"] = Animator(((10, 2), (6, 0), (6, 2), (6, 0)))
+        self.animations["DOWN"] = Animator(((8, 2), (4, 0), (4, 2), (4, 0)))
         self.animations[DEATH] = Animator(
             (
                 (0, 12),
@@ -185,19 +185,19 @@ class PacManSprites(Spritesheet):
             The time elapsed since the last update.
         """
         if self.entity.alive == True:
-            if self.entity.direction == LEFT:
-                self.entity.image = self.get_image(*self.animations[LEFT].update(dt))
+            if self.entity.direction == Directions.LEFT:
+                self.entity.image = self.get_image(*self.animations["LEFT"].update(dt))
                 self.stopimage = (8, 0)
-            elif self.entity.direction == RIGHT:
-                self.entity.image = self.get_image(*self.animations[RIGHT].update(dt))
+            elif self.entity.direction == Directions.RIGHT:
+                self.entity.image = self.get_image(*self.animations["RIGHT"].update(dt))
                 self.stopimage = (10, 0)
-            elif self.entity.direction == DOWN:
-                self.entity.image = self.get_image(*self.animations[DOWN].update(dt))
+            elif self.entity.direction == Directions.DOWN:
+                self.entity.image = self.get_image(*self.animations["DOWN"].update(dt))
                 self.stopimage = (8, 2)
-            elif self.entity.direction == UP:
-                self.entity.image = self.get_image(*self.animations[UP].update(dt))
+            elif self.entity.direction == Directions.UP:
+                self.entity.image = self.get_image(*self.animations["UP"].update(dt))
                 self.stopimage = (10, 2)
-            elif self.entity.direction == STOP:
+            elif self.entity.direction == Directions.STOP:
                 self.entity.image = self.get_image(*self.stopimage)
         else:
             self.entity.image = self.get_image(*self.animations[DEATH].update(dt))
@@ -312,24 +312,24 @@ class GhostSprites(Spritesheet):
         """
         x = self.x[self.entity.name]
         if self.entity.mode.current in [SCATTER, CHASE]:
-            if self.entity.direction == LEFT:
+            if self.entity.direction == Directions.LEFT:
                 self.entity.image = self.get_image(x, 8)
-            elif self.entity.direction == RIGHT:
+            elif self.entity.direction == Directions.RIGHT:
                 self.entity.image = self.get_image(x, 10)
-            elif self.entity.direction == DOWN:
+            elif self.entity.direction == Directions.DOWN:
                 self.entity.image = self.get_image(x, 6)
-            elif self.entity.direction == UP:
+            elif self.entity.direction == Directions.UP:
                 self.entity.image = self.get_image(x, 4)
         elif self.entity.mode.current == FREIGHT:
             self.entity.image = self.get_image(10, 4)
         elif self.entity.mode.current == SPAWN:
-            if self.entity.direction == LEFT:
+            if self.entity.direction == Directions.LEFT:
                 self.entity.image = self.get_image(8, 8)
-            elif self.entity.direction == RIGHT:
+            elif self.entity.direction == Directions.RIGHT:
                 self.entity.image = self.get_image(8, 10)
-            elif self.entity.direction == DOWN:
+            elif self.entity.direction == Directions.DOWN:
                 self.entity.image = self.get_image(8, 6)
-            elif self.entity.direction == UP:
+            elif self.entity.direction == Directions.UP:
                 self.entity.image = self.get_image(8, 4)
 
     def get_start_image(self) -> pygame.Surface:
