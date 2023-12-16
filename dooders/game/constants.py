@@ -13,7 +13,6 @@ SCREENSIZE = (SCREENWIDTH, SCREENHEIGHT)
 # SCREENSIZE = SCREENWIDTH + 2 * PADDING, SCREENHEIGHT + 2 * PADDING
 
 
-# Colors
 class Colors(Enum):
     BLACK = (0, 0, 0)
     YELLOW = (255, 255, 0)
@@ -34,30 +33,12 @@ class Directions(Enum):
     PORTAL = 3
 
 
-# # Directions
-# STOP = 0
-# UP = 1
-# DOWN = -1
-# LEFT = 2
-# RIGHT = -2
-# PORTAL = 3
+class GhostStates(Enum):
+    SCATTER = 0
+    CHASE = 1
+    FREIGHT = 2
+    SPAWN = 3
 
-# Sprites
-PACMAN = 0
-PELLET = 1
-POWERPELLET = 2
-GHOST = 3
-BLINKY = 4
-PINKY = 5
-INKY = 6
-CLYDE = 7
-FRUIT = 8
-
-# Ghost states
-SCATTER = 0
-CHASE = 1
-FREIGHT = 2
-SPAWN = 3
 
 # Texts
 SCORETXT = 0

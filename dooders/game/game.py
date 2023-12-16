@@ -331,7 +331,7 @@ class Game:
             # if self.pellets.numEaten == 70:
             #     self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
             self.pellets.pellet_List.remove(pellet)
-            if pellet.name == POWERPELLET:
+            if pellet.name == "PowerPellet":
                 self.blinky.start_freight()
             if self.pellets.is_empty():
                 self.flashBG = True
@@ -350,7 +350,7 @@ class Game:
         """
 
         if self.pacman.collide_ghost(self.blinky):
-            if self.blinky.mode.current is FREIGHT:
+            if self.blinky.mode.current is GhostStates.FREIGHT:
                 # self.pacman.visible = False
                 # self.blinky.visible = False
                 self.update_score(self.blinky.points)
@@ -367,7 +367,7 @@ class Game:
                 # self.pause.set_pause(pause_time=1, func=self.show_entities)
                 # self.nodes.allow_home_access(self.ghosts)
 
-            elif self.blinky.mode.current is not SPAWN:
+            elif self.blinky.mode.current is not GhostStates.SPAWN:
                 if self.pacman.alive:
                     self.lives -= 1
                     self.lifesprites.remove_image()
@@ -532,10 +532,3 @@ class Game:
         #     self.screen.blit(self.fruitCaptured[i], (x, y))
 
         pygame.display.update()
-
-
-# if __name__ == "__main__":
-#     game = GameController()
-#     game.start_game()
-#     while True:
-#         game.update()

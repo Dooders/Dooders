@@ -1,11 +1,16 @@
+from abc import ABC, abstractmethod
 from dooders.game.constants import Directions
 from dooders.sdk.utils.short_id import ShortUUID as short_id
 
 
-class NPC:
+class NPC(ABC):
     def __init__(self) -> None:
         self.seed = short_id()
         self.id = self.seed.uuid()
-        self.name = None
+        self.name = self.__class__.__name__
         self.visible = True
         self.direction = Directions.STOP
+
+    @abstractmethod
+    def update(self) -> None:
+        raise NotImplementedError("update() method not implemented")

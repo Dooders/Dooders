@@ -289,7 +289,7 @@ class GhostSprites(Spritesheet):
             The ghost entity that the sprites are associated with.
         """
         Spritesheet.__init__(self)
-        self.x = {BLINKY: 0, PINKY: 2, INKY: 4, CLYDE: 6}
+        self.x = {"Blinky": 0, "Pinky": 2, "Inky": 4, "Clyde": 6}
         self.entity = entity
         self.entity.image = self.get_start_image()
 
@@ -311,7 +311,7 @@ class GhostSprites(Spritesheet):
             The time elapsed since the last update.
         """
         x = self.x[self.entity.name]
-        if self.entity.mode.current in [SCATTER, CHASE]:
+        if self.entity.mode.current in [GhostStates.SCATTER, GhostStates.CHASE]:
             if self.entity.direction == Directions.LEFT:
                 self.entity.image = self.get_image(x, 8)
             elif self.entity.direction == Directions.RIGHT:
@@ -320,9 +320,9 @@ class GhostSprites(Spritesheet):
                 self.entity.image = self.get_image(x, 6)
             elif self.entity.direction == Directions.UP:
                 self.entity.image = self.get_image(x, 4)
-        elif self.entity.mode.current == FREIGHT:
+        elif self.entity.mode.current == GhostStates.FREIGHT:
             self.entity.image = self.get_image(10, 4)
-        elif self.entity.mode.current == SPAWN:
+        elif self.entity.mode.current == GhostStates.SPAWN:
             if self.entity.direction == Directions.LEFT:
                 self.entity.image = self.get_image(8, 8)
             elif self.entity.direction == Directions.RIGHT:

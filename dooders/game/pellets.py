@@ -6,7 +6,7 @@ from dooders.sdk.base.coordinate import Coordinate
 from dooders.game.npc import NPC
 
 
-class Pellet(NPC):
+class Pellet(NPC):  #! should inherit from Entity instead of NPC
     """
     This class provides a structured way to represent and manage a pellet in a game.
 
@@ -38,20 +38,6 @@ class Pellet(NPC):
 
     def __init__(self, row: int, column: int) -> None:
         """
-        Initializes the pellet's name (PELLET).
-
-        Sets the pellet's position based on the provided row and column,
-        adjusted for the tile width and height.
-
-        Defines the pellet's color (WHITE).
-
-        Sets the pellet's radius and collision radius (both are set to a
-        fraction of the tile width).
-
-        Initializes the pellet's point value (points attribute) to 10.
-
-        Initializes the pellet's visibility state (visible attribute) to True.
-
         Parameters
         ----------
         row : int
@@ -60,13 +46,18 @@ class Pellet(NPC):
             Column index of the pellet
         """
         NPC.__init__(self)
-        self.name = PELLET
         self.position = Coordinate(column, row)
         self.color = Colors.WHITE.value
         self.radius = int(2 * TILEWIDTH / 16)
         self.collideRadius = 2 * TILEWIDTH / 16
         self.points = 10
         self.visible = True
+
+    def update(self, dt: float) -> None:
+        """
+        Increments the timer by the time delta (dt).
+        """
+        pass
 
     def render(self, screen: pygame.Surface) -> None:
         """
@@ -88,8 +79,8 @@ class Pellet(NPC):
 
 class PowerPellet(Pellet):
     """
-    This class provides a structured way to represent and manage a power pellet
-    in a game.
+    A PowerPellet is a Pellet type that flashes (toggles visibility) at a
+    regular interval.
 
     It inherits the basic properties and behaviors of a regular pellet from the
     Pellet class and adds unique attributes and behaviors specific to power pellets,
@@ -127,17 +118,8 @@ class PowerPellet(Pellet):
 
     def __init__(self, row: int, column: int) -> None:
         """
-        Calls the initialization method of the parent Pellet class to set up basic attributes.
-
-        Changes the pellet's name to POWERPELLET.
-
-        Adjusts the pellet's radius to be larger than a regular pellet.
-
-        Sets the pellet's point value (points attribute) to 50, which is higher than a regular pellet.
-
-        Initializes the flashTime attribute, which determines how frequently the power pellet will flash (toggle visibility).
-
-        Initializes a timer (timer attribute) to track the flashing effect.
+        Calls the initialization method of the parent Pellet class to set up
+        basic attributes.
 
         Parameters
         ----------
@@ -147,7 +129,6 @@ class PowerPellet(Pellet):
             Column index of the pellet
         """
         Pellet.__init__(self, row, column)
-        self.name = POWERPELLET
         self.radius = int(8 * TILEWIDTH / 16)
         self.points = 50
         self.flashTime = 0.2

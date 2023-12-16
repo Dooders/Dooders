@@ -158,7 +158,7 @@ class FiniteStateMachine:
         for y in range(len(game_board)):
             for x in range(len(game_board[y])):
                 # Check if the current cell contains a power pellet
-                if game_board[y][x] == "POWER_PELLET":
+                if game_board[y][x] == "PowerPellet":
                     # Calculate the Manhattan distance between Pac-Man and the power pellet
                     distance = abs(pacman_x - x) + abs(pacman_y - y)
                     if distance <= threshold_distance:
