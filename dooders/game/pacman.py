@@ -62,7 +62,7 @@ class PacMan(NPC):
         self.path = []
         self.target = None
 
-    def get_path(self, game) -> None:
+    def find_path(self, game) -> None:
         self.path = game.graph.path_finding(self.position, self.target)
 
     def move(self) -> None:
