@@ -44,7 +44,7 @@ class MazeBase(ABC):
     def __init__(self) -> None:
         self.portalPairs = {}
         self.homeoffset = (0, 0)
-        self.ghostNodeDeny = {UP: (), DOWN: (), LEFT: (), RIGHT: ()}
+        # self.ghostNodeDeny = {UP: (), DOWN: (), LEFT: (), RIGHT: ()}
 
     def set_portal_pairs(self, nodes: "Node") -> None:
         """
@@ -100,27 +100,27 @@ class MazeBase(ABC):
         """
         return x + self.homeoffset[0], y + self.homeoffset[1]
 
-    def deny_ghosts_access(self, ghosts: "Ghost", nodes: "Node") -> None:
-        """
-        Adds denial rules to restrict ghost access in certain directions for
-        nodes in the maze environment.
+    # def deny_ghosts_access(self, ghosts: "Ghost", nodes: "Node") -> None:
+    #     """
+    #     Adds denial rules to restrict ghost access in certain directions for
+    #     nodes in the maze environment.
 
-        Specifically, it denies access for ghosts to certain positions with
-        offsets and directions specified in ghostNodeDeny.
+    #     Specifically, it denies access for ghosts to certain positions with
+    #     offsets and directions specified in ghostNodeDeny.
 
-        Parameters
-        ----------
-        ghosts : Ghost
-            The ghosts object to deny access to.
-        nodes : Node
-            The nodes object to deny access in.
-        """
-        nodes.deny_access_list(*(self.add_offset(2, 3) + (LEFT, ghosts)))
-        nodes.deny_access_list(*(self.add_offset(2, 3) + (RIGHT, ghosts)))
+    #     Parameters
+    #     ----------
+    #     ghosts : Ghost
+    #         The ghosts object to deny access to.
+    #     nodes : Node
+    #         The nodes object to deny access in.
+    #     """
+    #     nodes.deny_access_list(*(self.add_offset(2, 3) + (LEFT, ghosts)))
+    #     nodes.deny_access_list(*(self.add_offset(2, 3) + (RIGHT, ghosts)))
 
-        for direction in list(self.ghostNodeDeny.keys()):
-            for values in self.ghostNodeDeny[direction]:
-                nodes.deny_access_list(*(values + (direction, ghosts)))
+    #     for direction in list(self.ghostNodeDeny.keys()):
+    #         for values in self.ghostNodeDeny[direction]:
+    #             nodes.deny_access_list(*(values + (direction, ghosts)))
 
 
 class Maze1(MazeBase):
@@ -158,11 +158,11 @@ class Maze1(MazeBase):
         self.homenodeconnectRight = (15, 14)
         self.pacmanStart = (15, 26)
         self.fruitStart = (9, 20)
-        self.ghostNodeDeny = {
-            UP: ((12, 14), (15, 14), (12, 26), (15, 26)),
-            LEFT: (self.add_offset(2, 3),),
-            RIGHT: (self.add_offset(2, 3),),
-        }
+        # self.ghostNodeDeny = {
+        #     UP: ((12, 14), (15, 14), (12, 26), (15, 26)),
+        #     LEFT: (self.add_offset(2, 3),),
+        #     RIGHT: (self.add_offset(2, 3),),
+        # }
 
 
 class Maze2(MazeBase):
@@ -200,11 +200,11 @@ class Maze2(MazeBase):
         self.homenodeconnectRight = (18, 14)
         self.pacmanStart = (16, 26)
         self.fruitStart = (11, 20)
-        self.ghostNodeDeny = {
-            UP: ((9, 14), (18, 14), (11, 23), (16, 23)),
-            LEFT: (self.add_offset(2, 3),),
-            RIGHT: (self.add_offset(2, 3),),
-        }
+        # self.ghostNodeDeny = {
+        #     UP: ((9, 14), (18, 14), (11, 23), (16, 23)),
+        #     LEFT: (self.add_offset(2, 3),),
+        #     RIGHT: (self.add_offset(2, 3),),
+        # }
 
 
 class MazeData:
