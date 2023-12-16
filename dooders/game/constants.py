@@ -1,4 +1,7 @@
 # Game settings
+from enum import Enum
+
+
 TILEWIDTH = 16
 TILEHEIGHT = 16
 NROWS = 36
@@ -20,13 +23,22 @@ TEAL = (100, 255, 255)
 ORANGE = (230, 190, 40)
 GREEN = (0, 255, 0)
 
-# Directions
-STOP = 0
-UP = 1
-DOWN = -1
-LEFT = 2
-RIGHT = -2
-PORTAL = 3
+
+class Directions(Enum):
+    STOP = 0
+    UP = 1
+    DOWN = -1
+    LEFT = 2
+    RIGHT = -2
+    PORTAL = 3
+
+# # Directions
+# STOP = 0
+# UP = 1
+# DOWN = -1
+# LEFT = 2
+# RIGHT = -2
+# PORTAL = 3
 
 # Sprites
 PACMAN = 0
