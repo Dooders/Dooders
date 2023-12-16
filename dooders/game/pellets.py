@@ -48,8 +48,8 @@ class Pellet(NPC):  #! should inherit from Entity instead of NPC
         NPC.__init__(self)
         self.position = Coordinate(column, row)
         self.color = Colors.WHITE.value
-        self.radius = int(2 * TILEWIDTH / 16)
-        self.collideRadius = 2 * TILEWIDTH / 16
+        self.radius = int(2 * Dimensions.TILEWIDTH / 16)
+        self.collideRadius = 2 * Dimensions.TILEWIDTH / 16
         self.points = 10
         self.visible = True
 
@@ -73,7 +73,7 @@ class Pellet(NPC):  #! should inherit from Entity instead of NPC
         """
         if self.visible:
             x, y = self.position.as_pixel()
-            position = (x + TILEWIDTH / 2, y + TILEHEIGHT / 2)
+            position = (x + Dimensions.TILEWIDTH / 2, y + Dimensions.TILEHEIGHT / 2)
             pygame.draw.circle(screen, self.color, position, self.radius)
 
 
@@ -129,7 +129,7 @@ class PowerPellet(Pellet):
             Column index of the pellet
         """
         Pellet.__init__(self, row, column)
-        self.radius = int(8 * TILEWIDTH / 16)
+        self.radius = int(8 * Dimensions.TILEWIDTH / 16)
         self.points = 50
         self.flashTime = 0.2
         self.timer = 0

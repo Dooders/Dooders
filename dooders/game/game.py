@@ -111,7 +111,7 @@ class Game:
         self.render_game = render_game
         if render_game:
             pygame.init()
-        self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
+        self.screen = pygame.display.set_mode(Dimensions.SCREENSIZE, 0, 32)
         self.background = None
         self.background_norm = None
         self.background_flash = None
@@ -135,9 +135,9 @@ class Game:
         Sets up the game's background, including a normal background
         and a flashing one.
         """
-        self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
+        self.background_norm = pygame.surface.Surface(Dimensions.SCREENSIZE).convert()
         self.background_norm.fill(Colors.BLACK.value)
-        self.background_flash = pygame.surface.Surface(SCREENSIZE).convert()
+        self.background_flash = pygame.surface.Surface(Dimensions.SCREENSIZE).convert()
         self.background_flash.fill(Colors.BLACK.value)
         self.background_norm = self.mazesprites.construct_background(
             self.background_norm, self.level % 5
@@ -308,7 +308,7 @@ class Game:
                             self.textgroup.hide_text()
                             # self.show_entities()
                         else:
-                            self.textgroup.show_text(PAUSETXT)
+                            self.textgroup.show_text(Dimensions.PAUSETXT)
                             # self.hide_entities()
 
     def check_pellet_events(self) -> None:
@@ -375,7 +375,7 @@ class Game:
                     self.blinky.visible = False
 
                     if self.lives <= 0:
-                        self.textgroup.show_text(GAMEOVERTXT)
+                        self.textgroup.show_text(Texts.GAMEOVERTXT)
                         self.pause.set_pause(pause_time=3, func=self.reload_game)
                     else:
                         self.pause.set_pause(pause_time=3, func=self.reset_level)
@@ -470,7 +470,7 @@ class Game:
         self.score = 0
         self.textgroup.update_score(self.score)
         self.textgroup.update_level(self.level)
-        self.textgroup.show_text(READYTXT)
+        self.textgroup.show_text(Texts.READYTXT)
         self.lifesprites.reset_lives(self.lives)
         self.fruitCaptured = []
 
@@ -482,7 +482,7 @@ class Game:
         self.pacman.reset()
         self.blinky.reset()
         self.fruit = None
-        self.textgroup.show_text(READYTXT)
+        self.textgroup.show_text(Texts.READYTXT)
 
     def update_score(self, points: int) -> None:
         """

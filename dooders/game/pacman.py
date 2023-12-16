@@ -3,8 +3,7 @@ from typing import Union
 from pygame.locals import *
 
 from dooders.game.constants import (
-    TILEHEIGHT,
-    TILEWIDTH,
+    Dimensions,
     Colors,
     Directions,
 )
@@ -179,7 +178,7 @@ class PacMan(NPC):
         if self.visible:
             if self.image is not None:
                 x, y = self.position.as_pixel()
-                position = (x - TILEWIDTH / 2, y - TILEHEIGHT / 2)
+                position = (x - Dimensions.TILEWIDTH / 2, y - Dimensions.TILEHEIGHT / 2)
                 screen.blit(self.image, position)
             else:
                 raise Exception("No image for PacMan")
