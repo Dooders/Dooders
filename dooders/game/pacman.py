@@ -111,7 +111,7 @@ class PacMan(NPC):
         if self.alive:
             current_position = self.position.copy()
             self.target = self.state.update(game, self)
-            self.get_path(game)
+            self.find_path(game)
             self.move()
             self.previous_position = current_position
 
