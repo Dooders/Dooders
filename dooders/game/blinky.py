@@ -4,22 +4,22 @@ import pygame
 from pygame.locals import *
 
 from dooders.game.constants import *
-from dooders.game.entity import Entity
 from dooders.game.modes import ModeController
 from dooders.game.sprites import GhostSprites
 from dooders.sdk.base.coordinate import Coordinate
+from dooders.game.npc import NPC
 
 if TYPE_CHECKING:
     from game.pacman import PacMan
 
 
-class Blinky(Entity):
+class Blinky(NPC):
     """
     Blinky class
     """
 
     def __init__(self) -> None:
-        Entity.__init__(self)
+        NPC.__init__(self)
         self.name = BLINKY
         self.color = RED
         self.alive = True
@@ -116,7 +116,7 @@ class Blinky(Entity):
         Resets the ghost's position and direction to its spawn.
         """
         self.position = self.spawn
-        self.direction = STOP
+        self.direction = Directions.STOP
         self.visible = True
 
     def render(self, screen) -> None:

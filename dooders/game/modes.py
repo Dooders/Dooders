@@ -2,9 +2,6 @@ from typing import TYPE_CHECKING
 
 from dooders.game.constants import *
 
-if TYPE_CHECKING:
-    from entity import Entity
-
 
 class MainMode:
     """
@@ -130,7 +127,7 @@ class ModeController:
         Sets the mode to SPAWN if the current mode is FREIGHT.
     """
 
-    def __init__(self, entity: "Entity") -> None:
+    def __init__(self, entity) -> None:
         """
         Initializes a timer (timer) to track the time elapsed in the current mode.
 

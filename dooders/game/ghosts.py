@@ -4,7 +4,6 @@ import pygame
 from pygame.locals import *
 
 from dooders.game.constants import *
-from dooders.game.entity import Entity
 from dooders.game.modes import ModeController
 from dooders.game.sprites import GhostSprites
 from dooders.sdk.base.coordinate import Coordinate
@@ -13,7 +12,7 @@ if TYPE_CHECKING:
     from game.pacman import PacMan
 
 
-class Ghost(Entity):
+class Ghost:
     """
     Class is responsible for managing the behavior and attributes of ghost
     characters in a game.
@@ -86,7 +85,6 @@ class Ghost(Entity):
         blinky : Ghost
             Another ghost. Used for the Inky ghost.
         """
-        Entity.__init__(self, node)
         self.name = GHOST
         self.points = 200
         self.goal = Coordinate()
@@ -104,7 +102,6 @@ class Ghost(Entity):
         Resets specific attributes of the Ghost class, including points
         and directionMethod.
         """
-        Entity.reset(self)
         self.points = 200
         self.directionMethod = self.goal_direction
 
@@ -134,7 +131,6 @@ class Ghost(Entity):
             self.scatter()
         elif self.mode.current is CHASE:
             self.chase()
-        Entity.update(self, game)
 
     def scatter(self) -> None:
         """

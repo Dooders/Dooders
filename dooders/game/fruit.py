@@ -1,12 +1,11 @@
 import pygame
 
 from dooders.game.constants import *
-from dooders.game.entity import Entity
 from dooders.game.sprites import FruitSprites
 from dooders.sdk.base.coordinate import Coordinate
 
 
-class Fruit(Entity):
+class Fruit:
     """
     Represents a fruit object within the game or simulation.
 
@@ -70,7 +69,6 @@ class Fruit(Entity):
         level : int
             The current level of the game.
         """
-        Entity.__init__(self)
         self.name = FRUIT
         self.color = GREEN
         self.lifespan = 5
