@@ -21,7 +21,7 @@ class Blinky(NPC):
     def __init__(self) -> None:
         NPC.__init__(self)
         self.name = BLINKY
-        self.color = RED
+        self.color = Colors.RED.value
         self.alive = True
         self.points = 200
         self.sprites = GhostSprites(self)

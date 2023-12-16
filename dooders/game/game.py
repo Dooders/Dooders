@@ -136,9 +136,9 @@ class Game:
         and a flashing one.
         """
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
-        self.background_norm.fill(BLACK)
+        self.background_norm.fill(Colors.BLACK.value)
         self.background_flash = pygame.surface.Surface(SCREENSIZE).convert()
-        self.background_flash.fill(BLACK)
+        self.background_flash.fill(Colors.BLACK.value)
         self.background_norm = self.mazesprites.construct_background(
             self.background_norm, self.level % 5
         )
@@ -356,7 +356,7 @@ class Game:
                 self.update_score(self.blinky.points)
                 self.textgroup.add_text(
                     str(self.blinky.points),
-                    WHITE,
+                    Colors.WHITE,
                     self.blinky.position.x,
                     self.blinky.position.y,
                     8,
@@ -395,7 +395,7 @@ class Game:
                 self.update_score(self.fruit.points)
                 self.textgroup.add_text(
                     str(self.fruit.points),
-                    WHITE,
+                    Colors.WHITE,
                     self.fruit.position.x,
                     self.fruit.position.y,
                     8,

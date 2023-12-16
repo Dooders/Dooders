@@ -62,7 +62,7 @@ class Pellet(NPC):
         NPC.__init__(self)
         self.name = PELLET
         self.position = Coordinate(column, row)
-        self.color = WHITE
+        self.color = Colors.WHITE.value
         self.radius = int(2 * TILEWIDTH / 16)
         self.collideRadius = 2 * TILEWIDTH / 16
         self.points = 10
