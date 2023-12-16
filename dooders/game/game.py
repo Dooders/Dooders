@@ -136,9 +136,9 @@ class Game:
         and a flashing one.
         """
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
-        self.background_norm.fill(BLACK)
+        self.background_norm.fill(Colors.BLACK.value)
         self.background_flash = pygame.surface.Surface(SCREENSIZE).convert()
-        self.background_flash.fill(BLACK)
+        self.background_flash.fill(Colors.BLACK.value)
         self.background_norm = self.mazesprites.construct_background(
             self.background_norm, self.level % 5
         )
@@ -331,7 +331,7 @@ class Game:
             # if self.pellets.numEaten == 70:
             #     self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
             self.pellets.pellet_List.remove(pellet)
-            if pellet.name == POWERPELLET:
+            if pellet.name == "PowerPellet":
                 self.blinky.start_freight()
             if self.pellets.is_empty():
                 self.flashBG = True
@@ -350,13 +350,13 @@ class Game:
         """
 
         if self.pacman.collide_ghost(self.blinky):
-            if self.blinky.mode.current is FREIGHT:
+            if self.blinky.mode.current is GhostStates.FREIGHT:
                 # self.pacman.visible = False
                 # self.blinky.visible = False
                 self.update_score(self.blinky.points)
                 self.textgroup.add_text(
                     str(self.blinky.points),
-                    WHITE,
+                    Colors.WHITE,
                     self.blinky.position.x,
                     self.blinky.position.y,
                     8,
@@ -367,7 +367,7 @@ class Game:
                 # self.pause.set_pause(pause_time=1, func=self.show_entities)
                 # self.nodes.allow_home_access(self.ghosts)
 
-            elif self.blinky.mode.current is not SPAWN:
+            elif self.blinky.mode.current is not GhostStates.SPAWN:
                 if self.pacman.alive:
                     self.lives -= 1
                     self.lifesprites.remove_image()
@@ -395,7 +395,7 @@ class Game:
                 self.update_score(self.fruit.points)
                 self.textgroup.add_text(
                     str(self.fruit.points),
-                    WHITE,
+                    Colors.WHITE,
                     self.fruit.position.x,
                     self.fruit.position.y,
                     8,
@@ -532,10 +532,3 @@ class Game:
         #     self.screen.blit(self.fruitCaptured[i], (x, y))
 
         pygame.display.update()
-
-
-# if __name__ == "__main__":
-#     game = GameController()
-#     game.start_game()
-#     while True:
-#         game.update()

@@ -20,8 +20,7 @@ class Blinky(NPC):
 
     def __init__(self) -> None:
         NPC.__init__(self)
-        self.name = BLINKY
-        self.color = RED
+        self.color = Colors.RED.value
         self.alive = True
         self.points = 200
         self.sprites = GhostSprites(self)
@@ -44,13 +43,13 @@ class Blinky(NPC):
         ]
 
     def update_target(self, game) -> None:
-        if self.mode.current == SPAWN:
+        if self.mode.current == GhostStates.SPAWN:
             self.target = self.spawn
 
-        elif self.mode.current == CHASE:
+        elif self.mode.current == GhostStates.CHASE:
             self.target = game.pacman.position
 
-        elif self.mode.current == SCATTER:
+        elif self.mode.current == GhostStates.SCATTER:
             if self.path == [] and self.waypoints != []:
                 self.target = self.waypoints.pop(0)
 
@@ -88,7 +87,7 @@ class Blinky(NPC):
     def next_move(self, game) -> None:
         self.get_path(game)
 
-        if self.mode.current == FREIGHT:
+        if self.mode.current == GhostStates.FREIGHT:
             if len(self.path) == 1:
                 self.target = game.pacman.position
 

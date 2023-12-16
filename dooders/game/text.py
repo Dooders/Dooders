@@ -58,7 +58,7 @@ class Text(ABC):
     def __init__(
         self,
         text: str,
-        color: tuple,
+        color,
         x: int,
         y: int,
         size: int,
@@ -103,7 +103,7 @@ class Text(ABC):
         """
         self.id = id
         self.text = text
-        self.color = color
+        self.color = color.value if isinstance(color, Colors) else color
         self.size = size
         self.visible = visible
         self.position = Coordinate(x, y)
@@ -241,21 +241,38 @@ class TextGroup(ABC):
 
     def setup_text(self):
         size = TILEHEIGHT
-        self.alltext[SCORETXT] = Text("0".zfill(8), WHITE, 0, TILEHEIGHT, size)
+        self.alltext[SCORETXT] = Text(
+            "0".zfill(8), Colors.WHITE.value, 0, TILEHEIGHT, size
+        )
         self.alltext[LEVELTXT] = Text(
-            str(1).zfill(3), WHITE, 23 * TILEWIDTH, TILEHEIGHT, size
+            str(1).zfill(3), Colors.WHITE, 23 * TILEWIDTH, TILEHEIGHT, size
         )
         self.alltext[READYTXT] = Text(
-            "READY!", YELLOW, 11.25 * TILEWIDTH, 20 * TILEHEIGHT, size, visible=False
+            "READY!",
+            Colors.YELLOW.value,
+            11.25 * TILEWIDTH,
+            20 * TILEHEIGHT,
+            size,
+            visible=False,
         )
         self.alltext[PAUSETXT] = Text(
-            "PAUSED!", YELLOW, 10.625 * TILEWIDTH, 20 * TILEHEIGHT, size, visible=False
+            "PAUSED!",
+            Colors.YELLOW.value,
+            10.625 * TILEWIDTH,
+            20 * TILEHEIGHT,
+            size,
+            visible=False,
         )
         self.alltext[GAMEOVERTXT] = Text(
-            "GAMEOVER!", YELLOW, 10 * TILEWIDTH, 20 * TILEHEIGHT, size, visible=False
+            "GAMEOVER!",
+            Colors.YELLOW.value,
+            10 * TILEWIDTH,
+            20 * TILEHEIGHT,
+            size,
+            visible=False,
         )
-        self.add_text("SCORE", WHITE, 0, 0, size)
-        self.add_text("LEVEL", WHITE, 23 * TILEWIDTH, 0, size)
+        self.add_text("SCORE", Colors.WHITE.value, 0, 0, size)
+        self.add_text("LEVEL", Colors.WHITE.value, 23 * TILEWIDTH, 0, size)
 
     def update(self, dt):
         for tkey in list(self.alltext.keys()):

@@ -2,12 +2,16 @@ from typing import Union
 
 from pygame.locals import *
 
-from dooders.game.constants import Directions, PACMAN, TILEHEIGHT, TILEWIDTH, YELLOW
+from dooders.game.constants import (
+    TILEHEIGHT,
+    TILEWIDTH,
+    Colors,
+    Directions,
+)
 from dooders.game.models import FSM
-from dooders.game.pellets import Pellet
+from dooders.game.npc import NPC
 from dooders.game.sprites import PacManSprites
 from dooders.sdk.base.coordinate import Coordinate
-from dooders.game.npc import NPC
 
 
 class PacMan(NPC):
@@ -50,8 +54,7 @@ class PacMan(NPC):
 
     def __init__(self) -> None:
         NPC.__init__(self)
-        self.name = PACMAN
-        self.color = YELLOW
+        self.color = Colors.YELLOW.value
         self.alive = True
         self.direction = Directions.STOP
         self.sprites = PacManSprites(self)

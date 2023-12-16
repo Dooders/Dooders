@@ -85,7 +85,6 @@ class Ghost:
         blinky : Ghost
             Another ghost. Used for the Inky ghost.
         """
-        self.name = GHOST
         self.points = 200
         self.goal = Coordinate()
         self.directionMethod = self.goal_direction
@@ -198,16 +197,6 @@ class Ghost:
         self.set_speed(100)
         self.directionMethod = self.goal_direction
         self.homeNode.deny_access(DOWN, self)
-
-
-class Blinky(Ghost):
-    """Blinky is the red ghost."""
-
-    def __init__(self, node, pacman=None, blinky=None):
-        Ghost.__init__(self, node, pacman, blinky)
-        self.name = BLINKY
-        self.color = RED
-        self.sprites = GhostSprites(self)
 
 
 class Pinky(Ghost):

@@ -70,7 +70,7 @@ class Fruit:
             The current level of the game.
         """
         self.name = FRUIT
-        self.color = GREEN
+        self.color = Colors.GREEN
         self.lifespan = 5
         self.timer = 0
         self.destroy = False

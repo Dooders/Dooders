@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from dooders.game.constants import *
 
 
@@ -66,16 +64,16 @@ class MainMode:
         """
         self.timer += dt
         if self.timer >= self.time:
-            if self.mode is SCATTER:
+            if self.mode is GhostStates.SCATTER:
                 self.chase()
-            elif self.mode is CHASE:
+            elif self.mode is GhostStates.CHASE:
                 self.scatter()
 
     def scatter(self) -> None:
         """
         Sets the mode to SCATTER, defines its duration (time), and resets the timer.
         """
-        self.mode = SCATTER
+        self.mode = GhostStates.SCATTER
         self.time = 7
         self.timer = 0
 
@@ -83,7 +81,7 @@ class MainMode:
         """
         Sets the mode to CHASE, defines its duration (time), and resets the timer.
         """
-        self.mode = CHASE
+        self.mode = GhostStates.CHASE
         self.time = 20
         self.timer = 0
 
@@ -167,16 +165,16 @@ class ModeController:
             Time delta
         """
         self.mainmode.update(dt)
-        if self.current is FREIGHT:
+        if self.current is GhostStates.FREIGHT:
             self.timer += dt
             if self.timer >= self.time:
                 self.time = None
                 # self.entity.normal_mode()
                 self.current = self.mainmode.mode
-        elif self.current in [SCATTER, CHASE]:
+        elif self.current in [GhostStates.SCATTER, GhostStates.CHASE]:
             self.current = self.mainmode.mode
 
-        if self.current is SPAWN:
+        if self.current is GhostStates.SPAWN:
             if self.entity.position == self.entity.spawn:
                 self.entity.normal_mode()
                 self.current = self.mainmode.mode
@@ -187,16 +185,16 @@ class ModeController:
 
         If the entity is already in FREIGHT mode, it resets the timer.
         """
-        if self.current in [SCATTER, CHASE]:
+        if self.current in [GhostStates.SCATTER, GhostStates.CHASE]:
             self.timer = 0
             self.time = 7
-            self.current = FREIGHT
-        elif self.current is FREIGHT:
+            self.current = GhostStates.FREIGHT
+        elif self.current is GhostStates.FREIGHT:
             self.timer = 0
 
     def set_spawn_mode(self) -> None:
         """
         Sets the mode to SPAWN if the current mode is FREIGHT.
         """
-        if self.current is FREIGHT:
-            self.current = SPAWN
+        if self.current is GhostStates.FREIGHT:
+            self.current = GhostStates.SPAWN
