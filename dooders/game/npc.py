@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from dooders.game.constants import Directions
 from dooders.sdk.utils.short_id import ShortUUID as short_id
 
+# reset, render, get_path, move
 
 class NPC(ABC):
     def __init__(self) -> None:
