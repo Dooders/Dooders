@@ -2,12 +2,7 @@ from typing import Union
 
 from pygame.locals import *
 
-from dooders.game.constants import (
-    TILEHEIGHT,
-    TILEWIDTH,
-    Colors,
-    Directions,
-)
+from dooders.game.constants import Dimensions, Colors, Directions, SpawnPositions
 from dooders.game.models import FSM
 from dooders.game.npc import NPC
 from dooders.game.sprites import PacManSprites
@@ -58,8 +53,8 @@ class PacMan(NPC):
         self.alive = True
         self.direction = Directions.STOP
         self.sprites = PacManSprites(self)
-        self.home = Coordinate(13, 26)
-        self.position = self.home
+        self.spawn = Coordinate(SpawnPositions.PACMAN)
+        self.position = self.spawn
         self.state = FSM()
         self.previous_position = self.position
         self.path = []
@@ -84,7 +79,7 @@ class PacMan(NPC):
         Resets the Pac-Man to its initial state, facing left and alive.
         It also resets its sprites.
         """
-        self.position = self.home
+        self.position = self.spawn
         self.alive = True
         self.image = self.sprites.get_start_image()
         self.sprites.reset()
@@ -179,7 +174,7 @@ class PacMan(NPC):
         if self.visible:
             if self.image is not None:
                 x, y = self.position.as_pixel()
-                position = (x - TILEWIDTH / 2, y - TILEHEIGHT / 2)
+                position = (x - Dimensions.TILEWIDTH / 2, y - Dimensions.TILEHEIGHT / 2)
                 screen.blit(self.image, position)
             else:
                 raise Exception("No image for PacMan")

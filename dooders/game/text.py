@@ -194,7 +194,7 @@ class TextGroup(ABC):
         self.nextid = 10
         self.alltext = {}
         self.setup_text()
-        self.show_text(READYTXT)
+        self.show_text(Texts.READYTXT)
 
     def add_text(
         self,
@@ -240,39 +240,43 @@ class TextGroup(ABC):
         self.alltext.pop(id)
 
     def setup_text(self):
-        size = TILEHEIGHT
-        self.alltext[SCORETXT] = Text(
-            "0".zfill(8), Colors.WHITE.value, 0, TILEHEIGHT, size
+        size = Dimensions.TILEHEIGHT
+        self.alltext[Texts.SCORETXT] = Text(
+            "0".zfill(8), Colors.WHITE.value, 0, Dimensions.TILEHEIGHT, size
         )
-        self.alltext[LEVELTXT] = Text(
-            str(1).zfill(3), Colors.WHITE, 23 * TILEWIDTH, TILEHEIGHT, size
+        self.alltext[Texts.LEVELTXT] = Text(
+            str(1).zfill(3),
+            Colors.WHITE,
+            23 * Dimensions.TILEWIDTH,
+            Dimensions.TILEHEIGHT,
+            size,
         )
-        self.alltext[READYTXT] = Text(
+        self.alltext[Texts.READYTXT] = Text(
             "READY!",
             Colors.YELLOW.value,
-            11.25 * TILEWIDTH,
-            20 * TILEHEIGHT,
+            11.25 * Dimensions.TILEWIDTH,
+            20 * Dimensions.TILEHEIGHT,
             size,
             visible=False,
         )
-        self.alltext[PAUSETXT] = Text(
+        self.alltext[Texts.PAUSETXT] = Text(
             "PAUSED!",
             Colors.YELLOW.value,
-            10.625 * TILEWIDTH,
-            20 * TILEHEIGHT,
+            10.625 * Dimensions.TILEWIDTH,
+            20 * Dimensions.TILEHEIGHT,
             size,
             visible=False,
         )
-        self.alltext[GAMEOVERTXT] = Text(
+        self.alltext[Texts.GAMEOVERTXT] = Text(
             "GAMEOVER!",
             Colors.YELLOW.value,
-            10 * TILEWIDTH,
-            20 * TILEHEIGHT,
+            10 * Dimensions.TILEWIDTH,
+            20 * Dimensions.TILEHEIGHT,
             size,
             visible=False,
         )
         self.add_text("SCORE", Colors.WHITE.value, 0, 0, size)
-        self.add_text("LEVEL", Colors.WHITE.value, 23 * TILEWIDTH, 0, size)
+        self.add_text("LEVEL", Colors.WHITE.value, 23 * Dimensions.TILEWIDTH, 0, size)
 
     def update(self, dt):
         for tkey in list(self.alltext.keys()):
@@ -285,15 +289,15 @@ class TextGroup(ABC):
         self.alltext[id].visible = True
 
     def hide_text(self):
-        self.alltext[READYTXT].visible = False
-        self.alltext[PAUSETXT].visible = False
-        self.alltext[GAMEOVERTXT].visible = False
+        self.alltext[Texts.READYTXT].visible = False
+        self.alltext[Texts.PAUSETXT].visible = False
+        self.alltext[Texts.GAMEOVERTXT].visible = False
 
     def update_score(self, score):
-        self.update_text(SCORETXT, str(score).zfill(8))
+        self.update_text(Texts.SCORETXT, str(score).zfill(8))
 
     def update_level(self, level):
-        self.update_text(LEVELTXT, str(level + 1).zfill(3))
+        self.update_text(Texts.LEVELTXT, str(level + 1).zfill(3))
 
     def update_text(self, id, value):
         if id in self.alltext.keys():

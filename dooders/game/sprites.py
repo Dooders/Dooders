@@ -50,8 +50,8 @@ class Spritesheet(ABC):
         self.sheet = pygame.image.load("dooders/game/assets/spritesheet.png").convert()
         transcolor = self.sheet.get_at((0, 0))
         self.sheet.set_colorkey(transcolor)
-        width = int(self.sheet.get_width() / BASETILEWIDTH * TILEWIDTH)
-        height = int(self.sheet.get_height() / BASETILEHEIGHT * TILEHEIGHT)
+        width = int(self.sheet.get_width() / BASETILEWIDTH * Dimensions.TILEWIDTH)
+        height = int(self.sheet.get_height() / BASETILEHEIGHT * Dimensions.TILEHEIGHT)
         self.sheet = pygame.transform.scale(self.sheet, (width, height))
 
     def get_image(self, x: int, y: int, width: int, height: int) -> pygame.Surface:
@@ -74,8 +74,8 @@ class Spritesheet(ABC):
         pygame.Surface
             The sprite at the specified x and y coordinates.
         """
-        x *= TILEWIDTH
-        y *= TILEHEIGHT
+        x *= Dimensions.TILEWIDTH
+        y *= Dimensions.TILEHEIGHT
         self.sheet.set_clip(pygame.Rect(x, y, width, height))
         return self.sheet.subsurface(self.sheet.get_clip())
 
@@ -235,7 +235,9 @@ class PacManSprites(Spritesheet):
         pygame.Surface
             The sprite at the specified x and y coordinates.
         """
-        return Spritesheet.get_image(self, x, y, 2 * TILEWIDTH, 2 * TILEHEIGHT)
+        return Spritesheet.get_image(
+            self, x, y, 2 * Dimensions.TILEWIDTH, 2 * Dimensions.TILEHEIGHT
+        )
 
 
 class GhostSprites(Spritesheet):
@@ -358,7 +360,9 @@ class GhostSprites(Spritesheet):
         pygame.Surface
             The sprite at the specified x and y coordinates.
         """
-        return Spritesheet.get_image(self, x, y, 2 * TILEWIDTH, 2 * TILEHEIGHT)
+        return Spritesheet.get_image(
+            self, x, y, 2 * Dimensions.TILEWIDTH, 2 * Dimensions.TILEHEIGHT
+        )
 
 
 class FruitSprites(Spritesheet):
@@ -451,7 +455,9 @@ class FruitSprites(Spritesheet):
         pygame.Surface
             The sprite at the specified x and y coordinates.
         """
-        return Spritesheet.get_image(self, x, y, 2 * TILEWIDTH, 2 * TILEHEIGHT)
+        return Spritesheet.get_image(
+            self, x, y, 2 * Dimensions.TILEWIDTH, 2 * Dimensions.TILEHEIGHT
+        )
 
 
 class LifeSprites(Spritesheet):
@@ -528,7 +534,9 @@ class LifeSprites(Spritesheet):
         pygame.Surface
             The sprite at the specified x and y coordinates.
         """
-        return Spritesheet.get_image(self, x, y, 2 * TILEWIDTH, 2 * TILEHEIGHT)
+        return Spritesheet.get_image(
+            self, x, y, 2 * Dimensions.TILEWIDTH, 2 * Dimensions.TILEHEIGHT
+        )
 
 
 class MazeSprites(Spritesheet):
@@ -591,7 +599,9 @@ class MazeSprites(Spritesheet):
         pygame.Surface
             The sprite at the specified x and y coordinates.
         """
-        return Spritesheet.get_image(self, x, y, TILEWIDTH, TILEHEIGHT)
+        return Spritesheet.get_image(
+            self, x, y, Dimensions.TILEWIDTH, Dimensions.TILEHEIGHT
+        )
 
     def read_maze_file(self, mazefile: str) -> np.ndarray:
         """
@@ -645,10 +655,16 @@ class MazeSprites(Spritesheet):
                     # print(sprite)
                     rotval = int(self.rotdata[row][col])
                     sprite = self.rotate(sprite, rotval)
-                    background.blit(sprite, (col * TILEWIDTH, row * TILEHEIGHT))
+                    background.blit(
+                        sprite,
+                        (col * Dimensions.TILEWIDTH, row * Dimensions.TILEHEIGHT),
+                    )
                 elif self.data[row][col] == "=":
                     sprite = self.get_image(10, 8)
-                    background.blit(sprite, (col * TILEWIDTH, row * TILEHEIGHT))
+                    background.blit(
+                        sprite,
+                        (col * Dimensions.TILEWIDTH, row * Dimensions.TILEHEIGHT),
+                    )
 
         # print("********************************")
 
