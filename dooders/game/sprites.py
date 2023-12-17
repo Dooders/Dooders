@@ -243,7 +243,7 @@ class PacManSprites(Spritesheet):
 class GhostSprites(Spritesheet):
     """
     Class provides a structured way to manage and update the visual
-    representation of the ghost characters based on their state, mode, and
+    representation of the ghost characters based on their state and
     direction.
 
     It encapsulates the logic for handling the ghost's animations
@@ -265,7 +265,7 @@ class GhostSprites(Spritesheet):
     Methods
     -------
     update(dt)
-        Updates the sprite based on the current state, mode, and direction of
+        Updates the sprite based on the current state and direction of
         the entity.
     get_start_image()
         Returns the starting image for the entity.
@@ -298,13 +298,13 @@ class GhostSprites(Spritesheet):
     def update(self, dt: float) -> None:
         """
         Updates the image of the associated ghost entity based on its current
-        state, mode, and direction.
+        state and direction.
 
-        If the ghost is in SCATTER or CHASE mode, its image is determined by its
+        If the ghost is in SCATTER or CHASE state, its image is determined by its
             direction and its specific type (BLINKY, PINKY, etc.).
-        If the ghost is in FREIGHT mode (when Pac-Man eats a power pellet and
+        If the ghost is in FREIGHT state (when Pac-Man eats a power pellet and
             the ghosts become vulnerable), all ghosts use the same frightened image.
-        If the ghost is in SPAWN mode (when it's respawning after being eaten),
+        If the ghost is in SPAWN state (when it's respawning after being eaten),
             its image is determined by its direction but uses a common set of sprites.
 
         Parameters
@@ -313,7 +313,7 @@ class GhostSprites(Spritesheet):
             The time elapsed since the last update.
         """
         x = self.x[self.entity.name]
-        if self.entity.mode.current in [GhostStates.SCATTER, GhostStates.CHASE]:
+        if self.entity.state.current in [GhostStates.SCATTER, GhostStates.CHASE]:
             if self.entity.direction == Directions.LEFT:
                 self.entity.image = self.get_image(x, 8)
             elif self.entity.direction == Directions.RIGHT:
@@ -322,9 +322,9 @@ class GhostSprites(Spritesheet):
                 self.entity.image = self.get_image(x, 6)
             elif self.entity.direction == Directions.UP:
                 self.entity.image = self.get_image(x, 4)
-        elif self.entity.mode.current == GhostStates.FREIGHT:
+        elif self.entity.state.current == GhostStates.FREIGHT:
             self.entity.image = self.get_image(10, 4)
-        elif self.entity.mode.current == GhostStates.SPAWN:
+        elif self.entity.state.current == GhostStates.SPAWN:
             if self.entity.direction == Directions.LEFT:
                 self.entity.image = self.get_image(8, 8)
             elif self.entity.direction == Directions.RIGHT:
