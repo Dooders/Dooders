@@ -308,7 +308,7 @@ class Game:
                             self.textgroup.hide_text()
                             # self.show_entities()
                         else:
-                            self.textgroup.show_text(Dimensions.PAUSETXT)
+                            self.textgroup.show_text(Texts.PAUSETXT)
                             # self.hide_entities()
 
     def check_pellet_events(self) -> None:
