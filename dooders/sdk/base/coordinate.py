@@ -66,6 +66,8 @@ class Coordinate:
         y : int
             y component of the coordinate
         """
+        if isinstance(x, tuple):
+            x, y = x
         self.x = x
         self.y = y
 

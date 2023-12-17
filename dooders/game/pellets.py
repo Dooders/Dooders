@@ -189,16 +189,6 @@ class PelletGroup:
 
     def __init__(self, pellet_file: str) -> None:
         """
-        Initializes the pellet_List to store all pellets (both regular and
-        power pellets).
-
-        Initializes the powerpellets list to store only power pellets.
-
-        Calls the create_pellet_list method to populate the pellet_List based on the
-        provided pellet file.
-
-        Initializes a counter (numEaten) to track the number of pellets eaten.
-
         Parameters
         ----------
         pellet_file : str

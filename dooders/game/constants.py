@@ -47,3 +47,11 @@ class Texts(Enum):
     READYTXT = 2
     PAUSETXT = 3
     GAMEOVERTXT = 4
+
+
+class SpawnPositions:
+    BLINKY = (13, 14)
+    PINKY = (13, 14)
+    INKY = (11, 14)
+    CLYDE = (15, 14)
+    PACMAN = (13, 26)

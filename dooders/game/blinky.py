@@ -24,7 +24,7 @@ class Blinky(NPC):
         self.alive = True
         self.points = 200
         self.sprites = GhostSprites(self)
-        self.spawn = Coordinate(13, 14)
+        self.spawn = Coordinate(SpawnPositions.BLINKY)
         self.position = self.spawn
         self.previous_position = self.position
         self.mode = ModeController(self)
