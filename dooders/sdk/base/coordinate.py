@@ -173,6 +173,22 @@ class Coordinate:
             < Coordinate.EPSILON
         )
 
+    def distance_to(self, other: "Coordinate") -> float:
+        """
+        Returns the manhattan distance between two coordinates.
+
+        Parameters
+        ----------
+        other : Coordinate
+            coordinate to get the distance to
+
+        Returns
+        -------
+        float
+            Manhattan distance between the two coordinates
+        """
+        return abs(self.x - other.x) + abs(self.y - other.y)
+
     def magnitude_squared(self) -> int:
         """
         Returns the squared magnitude of the coordinate.
