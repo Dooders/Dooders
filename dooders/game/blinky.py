@@ -1,16 +1,14 @@
-from typing import TYPE_CHECKING
-
-import pygame
-from pygame.locals import *
-
-from dooders.game.constants import *
-from dooders.game.modes import ModeController
+from dooders.game.constants import (
+    Colors,
+    Dimensions,
+    Directions,
+    GhostStates,
+    SpawnPositions,
+)
 from dooders.game.npc import NPC
 from dooders.game.sprites import GhostSprites
+from dooders.game.states import GhostState
 from dooders.sdk.base.coordinate import Coordinate
-
-if TYPE_CHECKING:
-    from game.pacman import PacMan
 
 
 class Blinky(NPC):
@@ -27,7 +25,7 @@ class Blinky(NPC):
         self.spawn = Coordinate(SpawnPositions.BLINKY)
         self.position = self.spawn
         self.previous_position = self.position
-        self.state = ModeController(self)
+        self.state = GhostState(self)
         self.path = []
         self.target = None
         self.waypoints = [
@@ -97,14 +95,14 @@ class Blinky(NPC):
         """
         Starts the ghost's freight state.
         """
-        self.state.set_freight_mode()
+        self.state.freight()
         self.target = self.spawn
 
     def start_spawn(self) -> None:
         """
         Sets the ghost's state to spawn mode.
         """
-        self.state.set_spawn_mode()
+        self.state.spawn()
         self.target = self.spawn
 
     def normal_mode(self) -> None:

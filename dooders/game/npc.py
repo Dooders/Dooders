@@ -22,8 +22,9 @@ class NPC(ABC):
     @abstractmethod
     def update(self) -> None:
         """
-        Every NPC must implement this method. This method is called every frame
-        and is used to update the NPC's state.
+        Every NPC must implement this method.
+
+        This method is called every cycle and is used to update the NPC's state.
         """
         raise NotImplementedError("update() method not implemented")
 
