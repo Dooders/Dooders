@@ -107,12 +107,6 @@ class FiniteStateMachine:
             or space.has("PowerPellet")  #! allow to take list of objects
         ]
 
-        # eligible_neighbors = [
-        #     space
-        #     for space in neighbor_spaces
-        #     if space.playable and space not in pellets
-        # ]
-
         if len(pellets) >= 1:
             target = random.choice(pellets).coordinates
 
@@ -165,30 +159,3 @@ class FiniteStateMachine:
                         return True
 
         return False
-
-    def non_vulnerable_ghost_nearby(self, environment):
-        return False
-
-    def vulnerable_ghost_nearby(self, environment):
-        return False
-
-    def ate_power_pellet(self, environment):
-        return False
-
-    def ate_vulnerable_ghost(self, environment):
-        return False
-
-    def move_towards_nearest_pellet(self, environment):
-        # Search algo for nearest pellet in 4 directions (up, down, left, right)
-        # stops when it hits a wall or a pellet, returns distance, shortest distance is chosen
-        # get the N spaces in a provided direction
-        return None
-
-    def move_towards_power_pellet(self):
-        return None
-
-    def move_towards_vulnerable_ghost(self):
-        return None
-
-    def move_away_from_ghost(self):
-        return None
