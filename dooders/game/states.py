@@ -15,7 +15,7 @@ class State(ABC):
         self.npc = npc
 
     @abstractmethod
-    def update(self, dt) -> None:
+    def update(self, *args, **kwargs) -> None:
         """
         Must have an update method that takes in an NPC and a Game object and
         updates the NPC's state.
@@ -104,3 +104,58 @@ class GhostState(State):
             self.current = GhostStates.FREIGHT
         elif self.current is GhostStates.FREIGHT:
             self.timer = 0
+
+
+class PacManState(State):
+    def __init__(self, npc: "NPC") -> None:
+        super().__init__(npc)
+        self.current = "Search"
+
+    def update(self, game) -> None:
+        if self.npc.alive:
+            if self.non_vulnerable_ghost_nearby(game):
+                self.current = "Evade"
+
+            elif self.vulnerable_ghost_nearby(game):
+                self.current = "Attack"
+
+            else:
+                self.current = "Search"
+
+    def non_vulnerable_ghost_nearby(self, game) -> bool:
+        """
+        Returns True if a non-vulnerable ghost is nearby, False otherwise.
+
+        Parameters
+        ----------
+        game : Game
+            Game object
+
+        Returns
+        -------
+        bool
+            True if a non-vulnerable ghost is nearby, False otherwise.
+        """
+        if game.blinky.state.current == GhostStates.CHASE:
+            if self.npc.position.distance_to(game.blinky.position) <= 2:
+                return True
+        return False
+
+    def vulnerable_ghost_nearby(self, game) -> bool:
+        """
+        Returns True if a vulnerable ghost is nearby, False otherwise.
+
+        Parameters
+        ----------
+        game : Game
+            Game object
+
+        Returns
+        -------
+        bool
+            True if a vulnerable ghost is nearby, False otherwise.
+        """
+        if game.blinky.state.current == GhostStates.FREIGHT:
+            if self.npc.position.distance_to(game.blinky.position) <= 2:
+                return True
+        return False
