@@ -1,10 +1,4 @@
-from dooders.game.constants import (
-    Colors,
-    Dimensions,
-    Directions,
-    GhostStates,
-    SpawnPositions,
-)
+from dooders.game.constants import Colors, GhostStates, SpawnPositions
 from dooders.game.npc import NPC
 from dooders.game.sprites import GhostSprites
 from dooders.game.states import GhostState
@@ -14,7 +8,33 @@ from dooders.sdk.base.coordinate import Coordinate
 
 class Blinky(NPC):
     """
-    Blinky class
+    Blinky is the red ghost. He is the most aggressive of the ghosts and will
+    always try to chase PacMan.
+
+    Attributes
+    ----------
+    color : tuple
+        The color of the entity
+    alive : bool
+        Whether or not the entity is alive
+    points : int
+        The amount of points the entity is worth
+    sprites : GhostSprites
+        The sprites for the entity
+    spawn : Coordinate
+        The spawn position of the entity
+    position : Coordinate
+        The current position of the entity
+    state : GhostState
+        The state of the entity
+    previous_position : Coordinate
+        The previous position of the entity
+    path : list
+        The path the entity is following
+    target : GhostTarget
+        The target of the entity
+    waypoints : list
+        The waypoints the entity is following
     """
 
     def __init__(self) -> None:
@@ -58,22 +78,8 @@ class Blinky(NPC):
         self.next_move(game)
         self.previous_position = current_position
 
-    def get_path(self, game) -> None:
-        self.path = game.graph.path_finding(self.position, self.target.current)
-
-    def move(self) -> None:
-        """
-        Moves the ghost to the next position in its path.
-        """
-        if self.path != []:
-            next_position = self.path.pop(0)
-            if type(next_position) == tuple:
-                next_position = Coordinate(next_position[0], next_position[1])
-            self.direction = self.position.relative_direction(next_position)
-            self.position = next_position
-
     def next_move(self, game) -> None:
-        self.get_path(game)
+        self.find_path(game)
 
         if self.state.current == GhostStates.FREIGHT:
             if len(self.path) == 1:
@@ -97,28 +103,3 @@ class Blinky(NPC):
 
     def normal_mode(self) -> None:
         pass
-
-    def reset(self) -> None:
-        """
-        Resets the ghost's position and direction to its spawn.
-        """
-        self.position = self.spawn
-        self.direction = Directions.STOP
-        self.visible = True
-
-    def render(self, screen) -> None:
-        """
-        Renders the ghost's sprites on the screen.
-
-        Parameters
-        ----------
-        screen : pygame.Surface
-            The screen to render the sprites on.
-        """
-        if self.visible:
-            if self.image is not None:
-                x, y = self.position.as_pixel()
-                position = (x - Dimensions.TILEWIDTH / 2, y - Dimensions.TILEHEIGHT / 2)
-                screen.blit(self.image, position)
-            else:
-                raise Exception("No image for Blinky Ghost")
