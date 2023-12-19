@@ -1,4 +1,5 @@
 from typing import Union
+import random
 
 from pygame.locals import *
 
@@ -6,6 +7,8 @@ from dooders.game.constants import Dimensions, Colors, Directions, SpawnPosition
 from dooders.game.models import FSM
 from dooders.game.npc import NPC
 from dooders.game.sprites import PacManSprites
+from dooders.game.states import PacManState
+from dooders.game.targets import Target
 from dooders.sdk.base.coordinate import Coordinate
 
 
@@ -55,13 +58,13 @@ class PacMan(NPC):
         self.sprites = PacManSprites(self)
         self.spawn = Coordinate(SpawnPositions.PACMAN)
         self.position = self.spawn
-        self.state = FSM()
+        self.state = PacManState(self)
         self.previous_position = self.position
         self.path = []
-        self.target = None
+        self.target = Target()
 
     def find_path(self, game) -> None:
-        self.path = game.graph.path_finding(self.position, self.target)
+        self.path = game.graph.path_finding(self.position, self.target.current)
 
     def move(self) -> None:
         """
@@ -108,7 +111,8 @@ class PacMan(NPC):
 
         if self.alive:
             current_position = self.position.copy()
-            self.target = self.state.update(game, self)
+            self.state.update(game)
+            self.target.update(game, self)
             self.find_path(game)
             self.move()
             self.previous_position = current_position
