@@ -1,9 +1,8 @@
-import random
 from typing import Union
 
 from pygame.locals import *
 
-from dooders.game.constants import Colors, Dimensions, Directions, SpawnPositions
+from dooders.game.constants import Colors, Directions, SpawnPositions
 from dooders.game.npc import NPC
 from dooders.game.sprites import PacManSprites
 from dooders.game.states import PacManState
@@ -13,15 +12,11 @@ from dooders.sdk.base.coordinate import Coordinate
 
 class PacMan(NPC):
     """
-    PacMan class
-
     PacMan is the main character of the game. He is controlled by the player
     and must eat all the pellets in the maze while avoiding the ghosts.
 
     Attributes
     ----------
-    name : string
-        The name of the entity
     color : tuple
         The color of the entity
     direction : int
@@ -30,23 +25,25 @@ class PacMan(NPC):
         Whether or not the entity is alive
     sprites : PacManSprites
         The sprites for the entity
+    spawn : Coordinate
+        The spawn position of the entity
+    position : Coordinate
+        The current position of the entity
+    state : PacManState
+        The state of the entity
+    previous_position : Coordinate
+        The previous position of the entity
+    path : list
+        The path the entity is following
+    target : PacManTarget
+        The target of the entity
 
     Methods
     -------
-    reset()
-        Resets the entity
-    die()
-        Kills the entity
     update(dt)
         Updates the entity
-    get_valid_key()
-        Gets the key pressed by the player
     eat_pellets(pellet_List)
         Checks if the entity has eaten a pellet
-    collide_ghost(ghost)
-        Checks if the entity has collided with a ghost
-    collide_check(other)
-        Checks if the entity has collided with another entity
     """
 
     def __init__(self) -> None:
@@ -61,36 +58,6 @@ class PacMan(NPC):
         self.previous_position = self.position
         self.path = []
         self.target = PacManTarget()
-
-    def find_path(self, game) -> None:
-        self.path = game.graph.path_finding(self.position, self.target.current)
-
-    def move(self) -> None:
-        """
-        Moves the ghost to the next position in its path.
-        """
-        if self.path != []:
-            next_position = self.path.pop(0)
-            if type(next_position) == tuple:
-                next_position = Coordinate(next_position[0], next_position[1])
-            self.direction = self.position.relative_direction(next_position)
-            self.position = next_position
-
-    def reset(self) -> None:
-        """
-        Resets the Pac-Man to its initial state, facing left and alive.
-        It also resets its sprites.
-        """
-        self.position = self.spawn
-        self.alive = True
-        self.image = self.sprites.get_start_image()
-        self.sprites.reset()
-
-    def die(self) -> None:
-        """
-        Sets the Pac-Man's state to dead and stops its movement.
-        """
-        self.alive = False
 
     def update(self, game) -> None:
         """
@@ -136,48 +103,3 @@ class PacMan(NPC):
             if self.collide_check(pellet):
                 return pellet
         return None
-
-    def collide_ghost(self, ghost: "Ghost") -> bool:
-        """
-        Checks if Pac-Man has collided with a ghost.
-
-        Returns True if a collision is detected, False otherwise.
-
-        Parameters
-        ----------
-        ghost : Ghost
-            The ghost to check for collisions with
-
-        Returns
-        -------
-        bool
-            True if a collision is detected, False otherwise
-        """
-        return self.collide_check(ghost)
-
-    def collide_check(self, other: "object") -> bool:
-        """
-
-        Returns True if a collision is detected, False otherwise.
-
-        Parameters
-        ----------
-        other : object
-            The entity to check for collisions with
-
-        Returns
-        -------
-        bool
-            True if a collision is detected, False otherwise
-        """
-        if self.position == other.position:
-            return True
-
-    def render(self, screen):
-        if self.visible:
-            if self.image is not None:
-                x, y = self.position.as_pixel()
-                position = (x - Dimensions.TILEWIDTH / 2, y - Dimensions.TILEHEIGHT / 2)
-                screen.blit(self.image, position)
-            else:
-                raise Exception("No image for PacMan")
