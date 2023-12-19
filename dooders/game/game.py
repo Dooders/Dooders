@@ -6,14 +6,13 @@ from pygame.locals import *
 from dooders.game.blinky import Blinky
 from dooders.game.constants import *
 from dooders.game.fruit import Fruit
-from dooders.game.maze import MazeData
+from dooders.game.map import Map
 from dooders.game.pacman import PacMan
 from dooders.game.pauser import Pause
 from dooders.game.pellets import PelletGroup
-from dooders.game.sprites import LifeSprites, MazeSprites
+from dooders.game.sprites import LifeSprites
 from dooders.game.text import TextGroup
 from dooders.sdk.base.coordinate import Coordinate
-from dooders.sdk.surfaces.graph import Graph
 
 map_legend = {
     "playable": [".", "-", "+", "p", "P", "n", "|"],
@@ -128,7 +127,6 @@ class Game:
         self.flashTimer = 0
         self.fruitCaptured = []
         self.fruitNode = None
-        self.mazedata = MazeData()
 
     def set_background(self) -> None:
         """
@@ -139,10 +137,10 @@ class Game:
         self.background_norm.fill(Colors.BLACK.value)
         self.background_flash = pygame.surface.Surface(Dimensions.SCREENSIZE).convert()
         self.background_flash.fill(Colors.BLACK.value)
-        self.background_norm = self.mazesprites.construct_background(
+        self.background_norm = self.map.sprites.construct_background(
             self.background_norm, self.level % 5
         )
-        self.background_flash = self.mazesprites.construct_background(
+        self.background_flash = self.map.sprites.construct_background(
             self.background_flash, 5
         )
         self.flashBG = False
@@ -167,65 +165,15 @@ class Game:
         10. Set up the ghost home access
         11. Set up the ghost access
         """
-        self.mazedata.load_maze(self.level)
-        self.mazesprites = MazeSprites()
-
-        self.graph = self.setup_graph()
-
+        self.map = Map()
         self.set_background()
-        # self.nodes = NodeGroup("assets/" + self.mazedata.obj.name + ".txt")
-        # self.mazedata.obj.set_portal_pairs(self.nodes)
-        # self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan()
         self.blinky = Blinky()
-        self.graph.add(self.pacman, self.pacman.position)
+        self.map.add(self.pacman, self.pacman.position)
         self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
 
         for pellet in self.pellets.pellet_List:
-            self.graph.add(pellet, pellet.position)
-        # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
-
-        # self.ghosts.pinky.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
-        # )
-        # self.ghosts.inky.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(0, 3))
-        # )
-        # self.ghosts.clyde.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(4, 3))
-        # )
-        # self.ghosts.set_spawn_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
-        # )
-        # self.ghosts.blinky.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 0))
-        # )
-
-        # self.nodes.deny_home_access(self.pacman)
-        # self.nodes.deny_home_access_list(self.ghosts)
-        # self.ghosts.inky.startNode.deny_access(RIGHT, self.ghosts.inky)
-        # self.ghosts.clyde.startNode.deny_access(LEFT, self.ghosts.clyde)
-        # self.mazedata.obj.deny_ghosts_access(self.ghosts, self.nodes)
-
-    def setup_graph(self):
-        map_data = self.mazesprites.data
-        grid_height = len(map_data)
-        grid_width = len(map_data[0])
-        graph = Graph({"height": grid_height, "width": grid_width, "map": map_data})
-
-        nodes_to_remove = []
-
-        for space in graph.spaces():
-            if space.tile_type in map_legend["playable"]:
-                space.playable = True
-            else:
-                nodes_to_remove.append(space.coordinates)
-
-        # Removing the nodes that are not playable
-        for node in nodes_to_remove:
-            graph._graph.remove_node(node)
-
-        return graph
+            self.map.add(pellet, pellet.position)
 
     def update(self) -> None:
         """
@@ -306,10 +254,8 @@ class Game:
                         self.pause.set_pause(player_paused=True)
                         if not self.pause.paused:
                             self.textgroup.hide_text()
-                            # self.show_entities()
                         else:
                             self.textgroup.show_text(Texts.PAUSETXT)
-                            # self.hide_entities()
 
     def check_pellet_events(self) -> None:
         """
@@ -323,7 +269,7 @@ class Game:
         """
         pellet = self.pacman.eat_pellets(self.pellets.pellet_List)
         if pellet:
-            self.graph.remove(pellet)
+            self.map.remove(pellet)
             self.pellets.numEaten += 1
             self.update_score(pellet.points)
             # if self.pellets.numEaten == 30:
@@ -349,10 +295,8 @@ class Game:
             game is paused for 3 seconds before restarting the level.
         """
 
-        if self.pacman.collide_ghost(self.blinky):
+        if self.pacman.collide_check(self.blinky):
             if self.blinky.state.current is GhostStates.FREIGHT:
-                # self.pacman.visible = False
-                # self.blinky.visible = False
                 self.update_score(self.blinky.points)
                 self.textgroup.add_text(
                     str(self.blinky.points),
@@ -413,6 +357,7 @@ class Game:
                 self.fruit = None
 
     def search_pellet(self, start: "Coordinate") -> "Coordinate":
+        #! Refactor and move to map.py
         # Use BFS to find the closest pellet
         visited = set()
         queue = [start]
@@ -423,12 +368,12 @@ class Game:
                 visited.add(node)
 
                 # Check if the node has a pellet
-                space = self.graph._graph.nodes[node].get("space")
+                space = self.map.graph._graph.nodes[node].get("space")
                 if space and space.has("Pellet"):
                     return space
 
                 # Add neighbors to the queue
-                for neighbor in self.graph._graph.neighbors(node):
+                for neighbor in self.map.graph._graph.neighbors(node):
                     if neighbor not in visited:
                         queue.append(neighbor)
 
