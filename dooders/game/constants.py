@@ -61,3 +61,21 @@ class SpawnPositions:
     INKY = (11, 14)
     CLYDE = (15, 14)
     PACMAN = (13, 26)
+
+
+class MapLegend:
+    PLAYABLE = [".", "-", "+", "p", "P", "n", "|"]
+    NON_PLAYABLE = [
+        "X",
+        "0",
+        "1",
+        "8",
+        "7",
+        "3",
+        "2",
+        "9",
+        "6",
+        "4",
+        "5",
+        "=",
+    ]
