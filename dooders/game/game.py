@@ -169,13 +169,8 @@ class Game:
         """
         self.mazedata.load_maze(self.level)
         self.mazesprites = MazeSprites()
-
         self.graph = self.setup_graph()
-
         self.set_background()
-        # self.nodes = NodeGroup("assets/" + self.mazedata.obj.name + ".txt")
-        # self.mazedata.obj.set_portal_pairs(self.nodes)
-        # self.mazedata.obj.connect_home_nodes(self.nodes)
         self.pacman = PacMan()
         self.blinky = Blinky()
         self.graph.add(self.pacman, self.pacman.position)
@@ -183,29 +178,6 @@ class Game:
 
         for pellet in self.pellets.pellet_List:
             self.graph.add(pellet, pellet.position)
-        # self.ghosts = GhostGroup(self.nodes.get_start_temp_node(), self.pacman)
-
-        # self.ghosts.pinky.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
-        # )
-        # self.ghosts.inky.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(0, 3))
-        # )
-        # self.ghosts.clyde.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(4, 3))
-        # )
-        # self.ghosts.set_spawn_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 3))
-        # )
-        # self.ghosts.blinky.set_start_node(
-        #     self.nodes.get_node_from_tiles(*self.mazedata.obj.add_offset(2, 0))
-        # )
-
-        # self.nodes.deny_home_access(self.pacman)
-        # self.nodes.deny_home_access_list(self.ghosts)
-        # self.ghosts.inky.startNode.deny_access(RIGHT, self.ghosts.inky)
-        # self.ghosts.clyde.startNode.deny_access(LEFT, self.ghosts.clyde)
-        # self.mazedata.obj.deny_ghosts_access(self.ghosts, self.nodes)
 
     def setup_graph(self):
         map_data = self.mazesprites.data
@@ -306,10 +278,8 @@ class Game:
                         self.pause.set_pause(player_paused=True)
                         if not self.pause.paused:
                             self.textgroup.hide_text()
-                            # self.show_entities()
                         else:
                             self.textgroup.show_text(Texts.PAUSETXT)
-                            # self.hide_entities()
 
     def check_pellet_events(self) -> None:
         """
@@ -351,8 +321,6 @@ class Game:
 
         if self.pacman.collide_check(self.blinky):
             if self.blinky.state.current is GhostStates.FREIGHT:
-                # self.pacman.visible = False
-                # self.blinky.visible = False
                 self.update_score(self.blinky.points)
                 self.textgroup.add_text(
                     str(self.blinky.points),
@@ -413,6 +381,7 @@ class Game:
                 self.fruit = None
 
     def search_pellet(self, start: "Coordinate") -> "Coordinate":
+        #! Get rid of this method
         # Use BFS to find the closest pellet
         visited = set()
         queue = [start]
