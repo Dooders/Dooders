@@ -107,6 +107,27 @@ class GhostState(State):
 
 
 class PacManState(State):
+    """
+
+    The PacMan's state is updated based on the following rules:
+    1. If the PacMan is in the search state and a power pellet is nearby,
+        then the PacMan moves to the chase state.
+    2. If the PacMan is in the search state and a non-vulnerable ghost is
+        nearby, then the PacMan moves to the evade state.
+    3. If the PacMan is in the chase state and a power pellet is eaten and
+        a vulnerable ghost is nearby, then the PacMan moves to the attack
+        state.
+    4. If the PacMan is in the chase state and a non-vulnerable ghost is
+        nearby, then the PacMan moves to the evade state.
+    5. If the PacMan is in the attack state and no vulnerable ghosts are
+        nearby or a vulnerable ghost is eaten, then the PacMan moves to
+        the search state.
+    6. If the PacMan is in the evade state and no non-vulnerable ghosts are
+        nearby, then the PacMan moves to the search state.
+    7. If the PacMan is in the evade state and a power pellet is nearby, then
+        the PacMan moves to the chase state.
+    """
+
     def __init__(self, npc: "NPC") -> None:
         super().__init__(npc)
         self.current = "Search"
