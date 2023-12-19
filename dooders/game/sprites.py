@@ -539,7 +539,7 @@ class LifeSprites(Spritesheet):
         )
 
 
-class MazeSprites(Spritesheet):
+class MapSprites(Spritesheet):
     """
     handle the sprites representing the maze layout in the Pac-Man game.
 
@@ -617,7 +617,6 @@ class MazeSprites(Spritesheet):
         np.ndarray
             A NumPy array of strings representing the maze layout.
         """
-        # print(f'Loading maze file "{mazefile}"')
         return np.loadtxt(mazefile, dtype="<U1")
 
     def construct_background(
@@ -647,12 +646,9 @@ class MazeSprites(Spritesheet):
         """
         for row in list(range(self.data.shape[0])):
             for col in list(range(self.data.shape[1])):
-                # print(f"row: {row}, col: {col}, data: {self.data[row][col]}")
                 if self.data[row][col].isdigit():
                     x = int(self.data[row][col]) + 12
-                    # print(f"row: {row}, col: {col}, x: {x}, y: {y}")
                     sprite = self.get_image(x, y)
-                    # print(sprite)
                     rotval = int(self.rotdata[row][col])
                     sprite = self.rotate(sprite, rotval)
                     background.blit(
@@ -665,8 +661,6 @@ class MazeSprites(Spritesheet):
                         sprite,
                         (col * Dimensions.TILEWIDTH, row * Dimensions.TILEHEIGHT),
                     )
-
-        # print("********************************")
 
         return background
 
