@@ -5,7 +5,7 @@ import numpy as np
 import pygame
 
 from dooders.game.animation import Animator
-from dooders.game.constants import *
+from dooders.game.settings import *
 
 if TYPE_CHECKING:
     from fruit import Fruit

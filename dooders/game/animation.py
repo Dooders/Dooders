@@ -1,4 +1,4 @@
-from dooders.game.constants import *
+from dooders.game.settings import *
 
 
 class Animator:

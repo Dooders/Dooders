@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 
 from dooders.game.blinky import Blinky
-from dooders.game.constants import *
+from dooders.game.settings import *
 from dooders.game.fruit import Fruit
 from dooders.game.map import Map
 from dooders.game.pacman import PacMan

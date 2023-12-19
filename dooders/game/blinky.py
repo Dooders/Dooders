@@ -1,4 +1,4 @@
-from dooders.game.constants import Colors, GhostStates, SpawnPositions
+from dooders.game.settings import Colors, GhostStates, SpawnPositions
 from dooders.game.npc import NPC
 from dooders.game.sprites import GhostSprites
 from dooders.game.states import GhostState

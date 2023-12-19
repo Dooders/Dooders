@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 
-from dooders.game.constants import *
+from dooders.game.settings import *
 from dooders.sdk.base.coordinate import Coordinate
 from dooders.game.npc import NPC
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List
 
 import pygame
 
-from dooders.game.constants import Dimensions, Directions
+from dooders.game.settings import Dimensions, Directions
 from dooders.sdk.base.coordinate import Coordinate
 from dooders.sdk.utils.short_id import ShortUUID as short_id
 

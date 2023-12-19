@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List
 
-from dooders.game.constants import MapLegend
+from dooders.game.settings import MapLegend
 from dooders.game.sprites import MapSprites
 from dooders.sdk.surfaces.graph import Graph
 
@@ -98,6 +98,10 @@ class Map:
         -------
         Graph
             The graph of the map
+            
+        See Also
+        --------
+        dooders.sdk.surfaces.graph.Graph
         """
         map_data = self.sprites.data
         grid_height = len(map_data)

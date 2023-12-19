@@ -1,6 +1,6 @@
 import pygame
 
-from dooders.game.constants import *
+from dooders.game.settings import *
 from dooders.game.sprites import FruitSprites
 from dooders.sdk.base.coordinate import Coordinate
 

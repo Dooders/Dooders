@@ -1,7 +1,7 @@
 import math
 
 from dooders.defaults import TILE_HEIGHT, TILE_WIDTH
-from dooders.game.constants import Directions
+from dooders.game.settings import Directions
 
 
 class Coordinate:

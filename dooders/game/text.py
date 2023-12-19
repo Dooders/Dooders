@@ -2,7 +2,7 @@ from abc import ABC
 
 import pygame
 
-from dooders.game.constants import *
+from dooders.game.settings import *
 from dooders.sdk.base.coordinate import Coordinate
 
 

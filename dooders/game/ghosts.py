@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame.locals import *
 
-from dooders.game.constants import *
+from dooders.game.settings import *
 from dooders.game.modes import ModeController
 from dooders.game.sprites import GhostSprites
 from dooders.sdk.base.coordinate import Coordinate
