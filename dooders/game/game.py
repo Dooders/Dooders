@@ -6,7 +6,6 @@ from pygame.locals import *
 from dooders.game.blinky import Blinky
 from dooders.game.constants import *
 from dooders.game.fruit import Fruit
-from dooders.game.maze import MazeData
 from dooders.game.pacman import PacMan
 from dooders.game.pauser import Pause
 from dooders.game.pellets import PelletGroup
@@ -128,7 +127,6 @@ class Game:
         self.flashTimer = 0
         self.fruitCaptured = []
         self.fruitNode = None
-        self.mazedata = MazeData()
 
     def set_background(self) -> None:
         """
@@ -167,7 +165,6 @@ class Game:
         10. Set up the ghost home access
         11. Set up the ghost access
         """
-        self.mazedata.load_maze(self.level)
         self.mazesprites = MazeSprites()
         self.graph = self.setup_graph()
         self.set_background()
