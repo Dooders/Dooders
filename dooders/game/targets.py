@@ -54,7 +54,7 @@ class PacManTarget(Target):
         tuple
             The coordinates of the target space
         """
-        neighbor_spaces = game.graph.nearby_spaces(agent.position)
+        neighbor_spaces = game.map.graph.nearby_spaces(agent.position)
         pellets = [
             space for space in neighbor_spaces if space.has(["Pellet", "PowerPellet"])
         ]
