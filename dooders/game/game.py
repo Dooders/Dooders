@@ -316,7 +316,7 @@ class Game:
         Checks if Pacman has eaten any pellets and handles the consequences.
 
         If Pacman eats a pellet, the pellet is removed from the pellet list, the
-            score is updated, and the ghost freight????(sp) mode is started if Pacman
+            score is updated, and the ghost freight state is started if Pacman
             eats a power pellet.
         If Pacman eats all the pellets, the background flashes and the game is
             paused for 3 seconds before starting the next level.
@@ -342,15 +342,15 @@ class Game:
         """
         Checks for collisions between Pacman and the ghosts and handles the outcomes.
 
-        If Pacman collides with a ghost in freight mode, the ghost and Pacman
+        If Pacman collides with a ghost in freight state, the ghost and Pacman
             are hidden, the score is updated, and the ghost is sent back to its
             spawn node.
-        If Pacman collides with a ghost in any other mode, Pacman dies and the
+        If Pacman collides with a ghost in any other state, Pacman dies and the
             game is paused for 3 seconds before restarting the level.
         """
 
         if self.pacman.collide_ghost(self.blinky):
-            if self.blinky.mode.current is GhostStates.FREIGHT:
+            if self.blinky.state.current is GhostStates.FREIGHT:
                 # self.pacman.visible = False
                 # self.blinky.visible = False
                 self.update_score(self.blinky.points)
@@ -367,7 +367,7 @@ class Game:
                 # self.pause.set_pause(pause_time=1, func=self.show_entities)
                 # self.nodes.allow_home_access(self.ghosts)
 
-            elif self.blinky.mode.current is not GhostStates.SPAWN:
+            elif self.blinky.state.current is not GhostStates.SPAWN:
                 if self.pacman.alive:
                     self.lives -= 1
                     self.lifesprites.remove_image()

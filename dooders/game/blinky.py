@@ -1,16 +1,14 @@
-from typing import TYPE_CHECKING
-
-import pygame
-from pygame.locals import *
-
-from dooders.game.constants import *
-from dooders.game.modes import ModeController
-from dooders.game.sprites import GhostSprites
-from dooders.sdk.base.coordinate import Coordinate
+from dooders.game.constants import (
+    Colors,
+    Dimensions,
+    Directions,
+    GhostStates,
+    SpawnPositions,
+)
 from dooders.game.npc import NPC
-
-if TYPE_CHECKING:
-    from game.pacman import PacMan
+from dooders.game.sprites import GhostSprites
+from dooders.game.states import GhostState
+from dooders.sdk.base.coordinate import Coordinate
 
 
 class Blinky(NPC):
@@ -27,7 +25,7 @@ class Blinky(NPC):
         self.spawn = Coordinate(SpawnPositions.BLINKY)
         self.position = self.spawn
         self.previous_position = self.position
-        self.mode = ModeController(self)
+        self.state = GhostState(self)
         self.path = []
         self.target = None
         self.waypoints = [
@@ -43,19 +41,19 @@ class Blinky(NPC):
         ]
 
     def update_target(self, game) -> None:
-        if self.mode.current == GhostStates.SPAWN:
+        if self.state.current == GhostStates.SPAWN:
             self.target = self.spawn
 
-        elif self.mode.current == GhostStates.CHASE:
+        elif self.state.current == GhostStates.CHASE:
             self.target = game.pacman.position
 
-        elif self.mode.current == GhostStates.SCATTER:
+        elif self.state.current == GhostStates.SCATTER:
             if self.path == [] and self.waypoints != []:
                 self.target = self.waypoints.pop(0)
 
     def update(self, game) -> None:
         """
-        Updates the ghost's position and direction based on the current mode.
+        Updates the ghost's position and direction based on the current state.
 
         Parameters
         ----------
@@ -66,7 +64,7 @@ class Blinky(NPC):
         current_position = self.position.copy()
         self.sprites.update(dt)
         self.update_target(game)
-        self.mode.update(dt)
+        self.state.update(dt)
         self.next_move(game)
         self.previous_position = current_position
 
@@ -87,7 +85,7 @@ class Blinky(NPC):
     def next_move(self, game) -> None:
         self.get_path(game)
 
-        if self.mode.current == GhostStates.FREIGHT:
+        if self.state.current == GhostStates.FREIGHT:
             if len(self.path) == 1:
                 self.target = game.pacman.position
 
@@ -95,16 +93,16 @@ class Blinky(NPC):
 
     def start_freight(self) -> None:
         """
-        Starts the ghost's freight mode.
+        Starts the ghost's freight state.
         """
-        self.mode.set_freight_mode()
+        self.state.freight()
         self.target = self.spawn
 
     def start_spawn(self) -> None:
         """
-        Sets the ghost's mode to spawn mode.
+        Sets the ghost's state to spawn mode.
         """
-        self.mode.set_spawn_mode()
+        self.state.spawn()
         self.target = self.spawn
 
     def normal_mode(self) -> None:

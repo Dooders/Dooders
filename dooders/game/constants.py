@@ -41,6 +41,12 @@ class GhostStates(Enum):
     SPAWN = 3
 
 
+class PacManStates(Enum):
+    SEARCH = 0
+    CHASE = 1
+    EVADE = 2
+
+
 class Texts(Enum):
     SCORETXT = 0
     LEVELTXT = 1

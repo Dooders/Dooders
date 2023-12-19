@@ -11,7 +11,7 @@ contents (Energy, Agents, etc.)
 """
 
 import random
-from typing import Union
+from typing import List, Union
 
 from dooders.sdk.base.coordinate import Coordinate
 
@@ -124,15 +124,15 @@ class Space:
         if len(self._contents) == 0:
             self.status = "empty"
 
-    def has(self, object_type: str, ignore: object = None) -> bool:
+    def has(self, object_type: Union[str, List[str]], ignore: object = None) -> bool:
         """
         Return a boolean indicating if the Space contains
         a specific object type
 
         Parameters
         ----------
-        object_type: str, ('Dooder', 'Energy', etc.)
-            The type of object to check for
+        object_type: str or List[str], ('Dooder', 'Energy', etc.)
+            The type(s) of object to check for.
         ignore: object
             A list of object to ignore (Specifically the involved Dooder)
 
@@ -148,13 +148,16 @@ class Space:
         >>> space.has('Dooder')
         True
         """
+
+        if not isinstance(object_type, list):
+            object_type = [object_type]
+
         for object in self._contents.values():
-            if object.__class__.__name__ == object_type:
-                if ignore:
-                    if object.id == ignore.id:
-                        pass
-                else:
-                    return True
+            if object.__class__.__name__ in object_type:
+                if ignore and object.id == ignore.id:
+                    continue
+                return True
+
         return False
 
     @property
