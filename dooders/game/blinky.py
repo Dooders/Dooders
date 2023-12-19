@@ -8,6 +8,7 @@ from dooders.game.constants import (
 from dooders.game.npc import NPC
 from dooders.game.sprites import GhostSprites
 from dooders.game.states import GhostState
+from dooders.game.targets import GhostTarget
 from dooders.sdk.base.coordinate import Coordinate
 
 
@@ -27,7 +28,7 @@ class Blinky(NPC):
         self.previous_position = self.position
         self.state = GhostState(self)
         self.path = []
-        self.target = None
+        self.target = GhostTarget()
         self.waypoints = [
             (6, 17),
             (6, 4),
@@ -39,17 +40,6 @@ class Blinky(NPC):
             (1, 8),
             (1, 8),
         ]
-
-    def update_target(self, game) -> None:
-        if self.state.current == GhostStates.SPAWN:
-            self.target = self.spawn
-
-        elif self.state.current == GhostStates.CHASE:
-            self.target = game.pacman.position
-
-        elif self.state.current == GhostStates.SCATTER:
-            if self.path == [] and self.waypoints != []:
-                self.target = self.waypoints.pop(0)
 
     def update(self, game) -> None:
         """
@@ -63,13 +53,13 @@ class Blinky(NPC):
         dt = game.dt
         current_position = self.position.copy()
         self.sprites.update(dt)
-        self.update_target(game)
         self.state.update(dt)
+        self.target.update(game, self)
         self.next_move(game)
         self.previous_position = current_position
 
     def get_path(self, game) -> None:
-        self.path = game.graph.path_finding(self.position, self.target)
+        self.path = game.graph.path_finding(self.position, self.target.current)
 
     def move(self) -> None:
         """
@@ -87,7 +77,7 @@ class Blinky(NPC):
 
         if self.state.current == GhostStates.FREIGHT:
             if len(self.path) == 1:
-                self.target = game.pacman.position
+                self.target.current = game.pacman.position
 
         self.move()
 
@@ -96,14 +86,14 @@ class Blinky(NPC):
         Starts the ghost's freight state.
         """
         self.state.freight()
-        self.target = self.spawn
+        self.target.current = self.spawn
 
     def start_spawn(self) -> None:
         """
         Sets the ghost's state to spawn mode.
         """
         self.state.spawn()
-        self.target = self.spawn
+        self.target.current = self.spawn
 
     def normal_mode(self) -> None:
         pass
