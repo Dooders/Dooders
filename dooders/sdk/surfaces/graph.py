@@ -409,7 +409,7 @@ class Graph:
         for neighbor in self._graph.neighbors(position):
             yield self._graph.nodes[neighbor]["space"]
 
-    def get_neighbor_spaces(self, coordinate: "Coordinate") -> List[Space]:
+    def nearby_spaces(self, coordinate: "Coordinate") -> List[Space]:
         """
         Returns the neighbor spaces of a node.
 
