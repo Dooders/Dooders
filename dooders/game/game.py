@@ -349,7 +349,7 @@ class Game:
             game is paused for 3 seconds before restarting the level.
         """
 
-        if self.pacman.collide_ghost(self.blinky):
+        if self.pacman.collide_check(self.blinky):
             if self.blinky.state.current is GhostStates.FREIGHT:
                 # self.pacman.visible = False
                 # self.blinky.visible = False
