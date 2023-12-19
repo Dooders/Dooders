@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from dooders.game.constants import GhostStates
+from dooders.game.constants import GhostStates, PacManStates
 
 if TYPE_CHECKING:
     from dooders.game.npc import NPC
@@ -130,18 +130,18 @@ class PacManState(State):
 
     def __init__(self, npc: "NPC") -> None:
         super().__init__(npc)
-        self.current = "Search"
+        self.current = PacManStates.SEARCH
 
     def update(self, game) -> None:
         if self.npc.alive:
             if self.non_vulnerable_ghost_nearby(game):
-                self.current = "Evade"
+                self.current = PacManStates.EVADE
 
             elif self.vulnerable_ghost_nearby(game):
-                self.current = "Attack"
+                self.current = PacManStates.CHASE
 
             else:
-                self.current = "Search"
+                self.current = PacManStates.SEARCH
 
     def non_vulnerable_ghost_nearby(self, game) -> bool:
         """
