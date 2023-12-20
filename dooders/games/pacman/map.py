@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, List
 
-from dooders.game.settings import MapLegend
-from dooders.game.sprites import MapSprites
+from dooders.games.pacman.settings import MapLegend
+from dooders.games.pacman.sprites import MapSprites
 from dooders.sdk.surfaces.graph import Graph
 
 if TYPE_CHECKING:
-    from dooders.game.npc import NPC
+    from dooders.games.npc import NPC
     from dooders.sdk.base.coordinate import Coordinate
 
 

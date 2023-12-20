@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pygame
 
-from dooders.game.animation import Animator
-from dooders.game.settings import *
+from dooders.games.pacman.animation import Animator
+from dooders.games.pacman.settings import *
 
 if TYPE_CHECKING:
-    from fruit import Fruit
-    from ghosts import Ghost
-    from pacman import PacMan
+    from dooders.games.pacman.fruit import Fruit
+    from dooders.games.pacman.ghosts import Ghost
+    from dooders.games.pacman.pacman import PacMan
 
 BASETILEWIDTH = 16  # The width of a tile in the sprite sheet
 BASETILEHEIGHT = 16  # The height of a tile in the sprite sheet
@@ -47,7 +47,7 @@ class Spritesheet(ABC):
 
         Rescales the sprite sheet to match the game's tile width and height.
         """
-        self.sheet = pygame.image.load("dooders/game/assets/spritesheet.png").convert()
+        self.sheet = pygame.image.load("dooders/games/pacman/assets/spritesheet.png").convert()
         transcolor = self.sheet.get_at((0, 0))
         self.sheet.set_colorkey(transcolor)
         width = int(self.sheet.get_width() / BASETILEWIDTH * Dimensions.TILEWIDTH)
@@ -576,8 +576,8 @@ class MapSprites(Spritesheet):
         rotfile : str
             The name of the file to read the rotation data from.
         """
-        mazefile = "dooders/game/assets/maze1.txt"
-        rotfile = "dooders/game/assets/maze1_rotation.txt"
+        mazefile = "dooders/games/pacman/assets/maze1.txt"
+        rotfile = "dooders/games/pacman/assets/maze1_rotation.txt"
         Spritesheet.__init__(self)
         self.data = self.read_maze_file(mazefile)
         self.rotdata = self.read_maze_file(rotfile)

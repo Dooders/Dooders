@@ -1,8 +1,8 @@
-from dooders.game.settings import Colors, GhostStates, SpawnPositions
-from dooders.game.npc import NPC
-from dooders.game.sprites import GhostSprites
-from dooders.game.states import GhostState
-from dooders.game.targets import GhostTarget
+from dooders.games.pacman.settings import Colors, GhostStates, SpawnPositions
+from dooders.games.npc import NPC
+from dooders.games.pacman.sprites import GhostSprites
+from dooders.games.pacman.states import GhostState
+from dooders.games.pacman.targets import GhostTarget
 from dooders.sdk.base.coordinate import Coordinate
 
 

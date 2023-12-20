@@ -2,7 +2,7 @@ from abc import ABC
 
 import pygame
 
-from dooders.game.settings import *
+from dooders.games.pacman.settings import *
 from dooders.sdk.base.coordinate import Coordinate
 
 
@@ -111,7 +111,7 @@ class Text(ABC):
         self.lifespan = time
         self.label = None
         self.destroy = False
-        self.setup_font("dooders/game/assets/PressStart2P-Regular.ttf")
+        self.setup_font("dooders/games/pacman/assets/PressStart2P-Regular.ttf")
         self.create_label()
 
     def setup_font(self, font_path: str) -> None:

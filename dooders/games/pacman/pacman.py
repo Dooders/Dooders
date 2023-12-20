@@ -2,11 +2,11 @@ from typing import Union
 
 from pygame.locals import *
 
-from dooders.game.settings import Colors, Directions, SpawnPositions
-from dooders.game.npc import NPC
-from dooders.game.sprites import PacManSprites
-from dooders.game.states import PacManState
-from dooders.game.targets import PacManTarget
+from dooders.games.npc import NPC
+from dooders.games.pacman.settings import Colors, Directions, SpawnPositions
+from dooders.games.pacman.sprites import PacManSprites
+from dooders.games.pacman.states import PacManState
+from dooders.games.pacman.targets import PacManTarget
 from dooders.sdk.base.coordinate import Coordinate
 
 

@@ -1,9 +1,9 @@
 import numpy as np
 import pygame
 
-from dooders.game.settings import *
+from dooders.games.pacman.settings import *
 from dooders.sdk.base.coordinate import Coordinate
-from dooders.game.npc import NPC
+from dooders.games.npc import NPC
 
 
 class Pellet(NPC):  #! should inherit from Entity instead of NPC

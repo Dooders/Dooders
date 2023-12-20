@@ -1,7 +1,7 @@
 import pygame
 
-from dooders.game.settings import *
-from dooders.game.sprites import FruitSprites
+from dooders.games.pacman.settings import *
+from dooders.games.pacman.sprites import FruitSprites
 from dooders.sdk.base.coordinate import Coordinate
 
 

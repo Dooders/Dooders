@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING, List
 
 import pygame
 
-from dooders.game.settings import Dimensions, Directions
+from dooders.games.pacman.settings import Dimensions, Directions
 from dooders.sdk.base.coordinate import Coordinate
 from dooders.sdk.utils.short_id import ShortUUID as short_id
 
 if TYPE_CHECKING:
-    from dooders.game.game import Game
+    from dooders.games.pacman.game import Game
 
 
 class NPC(ABC):

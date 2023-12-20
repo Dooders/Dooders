@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from dooders.game.settings import GhostStates, PacManStates
+from dooders.games.pacman.settings import GhostStates, PacManStates
 
 if TYPE_CHECKING:
-    from dooders.game.npc import NPC
+    from dooders.games.npc import NPC
 
 
 class State(ABC):

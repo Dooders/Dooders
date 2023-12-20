@@ -1,4 +1,4 @@
-from dooders.game.settings import *
+from dooders.games.pacman.settings import *
 
 
 class Animator:
