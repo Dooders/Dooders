@@ -127,10 +127,10 @@ class PacMan(NPC):
         distance = 0
         for ghost in game.ghosts.ghosts:
             if distance == 0:
-                distance = self.position.distance(ghost.position)
+                distance = self.position.distance_to(ghost.position)
                 closest_ghost = ghost
-            elif self.position.distance(ghost.position) < distance:
-                distance = self.position.distance(ghost.position)
+            elif self.position.distance_to(ghost.position) < distance:
+                distance = self.position.distance_to(ghost.position)
                 closest_ghost = ghost
 
         return closest_ghost
