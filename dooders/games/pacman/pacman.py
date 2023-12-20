@@ -9,6 +9,7 @@ from dooders.sdk.base.coordinate import Coordinate
 
 if TYPE_CHECKING:
     from dooders.games.pacman.game import Game
+    from dooders.games.pacman.ghosts import Ghost
     from dooders.games.pacman.pellets import Pellet
 
 
@@ -46,6 +47,8 @@ class PacMan(NPC):
         Updates the entity
     eat_pellets(pellet_List: List["Pellet"])
         Checks if the entity has eaten a pellet
+    closest_ghost(game: Game)
+        Finds the ghost closest to the entity
     """
 
     def __init__(self) -> None:
@@ -85,7 +88,7 @@ class PacMan(NPC):
             self.move()
             self.previous_position = current_position
 
-    def eat_pellets(self, pellet_List: List["Pellet"]) -> Union[None, object]:
+    def eat_pellets(self, pellet_List: List["Pellet"]) -> Union[None, "Pellet"]:
         """
         Checks for collisions between Pac-Man and any pellet in the provided list.
 
@@ -105,3 +108,29 @@ class PacMan(NPC):
             if self.collide_check(pellet):
                 return pellet
         return None
+
+    def closest_ghost(self, game: "Game") -> "Ghost":
+        """
+        Find the ghost closest to PacMan, based on the distance between the
+        manhattan distance between the two entities.
+
+        Parameters
+        ----------
+        game : Game
+            The game object
+
+        Returns
+        -------
+        Ghost
+            The ghost closest to PacMan
+        """
+        distance = 0
+        for ghost in game.ghosts.ghosts:
+            if distance == 0:
+                distance = self.position.distance(ghost.position)
+                closest_ghost = ghost
+            elif self.position.distance(ghost.position) < distance:
+                distance = self.position.distance(ghost.position)
+                closest_ghost = ghost
+
+        return closest_ghost
