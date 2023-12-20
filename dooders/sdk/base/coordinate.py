@@ -1,7 +1,7 @@
 import math
 
 from dooders.defaults import TILE_HEIGHT, TILE_WIDTH
-from dooders.game.constants import Directions
+from dooders.games.pacman.settings import Directions
 
 
 class Coordinate:

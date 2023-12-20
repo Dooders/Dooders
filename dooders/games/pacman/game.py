@@ -3,15 +3,15 @@ import time
 import pygame
 from pygame.locals import *
 
-from dooders.game.blinky import Blinky
-from dooders.game.constants import *
-from dooders.game.fruit import Fruit
-from dooders.game.map import Map
-from dooders.game.pacman import PacMan
-from dooders.game.pauser import Pause
-from dooders.game.pellets import PelletGroup
-from dooders.game.sprites import LifeSprites
-from dooders.game.text import TextGroup
+from dooders.games.pacman.blinky import Blinky
+from dooders.games.pacman.settings import *
+from dooders.games.pacman.fruit import Fruit
+from dooders.games.pacman.map import Map
+from dooders.games.pacman.pacman import PacMan
+from dooders.games.pacman.pauser import Pause
+from dooders.games.pacman.pellets import PelletGroup
+from dooders.games.pacman.sprites import LifeSprites
+from dooders.games.pacman.text import TextGroup
 from dooders.sdk.base.coordinate import Coordinate
 
 map_legend = {
@@ -170,7 +170,7 @@ class Game:
         self.pacman = PacMan()
         self.blinky = Blinky()
         self.map.add(self.pacman, self.pacman.position)
-        self.pellets = PelletGroup("dooders/game/assets/maze1.txt")
+        self.pellets = PelletGroup("dooders/games/pacman/assets/maze1.txt")
 
         for pellet in self.pellets.pellet_List:
             self.map.add(pellet, pellet.position)

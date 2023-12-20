@@ -1,7 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 
-from dooders.game.constants import GhostStates
+from dooders.games.pacman.settings import GhostStates
 
 
 class Target(ABC):
