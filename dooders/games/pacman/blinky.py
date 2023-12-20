@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING, List
+
 from dooders.games.pacman.settings import Colors, GhostStates, SpawnPositions
 from dooders.games.npc import NPC
 from dooders.games.pacman.sprites import GhostSprites
@@ -5,8 +7,11 @@ from dooders.games.pacman.states import GhostState
 from dooders.games.pacman.targets import GhostTarget
 from dooders.sdk.base.coordinate import Coordinate
 
+if TYPE_CHECKING:
+    from dooders.games.pacman.game import Game
 
-class Blinky(NPC):
+
+class Ghost(NPC):
     """
     Blinky is the red ghost. He is the most aggressive of the ghosts and will
     always try to chase PacMan.
@@ -16,9 +21,9 @@ class Blinky(NPC):
     color : tuple
         The color of the entity
     alive : bool
-        Whether or not the entity is alive
-    points : int
-        The amount of points the entity is worth
+        Whether the entity is alive or not
+    direction : Coordinate
+        The direction the entity is moving in
     sprites : GhostSprites
         The sprites for the entity
     spawn : Coordinate
@@ -29,16 +34,23 @@ class Blinky(NPC):
         The state of the entity
     previous_position : Coordinate
         The previous position of the entity
-    path : list
-        The path the entity is following
+    path : List[Coordinate]
+        The path the entity to reach its target
     target : GhostTarget
-        The target of the entity
-    waypoints : list
-        The waypoints the entity is following
+        The target the entity is currently following
+
+    Methods
+    -------
+    update(game: Game)
+        Updates the entity
+    start_freight()
+        Starts the entity's freight state
+    start_spawn()
+        Sets the entity's state to spawn mode
     """
 
     def __init__(self) -> None:
-        NPC.__init__(self)
+        super().__init__()
         self.color = Colors.RED.value
         self.alive = True
         self.points = 200
@@ -47,7 +59,7 @@ class Blinky(NPC):
         self.position = self.spawn
         self.previous_position = self.position
         self.state = GhostState(self)
-        self.path = []
+        self.path: List[Coordinate] = []
         self.target = GhostTarget()
         self.waypoints = [
             (6, 17),
@@ -61,24 +73,32 @@ class Blinky(NPC):
             (1, 8),
         ]
 
-    def update(self, game) -> None:
+    def update(self, game: "Game") -> None:
         """
         Updates the ghost's position and direction based on the current state.
 
         Parameters
         ----------
-        game : GameController
+        game : Game
             The game controller object that the ghost is in.
         """
-        dt = game.dt
+        time_delta = game.dt
         current_position = self.position.copy()
-        self.sprites.update(dt)
-        self.state.update(dt)
+        self.sprites.update(time_delta)
+        self.state.update(time_delta)
         self.target.update(game, self)
         self.next_move(game)
         self.previous_position = current_position
 
-    def next_move(self, game) -> None:
+    def next_move(self, game: "Game") -> None:
+        """
+        Determines the next move for the ghost based on the current state.
+
+        Parameters
+        ----------
+        game : Game
+            The game controller object that the ghost is in.
+        """
         self.find_path(game)
 
         if self.state.current == GhostStates.FREIGHT:
@@ -101,5 +121,7 @@ class Blinky(NPC):
         self.state.spawn()
         self.target.current = self.spawn
 
-    def normal_mode(self) -> None:
-        pass
+
+class Blinky(Ghost):
+    def __init__(self):
+        super().__init__()
