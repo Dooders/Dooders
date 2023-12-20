@@ -3,7 +3,7 @@ import time
 import pygame
 from pygame.locals import *
 
-from dooders.games.pacman.blinky import Blinky
+from dooders.games.pacman.ghosts import GhostGroup
 from dooders.games.pacman.settings import *
 from dooders.games.pacman.fruit import Fruit
 from dooders.games.pacman.map import Map
@@ -13,24 +13,6 @@ from dooders.games.pacman.pellets import PelletGroup
 from dooders.games.pacman.sprites import LifeSprites
 from dooders.games.pacman.text import TextGroup
 from dooders.sdk.base.coordinate import Coordinate
-
-map_legend = {
-    "playable": [".", "-", "+", "p", "P", "n", "|"],
-    "non-playable": [
-        "X",
-        "0",
-        "1",
-        "8",
-        "7",
-        "3",
-        "2",
-        "9",
-        "6",
-        "4",
-        "5",
-        "=",
-    ],
-}
 
 
 class Game:
@@ -122,6 +104,7 @@ class Game:
         self.score = 0
         self.textgroup = TextGroup()
         self.lifesprites = LifeSprites(self.lives)
+        self.ghosts = GhostGroup()
         self.flashBG = False
         self.flashTime = 0.2
         self.flashTimer = 0
@@ -168,8 +151,11 @@ class Game:
         self.map = Map()
         self.set_background()
         self.pacman = PacMan()
-        self.blinky = Blinky()
         self.map.add(self.pacman, self.pacman.position)
+        
+        for ghost in self.ghosts.ghosts:
+            self.map.add(ghost, ghost.position)
+
         self.pellets = PelletGroup("dooders/games/pacman/assets/maze1.txt")
 
         for pellet in self.pellets.pellet_List:
@@ -199,7 +185,7 @@ class Game:
 
         # Update ghosts, fruit, and check for pellet events
         if not self.pause.paused:
-            self.blinky.update(self)
+            self.ghosts.update(self)
             self.check_pellet_events()
             self.check_ghost_events()
 
@@ -278,7 +264,7 @@ class Game:
             #     self.ghosts.clyde.startNode.allow_access(LEFT, self.ghosts.clyde)
             self.pellets.pellet_List.remove(pellet)
             if pellet.name == "PowerPellet":
-                self.blinky.start_freight()
+                self.ghosts.start_freight()
             if self.pellets.is_empty():
                 self.flashBG = True
                 self.hide_entities()
@@ -294,35 +280,35 @@ class Game:
         If Pacman collides with a ghost in any other state, Pacman dies and the
             game is paused for 3 seconds before restarting the level.
         """
+        for ghost in self.ghosts.ghosts:
+            if self.pacman.collide_check(ghost):
+                if ghost.state.current is GhostStates.FREIGHT:
+                    self.update_score(ghost.points)
+                    self.textgroup.add_text(
+                        str(ghost.points),
+                        Colors.WHITE,
+                        ghost.position.x,
+                        ghost.position.y,
+                        8,
+                        time=1,
+                    )
+                    ghost.start_spawn()
+                    # self.ghosts.update_points()
+                    # self.pause.set_pause(pause_time=1, func=self.show_entities)
+                    # self.nodes.allow_home_access(self.ghosts)
 
-        if self.pacman.collide_check(self.blinky):
-            if self.blinky.state.current is GhostStates.FREIGHT:
-                self.update_score(self.blinky.points)
-                self.textgroup.add_text(
-                    str(self.blinky.points),
-                    Colors.WHITE,
-                    self.blinky.position.x,
-                    self.blinky.position.y,
-                    8,
-                    time=1,
-                )
-                self.blinky.start_spawn()
-                # self.ghosts.update_points()
-                # self.pause.set_pause(pause_time=1, func=self.show_entities)
-                # self.nodes.allow_home_access(self.ghosts)
+                elif ghost.state.current is not GhostStates.SPAWN:
+                    if self.pacman.alive:
+                        self.lives -= 1
+                        self.lifesprites.remove_image()
+                        self.pacman.die()
+                        ghost.visible = False
 
-            elif self.blinky.state.current is not GhostStates.SPAWN:
-                if self.pacman.alive:
-                    self.lives -= 1
-                    self.lifesprites.remove_image()
-                    self.pacman.die()
-                    self.blinky.visible = False
-
-                    if self.lives <= 0:
-                        self.textgroup.show_text(Texts.GAMEOVERTXT)
-                        self.pause.set_pause(pause_time=3, func=self.reload_game)
-                    else:
-                        self.pause.set_pause(pause_time=3, func=self.reset_level)
+                        if self.lives <= 0:
+                            self.textgroup.show_text(Texts.GAMEOVERTXT)
+                            self.pause.set_pause(pause_time=3, func=self.reload_game)
+                        else:
+                            self.pause.set_pause(pause_time=3, func=self.reset_level)
 
     def check_fruit_events(self) -> None:
         """
@@ -384,14 +370,14 @@ class Game:
         Shows the entities, like Pacman and the ghosts.
         """
         self.pacman.visible = True
-        self.blinky.visible = True
+        self.ghosts.show()
 
     def hide_entities(self) -> None:
         """
         Hides the entities, like Pacman and the ghosts.
         """
         self.pacman.visible = False
-        self.blinky.visible = False
+        self.ghosts.hide()
 
     def next_level(self) -> None:
         """
@@ -425,7 +411,7 @@ class Game:
         """
         self.pause.paused = True
         self.pacman.reset()
-        self.blinky.reset()
+        self.ghosts.reset()
         self.fruit = None
         self.textgroup.show_text(Texts.READYTXT)
 
@@ -460,7 +446,7 @@ class Game:
         # if self.fruit is not None:
         #     self.fruit.render(self.screen)
         self.pacman.render(self.screen)
-        self.blinky.render(self.screen)
+        self.ghosts.render(self.screen)
         # self.ghosts.render(self.screen)
         self.textgroup.render(self.screen)
 

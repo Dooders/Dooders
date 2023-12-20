@@ -157,10 +157,10 @@ class PacManState(State):
         bool
             True if a non-vulnerable ghost is nearby, False otherwise.
         """
-        if game.blinky.state.current == GhostStates.CHASE:
-            if self.npc.position.distance_to(game.blinky.position) <= 2:
-                return True
-        return False
+        for ghost in game.ghosts:
+            if ghost.state.current == GhostStates.CHASE:
+                if self.npc.position.distance_to(ghost.position) <= 2:
+                    return True
 
     def vulnerable_ghost_nearby(self, game) -> bool:
         """
@@ -176,7 +176,7 @@ class PacManState(State):
         bool
             True if a vulnerable ghost is nearby, False otherwise.
         """
-        if game.blinky.state.current == GhostStates.FREIGHT:
-            if self.npc.position.distance_to(game.blinky.position) <= 2:
-                return True
-        return False
+        for ghost in game.ghosts:
+            if ghost.state.current == GhostStates.FREIGHT:
+                if self.npc.position.distance_to(ghost.position) <= 2:
+                    return True

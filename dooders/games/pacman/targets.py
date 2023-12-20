@@ -1,7 +1,7 @@
 import random
 from abc import ABC, abstractmethod
 
-from dooders.games.pacman.settings import GhostStates
+from dooders.games.pacman.settings import Dimensions, GhostStates
 
 
 class Target(ABC):
@@ -96,3 +96,39 @@ class GhostTarget(Target):
         elif agent.state.current == GhostStates.SCATTER:
             if agent.path == [] and agent.waypoints != []:
                 self.current = agent.waypoints.pop(0)
+
+
+class PinkyTarget(GhostTarget):
+    def __init__(self):
+        self.current = None
+
+    def update(self, game, agent) -> None:
+        """
+        Updates the ghost's position and direction based on the current state.
+
+        If the ghost is in the SPAWN state, then the target is the spawn point.
+
+        If the ghost CHASE state, the target is PacMan's position.
+
+        If the ghost is in the SCATTER state, then the target is the next waypoint.
+
+        Parameters
+        ----------
+        game : GameController
+            The game controller object that the ghost is in.
+        """
+        if agent.state.current == GhostStates.SPAWN:
+            self.current = agent.spawn
+
+        elif agent.state.current == GhostStates.CHASE:
+            vector1 = (
+                game.pacman.position + game.pacman.direction * Dimensions.TILEWIDTH * 2
+            )
+            vector2 = vector1 - agent.position
+            self.current = agent.position + vector2
+
+        elif agent.state.current == GhostStates.SCATTER:
+            if agent.path == [] and agent.waypoints != []:
+                self.current = agent.waypoints.pop(0)
+            else:
+                self.current = game.pacman.position
