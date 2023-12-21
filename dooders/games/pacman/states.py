@@ -85,7 +85,7 @@ class GhostState(State):
 
     def scatter(self) -> None:
         self.current = GhostStates.SCATTER
-        self.time = 7
+        self.time = 6
         self.timer = 0
 
     def chase(self) -> None:
@@ -137,7 +137,7 @@ class PacManState(State):
             if self.non_vulnerable_ghost_nearby(game):
                 self.current = PacManStates.EVADE
 
-            elif self.vulnerable_ghost_nearby(game):
+            elif game.ghosts.is_freight:
                 self.current = PacManStates.CHASE
 
             else:
