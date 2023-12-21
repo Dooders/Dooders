@@ -2,6 +2,7 @@ import random
 from abc import ABC, abstractmethod
 
 from dooders.games.pacman.settings import Dimensions, GhostStates
+import networkx as nx
 
 
 class Target(ABC):
@@ -103,29 +104,19 @@ class PinkyTarget(GhostTarget):
         self.current = None
 
     def update(self, game, agent) -> None:
-        """
-        Updates the ghost's position and direction based on the current state.
-
-        If the ghost is in the SPAWN state, then the target is the spawn point.
-
-        If the ghost CHASE state, the target is PacMan's position.
-
-        If the ghost is in the SCATTER state, then the target is the next waypoint.
-
-        Parameters
-        ----------
-        game : GameController
-            The game controller object that the ghost is in.
-        """
+        """ """
         if agent.state.current == GhostStates.SPAWN:
             self.current = agent.spawn
 
         elif agent.state.current == GhostStates.CHASE:
-            vector1 = (
-                game.pacman.position + game.pacman.direction * Dimensions.TILEWIDTH * 2
+            #! add path method to game
+            path_lengths = nx.single_source_shortest_path_length(
+                game.map.graph._graph, game.pacman.position, cutoff=5
             )
-            vector2 = vector1 - agent.position
-            self.current = agent.position + vector2
+            nodes_5_steps_away = [
+                node for node, length in path_lengths.items() if length == 5
+            ]
+            self.current = random.choice(nodes_5_steps_away)
 
         elif agent.state.current == GhostStates.SCATTER:
             if agent.path == [] and agent.waypoints != []:
