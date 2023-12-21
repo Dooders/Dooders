@@ -53,6 +53,7 @@ class PacMan(NPC):
 
     def __init__(self) -> None:
         super().__init__()
+        #! reorganize attributes
         self.color = Colors.YELLOW.value
         self.alive: bool = True
         self.direction = Directions.STOP
@@ -124,6 +125,7 @@ class PacMan(NPC):
         Ghost
             The ghost closest to PacMan
         """
+        #! should provide ghost list instead of game???
         distance = 0
         for ghost in game.ghosts.ghosts:
             if distance == 0:
@@ -134,3 +136,20 @@ class PacMan(NPC):
                 closest_ghost = ghost
 
         return closest_ghost
+
+    def closest_pellet(self, game: "Game") -> "Pellet":
+        """
+        Find the pellet closest to PacMan based on a breadth-first search based
+        on the PacMan's position.
+
+        Parameters
+        ----------
+        game : Game
+            The game object
+
+        Returns
+        -------
+        Pellet
+            The pellet closest to PacMan
+        """
+        return game.search_pellet(self.position)
