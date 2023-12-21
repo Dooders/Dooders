@@ -1,7 +1,14 @@
 from typing import TYPE_CHECKING, List
 
-from dooders.games.pacman.settings import Colors, GhostStates, SpawnPositions
+import pygame
+
 from dooders.games.npc import NPC
+from dooders.games.pacman.settings import (
+    Colors,
+    Dimensions,
+    GhostStates,
+    SpawnPositions,
+)
 from dooders.games.pacman.sprites import GhostSprites
 from dooders.games.pacman.states import GhostState
 from dooders.games.pacman.targets import GhostTarget
@@ -69,8 +76,7 @@ class Ghost(NPC):
             (6, 8),
             (6, 4),
             (1, 4),
-            (1, 8),
-            (1, 8),
+            (1, 8)
         ]
 
     def update(self, game: "Game") -> None:
@@ -126,12 +132,33 @@ class Blinky(Ghost):
     def __init__(self):
         super().__init__()
 
+    # def render(self, screen: "pygame.Surface") -> None:
+    #     """
+    #     Renders the ghost on the game screen.
+
+    #     Parameters
+    #     ----------
+    #     screen : pygame.Surface
+    #         The game screen.
+    #     """
+    #     super().render(screen)
+    #     # blit red dot for the target
+    #     if self.target.current is not None:
+    #         target = self.target.current
+    #         if isinstance(target, tuple):
+    #             target = Coordinate(target[0], target[1])
+
+    #         x, y = target.as_pixel()
+    #         position = (x - Dimensions.TILEWIDTH / 2, y - Dimensions.TILEHEIGHT / 2)
+    #         pygame.draw.circle(screen, Colors.RED.value, position, 5)
+
 
 class Pinky(Ghost):
     def __init__(self):
         super().__init__()
         self.color = Colors.PINK.value
         self.spawn = Coordinate(SpawnPositions.PINKY)
+        self.waypoints = [(26, 4), (26, 29), (1, 29), (1, 4), (26, 4)]
 
 
 class Inky(Ghost):
@@ -297,6 +324,16 @@ class GhostGroup:
         """
         for ghost in self:
             ghost.reset()
+
+    @property
+    def is_freight(self) -> bool:
+        """
+        Returns True if any of the ghosts are in freight mode, False otherwise.
+        """
+        for ghost in self:
+            if ghost.state.current is GhostStates.FREIGHT:
+                return True
+        return False
 
     def render(self, screen: "pygame.Surface") -> None:
         """
