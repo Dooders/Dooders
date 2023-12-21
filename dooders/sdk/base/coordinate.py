@@ -288,6 +288,22 @@ class Coordinate:
         else:
             raise ValueError("Coordinates must be adjacent to get relative direction")
 
+    def distance_to(self, other: "Coordinate") -> float:
+        """
+        Returns the manhattan distance between two coordinates.
+
+        Parameters
+        ----------
+        other : Coordinate
+            coordinate to get the distance to
+
+        Returns
+        -------
+        float
+            Manhattan distance between the two coordinates
+        """
+        return abs(self.x - other.x) + abs(self.y - other.y)
+
     def __str__(self) -> str:
         """
         Provides a string representation of the coordinate in the format <x, y>.
