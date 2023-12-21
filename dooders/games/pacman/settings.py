@@ -1,6 +1,7 @@
 # Game settings
 from enum import Enum
 
+SCATTER_CORNERS = [(1, 4), (26, 4), (26, 32), (1, 32)]
 
 class Dimensions:
     TILEWIDTH = 16
@@ -57,7 +58,7 @@ class Texts(Enum):
 
 class SpawnPositions:
     BLINKY = (13, 14)
-    PINKY = (13, 14)
+    PINKY = (13, 17)
     INKY = (11, 14)
     CLYDE = (15, 14)
     PACMAN = (13, 26)
