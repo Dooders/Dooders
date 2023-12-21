@@ -152,7 +152,7 @@ class Game:
         self.set_background()
         self.pacman = PacMan()
         self.map.add(self.pacman, self.pacman.position)
-        
+
         for ghost in self.ghosts.ghosts:
             self.map.add(ghost, ghost.position)
 
@@ -364,6 +364,22 @@ class Game:
                         queue.append(neighbor)
 
         return None  # Return None if no pellet is found
+
+    def find_farthest_point(self, coordinate):
+        visited = set()  # Keep track of visited nodes
+        queue = [coordinate]  # Queue for BFS
+        farthest_node = None
+
+        while queue:
+            current_node = queue.pop(0)
+            farthest_node = current_node
+
+            for neighbor in self.map.graph._graph.neighbors(current_node):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+
+        return farthest_node
 
     def show_entities(self) -> None:
         """
