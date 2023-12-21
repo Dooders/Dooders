@@ -98,7 +98,7 @@ class Map:
         -------
         Graph
             The graph of the map
-            
+
         See Also
         --------
         dooders.sdk.surfaces.graph.Graph
@@ -121,3 +121,9 @@ class Map:
             graph._graph.remove_node(node)
 
         return graph
+
+    def view(self):
+        """
+        View the map
+        """
+        self.sprites.view()
