@@ -67,11 +67,7 @@ class PacMan(NPC):
 
     def update(self, game: "Game") -> None:
         """
-        Updates the Pac-Man's state based on the time delta (dt).
-
-        It handles the movement, checks for overshooting targets, and handles
-        portal transitions (like when Pac-Man goes off one side of the screen
-        and appears on the other). It also checks for direction reversal.
+        Updates the Pac-Man's state based on chosen strategy.
 
         Parameters
         ----------
