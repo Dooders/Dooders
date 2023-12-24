@@ -19,7 +19,7 @@ class Target(ABC):
         )
 
 
-class PacManTarget(Target):
+class PacManFSM(Target):
     def __init__(self):
         self.current = None
 
