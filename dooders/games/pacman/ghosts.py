@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, List
 import pygame
 
 from dooders.games.npc import NPC
+from dooders.games.pacman.behavior import GhostBehavior
 from dooders.games.pacman.settings import (
     Colors,
     Dimensions,
@@ -68,6 +69,7 @@ class Ghost(NPC):
         self.state = GhostState(self)
         self.path: List[Coordinate] = []
         self.target = GhostTarget()
+        self.behavior = GhostBehavior(self)
         self.waypoints = [
             (6, 17),
             (6, 4),
@@ -76,7 +78,7 @@ class Ghost(NPC):
             (6, 8),
             (6, 4),
             (1, 4),
-            (1, 8)
+            (1, 8),
         ]
 
     def update(self, game: "Game") -> None:
@@ -92,7 +94,7 @@ class Ghost(NPC):
         current_position = self.position.copy()
         self.sprites.update(time_delta)
         self.state.update(time_delta)
-        self.target.update(game, self)
+        self.behavior.model.run(game, self)
         self.next_move(game)
         self.previous_position = current_position
 
