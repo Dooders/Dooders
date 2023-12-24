@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from dooders.games.pacman.game import Game
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from dooders.games.pacman.game import Game
 
 
 class TreeNode(ABC):
