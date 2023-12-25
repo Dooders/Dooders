@@ -124,3 +124,5 @@ class ShortUUID:
         """Return the string length of the shortened UUID."""
         factor = math.log(256) / math.log(self._alpha_len)
         return int(math.ceil(factor * num_bytes))
+
+seed = ShortUUID()
