@@ -4,8 +4,9 @@ from dooders.games.npc import NPC
 from dooders.games.pacman.settings import Colors, Directions, SpawnPositions
 from dooders.games.pacman.sprites import PacManSprites
 from dooders.games.pacman.states import PacManState
-from dooders.games.pacman.targets import PacManTarget
 from dooders.sdk.base.coordinate import Coordinate
+from dooders.games.pacman.behavior import PacManBehavior
+from dooders.games.pacman.targets import PacManFSM
 
 if TYPE_CHECKING:
     from dooders.games.pacman.game import Game
@@ -40,6 +41,9 @@ class PacMan(NPC):
         The path the entity to reach its target
     target : PacManTarget
         The target the entity is currently following
+    behavior : Behavior
+        The behavior strategy of the entity that determines its target and handles
+        its movement
 
     Methods
     -------
@@ -49,11 +53,12 @@ class PacMan(NPC):
         Checks if the entity has eaten a pellet
     closest_ghost(game: Game)
         Finds the ghost closest to the entity
+    closest_pellet(game: Game)
+        Finds the pellet closest to the entity
     """
 
     def __init__(self) -> None:
         super().__init__()
-        #! reorganize attributes
         self.color = Colors.YELLOW.value
         self.alive: bool = True
         self.direction = Directions.STOP
@@ -63,7 +68,9 @@ class PacMan(NPC):
         self.state = PacManState(self)
         self.previous_position = self.position
         self.path: List[Coordinate] = []
-        self.target = PacManTarget()
+        #! might need to get rid of target class (use behavior instead)
+        self.target = PacManFSM()
+        self.behavior = PacManBehavior(self)
 
     def update(self, game: "Game") -> None:
         """
@@ -78,12 +85,7 @@ class PacMan(NPC):
         self.sprites.update(time_delta)
 
         if self.alive:
-            current_position = self.position.copy()
-            self.state.update(game)
-            self.target.update(game, self)
-            self.find_path(game)
-            self.move()
-            self.previous_position = current_position
+            self.behavior.update(game)
 
     def eat_pellets(self, pellet_List: List["Pellet"]) -> Union[None, "Pellet"]:
         """

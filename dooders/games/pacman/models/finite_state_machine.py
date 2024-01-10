@@ -1,29 +1,13 @@
+from dooders.games.pacman.settings import GhostStates
+from dooders.games.pacman.targets import Target
 import random
-from abc import ABC, abstractmethod
-
-from dooders.games.pacman.settings import Dimensions, GhostStates
-import networkx as nx
 
 
-class Target(ABC):
+class PacManFSM:
     def __init__(self):
         self.current = None
 
-    @abstractmethod
-    def update(self, *args, **kwargs):
-        """
-        Update the target state.
-        """
-        raise NotImplementedError(
-            f"update() not implemented for {self.__class__.__name__}"
-        )
-
-
-class PacManFSM(Target):
-    def __init__(self):
-        self.current = None
-
-    def update(self, game, agent):
+    def run(self, game, agent):
         """
         Update the target state.
 
@@ -34,7 +18,7 @@ class PacManFSM(Target):
         agent : Agent
             Agent object
         """
-        self.current = self.search(game, agent)
+        agent.target.current = self.search(game, agent)
 
     def search(self, game, agent):
         """
@@ -69,11 +53,24 @@ class PacManFSM(Target):
         return target
 
 
-class GhostTarget(Target):
+class GhostFSM:
     def __init__(self):
         self.current = None
 
-    def update(self, game, agent) -> None:
+    def run(self, game, agent):
+        """
+        Update the target state.
+
+        Parameters
+        ----------
+        game : Game
+            Game object
+        agent : Agent
+            Agent object
+        """
+        agent.target.current = self.update(game, agent)
+
+    def update(self, game, agent):
         """
         Updates the ghost's position and direction based on the current state.
 
@@ -97,29 +94,3 @@ class GhostTarget(Target):
         elif agent.state.current == GhostStates.SCATTER:
             if agent.path == [] and agent.waypoints != []:
                 self.current = agent.waypoints.pop(0)
-
-
-class PinkyTarget(GhostTarget):
-    def __init__(self):
-        self.current = None
-
-    def update(self, game, agent) -> None:
-        """ """
-        if agent.state.current == GhostStates.SPAWN:
-            self.current = agent.spawn
-
-        elif agent.state.current == GhostStates.CHASE:
-            #! add path method to game
-            path_lengths = nx.single_source_shortest_path_length(
-                game.map.graph._graph, game.pacman.position, cutoff=5
-            )
-            nodes_5_steps_away = [
-                node for node, length in path_lengths.items() if length == 5
-            ]
-            self.current = random.choice(nodes_5_steps_away)
-
-        elif agent.state.current == GhostStates.SCATTER:
-            if agent.path == [] and agent.waypoints != []:
-                self.current = agent.waypoints.pop(0)
-            else:
-                self.current = game.pacman.position

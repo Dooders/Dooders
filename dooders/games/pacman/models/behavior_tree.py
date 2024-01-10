@@ -1,10 +1,10 @@
 import random
 
 from dooders.games.pacman.engine.tree_node import *
+# from dooders.games.pacman.targets import Target
 
 
 class BehaviorTree:
-    #! Break this out of the below Pacman specific behavior tree and into a generic behavior tree
     """
     A behavior tree for the Pacman agent.
 
@@ -37,7 +37,8 @@ class BehaviorTree:
     """
 
     def __init__(self):
-        self.tree = SelectorNode(
+        self.current = None
+        self.behavior_tree = SelectorNode(
             [
                 SequenceNode(
                     [
@@ -55,7 +56,7 @@ class BehaviorTree:
             ]
         )
 
-    def run(self, game: "Game") -> bool:
+    def run(self, game: "Game", agent=None) -> bool:
         """
         Parameters
         ----------
@@ -67,7 +68,8 @@ class BehaviorTree:
         bool
             True if the behavior tree ran successfully, False otherwise.
         """
-        self.tree.run(game)
+
+        self.current = self.behavior_tree.run(game, agent)
 
     def move_towards_pellet(self, game: "Game") -> bool:
         """
@@ -83,7 +85,6 @@ class BehaviorTree:
         """
         # Logic to move towards the nearest pellet
         game.pacman.target.current = game.pacman.closest_pellet(game).coordinates
-        print(f" search: {game.pacman.target.current}")
 
         return True
 
@@ -103,7 +104,6 @@ class BehaviorTree:
         #! change to move in opposite direction of ghost instead of farthest point
         nearest_ghost = game.pacman.closest_ghost(game)
         game.pacman.target.current = game.find_farthest_point(nearest_ghost.position)
-        print(f" escape: {game.pacman.target.current}")
 
         return True
 
@@ -123,7 +123,6 @@ class BehaviorTree:
         position = game.pacman.position
         neighbors = game.map.graph.nearby_spaces(position)
         game.pacman.target.current = random.choice(neighbors).coordinates
-        print(f" wander: {game.pacman.target.current}")
 
         return True
 

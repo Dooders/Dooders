@@ -43,7 +43,8 @@ class NPC(ABC):
             The path from the NPC's current position to the target position,
             without the current position.
         """
-        self.path = game.map.path_finding(self.position, self.target.current)
+        print(f'target: {self.target}')
+        self.path = game.map.path_finding(self.position, self.target.position)
 
     def move(self) -> None:
         """
