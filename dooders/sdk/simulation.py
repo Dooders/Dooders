@@ -66,7 +66,9 @@ class Simulation(Reality):
         The state of the simulation.
     """
 
-    def __init__(self, settings: dict, auto_restart: bool = True, batch_process: bool = True) -> None:
+    def __init__(
+        self, settings: dict, auto_restart: bool = True, batch_process: bool = True
+    ) -> None:
         super().__init__()
         self.settings = settings
         self.running = False
@@ -96,7 +98,7 @@ class Simulation(Reality):
         2. Collect data at the end of the cycle
         3. Place new energy
         4. Collect stats
-        5. Increment cycle counter   
+        5. Increment cycle counter
         """
         # advance every agent by a step
         self.time.step()
@@ -113,7 +115,7 @@ class Simulation(Reality):
         self.cycle_number += 1
 
     def cycle(self) -> None:
-        """ 
+        """
         Advance the simulation by one cycle.
         """
         if self.stop_conditions():
@@ -128,14 +130,17 @@ class Simulation(Reality):
         3. Collect the results
         """
         self.batch = batch
-        max_cycles = self.settings.get('MaxCycles')
+        max_cycles = self.settings.get("MaxCycles")
 
         if batch:
             disable = True
         else:
             disable = False
         pbar = tqdm(
-            desc=f"Simulation[{simulation_count}] Progress", total=max_cycles, disable=disable)
+            desc=f"Simulation[{simulation_count}] Progress",
+            total=max_cycles,
+            disable=disable,
+        )
         self.starting_time = datetime.now()
         try:
 
@@ -145,7 +150,7 @@ class Simulation(Reality):
 
         except Exception as e:
             print(traceback.format_exc())
-            print('Simulation failed')
+            print("Simulation failed")
 
         finally:
             self.ending_time = datetime.now()
@@ -202,12 +207,11 @@ class Simulation(Reality):
         bool
             Whether the simulation should stop or not.
         """
-        result, reason = Condition.check('stop', self)
+        result, reason = Condition.check("stop", self)
 
         if result:
             self.stop()
-            self.log(
-                1, f"Simulation stopped because of {reason}", 'Simulation')
+            self.log(1, f"Simulation stopped because of {reason}", "Simulation")
 
             return False
 
@@ -215,7 +219,7 @@ class Simulation(Reality):
             return True
 
     def log(self, granularity: int, message: str, scope: str) -> None:
-        """ 
+        """
         Log a message to the logger.
 
         Parameters
@@ -230,19 +234,19 @@ class Simulation(Reality):
         cycle_number = self.time.time
 
         log_dict = {
-            'Scope': scope,
-            'CycleNumber': cycle_number,
-            'Granularity': granularity,
-            'Message': message
+            "Scope": scope,
+            "CycleNumber": cycle_number,
+            "Granularity": granularity,
+            "Message": message,
         }
 
-        final_message = str(log_dict).strip('{}')
+        final_message = str(log_dict).strip("{}")
 
         Information.log(final_message, granularity)
 
     @property
     def simulation_summary(self) -> dict:
-        """ 
+        """
         Get a summary of the simulation.
 
         Returns
@@ -250,19 +254,22 @@ class Simulation(Reality):
         dict
             A dictionary of the summary of the simulation.
         """
-        return {'SimulationID': self.simulation_id,
-                'Timestamp': datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
-                'CycleCount': self.cycle_number,
-                'TotalEnergy': sum(Information.data['resources']['allocated_energy']),
-                'ConsumedEnergy': sum(Information.data['resources']['consumed_energy']),
-                'StartingDooderCount': self.settings.get('SeedCount'),
-                'EndingDooderCount': len(self.arena.active_dooders),
-                'ElapsedSeconds': int((self.ending_time - self.starting_time).total_seconds())
-                }
+        return {
+            "SimulationID": self.simulation_id,
+            "Timestamp": datetime.now().strftime("%Y-%m-%d, %H:%M:%S"),
+            "CycleCount": self.cycle_number,
+            "TotalEnergy": sum(Information.data["resources"]["allocated_energy"]),
+            "ConsumedEnergy": sum(Information.data["resources"]["consumed_energy"]),
+            "StartingDooderCount": self.settings.get("SeedCount"),
+            "EndingDooderCount": len(self.arena.active_dooders),
+            "ElapsedSeconds": int(
+                (self.ending_time - self.starting_time).total_seconds()
+            ),
+        }
 
     @property
     def state(self) -> dict:
-        """ 
+        """
         Get the current state of the simulation.
 
         Returns
@@ -271,11 +278,11 @@ class Simulation(Reality):
             The current state of the simulation.
         """
         return {
-            'simulation_id': self.simulation_id,
-            'running': self.running,
-            'starting_time': str(self.starting_time),
-            'ending_time': str(self.ending_time),
-            'arena': self.arena.state,
-            'environment': self.environment.state,
-            'information': Information.data
+            "simulation_id": self.simulation_id,
+            "running": self.running,
+            "starting_time": str(self.starting_time),
+            "ending_time": str(self.ending_time),
+            "arena": self.arena.state,
+            "environment": self.environment.state,
+            "information": Information.data,
         }
