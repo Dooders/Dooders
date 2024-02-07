@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 
 from dooders.sdk.utils import seed
 
-DEFAULT_SETTINGS = {"position": (0, 0), "created": 0, "age": 0}
-
 
 class Entity(ABC):
     """
@@ -24,15 +22,17 @@ class Entity(ABC):
     Attributes
     ----------
     id : str
-        Unique identifier of the entity
+        Unique identifier for the entity
     created : int
-        Cycle number of the simulation when the entity is created
+        Cycle number when the entity was created
     terminated : int
-        Cycle number of the simulation when the entity is terminated, default None
-    cycle_number : int
-        Current cycle number of the simulation
+        Cycle number when the entity was terminated
     position : Coordinate
         Position of the entity
+    age : int
+        Age of the entity
+    _history : list
+        History of the entity
 
     Methods
     -------
@@ -43,8 +43,12 @@ class Entity(ABC):
     ----------
     name : str
         Name of the agent based on the class name
+    partial_state : dict
+        The partial state of the entity including id, created, age,
+        and position.
     state : dict
-        The state of the entity including id, created, current, and position.
+        The full state of the entity including id, created, age,
+        position, and history.
 
     See Also
     --------
@@ -55,14 +59,12 @@ class Entity(ABC):
 
     def __init__(self, settings: dict = None) -> None:
         self.id = seed.id()
+        self.settings = settings
+        self.created = settings.get("created", 0)
         self.terminated = None
+        self.position = settings.get("position", (0, 0))
+        self.age = 0
         self._history = []  #! bring over the sequence class
-
-        if settings is None:
-            settings = DEFAULT_SETTINGS
-
-        for key, value in settings.items():
-            setattr(self, key, value)
 
     @abstractmethod
     def update(self) -> None:
@@ -80,12 +82,24 @@ class Entity(ABC):
         return self.__class__.__name__
 
     @property
-    def state(self) -> dict:
-        """Return the state of the entity."""
+    def partial_state(self) -> dict:
+        """Return the partial state of the entity."""
         return {
             "id": self.id,
             "created": self.created,
             "terminated": self.terminated,
             "age": self.age,
             "position": self.position,
+        }
+
+    @property
+    def state(self) -> dict:
+        """Return the full state of the entity."""
+        return {
+            "id": self.id,
+            "created": self.created,
+            "terminated": self.terminated,
+            "age": self.age,
+            "position": self.position,
+            "history": self._history,
         }
