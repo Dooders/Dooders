@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 
 class Entity(ABC):
     """
+    Base class for all objects in the simulation environment.
+
     An entity is an object that exists in the environment of the simulation.
 
     An entity itself does not interact with the environment, but it has a state
@@ -19,12 +21,20 @@ class Entity(ABC):
     position : Coordinate
         Position of the entity, default (0, 0)
     cycle_number : int
-        Cycle number of the simulation
+        Cycle number of the simulation when the entity is created
 
     Attributes
     ----------
-    state : dict
-        The state of the entity.
+    id : str
+        Unique identifier of the entity
+    created : int
+        Cycle number of the simulation when the entity is created
+    terminated : int
+        Cycle number of the simulation when the entity is terminated, default None
+    cycle_number : int
+        Current cycle number of the simulation
+    position : Coordinate
+        Position of the entity
 
     Methods
     -------
@@ -48,7 +58,8 @@ class Entity(ABC):
     def __init__(self, position: "Coordinate", cycle_number: int) -> None:
         self.id = seed.id()
         self.created = cycle_number
-        self.current = cycle_number
+        self.terminated = None
+        self.cycle_number = cycle_number
         self.position = position
 
     @abstractmethod
@@ -72,6 +83,7 @@ class Entity(ABC):
         return {
             "id": self.id,
             "created": self.created,
-            "current": self.current,
+            "terminated": self.terminated,
+            "cycle_number": self.cycle_number,
             "position": self.position.state,
         }
