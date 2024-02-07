@@ -6,14 +6,13 @@ Each object will have the ability to move around the environment and
 interact with other objects.
 """
 
-from typing import TYPE_CHECKING, Any, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Dict, List
 
 import numpy as np
-from pydantic import BaseModel
 
 from dooders.sdk import steps
-from dooders.sdk.base.agent import Agent
 from dooders.sdk.base.coordinate import Coordinate
+from dooders.sdk.base.entity import Entity
 from dooders.sdk.core import Condition
 from dooders.sdk.core.action import Action
 from dooders.sdk.core.default_settings import default_settings
@@ -33,42 +32,37 @@ MODEL_SETTINGS = default_settings["internal_models"]
 GeneticCode = Dict[str, List[Any]]
 
 
-class MainStats(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True
-
-    id: str
-    number: int
-    position: Coordinate
-    rotation: int
-    hunger: int
-    age: int
-    generation: int
-    birth: int
-    death: Union[int, None] = None
-    status: str
-    reproduction_count: int
-    move_count: int
-    energy_consumed: int
-    tag: str
-    encoded_weights: dict
-    inference_record: dict
+DEFAULT_SETTINGS = {
+    "position": (0, 0),
+    "created": 0,
+    "age": 0,
+    "hunger": 0,
+    "generation": 0,
+    "status": "Alive",
+    "reproduction_count": 0,
+    "move_count": 0,
+    "energy_consumed": 0,
+    "tag": "Dooder",
+    "encoded_weights": {},
+    "inference_record": {},
+}
 
 
-class Dooder(Agent):
+class Dooder(Entity):
     """
-    Primary Dooder class
+    Primary Agent class for entities in the simulation environment.
+
+    An agent is an entity that can move and interact with the environment inside
+    the simulation.
+
+    A Dooder consumes energy and information to extend its life.
 
     Parameters
     ----------
-    id: str
-        Unique ID for the object.
-        Created by the simulation object
-    position: tuple
-        Position of the object.
-        The position ties to a location in the Environment object
-    simulation: BaseSimulation
-        Reference to the simulation.
+    settings: dict
+        The settings for the Dooder including position, created, age, hunger,
+        generation, status, reproduction_count, move_count, energy_consumed, tag,
+        encoded_weights, and inference_record.
 
     Attributes
     ----------
@@ -107,17 +101,12 @@ class Dooder(Agent):
         The Dooder's perception.
     """
 
-    def __init__(self, id: str, position: tuple, simulation: "BaseSimulation") -> None:
-        super().__init__(id, position, simulation)
-        self.moore = True
+    def __init__(self, settings: dict = None) -> None:
+        if settings is None:
+            settings = DEFAULT_SETTINGS
+        super().__init__(settings)
         self.condensed_weight_list = list()
         self.internal_models = InternalModels(self.id, MODEL_SETTINGS)
-        self.log(granularity=1, message=f"Created", scope="Dooder")
-
-    def __del__(self):
-        self.condensed_weight_list = list()
-        self.internal_models = None
-        self.simulation = None
 
     def do(self, action: str) -> None:
         """
@@ -174,7 +163,6 @@ class Dooder(Agent):
         4. Check if the dooder should die at the end of its step
 
         """
-        self.store_gene_embedding()
         self.age += 1
 
         if self.death_check():
@@ -313,27 +301,26 @@ class Dooder(Agent):
         return logs
 
     @property
-    def stats(self) -> "MainStats":
+    def state(self) -> dict:
         """
         The base stats of the dooder.
-
-        Returns
-        -------
-        stats: dict
-            A dictionary of the dooder's main stats.
-            for example:
-            {'id': '1234', 'position': (0,0), 'hunger': 0,
-            'age': 4, 'birth': 0, 'status': 'Alive', 'reproduction_count': 0,
-            'move_count': 0, 'energy_consumed': 0}
         """
-        stats = {}
-        for stat in MainStats.__fields__:
-            if stat == "position":
-                stats[stat] = str(getattr(self, stat))
-            else:
-                stats[stat] = getattr(self, stat)
-
-        return stats
+        return {
+            "id": self.id,
+            "number": self.number,
+            "age": self.age,
+            "generation": self.generation,
+            "created": self.created,
+            "terminated": self.death,
+            "position": self.position,
+            "rotation": self.rotation,
+            "status": self.status,
+            "reproduction_count": self.reproduction_count,
+            "move_count": self.move_count,
+            "energy_consumed": self.energy_consumed,
+            "hunger": self.hunger,
+            "tag": self.tag,
+        }
 
     @property
     def perception(self) -> "Perception":
@@ -348,32 +335,3 @@ class Dooder(Agent):
         locations = self.simulation.environment.nearby_spaces((self.position))
 
         return Perception(locations, self)
-
-    @property
-    def state(self) -> dict:
-        """
-        Return the state of the dooder.
-
-        Returns
-        -------
-        state: dict
-            The state of the dooder.
-        """
-        state = self.stats
-        state["encoded_weights"] = self.encoded_weights
-
-        return state
-
-    @property
-    def final_state(self):
-        """
-        Return the final state of the dooder.
-
-        Returns
-        -------
-        state: dict
-            The final state of the dooder.
-        """
-        state = self.state
-        state["final_state"] = self.genetic_code["Consume"][0]
-        return state
