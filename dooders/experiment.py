@@ -6,7 +6,6 @@ from tqdm import tqdm
 
 from dooders.sdk import strategies
 from dooders.sdk.actions import *
-from dooders.sdk.base.agent import Agent
 from dooders.sdk.core import Assemble
 from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
