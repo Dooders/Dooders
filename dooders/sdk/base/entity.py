@@ -11,8 +11,8 @@ class Entity(ABC):
 
     An entity is an object that exists in the environment of the simulation.
 
-    An entity itself does not interact with the environment, but it has a state
-    that can be updated.
+    An entity itself does not interact with the environment, but it can be acted
+    upon and has its own state.
 
     Parameters
     ----------
