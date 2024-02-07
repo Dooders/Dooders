@@ -1,10 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
 
 from dooders.sdk.utils import seed
 
-if TYPE_CHECKING:
-    from dooders.sdk.base.coordinate import Coordinate
+DEFAULT_SETTINGS = {"position": (0, 0), "created": 0, "age": 0}
 
 
 class Entity(ABC):
@@ -50,17 +48,21 @@ class Entity(ABC):
 
     See Also
     --------
-    dooders.sdk.base.agent.Agent :
-        An agent is an entity that can move and interact with the environment
+    dooders.sdk.models.dooder.Dooder :
+        An Dooder is an entity that can move and interact with the environment
         inside the simulation. It is a subclass of Entity.
     """
 
-    def __init__(self, position: "Coordinate", cycle_number: int) -> None:
+    def __init__(self, settings: dict = None) -> None:
         self.id = seed.id()
-        self.created = cycle_number
         self.terminated = None
-        self.cycle_number = cycle_number
-        self.position = position
+        self._history = []  #! bring over the sequence class
+
+        if settings is None:
+            settings = DEFAULT_SETTINGS
+
+        for key, value in settings.items():
+            setattr(self, key, value)
 
     @abstractmethod
     def update(self) -> None:
@@ -84,6 +86,6 @@ class Entity(ABC):
             "id": self.id,
             "created": self.created,
             "terminated": self.terminated,
-            "cycle_number": self.cycle_number,
-            "position": self.position.state,
+            "age": self.age,
+            "position": self.position,
         }
