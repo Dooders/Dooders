@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from dooders.sdk.base.coordinate import Coordinate
-from dooders.sdk.utils import seed
+from dooders.sdk.utils.short_id import seed
 
 if TYPE_CHECKING:
     from dooders.sdk.base.entity import Entity

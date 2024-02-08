@@ -8,8 +8,8 @@ Essentially, the order in which agents are stepped through during a cycle.
 import random
 from collections import defaultdict
 
-from dooders.sdk.base.agent import Agent
 from dooders.sdk.base.base_time import BaseTime
+from dooders.sdk.base.entity import Entity
 
 
 class Time(BaseTime):
@@ -63,7 +63,7 @@ class Time(BaseTime):
 
         self._objects[object.name][object.id] = object
 
-    def remove(self, object: 'Agent') -> None:
+    def remove(self, object: 'Entity') -> None:
         """
         Remove all instances of a given agent from the schedule.
 

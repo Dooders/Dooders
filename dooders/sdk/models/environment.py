@@ -3,9 +3,10 @@ Environment Model
 -----------------
 Represents the "physical" environment in which the agents interact.
 """
+
 from typing import Any, List, Union
 
-from dooders.sdk.base.agent import Agent
+from dooders.sdk.base.entity import Entity
 from dooders.sdk.core.surface import Surface
 
 GridCell = List[Any]
@@ -17,19 +18,19 @@ class Environment:
 
     Methods
     -------
-    place_object(object: Agent, position: tuple) -> None
+    place_object(object: Entity, position: tuple) -> None
         Place an object at the provided position.
-    remove_object(object: Agent) -> None
+    remove_object(object: Entity) -> None
         Remove an object from the surface.
-    move_object(object: Agent, location: tuple) -> None
+    move_object(object: Entity, location: tuple) -> None
         Move an object to a new location.
-    get_object_types() -> List[Agent]
+    get_object_types() -> List[Entity]
         Get all object types in the environment.
-    get_objects(object_type: str = 'Agent') -> List[Agent]
+    get_objects(object_type: str = 'Entity') -> List[Entity]
         Get all objects of a given type.
-    get_object(object_id: str) -> Agent
+    get_object(object_id: str) -> Entity
         Get an object by its id.
-    get_random_neighbors(object: Agent, object_type: Agent = 'Agent') -> List[Agent]
+    get_random_neighbors(object: Entity, object_type: Entity = 'Entity') -> List[Entity]
         Get all objects in the perception of the given object.
     """
 
@@ -52,38 +53,38 @@ class Environment:
         """
         self.surface = Surface.build(self.SurfaceType())
 
-    def place_object(self, object: "Agent", position: tuple) -> None:
+    def place_object(self, object: "Entity", position: tuple) -> None:
         """
         Place an object at the provided position.
 
         Parameters
         ----------
-        object: Agent
+        object: Entity
             The object to place.
         position: tuple
             The location to place the object, in the form (x, y).
         """
         self.surface.add(object, position)
 
-    def remove_object(self, object: Union["Agent", str]) -> None:
+    def remove_object(self, object: Union["Entity", str]) -> None:
         """
         Remove an object from the surface object.
 
         Parameters
         ----------
-        object: Union[Agent, str]
+        object: Union[Entity, str]
             The object to remove.
             Either the object itself or the object's id.
         """
         self.surface.remove(object)
 
-    def move_object(self, object: "Agent", location: tuple) -> None:
+    def move_object(self, object: "Entity", location: tuple) -> None:
         """
         Move an object to a new location.
 
         Parameters
         ----------
-        object: Agent
+        object: Entity
             The object to move.
         location: tuple
             The location to move the object to.
@@ -91,7 +92,7 @@ class Environment:
         self.remove_object(object)
         self.place_object(object, location)
 
-    def get_objects(self, object_type: str = None) -> List[Agent]:
+    def get_objects(self, object_type: str = None) -> List[Entity]:
         """
         Get all objects of a given type.
 
@@ -102,13 +103,13 @@ class Environment:
 
         Returns
         -------
-        objects: List[Agent]
+        objects: List[Entity]
             A list of all objects of the given type.
         """
 
         yield from self.surface.contents(object_type)
 
-    def get_object(self, object_id: str) -> Agent:
+    def get_object(self, object_id: str) -> Entity:
         """
         Get an object by its id.
 
@@ -120,12 +121,12 @@ class Environment:
 
         Returns
         -------
-        object: Agent
+        object: Entity
             The object with the given id.
         """
         return self.surface[object_id]
 
-    def get_object_count(self, object_type: str = "Agent") -> int:
+    def get_object_count(self, object_type: str = "Entity") -> int:
         """
         Get the number of objects of a given type.
 

@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from dooders.sdk.utils import seed
-
+from dooders.sdk.utils.short_id import seed
 
 class Simulation(ABC):
     def __init__(self, settings):

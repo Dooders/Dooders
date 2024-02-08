@@ -1,7 +1,7 @@
 import unittest
 
 from dooders.sdk.base.entity import Entity
-from dooders.sdk.utils import seed
+from dooders.sdk.utils.short_id import seed
 
 
 class MockEntity(Entity):
@@ -11,7 +11,6 @@ class MockEntity(Entity):
 
 class TestEntity(unittest.TestCase):
     def setUp(self):
-        seed.set_seed(123)  # Assuming there's a method to set seed for reproducibility
         self.mock_settings = {"position": (5, 5), "created": 100}
         self.entity = MockEntity(settings=self.mock_settings)
 
