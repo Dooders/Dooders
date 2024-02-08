@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from dooders.sdk.base.vector import Coordinate
 
 from dooders.sdk.utils.short_id import seed
 
@@ -62,7 +63,7 @@ class Entity(ABC):
         self.settings = settings
         self.created = settings.get("created", 0)
         self.terminated = None
-        self.position = settings.get("position", (0, 0))
+        self.position = Coordinate(settings.get("position", (0, 0)))
         self.age = 0
         self._history = []  #! bring over the sequence class
 
