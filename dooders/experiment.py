@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 from dooders.sdk import strategies
 from dooders.sdk.actions import *
+from dooders.sdk.base.entity import Entity
 from dooders.sdk.core import Assemble
 from dooders.sdk.policies import *
 from dooders.sdk.surfaces import *
@@ -191,7 +192,7 @@ class Experiment:
 
         self.end_time = time.time()
 
-    def get_objects(self, object_type: str = "Agent") -> List[Agent]:
+    def get_objects(self, object_type: str = "Entity") -> List[Entity]:
         """
         Get all objects of a given type.
         Returns all objects if no type is given.
@@ -203,7 +204,7 @@ class Experiment:
 
         Returns
         -------
-        List[Agent]
+        List[Entity]
             A list of objects of the given type.
         """
         return self.simulation.environment.get_objects(object_type)
