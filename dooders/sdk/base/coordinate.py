@@ -12,8 +12,6 @@ class Coordinate:
 
     Methods
     -------
-    __init__(x: int = 0, y: int = 0) -> None
-        Initializes the coordinate with the given x and y components
     __add__(other: Coordinate) -> Coordinate
         Adds two coordinates
     __sub__(other: Coordinate) -> Coordinate
