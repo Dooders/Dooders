@@ -72,7 +72,7 @@ class Entity(ABC):
         self.created = settings.get("created", 0)
         self.terminated = None
         self.age = 0
-        self._position = Coordinate(settings.get("position", (0, 0)))
+        self._position = settings.get("position", (0, 0))
         self._history = Sequence()
 
     def update(self) -> None:
