@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
-from dooders.sdk.base.vector import Coordinate
+from abc import ABC
 
+from dooders.sdk.base.sequence import Sequence
+from dooders.sdk.base.vector import Coordinate
 from dooders.sdk.utils.short_id import seed
 
 
@@ -32,8 +33,8 @@ class Entity(ABC):
         Position of the entity
     age : int
         Age of the entity
-    _history : list
-        History of the entity
+    _history : Sequence
+        History of the entity. See Sequence for more details.
 
     Methods
     -------
@@ -42,6 +43,10 @@ class Entity(ABC):
 
     Properties
     ----------
+    position : Coordinate
+        Position of the entity
+    history : list
+        History of the entity
     name : str
         Name of the agent based on the class name
     partial_state : dict
@@ -56,6 +61,9 @@ class Entity(ABC):
     dooders.sdk.models.dooder.Dooder :
         An Dooder is an entity that can move and interact with the environment
         inside the simulation. It is a subclass of Entity.
+    dooders.sdk.core.sequence.Sequence :
+        Sequence of states over time. The sequence is stored as a deque, with
+        the most recent state at the start of the sequence.
     """
 
     def __init__(self, settings: dict = None) -> None:
@@ -63,14 +71,50 @@ class Entity(ABC):
         self.settings = settings
         self.created = settings.get("created", 0)
         self.terminated = None
-        self.position = Coordinate(settings.get("position", (0, 0)))
         self.age = 0
-        self._history = []  #! bring over the sequence class
+        self._position = Coordinate(settings.get("position", (0, 0)))
+        self._history = Sequence()
 
-    @abstractmethod
     def update(self) -> None:
         """Trigger the entity to update its state."""
-        raise NotImplementedError("Update method not implemented")
+        self.age += 1
+        self._history.add_state(self.partial_state)
+
+    @property
+    def position(self) -> Coordinate:
+        """
+        Returns
+        -------
+        Coordinate
+            Position of the entity
+
+        See Also
+        --------
+        dooders.sdk.base.vector.Coordinate :
+            A coordinate in the simulation environment. It is a subclass of
+            tuple.
+        """
+        return self._position
+
+    @position.setter
+    def position(self, position: tuple) -> None:
+        """
+        Parameters
+        ----------
+        position : tuple
+            Position of the entity
+        """
+        self._position = Coordinate(position)
+
+    @property
+    def history(self) -> list:
+        """
+        Returns
+        -------
+        list
+            History of the entity
+        """
+        return self._history.history
 
     @property
     def name(self) -> str:
@@ -84,7 +128,12 @@ class Entity(ABC):
 
     @property
     def partial_state(self) -> dict:
-        """Return the partial state of the entity."""
+        """
+        Returns
+        -------
+        dict
+            The partial state of the entity including id, created, age, and position.
+        """
         return {
             "id": self.id,
             "created": self.created,
@@ -95,12 +144,18 @@ class Entity(ABC):
 
     @property
     def state(self) -> dict:
-        """Return the full state of the entity."""
+        """
+        Returns
+        -------
+        dict
+            The full state of the entity including id, created, age, position,
+            and history.
+        """
         return {
             "id": self.id,
             "created": self.created,
             "terminated": self.terminated,
             "age": self.age,
             "position": self.position,
-            "history": self._history,
+            "history": self.history,
         }
