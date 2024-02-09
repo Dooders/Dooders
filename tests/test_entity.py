@@ -55,6 +55,16 @@ class TestEntity(unittest.TestCase):
         self.entity.update()
         self.assertEqual(self.entity.age, 1)
 
+    def test_position_property(self):
+        """Test the position property."""
+        self.entity.position = (10, 10)
+        self.assertEqual(self.entity.position, (10, 10))
+
+    def test_history_property(self):
+        """Test the history property."""
+        self.entity._history.append("test_event")
+        self.assertEqual(self.entity.history, ["test_event"])
+
 
 if __name__ == "__main__":
     unittest.main()
