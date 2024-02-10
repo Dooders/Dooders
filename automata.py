@@ -45,14 +45,14 @@ initial_state = [0] * num_cells  # Initialize with all zeros
 initial_state[num_cells // 2] = 1  # Set the middle cell to 1
 
 # Generate the cellular automata
-# automata = generate_automata(rule_number, initial_state, num_generations)
+automata = generate_automata(rule_number, initial_state, num_generations)
 
-# # Visualize the cellular automata
-# plt.figure(figsize=(10, 10))
-# plt.imshow(automata, cmap="binary", interpolation="nearest")
-# plt.title(f"Cellular Automata Rule {rule_number}")
-# plt.axis("off")
-# plt.show()
+# Visualize the cellular automata
+plt.figure(figsize=(10, 10))
+plt.imshow(automata, cmap="binary", interpolation="nearest")
+plt.title(f"Cellular Automata Rule {rule_number}")
+plt.axis("off")
+plt.show()
 
 
 # Generate training data
@@ -83,9 +83,29 @@ class Rule30CNN(nn.Module):
         return x
 
 
+def plot(model, test_data, test_labels, criterion, epoch):
+    with torch.no_grad():
+        test_output = model(test_data)
+        test_loss = criterion(test_output, test_labels)
+
+    # Visualize the model's predictions
+    plt.figure(figsize=(10, 10))
+    plt.suptitle(f"Epoch: {epoch}, Test Loss: {test_loss.item()}")
+    plt.subplot(1, 2, 1)
+    plt.imshow(test_labels[:25].numpy(), cmap="binary", interpolation="nearest")
+    plt.title("True")
+    plt.axis("off")
+    plt.subplot(1, 2, 2)
+    plt.imshow(test_output[:25].numpy(), cmap="binary", interpolation="nearest")
+    plt.title("Predicted")
+    plt.axis("off")
+
+    plt.savefig(f"rule30_epoch_{epoch}.png")
+
+
 # Prepare the data
 length = 15
-data, labels = generate_data(length = length)
+data, labels = generate_data(length=length)
 data = data.view(-1, 1, length)
 labels = labels.view(-1, length)
 split = int(0.8 * len(data))
@@ -98,7 +118,7 @@ criterion = nn.BCELoss()  # Binary Cross Entropy Loss for binary classification
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # Training loop
-epochs = 9000
+epochs = 2000
 for epoch in range(epochs):
     optimizer.zero_grad()
     output = model(train_data)
@@ -108,8 +128,43 @@ for epoch in range(epochs):
     if epoch % 10 == 0:
         print(f"Epoch {epoch}, Loss: {loss.item()}")
 
+    if epoch % 100 == 0:
+        plot(model, test_data, test_labels, criterion, epoch)
+
+
 # Evaluation
-with torch.no_grad():
-    test_output = model(test_data)
-    test_loss = criterion(test_output, test_labels)
-    print(f"Test Loss: {test_loss.item()}")
+# with torch.no_grad():
+#     test_output = model(test_data)
+#     test_loss = criterion(test_output, test_labels)
+#     print(f"Test Loss: {test_loss.item()}")
+
+# # Visualize the model's predictions
+# plt.figure(figsize=(10, 10))
+# plt.subplot(1, 2, 1)
+# plt.imshow(test_labels[:25].numpy(), cmap="binary", interpolation="nearest")
+# plt.title("True")
+# plt.axis("off")
+# plt.subplot(1, 2, 2)
+# plt.imshow(test_output[:25].numpy(), cmap="binary", interpolation="nearest")
+# plt.title("Predicted")
+# plt.axis("off")
+# plt.show()
+
+
+import os
+
+# make gif
+import imageio
+
+images = []
+
+matching_files = [
+    f for f in os.listdir(".") if f.startswith("rule30_epoch") and f.endswith(".png")
+]
+matching_files.sort(key=lambda x: int(x.split("_")[2].split(".")[0]))
+for filename in matching_files:
+    images.append(imageio.imread(filename))
+imageio.mimsave("rule30_training.gif", images, duration=0.5)
+for filename in os.listdir("."):
+    if filename.endswith(".png"):
+        os.remove(filename)
