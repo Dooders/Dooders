@@ -6,7 +6,7 @@ pandas==1.5.3
 Pillow==10.3.0
 plotly==5.9.0
 psycopg2-binary==2.9.6
-pydantic==1.10.7
+pydantic==1.10.13
 pygame==2.4.0
 pytest==7.1.2
 python-dotenv==1.0.0
