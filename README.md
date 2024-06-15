@@ -13,7 +13,7 @@ A [Dooder](docs/Dooder.md) is an agent object in the simulation with an amount o
 
 ### Research Objective
 
-I aim to research and experiment with intelligent agents to understand how they develop agency, how it can be measured, and how it can be optimized in a complex and dynamic simulation environment.
+Ultimately, I want to better understand how an agent develops agency, how it can be measured, and how it can be optimized in a complex and dynamic simulation environment.
 
 ### Approach
 
