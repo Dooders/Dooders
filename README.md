@@ -3,7 +3,7 @@
 
 ![dooders logo](./docs/dooder_logo.png)
 
-> Reality works; simulate it.  
+> Reality works. Simulate it.  
   
 ## Overview
 
