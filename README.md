@@ -1,5 +1,6 @@
 
 # Dooders
+![Project Status](https://img.shields.io/badge/status-in%20development-orange)
 
 ![dooders logo](./docs/dooder_logo.png)
 
